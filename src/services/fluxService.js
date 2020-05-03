@@ -90,11 +90,10 @@ function getCollateralInfo(collateralOutpoint) {
 async function processZelNodes() {
   try {
     const currentRoundTime = new Date().getTime();
-    const currentRefreshRound = {};
     const zelnodes = await getZelNodeList();
     log.info(`Beginning processing of ${currentRoundTime}.`);
     const database = db.db(config.database.local.database);
-    currentZelNodeIps = await getZelNodeIPs(zelnodes); // always defined
+    currentZelNodeIps = await getZelNodeIPs(zelnodes);
     log.info(`Found ${zelnodes.length} Fluxes.`);
 
     // eslint-disable-next-line no-restricted-syntax
@@ -133,7 +132,7 @@ async function processZelNodes() {
       fluxInfo.roundTime = currentRoundTime;
       const curTime = new Date().getTime();
       fluxInfo.dataCollectedAt = curTime;
-      await serviceHelper.insertOneToDatabase(database, fluxcollection, currentRefreshRound).catch((error) => {
+      await serviceHelper.insertOneToDatabase(database, fluxcollection, fluxInfo).catch((error) => {
         log.error(error);
       });
       if ((i + 1) % 25 === 0) {
