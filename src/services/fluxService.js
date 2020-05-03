@@ -112,7 +112,6 @@ async function processZelNodes() {
       currentRefreshRound.push(fluxInfo);
       if ((i + 1) % 25 === 0) {
         log.info(`Checked ${i + 1}/${zelnodeips.length}.`);
-        log.info(fluxInfo);
       }
     }
     if (currentRefreshRound.length > 0) {
