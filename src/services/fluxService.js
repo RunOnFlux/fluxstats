@@ -4,13 +4,17 @@ const config = require('config');
 const log = require('../lib/log');
 const serviceHelper = require('./serviceHelper');
 
+const axiosConfig = {
+  timeout: 3456,
+};
+
 let db = null;
 const geocollection = config.database.local.collections.geolocation;
 const fluxcollection = config.database.local.collections.fluxes;
 
 async function getZelNodeList() {
   try {
-    const zelnodeList = await axios.get(`${config.explorer}/api/zelnode/listzelnodes`);
+    const zelnodeList = await axios.get(`${config.explorer}/api/zelnode/listzelnodes`, axiosConfig);
     return zelnodeList.data.result || [];
   } catch (e) {
     log.error(e);
@@ -32,7 +36,7 @@ async function getZelNodeIPs() {
 async function getZelNodeGeolocation(ip) {
   try {
     const ipApiUrl = `http://ip-api.com/json/${ip}}?fields=status,country,countryCode,lat,lon,query,org`;
-    const ipRes = await axios.get(ipApiUrl);
+    const ipRes = await axios.get(ipApiUrl, axiosConfig);
     if (ipRes.data.status === 'success') {
       const information = {
         ip: ipRes.data.query,
@@ -55,7 +59,7 @@ async function getZelNodeGeolocation(ip) {
 async function getFluxInformation(ip) {
   try {
     const fluxInfoUrl = `http://${ip}:16127/zelflux/info`;
-    const fluxRes = await axios.get(fluxInfoUrl);
+    const fluxRes = await axios.get(fluxInfoUrl, axiosConfig);
     if (fluxRes.data.status === 'success') {
       return fluxRes.data.data;
     }
@@ -68,13 +72,15 @@ async function getFluxInformation(ip) {
 
 async function processZelNodes() {
   try {
-    const database = db.db(config.database.local.database);
-    const zelnodeips = await getZelNodeIPs(); // always defined
     const currentRoundTime = new Date().getTime();
     const currentRefreshRound = [];
+    log.info(`Beginning processing of ${currentRoundTime}.`);
+    const database = db.db(config.database.local.database);
+    const zelnodeips = await getZelNodeIPs(); // always defined
+    log.info(`Found ${zelnodeips.length} Fluxes.`);
 
     // eslint-disable-next-line no-restricted-syntax
-    for (const ip of zelnodeips) {
+    for (const [i, ip] of zelnodeips.entries()) {
       const fluxInfo = await getFluxInformation(ip);
       if (typeof fluxInfo === 'object') {
         const query = { ip };
@@ -100,12 +106,17 @@ async function processZelNodes() {
       }
       fluxInfo.timestamp = currentRoundTime;
       currentRefreshRound.push(fluxInfo);
+      if ((i + 1) % 25 === 0) {
+        log.info(`Checked ${i + 1}/${zelnodeips.length}.`);
+        log.info(fluxInfo);
+      }
     }
     if (currentRefreshRound.length > 0) {
       await serviceHelper.insertOneToDatabase(database, fluxcollection, currentRefreshRound).catch((error) => {
         log.error(error);
       });
     }
+    log.info(`Processing of ${currentRoundTime} finished.`);
     setTimeout(() => {
       processZelNodes();
     }, 5 * 60 * 1000);
