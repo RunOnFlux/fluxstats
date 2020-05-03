@@ -51,7 +51,7 @@ async function getZelNodeGeolocation(ip) {
     }
     return false;
   } catch (e) {
-    log.error(e);
+    log.error(`Geolocation of IP ${ip} error`);
     return false;
   }
 }
@@ -63,10 +63,14 @@ async function getFluxInformation(ip) {
     if (fluxRes.data.status === 'success') {
       return fluxRes.data.data;
     }
-    return false;
+    return {
+      error: true,
+    };
   } catch (e) {
-    log.error(e);
-    return false;
+    log.error(`Flux information of IP ${ip} error`);
+    return {
+      error: true,
+    };
   }
 }
 
@@ -82,29 +86,29 @@ async function processZelNodes() {
     // eslint-disable-next-line no-restricted-syntax
     for (const [i, ip] of zelnodeips.entries()) {
       const fluxInfo = await getFluxInformation(ip);
-      if (typeof fluxInfo === 'object') {
-        const query = { ip };
-        const projection = {};
-        // we shall always have geolocation
-        const result = await serviceHelper.findOneInDatabase(database, geocollection, query, projection).catch((error) => {
-          log.error(error);
-        });
-        if (result) {
-          fluxInfo.geolocation = result;
-        } else {
-          // we do not have info about that ip yet. Get it and Store it.
-          await serviceHelper.timeout(2000);
-          const geoRes = await getZelNodeGeolocation(ip);
-          if (geoRes) {
-            // geo ok, store it and update fluxInfo.
-            await serviceHelper.insertOneToDatabase(database, geocollection, geoRes).catch((error) => {
-              log.error(error);
-            });
-            fluxInfo.geolocation = geoRes;
-          }
+      const query = { ip };
+      const projection = {};
+      // we shall always have geolocation
+      const result = await serviceHelper.findOneInDatabase(database, geocollection, query, projection).catch((error) => {
+        log.error(error);
+      });
+      if (result) {
+        fluxInfo.geolocation = result;
+      } else {
+        // we do not have info about that ip yet. Get it and Store it.
+        await serviceHelper.timeout(2000);
+        const geoRes = await getZelNodeGeolocation(ip);
+        if (geoRes) {
+          // geo ok, store it and update fluxInfo.
+          await serviceHelper.insertOneToDatabase(database, geocollection, geoRes).catch((error) => {
+            log.error(error);
+          });
+          fluxInfo.geolocation = geoRes;
         }
       }
-      fluxInfo.timestamp = currentRoundTime;
+      fluxInfo.roundTime = currentRoundTime;
+      const curTime = new Date().getTime();
+      fluxInfo.dataCollectedAt = curTime;
       currentRefreshRound.push(fluxInfo);
       if ((i + 1) % 25 === 0) {
         log.info(`Checked ${i + 1}/${zelnodeips.length}.`);
@@ -158,7 +162,8 @@ async function getAllFluxInformation(req, res) {
   const projection = {
     projection: {
       _id: 0,
-      timestamp: 1,
+      roundTime: 1,
+      dataCollectedAt: 1,
       geolocation: 1,
       zelcash: 1,
       zelnode: 1,
