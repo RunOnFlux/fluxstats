@@ -8,4 +8,7 @@ module.exports = (app) => {
   app.get('/fluxinfo', (req, res) => {
     fluxService.getAllFluxInformation(req, res);
   });
+  app.get('/fluxhistory/ip/:ip?', (req, res) => {
+    fluxService.getFluxIPHistory(req, res);
+  });
 };

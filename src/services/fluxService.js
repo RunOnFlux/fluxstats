@@ -5,12 +5,15 @@ const log = require('../lib/log');
 const serviceHelper = require('./serviceHelper');
 
 const axiosConfig = {
-  timeout: 3456,
+  timeout: 13456,
 };
 
 let db = null;
 const geocollection = config.database.local.collections.geolocation;
 const fluxcollection = config.database.local.collections.fluxes;
+
+let currentZelNodeIps = [];
+let lastCompletedRound = 0;
 
 async function getZelNodeList() {
   try {
@@ -22,9 +25,9 @@ async function getZelNodeList() {
   }
 }
 
-async function getZelNodeIPs() {
+async function getZelNodeIPs(zelnodeList) {
   try {
-    const zelnodes = await getZelNodeList();
+    const zelnodes = zelnodeList || await getZelNodeList();
     const ips = zelnodes.map((zelnode) => zelnode.ip);
     return ips;
   } catch (e) {
@@ -76,19 +79,28 @@ async function getFluxInformation(ip) {
   }
 }
 
+function getCollateralInfo(collateralOutpoint) {
+  const a = collateralOutpoint;
+  const b = a.split(', ');
+  const txhash = b[0].substr(10, b[0].length);
+  const txindex = serviceHelper.ensureNumber(b[1].split(')')[0]);
+  return { txhash, txindex };
+}
+
 async function processZelNodes() {
   try {
     const currentRoundTime = new Date().getTime();
     const currentRefreshRound = {};
+    const zelnodes = await getZelNodeList();
     log.info(`Beginning processing of ${currentRoundTime}.`);
     const database = db.db(config.database.local.database);
-    const zelnodeips = await getZelNodeIPs(); // always defined
-    log.info(`Found ${zelnodeips.length} Fluxes.`);
+    currentZelNodeIps = await getZelNodeIPs(zelnodes); // always defined
+    log.info(`Found ${zelnodes.length} Fluxes.`);
 
     // eslint-disable-next-line no-restricted-syntax
-    for (const [i, ip] of zelnodeips.entries()) {
-      const fluxInfo = await getFluxInformation(ip);
-      const query = { ip };
+    for (const [i, zelnode] of zelnodes.entries()) {
+      const fluxInfo = await getFluxInformation(zelnode.ip);
+      const query = { ip: zelnode.ip };
       const projection = {};
       // we shall always have geolocation
       const result = await serviceHelper.findOneInDatabase(database, geocollection, query, projection).catch((error) => {
@@ -99,7 +111,7 @@ async function processZelNodes() {
       } else {
         // we do not have info about that ip yet. Get it and Store it.
         await serviceHelper.timeout(2000);
-        const geoRes = await getZelNodeGeolocation(ip);
+        const geoRes = await getZelNodeGeolocation(zelnode.ip);
         if (geoRes) {
           // geo ok, store it and update fluxInfo.
           await serviceHelper.insertOneToDatabase(database, geocollection, geoRes).catch((error) => {
@@ -108,20 +120,28 @@ async function processZelNodes() {
           fluxInfo.geolocation = geoRes;
         }
       }
+      fluxInfo.ip = zelnode.ip;
+      fluxInfo.addedHeight = zelnode.added_height;
+      fluxInfo.confirmedHeight = zelnode.confirmed_height;
+      fluxInfo.lastConfirmedHeight = zelnode.last_confirmed_height;
+      fluxInfo.lastPaidHeight = zelnode.last_paid_height;
+      fluxInfo.tier = zelnode.tier;
+      fluxInfo.paymentAddress = zelnode.payment_address;
+      fluxInfo.activeSince = zelnode.activesince;
+      fluxInfo.collateralHash = getCollateralInfo(zelnode.collateral).txhash;
+      fluxInfo.collateralIndex = getCollateralInfo(zelnode.collateral).txindex;
       fluxInfo.roundTime = currentRoundTime;
       const curTime = new Date().getTime();
       fluxInfo.dataCollectedAt = curTime;
-      currentRefreshRound[ip] = fluxInfo;
-      if ((i + 1) % 25 === 0) {
-        log.info(`Checked ${i + 1}/${zelnodeips.length}.`);
-      }
-    }
-    if (Object.keys(currentRefreshRound).length > 0) {
       await serviceHelper.insertOneToDatabase(database, fluxcollection, currentRefreshRound).catch((error) => {
         log.error(error);
       });
+      if ((i + 1) % 25 === 0) {
+        log.info(`Checked ${i + 1}/${zelnodes.length}.`);
+      }
     }
     log.info(`Processing of ${currentRoundTime} finished.`);
+    lastCompletedRound = currentRoundTime;
     setTimeout(() => {
       processZelNodes();
     }, 5 * 60 * 1000);
@@ -159,10 +179,30 @@ async function getAllGeolocation(req, res) {
 
 async function getAllFluxInformation(req, res) {
   const database = db.db(config.database.local.database);
-  const query = {};
+  const queryForIps = [];
+  currentZelNodeIps.forEach((ip) => {
+    const singlequery = {
+      ip,
+    };
+    queryForIps.push(singlequery);
+  });
+  const query = {
+    $or: queryForIps,
+    roundTime: lastCompletedRound,
+  };
   const projection = {
     projection: {
       _id: 0,
+      ip: 1,
+      addedHeight: 1,
+      lastPaidHeight: 1,
+      tier: 1,
+      activeSince: 1,
+      confirmedHeight: 1,
+      lastConfirmedHeight: 1,
+      collateralHash: 1,
+      collateralIndex: 1,
+      paymentAddress: 1,
       roundTime: 1,
       dataCollectedAt: 1,
       geolocation: 1,
@@ -174,7 +214,51 @@ async function getAllFluxInformation(req, res) {
     },
   };
   // return latest zelnode round
-  const results = await serviceHelper.findOneInDatabaseReverse(database, fluxcollection, query, projection).catch((error) => {
+  const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection).catch((error) => {
+    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+    res.json(errMessage);
+    log.error(error);
+  });
+  const resMessage = serviceHelper.createDataMessage(results);
+  return res.json(resMessage);
+}
+
+async function getFluxIPHistory(req, res) {
+  const database = db.db(config.database.local.database);
+  let { ip } = req.params; // we accept both help/command and help?command=getinfo
+  ip = ip || req.query.ip;
+  if (!ip) {
+    const errMessage = serviceHelper.createErrorMessage('No IP provided');
+    return res.json(errMessage);
+  }
+  const query = {
+    ip,
+  };
+  const projection = {
+    projection: {
+      _id: 0,
+      ip: 1,
+      addedHeight: 1,
+      lastPaidHeight: 1,
+      tier: 1,
+      activeSince: 1,
+      confirmedHeight: 1,
+      lastConfirmedHeight: 1,
+      collateralHash: 1,
+      collateralIndex: 1,
+      paymentAddress: 1,
+      roundTime: 1,
+      dataCollectedAt: 1,
+      geolocation: 1,
+      zelcash: 1,
+      zelnode: 1,
+      zelbench: 1,
+      zelflux: 1,
+      zelapps: 1,
+    },
+  };
+  // return latest zelnode round
+  const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection).catch((error) => {
     const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
     res.json(errMessage);
     log.error(error);
@@ -189,6 +273,17 @@ async function start() {
       log.error(error);
       throw error;
     });
+    db.collection(fluxcollection).createIndex({ ip: 1 }, { name: 'query for getting list of Flux data associated to IP address' });
+    db.collection(fluxcollection).createIndex({ ip: 1, roundTime: 1 }, { name: 'query for getting list of Flux data associated to IP address since some roundTime' });
+    db.collection(fluxcollection).createIndex({ addedHeight: 1 }, { name: 'query for getting list of Flux data tied to addedHeight' });
+    db.collection(fluxcollection).createIndex({ lastPaidHeight: 1 }, { name: 'query for getting list of Flux data tied to lastPaidHeight' });
+    db.collection(fluxcollection).createIndex({ tier: 1 }, { name: 'query for getting list of Flux data tied to addedHeight' });
+    db.collection(fluxcollection).createIndex({ paymentAddress: 1 }, { name: 'query for getting list of Flux data tied to paymentAddress' });
+    db.collection(fluxcollection).createIndex({ activeSince: 1 }, { name: 'query for getting list of Flux data tied to activeSince' });
+    db.collection(fluxcollection).createIndex({ confirmedHeight: 1 }, { name: 'query for getting list of Flux data that were confirmed on specific height' });
+    db.collection(fluxcollection).createIndex({ lastConfirmedHeight: 1 }, { name: 'query for getting list of Flux data that were lastlyconfirmed on specific height' });
+    db.collection(fluxcollection).createIndex({ collateralHash: 1, collateralIndex: 1 }, { name: 'query for getting list of list of Flux data associated to specific collateral' });
+    db.collection(fluxcollection).createIndex({ roundTime: 1 }, { name: 'query for getting list of Flux data that were added in specific roundTime' });
     log.info('Initiating Flux API services...');
     // begin zelnodes processing;
     processZelNodes();
@@ -202,6 +297,8 @@ async function start() {
 }
 module.exports = {
   start,
+  getZelNodeIPs,
   getAllGeolocation,
   getAllFluxInformation,
+  getFluxIPHistory,
 };
