@@ -49,6 +49,7 @@ async function getZelNodeGeolocation(ip) {
       // push this to our database
       return information;
     }
+    log.warn(`Geolocation of IP ${ip} is unavailable`);
     return false;
   } catch (e) {
     log.error(`Geolocation of IP ${ip} error`);
@@ -63,6 +64,7 @@ async function getFluxInformation(ip) {
     if (fluxRes.data.status === 'success') {
       return fluxRes.data.data;
     }
+    log.warn(`Flux information of IP ${ip} is bad`);
     return {
       error: true,
     };
