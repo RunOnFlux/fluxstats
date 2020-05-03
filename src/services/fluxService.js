@@ -35,7 +35,7 @@ async function getZelNodeIPs() {
 
 async function getZelNodeGeolocation(ip) {
   try {
-    const ipApiUrl = `http://ip-api.com/json/${ip}}?fields=status,country,countryCode,lat,lon,query,org`;
+    const ipApiUrl = `http://ip-api.com/json/${ip}?fields=status,country,countryCode,lat,lon,query,org`;
     const ipRes = await axios.get(ipApiUrl, axiosConfig);
     if (ipRes.data.status === 'success') {
       const information = {
