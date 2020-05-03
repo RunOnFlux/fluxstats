@@ -101,6 +101,13 @@ async function findInDatabase(database, collection, query, projection) {
   return results;
 }
 
+async function findOneInDatabaseReverse(database, collection, query, projection) {
+  const result = await database.collection(collection).find(query, projection).sort({ _id: -1 }).limit(1)
+    .next()
+    .catch((error) => { throw error; });
+  return result;
+}
+
 async function findOneInDatabase(database, collection, query, projection) {
   const result = await database.collection(collection).findOne(query, projection).catch((error) => { throw error; });
   return result;
@@ -158,6 +165,7 @@ module.exports = {
   ensureString,
   connectMongoDb,
   findInDatabase,
+  findOneInDatabaseReverse,
   findOneInDatabase,
   findOneAndUpdateInDatabase,
   insertOneToDatabase,

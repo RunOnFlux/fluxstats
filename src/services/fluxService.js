@@ -79,7 +79,7 @@ async function getFluxInformation(ip) {
 async function processZelNodes() {
   try {
     const currentRoundTime = new Date().getTime();
-    const currentRefreshRound = [];
+    const currentRefreshRound = {};
     log.info(`Beginning processing of ${currentRoundTime}.`);
     const database = db.db(config.database.local.database);
     const zelnodeips = await getZelNodeIPs(); // always defined
@@ -111,12 +111,12 @@ async function processZelNodes() {
       fluxInfo.roundTime = currentRoundTime;
       const curTime = new Date().getTime();
       fluxInfo.dataCollectedAt = curTime;
-      currentRefreshRound.push(fluxInfo);
+      currentRefreshRound[ip] = fluxInfo;
       if ((i + 1) % 25 === 0) {
         log.info(`Checked ${i + 1}/${zelnodeips.length}.`);
       }
     }
-    if (currentRefreshRound.length > 0) {
+    if (Object.keys(currentRefreshRound).length > 0) {
       await serviceHelper.insertOneToDatabase(database, fluxcollection, currentRefreshRound).catch((error) => {
         log.error(error);
       });
@@ -174,7 +174,7 @@ async function getAllFluxInformation(req, res) {
     },
   };
   // return latest zelnode round
-  const results = await serviceHelper.findOneInDatabase(database, fluxcollection, query, projection).catch((error) => {
+  const results = await serviceHelper.findOneInDatabaseReverse(database, fluxcollection, query, projection).catch((error) => {
     const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
     res.json(errMessage);
     log.error(error);
