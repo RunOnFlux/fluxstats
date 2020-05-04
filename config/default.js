@@ -13,6 +13,8 @@ module.exports = {
         fluxes: 'fluxes',
         // geolocations of ip addresses belonging to zelflux instances
         geolocation: 'geolocation',
+        // timestamp of completed full rounds
+        completedRounds: 'completedrounds',
       },
     },
   },

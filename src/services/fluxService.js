@@ -11,9 +11,9 @@ const axiosConfig = {
 let db = null;
 const geocollection = config.database.local.collections.geolocation;
 const fluxcollection = config.database.local.collections.fluxes;
+const completedRoundsCollection = config.database.local.collections.completedRounds;
 
 let currentZelNodeIps = [];
-let lastCompletedRound = 0;
 
 async function getZelNodeList() {
   try {
@@ -140,7 +140,12 @@ async function processZelNodes() {
       }
     }
     log.info(`Processing of ${currentRoundTime} finished.`);
-    lastCompletedRound = currentRoundTime;
+    const crt = {
+      timestamp: currentRoundTime,
+    };
+    await serviceHelper.insertOneToDatabase(database, completedRoundsCollection, crt).catch((error) => {
+      log.error(error);
+    });
     setTimeout(() => {
       processZelNodes();
     }, 5 * 60 * 1000);
@@ -178,6 +183,14 @@ async function getAllGeolocation(req, res) {
 
 async function getAllFluxInformation(req, res) {
   const database = db.db(config.database.local.database);
+  const q = {};
+  const p = {};
+  const lastRound = await serviceHelper.findOneInDatabaseReverse(database, completedRoundsCollection, q, p).catch((error) => {
+    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+    res.json(errMessage);
+    log.error(error);
+  });
+  const lastCompletedRound = lastRound ? lastRound.timestamp : 0;
   const queryForIps = [];
   currentZelNodeIps.forEach((ip) => {
     const singlequery = {
