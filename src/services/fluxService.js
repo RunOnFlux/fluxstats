@@ -137,6 +137,10 @@ async function processZelNodes() {
       });
       if ((i + 1) % 25 === 0) {
         log.info(`Checked ${i + 1}/${zelnodes.length}.`);
+        const colStats = await serviceHelper.collectionStats(database, fluxcollection).catch((error) => {
+          throw error;
+        });
+        log.info('FLUX', colStats.size, colStats.count, colStats.avgObjSize);
       }
     }
     log.info(`Processing of ${currentRoundTime} finished.`);
@@ -148,12 +152,12 @@ async function processZelNodes() {
     });
     setTimeout(() => {
       processZelNodes();
-    }, 5 * 60 * 1000);
+    }, 1 * 60 * 1000);
   } catch (e) {
     log.error(e);
     setTimeout(() => {
       processZelNodes();
-    }, 5 * 60 * 1000);
+    }, 1 * 60 * 1000);
   }
 }
 
@@ -223,6 +227,102 @@ async function getAllFluxInformation(req, res) {
       zelbench: 1,
       zelflux: 1,
       zelapps: 1,
+    },
+  };
+  // return latest zelnode round
+  const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection).catch((error) => {
+    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+    res.json(errMessage);
+    log.error(error);
+  });
+  const resMessage = serviceHelper.createDataMessage(results);
+  return res.json(resMessage);
+}
+
+async function getAllFluxVersions(req, res) {
+  const database = db.db(config.database.local.database);
+  const q = {};
+  const p = {};
+  const lastRound = await serviceHelper.findOneInDatabaseReverse(database, completedRoundsCollection, q, p).catch((error) => {
+    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+    res.json(errMessage);
+    log.error(error);
+  });
+  const lastCompletedRound = lastRound ? lastRound.timestamp : 0;
+  const queryForIps = [];
+  currentZelNodeIps.forEach((ip) => {
+    const singlequery = {
+      ip,
+    };
+    queryForIps.push(singlequery);
+  });
+  const query = {
+    $or: queryForIps,
+    roundTime: lastCompletedRound,
+  };
+  const projection = {
+    projection: {
+      _id: 0,
+      zelcash: 1,
+      zelbench: 1,
+      zelflux: 1,
+    },
+  };
+  // return latest zelnode round
+  const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection).catch((error) => {
+    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+    res.json(errMessage);
+    log.error(error);
+  });
+  const allData = [];
+  results.forEach((flux) => {
+    if (flux.zelcash) {
+      const fluxData = {
+        ip: flux.zelflux.ip,
+        zelcash: flux.zelcash.info.version,
+        zelbench: flux.zelbench.info.version,
+        zelflux: flux.zelflux.version,
+      };
+      allData.push(fluxData);
+    } else {
+      const fluxData = {
+        ip: flux.ip,
+        zelcash: null,
+        zelbench: null,
+        zelflux: null,
+      };
+      allData.push(fluxData);
+    }
+  });
+  const resMessage = serviceHelper.createDataMessage(allData);
+  return res.json(resMessage);
+}
+
+async function getAllFluxGeolocation(req, res) {
+  const database = db.db(config.database.local.database);
+  const q = {};
+  const p = {};
+  const lastRound = await serviceHelper.findOneInDatabaseReverse(database, completedRoundsCollection, q, p).catch((error) => {
+    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+    res.json(errMessage);
+    log.error(error);
+  });
+  const lastCompletedRound = lastRound ? lastRound.timestamp : 0;
+  const queryForIps = [];
+  currentZelNodeIps.forEach((ip) => {
+    const singlequery = {
+      ip,
+    };
+    queryForIps.push(singlequery);
+  });
+  const query = {
+    $or: queryForIps,
+    roundTime: lastCompletedRound,
+  };
+  const projection = {
+    projection: {
+      _id: 0,
+      geolocation: 1,
     },
   };
   // return latest zelnode round
@@ -314,4 +414,6 @@ module.exports = {
   getAllGeolocation,
   getAllFluxInformation,
   getFluxIPHistory,
+  getAllFluxGeolocation,
+  getAllFluxVersions,
 };
