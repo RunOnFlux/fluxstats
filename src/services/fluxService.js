@@ -100,7 +100,17 @@ async function processZelNodes() {
     for (const [i, zelnode] of zelnodes.entries()) {
       const fluxInfo = await getFluxInformation(zelnode.ip);
       const query = { ip: zelnode.ip };
-      const projection = {};
+      const projection = {
+        projection: {
+          _id: 0,
+          ip: 1,
+          country: 1,
+          countryCode: 1,
+          lat: 1,
+          lon: 1,
+          org: 1,
+        },
+      };
       // we shall always have geolocation
       const result = await serviceHelper.findOneInDatabase(database, geocollection, query, projection).catch((error) => {
         log.error(error);
@@ -331,7 +341,8 @@ async function getAllFluxGeolocation(req, res) {
     res.json(errMessage);
     log.error(error);
   });
-  const resMessage = serviceHelper.createDataMessage(results);
+  const bresults = results.map((x) => x.geolocation);
+  const resMessage = serviceHelper.createDataMessage(bresults);
   return res.json(resMessage);
 }
 
