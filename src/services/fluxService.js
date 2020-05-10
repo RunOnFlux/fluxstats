@@ -390,6 +390,51 @@ async function getFluxIPHistory(req, res) {
   return res.json(resMessage);
 }
 
+async function getCompletedRoundsTimestamps(req, res) {
+  const database = db.db(config.database.local.database);
+  const q = {};
+  const p = {};
+  const completedRounds = await serviceHelper.findInDatabase(database, completedRoundsCollection, q, p).catch((error) => {
+    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+    res.json(errMessage);
+    log.error(error);
+  });
+  const bresults = completedRounds.map((x) => x.timestamp);
+  const resMessage = serviceHelper.createDataMessage(bresults);
+  return res.json(resMessage);
+}
+
+async function getAllFluxGeolocationNow(req, res) {
+  const database = db.db(config.database.local.database);
+  const queryForIps = [];
+  const zelnodeIpsNow = await getZelNodeIPs();
+  zelnodeIpsNow.forEach((ip) => {
+    const singlequery = {
+      ip,
+    };
+    queryForIps.push(singlequery);
+  });
+  const query = {
+    $or: queryForIps,
+  };
+  const projection = {
+    projection: {
+      _id: 0,
+      geolocation: 1,
+    },
+  };
+  // return latest zelnode round
+  const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection).catch((error) => {
+    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+    res.json(errMessage);
+    log.error(error);
+  });
+  const bresults = results.map((x) => x.geolocation);
+  const cresults = [...new Set(bresults)];
+  const resMessage = serviceHelper.createDataMessage(cresults);
+  return res.json(resMessage);
+}
+
 async function start() {
   try {
     db = await serviceHelper.connectMongoDb().catch((error) => {
@@ -427,4 +472,6 @@ module.exports = {
   getFluxIPHistory,
   getAllFluxGeolocation,
   getAllFluxVersions,
+  getCompletedRoundsTimestamps,
+  getAllFluxGeolocationNow,
 };

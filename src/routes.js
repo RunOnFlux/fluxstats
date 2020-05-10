@@ -20,4 +20,10 @@ module.exports = (app) => {
   app.get('/fluxlocations', cache('5 minutes'), (req, res) => {
     fluxService.getAllFluxGeolocation(req, res);
   });
+  app.get('/availabletimes', cache('5 minutes'), (req, res) => {
+    fluxService.getCompletedRoundsTimestamps(req, res);
+  });
+  app.get('/fluxlocationsnow', cache('5 minutes'), (req, res) => {
+    fluxService.getAllFluxGeolocationNow(req, res);
+  });
 };
