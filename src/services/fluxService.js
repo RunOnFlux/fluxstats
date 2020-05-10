@@ -101,13 +101,15 @@ async function processZelNodes() {
       const fluxInfo = await getFluxInformation(zelnode.ip);
       const query = { ip: zelnode.ip };
       const projection = {
-        _id: 0,
-        ip: 1,
-        country: 1,
-        countryCode: 1,
-        lat: 1,
-        lon: 1,
-        org: 1,
+        projection: {
+          _id: 0,
+          ip: 1,
+          country: 1,
+          countryCode: 1,
+          lat: 1,
+          lon: 1,
+          org: 1,
+        },
       };
       // we shall always have geolocation
       const result = await serviceHelper.findOneInDatabase(database, geocollection, query, projection).catch((error) => {
@@ -173,13 +175,15 @@ async function getAllGeolocation(req, res) {
   const database = db.db(config.database.local.database);
   const query = {};
   const projection = {
-    _id: 0,
-    ip: 1,
-    country: 1,
-    countryCode: 1,
-    lat: 1,
-    lon: 1,
-    org: 1,
+    projection: {
+      _id: 0,
+      ip: 1,
+      country: 1,
+      countryCode: 1,
+      lat: 1,
+      lon: 1,
+      org: 1,
+    },
   };
   const results = await serviceHelper.findInDatabase(database, geocollection, query, projection).catch((error) => {
     const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
@@ -213,25 +217,27 @@ async function getAllFluxInformation(req, res) {
     roundTime: lastCompletedRound,
   };
   const projection = {
-    _id: 0,
-    ip: 1,
-    addedHeight: 1,
-    lastPaidHeight: 1,
-    tier: 1,
-    activeSince: 1,
-    confirmedHeight: 1,
-    lastConfirmedHeight: 1,
-    collateralHash: 1,
-    collateralIndex: 1,
-    paymentAddress: 1,
-    roundTime: 1,
-    dataCollectedAt: 1,
-    geolocation: 1,
-    zelcash: 1,
-    zelnode: 1,
-    zelbench: 1,
-    zelflux: 1,
-    zelapps: 1,
+    projection: {
+      _id: 0,
+      ip: 1,
+      addedHeight: 1,
+      lastPaidHeight: 1,
+      tier: 1,
+      activeSince: 1,
+      confirmedHeight: 1,
+      lastConfirmedHeight: 1,
+      collateralHash: 1,
+      collateralIndex: 1,
+      paymentAddress: 1,
+      roundTime: 1,
+      dataCollectedAt: 1,
+      geolocation: 1,
+      zelcash: 1,
+      zelnode: 1,
+      zelbench: 1,
+      zelflux: 1,
+      zelapps: 1,
+    },
   };
   // return latest zelnode round
   const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection).catch((error) => {
@@ -265,10 +271,12 @@ async function getAllFluxVersions(req, res) {
     roundTime: lastCompletedRound,
   };
   const projection = {
-    _id: 0,
-    zelcash: 1,
-    zelbench: 1,
-    zelflux: 1,
+    projection: {
+      _id: 0,
+      zelcash: 1,
+      zelbench: 1,
+      zelflux: 1,
+    },
   };
   // return latest zelnode round
   const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection).catch((error) => {
@@ -322,8 +330,10 @@ async function getAllFluxGeolocation(req, res) {
     roundTime: lastCompletedRound,
   };
   const projection = {
-    _id: 0,
-    geolocation: 1,
+    projection: {
+      _id: 0,
+      geolocation: 1,
+    },
   };
   // return latest zelnode round
   const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection).catch((error) => {
@@ -348,25 +358,27 @@ async function getFluxIPHistory(req, res) {
     ip,
   };
   const projection = {
-    _id: 0,
-    ip: 1,
-    addedHeight: 1,
-    lastPaidHeight: 1,
-    tier: 1,
-    activeSince: 1,
-    confirmedHeight: 1,
-    lastConfirmedHeight: 1,
-    collateralHash: 1,
-    collateralIndex: 1,
-    paymentAddress: 1,
-    roundTime: 1,
-    dataCollectedAt: 1,
-    geolocation: 1,
-    zelcash: 1,
-    zelnode: 1,
-    zelbench: 1,
-    zelflux: 1,
-    zelapps: 1,
+    projection: {
+      _id: 0,
+      ip: 1,
+      addedHeight: 1,
+      lastPaidHeight: 1,
+      tier: 1,
+      activeSince: 1,
+      confirmedHeight: 1,
+      lastConfirmedHeight: 1,
+      collateralHash: 1,
+      collateralIndex: 1,
+      paymentAddress: 1,
+      roundTime: 1,
+      dataCollectedAt: 1,
+      geolocation: 1,
+      zelcash: 1,
+      zelnode: 1,
+      zelbench: 1,
+      zelflux: 1,
+      zelapps: 1,
+    },
   };
   // return latest zelnode round
   const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection).catch((error) => {
@@ -406,8 +418,10 @@ async function getAllFluxGeolocationNow(req, res) {
     $or: queryForIps,
   };
   const projection = {
-    _id: 0,
-    geolocation: 1,
+    projection: {
+      _id: 0,
+      geolocation: 1,
+    },
   };
   // return latest zelnode round
   const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection).catch((error) => {

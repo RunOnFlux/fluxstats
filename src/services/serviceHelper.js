@@ -97,21 +97,19 @@ async function connectMongoDb(url) {
 }
 
 async function findInDatabase(database, collection, query, projection) {
-  const results = await database.collection(collection).find(query).project(projection).toArray()
-    .catch((error) => { throw error; });
+  const results = await database.collection(collection).find(query, projection).toArray().catch((error) => { throw error; });
   return results;
 }
 
 async function findOneInDatabaseReverse(database, collection, query, projection) {
-  const result = await database.collection(collection).find(query).project(projection).sort({ _id: -1 })
-    .limit(1)
+  const result = await database.collection(collection).find(query, projection).sort({ _id: -1 }).limit(1)
     .next()
     .catch((error) => { throw error; });
   return result;
 }
 
 async function findOneInDatabase(database, collection, query, projection) {
-  const result = await database.collection(collection).findOne(query).project(projection).catch((error) => { throw error; });
+  const result = await database.collection(collection).findOne(query, projection).catch((error) => { throw error; });
   return result;
 }
 
@@ -131,13 +129,13 @@ async function updateOneInDatabase(database, collection, query, value) {
   return result;
 }
 
-async function updateInDatabase(database, collection, query, update) {
-  const result = await database.collection(collection).updateMany(query, update).catch((error) => { throw error; });
+async function updateInDatabase(database, collection, query, projection) {
+  const result = await database.collection(collection).updateMany(query, projection).catch((error) => { throw error; });
   return result;
 }
 
 async function findOneAndDeleteInDatabase(database, collection, query, projection) {
-  const result = await database.collection(collection).findOneAndDelete(query).project(projection).catch((error) => { throw error; });
+  const result = await database.collection(collection).findOneAndDelete(query, projection).catch((error) => { throw error; });
   return result;
 }
 
