@@ -7,7 +7,7 @@ module.exports = {
     url: '127.0.0.1',
     port: 27017,
     local: {
-      database: 'testfluxapi',
+      database: 'testfluxapi2',
       collections: {
         // Array of round of zelflux/info calls + geolocation.
         fluxes: 'fluxes',
