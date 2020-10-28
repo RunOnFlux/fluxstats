@@ -14,9 +14,13 @@ let outdatedKDANodes = [];
 let currentNodes = [];
 let allNodes = [];
 
+const axiosConfig = {
+  timeout: 13456,
+};
+
 async function getKadenaLocation(ip) {
   try {
-    const zelnodeList = await axios.get(`http://${ip}:16127/zelapps/location/KadenaChainWebNode`);
+    const zelnodeList = await axios.get(`http://${ip}:16127/zelapps/location/KadenaChainWebNode`, axiosConfig);
     if (zelnodeList.data.status === 'success') {
       return zelnodeList.data.data || [];
     }
@@ -29,7 +33,7 @@ async function getKadenaLocation(ip) {
 
 async function getKadenaAccount(ip) {
   try {
-    const zelnodeList = await axios.get(`http://${ip}:16127/zelflux/kadena`);
+    const zelnodeList = await axios.get(`http://${ip}:16127/zelflux/kadena`, axiosConfig);
     if (zelnodeList.data.status === 'success') {
       return zelnodeList.data.data || null;
     }
@@ -45,7 +49,7 @@ async function getKadenaHeight(ip) {
     const agent = new https.Agent({
       rejectUnauthorized: false,
     });
-    const kadenaData = await axios.get(`https://${ip}:30004/chainweb/0.0/mainnet01/cut`, { httpsAgent: agent });
+    const kadenaData = await axios.get(`https://${ip}:30004/chainweb/0.0/mainnet01/cut`, { httpsAgent: agent, timeout: 13456 });
     return kadenaData.data.height;
   } catch (e) {
     // log.error(e);
@@ -55,7 +59,7 @@ async function getKadenaHeight(ip) {
 
 async function getZelNodeTier(ip) {
   try {
-    const zelnodeList = await axios.get(`http://${ip}:16127/zelcash/getzelnodestatus`);
+    const zelnodeList = await axios.get(`http://${ip}:16127/zelcash/getzelnodestatus`, axiosConfig);
     if (zelnodeList.data.status === 'success') {
       return zelnodeList.data.data.tier;
     }
@@ -68,7 +72,7 @@ async function getZelNodeTier(ip) {
 
 async function getZelNodeZelID(ip) {
   try {
-    const zelnodeList = await axios.get(`http://${ip}:16127/zelflux/zelid`);
+    const zelnodeList = await axios.get(`http://${ip}:16127/zelflux/zelid`, axiosConfig);
     if (zelnodeList.data.status === 'success') {
       return zelnodeList.data.data;
     }
@@ -81,7 +85,7 @@ async function getZelNodeZelID(ip) {
 
 async function getKadenaVerison(ip) {
   try {
-    const appData = await axios.get(`http://${ip}:16127/zelapps/installedzelapps/KadenaChainWebNode`);
+    const appData = await axios.get(`http://${ip}:16127/zelapps/installedzelapps/KadenaChainWebNode`, axiosConfig);
     if (appData.data.status === 'success') {
       return appData.data.data[0].hash;
     }
