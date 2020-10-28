@@ -17,5 +17,14 @@ module.exports = {
         completedRounds: 'completedrounds',
       },
     },
+    kadena: {
+      database: 'kadena',
+      collections: {
+        // Array of round of zelflux/info calls + geolocation.
+        nodes: 'nodes',
+        // timestamp of completed full rounds
+        completedRounds: 'completedrounds',
+      },
+    },
   },
 };

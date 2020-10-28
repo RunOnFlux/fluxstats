@@ -5,9 +5,12 @@ const log = require('./src/lib/log');
 
 const fluxServices = require('./src/services/fluxService');
 
+const kadenaService = require('./src/services/kadenaService');
+
 const server = http.createServer(app);
 
 server.listen(config.server.port, () => {
   log.info(`Flux API listening on port ${config.server.port}!`);
   fluxServices.start();
+  kadenaService.start();
 });
