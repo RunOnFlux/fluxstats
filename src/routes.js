@@ -1,4 +1,5 @@
 const apicache = require('apicache');
+const path = require('path');
 const fluxService = require('./services/fluxService');
 const kadenaService = require('./services/kadenaService');
 
@@ -64,7 +65,11 @@ module.exports = (app) => {
   app.get('/kadena/eligible/:days?', cache('5 minutes'), (req, res) => {
     kadenaService.getKadenaEligibleDays(req, res);
   });
-  app.get('kadena/availabletimes', cache('5 minutes'), (req, res) => {
+  app.get('/kadena/availabletimes', cache('5 minutes'), (req, res) => {
     kadenaService.getCompletedRoundsTimestamps(req, res);
+  });
+
+  app.get('/kadena', cache('5 minutes'), (req, res) => {
+    res.sendFile(path.join(__dirname, './kdaUI/index.html'));
   });
 };
