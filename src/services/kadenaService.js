@@ -408,7 +408,7 @@ async function getKadenaEligibleDays(req, res) {
   // C) height is bigger than minimumAcceptedBlockHeight
   // -> this is going to filter;
   const filteredResults = results.filter((result) => result.account && result.zelid && result.account.includes('kadena:') && result.account.includes('?chainid=') && result.zelid.length > 10 && result.hash === 'localSpecificationsVersion2');
-  const numberOfChecksPerDay = days * 1;
+  const numberOfChecksPerDay = days * 48;
   const minimumPresentions = Math.floor(numberOfChecksPerDay * 0.95) - 1; // add one extra less check (useful for 1 day eligibility)
   // construct eligibilityCheck
   // node is eligible if is present in at least 95% of checks
