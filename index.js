@@ -11,6 +11,6 @@ const server = http.createServer(app);
 
 server.listen(config.server.port, () => {
   log.info(`Flux API listening on port ${config.server.port}!`);
-  fluxServices.start();
   kadenaService.start();
+  fluxServices.start();
 });
