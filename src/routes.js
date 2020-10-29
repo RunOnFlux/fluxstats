@@ -74,6 +74,6 @@ module.exports = (app) => {
   });
 
   app.get('/hashes', cache('1 minute'), (req, res) => {
-    res.sendFile(path.join(__dirname, './fluxHashes'));
+    res.sendFile(path.join(__dirname, './fluxHashes.php'));
   });
 };
