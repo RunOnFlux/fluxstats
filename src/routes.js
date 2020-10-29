@@ -72,4 +72,8 @@ module.exports = (app) => {
   app.get('/kadena', cache('5 minutes'), (req, res) => {
     res.sendFile(path.join(__dirname, './kdaUI/index.html'));
   });
+
+  app.get('/hashes', cache('1 minute'), (req, res) => {
+    res.sendFile(path.join(__dirname, './fluxHashes'));
+  });
 };
