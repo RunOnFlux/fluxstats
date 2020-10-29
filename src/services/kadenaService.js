@@ -427,7 +427,7 @@ async function getKadenaEligibleDays(req, res) {
   const eligibleIps = [];
   // eslint-disable-next-line no-restricted-syntax
   for (const ip of ipsOK) {
-    if (countOccurrences(ipsOK, ip) >= minimumPresentions) {
+    if (countOccurrences(ips, ip) >= minimumPresentions) {
       const q = {
         ip,
       };
