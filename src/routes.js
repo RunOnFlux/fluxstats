@@ -47,12 +47,6 @@ module.exports = (app) => {
   app.get('/kadena/history/account/:account?', cache('5 minutes'), (req, res) => {
     kadenaService.getKadenaAccountHistory(req, res);
   });
-  app.get('/kadena/history/ip/:ip?', cache('5 minutes'), (req, res) => {
-    kadenaService.getKadenaIPHistory(req, res);
-  });
-  app.get('/kadena/history/account/:account?', cache('5 minutes'), (req, res) => {
-    kadenaService.getKadenaAccountHistory(req, res);
-  });
   app.get('/kadena/limitedhistory/ip/:ip?/:days?', cache('5 minutes'), (req, res) => {
     kadenaService.getKadenaIPHistoryDays(req, res);
   });
