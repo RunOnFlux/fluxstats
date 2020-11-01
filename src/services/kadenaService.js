@@ -294,7 +294,7 @@ async function getKadenaIPHistoryDays(req, res) {
   const minimumTime = currentTime - daysInMiliseconds;
   const query = {
     ip,
-    roundTime: { $gt: minimumTime },
+    roundTime: { $gte: minimumTime },
   };
   const projection = {
     projection: {
@@ -337,7 +337,7 @@ async function getKadenaAccountHistoryDays(req, res) {
   const minimumTime = currentTime - daysInMiliseconds;
   const query = {
     account,
-    roundTime: { $gt: minimumTime },
+    roundTime: { $gte: minimumTime },
   };
   const projection = {
     projection: {
@@ -382,8 +382,8 @@ async function getKadenaEligibleDays(req, res) {
   const minimumAcceptedBlockHeight = currentBlockEstimation - blocksInTimeFrame - 200000; // allow being off sync for 200000 blocks;
 
   const query = {
-    roundTime: { $gt: minimumTime },
-    height: { $gt: minimumAcceptedBlockHeight },
+    roundTime: { $gte: minimumTime },
+    height: { $gte: minimumAcceptedBlockHeight },
     tier: { $exists: true },
     hash: { $exists: true },
     account: { $exists: true },
