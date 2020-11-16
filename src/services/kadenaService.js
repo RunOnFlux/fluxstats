@@ -117,8 +117,8 @@ async function beginKadena() {
   for (const index of stringOfTenChars) { // async inside
     const randomNumber = Math.floor((Math.random() * zelnodelist.length));
     const kdaNodes = await getKadenaLocation(zelnodelist[randomNumber]);
-    const kdaNodesValid = kdaNodes.filter((node) => node.hash === 'localSpecificationsVersion2');
-    const kdaNodesINValid = kdaNodes.filter((node) => node.hash !== 'localSpecificationsVersion2');
+    const kdaNodesValid = kdaNodes.filter((node) => node.hash === 'localSpecificationsVersion3');
+    const kdaNodesINValid = kdaNodes.filter((node) => node.hash !== 'localSpecificationsVersion3');
     kdaNodesValid.forEach((node) => {
       chainwebnodelocations.push(node.ip);
     });
@@ -184,7 +184,7 @@ async function outdatedNodes(req, res) {
   res.json(resMessage);
 }
 
-async function activeNodes(req, res) {
+async function uptodateNodes(req, res) {
   const results = currentNodes;
   const resMessage = serviceHelper.createDataMessage(results);
   res.json(resMessage);
@@ -411,7 +411,8 @@ async function getKadenaEligibleDays(req, res) {
   // B) account of kadena is present
   // C) height is bigger than minimumAcceptedBlockHeight
   // -> this is going to filter;
-  const filteredResults = results.filter((result) => result.hash === 'localSpecificationsVersion2');
+  // const filteredResults = results.filter((result) => result.hash === 'localSpecificationsVersion3');
+  const filteredResults = results;
   const numberOfChecksPerDay = days * 48;
   const minimumPresentions = Math.floor(numberOfChecksPerDay * 0.95) - 1; // add one extra less check (useful for 1 day eligibility)
   // construct eligibilityCheck
@@ -516,7 +517,7 @@ async function start() {
 module.exports = {
   start,
   outdatedNodes,
-  activeNodes,
+  uptodateNodes,
   allNodesAPI,
   getCompletedRoundsTimestamps,
   getKadenaIPHistory,

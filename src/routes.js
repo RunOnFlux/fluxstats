@@ -32,11 +32,11 @@ module.exports = (app) => {
   app.get('/kadena/outdatednodes', cache('5 minutes'), (req, res) => {
     kadenaService.outdatedNodes(req, res);
   });
-  app.get('/kadena/currentnodes', cache('5 minutes'), (req, res) => {
-    kadenaService.activeNodes(req, res);
+  app.get('/kadena/uptodatenodes', cache('5 minutes'), (req, res) => {
+    kadenaService.uptodateNodes(req, res);
   });
   app.get('/kadena/allnodes', cache('5 minutes'), (req, res) => {
-    kadenaService.activeNodes(req, res);
+    kadenaService.allNodesAPI(req, res);
   });
   app.get('/kadena/availabletimes', cache('5 minutes'), (req, res) => {
     kadenaService.getCompletedRoundsTimestamps(req, res);
