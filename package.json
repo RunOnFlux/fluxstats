@@ -1,6 +1,6 @@
 {
   "name": "fluxapi",
-  "version": "2.2.1",
+  "version": "2.2.2",
   "description": "Flux API features information about ZelFlux network",
   "main": "index.js",
   "scripts": {

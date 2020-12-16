@@ -384,10 +384,10 @@ async function getKadenaEligibleDays(req, res) {
   const query = {
     roundTime: { $gte: minimumTime },
     height: { $gte: minimumAcceptedBlockHeight },
-    tier: { $exists: true },
-    hash: { $exists: true },
-    account: { $exists: true },
-    zelid: { $exists: true },
+    tier: { $exists: true, $type: 2 },
+    hash: { $exists: true, $type: 2 },
+    account: { $exists: true, $type: 2 },
+    zelid: { $exists: true, $type: 2 },
   };
   const projection = {
     projection: {
