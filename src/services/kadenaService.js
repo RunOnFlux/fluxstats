@@ -117,8 +117,8 @@ async function beginKadena() {
   for (const index of stringOfTenChars) { // async inside
     const randomNumber = Math.floor((Math.random() * zelnodelist.length));
     const kdaNodes = await getKadenaLocation(zelnodelist[randomNumber]);
-    const kdaNodesValid = kdaNodes.filter((node) => node.hash === 'localSpecificationsVersion3');
-    const kdaNodesINValid = kdaNodes.filter((node) => node.hash !== 'localSpecificationsVersion3');
+    const kdaNodesValid = kdaNodes.filter((node) => node.hash === 'localSpecificationsVersion4');
+    const kdaNodesINValid = kdaNodes.filter((node) => node.hash !== 'localSpecificationsVersion4');
     kdaNodesValid.forEach((node) => {
       chainwebnodelocations.push(node.ip);
     });
