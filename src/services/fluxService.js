@@ -16,6 +16,8 @@ const LRUoptions = {
 };
 const myCache = new LRU(LRUoptions);
 
+let round = 0;
+
 let db = null;
 const geocollection = config.database.local.collections.geolocation;
 const fluxcollection = config.database.local.collections.fluxes;
@@ -95,8 +97,101 @@ function getCollateralInfo(collateralOutpoint) {
   return { txhash, txindex };
 }
 
+async function createHistoryStats() {
+  const database = db.db(config.database.local.database);
+  // last month
+  const lastMonthTime = new Date().getTime() - 2592000000; // 30 days in ms
+  const q = {
+    timestamp: { $gte: lastMonthTime },
+  };
+  const p = {
+    _id: 0,
+    timestamp: 1,
+  };
+  const completedRounds = await serviceHelper.findInDatabase(database, completedRoundsCollection, q, p);
+  const bresults = completedRounds.map((x) => x.timestamp);
+  // pick 12 times from each day
+  // data are collected roughly every 15 minutes -> 96 collections per day. Take every 8th data
+  let i = bresults.length;
+  const okTimestamps = [];
+  // eslint-disable-next-line no-plusplus
+  while (i--) {
+    if ((i + 1) % 8) {
+      okTimestamps.push(bresults[i]);
+    }
+  }
+  const queryForTimes = [];
+  okTimestamps.forEach((time) => {
+    const singlequery = {
+      roundTime: time,
+    };
+    queryForTimes.push(singlequery);
+  });
+  const query = {
+    $or: queryForTimes,
+  };
+  const projection = {
+    projection: {
+      _id: 0,
+      roundTime: 1,
+      tier: 1,
+    },
+  };
+  // return latest zelnode round
+  const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection);
+  // array of object containing tier and roundtime
+  const data = {};
+  // this array can be quite large
+  results.forEach((result) => {
+    if (data[result.roundTime]) {
+      if (result.tier === 'BASIC') {
+        if (data[result.roundTime].basic) {
+          data[result.roundTime].basic += 1;
+        } else {
+          data[result.roundTime].basic = 1;
+        }
+      } else if (result.tier === 'SUPER') {
+        if (data[result.roundTime].super) {
+          data[result.roundTime].super += 1;
+        } else {
+          data[result.roundTime].super = 1;
+        }
+      } else if (result.tier === 'BAMF') {
+        if (data[result.roundTime].bamf) {
+          data[result.roundTime].bamf += 1;
+        } else {
+          data[result.roundTime].bamf = 1;
+        }
+      }
+    } else {
+      data[result.roundTime] = {};
+      if (result.tier === 'BASIC') {
+        if (data[result.roundTime].basic) {
+          data[result.roundTime].basic += 1;
+        } else {
+          data[result.roundTime].basic = 1;
+        }
+      } else if (result.tier === 'SUPER') {
+        if (data[result.roundTime].super) {
+          data[result.roundTime].super += 1;
+        } else {
+          data[result.roundTime].super = 1;
+        }
+      } else if (result.tier === 'BAMF') {
+        if (data[result.roundTime].bamf) {
+          data[result.roundTime].bamf += 1;
+        } else {
+          data[result.roundTime].bamf = 1;
+        }
+      }
+    }
+  });
+  myCache.set('historyStats', data);
+}
+
 async function processZelNodes() {
   try {
+    round += 1;
     const currentRoundTime = new Date().getTime();
     const zelnodes = await getZelNodeList();
     log.info(`Beginning processing of ${currentRoundTime}.`);
@@ -170,11 +265,17 @@ async function processZelNodes() {
     });
     setTimeout(() => {
       processZelNodes();
+      if (round % 2 === 0) {
+        createHistoryStats();
+      }
     }, 1 * 60 * 1000);
   } catch (e) {
     log.error(e);
     setTimeout(() => {
       processZelNodes();
+      if (round % 2 === 0) {
+        createHistoryStats();
+      }
     }, 1 * 60 * 1000);
   }
 }
@@ -445,99 +546,7 @@ async function getAllFluxGeolocationNow(req, res) {
 
 async function fluxNodesHistoryStats(req, res) {
   try {
-    let dataForSend = myCache.get('historyStats');
-    if (!dataForSend) {
-      const database = db.db(config.database.local.database);
-      // last month
-      const lastMonthTime = new Date().getTime() - 2592000000; // 30 days in ms
-      const q = {
-        timestamp: { $gte: lastMonthTime },
-      };
-      const p = {
-        _id: 0,
-        timestamp: 1,
-      };
-      const completedRounds = await serviceHelper.findInDatabase(database, completedRoundsCollection, q, p);
-      const bresults = completedRounds.map((x) => x.timestamp);
-      // pick 12 times from each day
-      // data are collected roughly every 15 minutes -> 96 collections per day. Take every 8th data
-      let i = bresults.length;
-      const okTimestamps = [];
-      // eslint-disable-next-line no-plusplus
-      while (i--) {
-        if ((i + 1) % 8) {
-          okTimestamps.push(bresults[i]);
-        }
-      }
-      const queryForTimes = [];
-      okTimestamps.forEach((time) => {
-        const singlequery = {
-          roundTime: time,
-        };
-        queryForTimes.push(singlequery);
-      });
-      const query = {
-        $or: queryForTimes,
-      };
-      const projection = {
-        projection: {
-          _id: 0,
-          roundTime: 1,
-          tier: 1,
-        },
-      };
-      // return latest zelnode round
-      const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection);
-      // array of object containing tier and roundtime
-      const data = {};
-      // this array can be quite large
-      results.forEach((result) => {
-        if (data[result.roundTime]) {
-          if (result.tier === 'BASIC') {
-            if (data[result.roundTime].basic) {
-              data[result.roundTime].basic += 1;
-            } else {
-              data[result.roundTime].basic = 1;
-            }
-          } else if (result.tier === 'SUPER') {
-            if (data[result.roundTime].super) {
-              data[result.roundTime].super += 1;
-            } else {
-              data[result.roundTime].super = 1;
-            }
-          } else if (result.tier === 'BAMF') {
-            if (data[result.roundTime].bamf) {
-              data[result.roundTime].bamf += 1;
-            } else {
-              data[result.roundTime].bamf = 1;
-            }
-          }
-        } else {
-          data[result.roundTime] = {};
-          if (result.tier === 'BASIC') {
-            if (data[result.roundTime].basic) {
-              data[result.roundTime].basic += 1;
-            } else {
-              data[result.roundTime].basic = 1;
-            }
-          } else if (result.tier === 'SUPER') {
-            if (data[result.roundTime].super) {
-              data[result.roundTime].super += 1;
-            } else {
-              data[result.roundTime].super = 1;
-            }
-          } else if (result.tier === 'BAMF') {
-            if (data[result.roundTime].bamf) {
-              data[result.roundTime].bamf += 1;
-            } else {
-              data[result.roundTime].bamf = 1;
-            }
-          }
-        }
-      });
-      myCache.set('historyStats', data);
-      dataForSend = data;
-    }
+    const dataForSend = myCache.get('historyStats');
     const resMessage = serviceHelper.createDataMessage(dataForSend);
     res.json(resMessage);
   } catch (error) {
@@ -568,6 +577,7 @@ async function start() {
     log.info('Initiating Flux API services...');
     // begin zelnodes processing;
     processZelNodes();
+    createHistoryStats();
   } catch (e) {
     // restart service after 5 mins
     log.error(e);
