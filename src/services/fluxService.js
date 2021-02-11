@@ -1,12 +1,20 @@
 /* eslint-disable no-await-in-loop */
 const axios = require('axios');
 const config = require('config');
+const LRU = require('lru-cache');
 const log = require('../lib/log');
 const serviceHelper = require('./serviceHelper');
 
 const axiosConfig = {
   timeout: 13456,
 };
+
+// default cache
+const LRUoptions = {
+  max: 500, // store 500 values, we shall not have more values at any period
+  maxAge: 1000 * 60 * 60, // 1 hour
+};
+const myCache = new LRU(LRUoptions);
 
 let db = null;
 const geocollection = config.database.local.collections.geolocation;
@@ -437,69 +445,100 @@ async function getAllFluxGeolocationNow(req, res) {
 
 async function fluxNodesHistoryStats(req, res) {
   try {
-    const database = db.db(config.database.local.database);
-    // last month
-    const lastMonthTime = new Date().getTime() - 2592000000; // 30 days in ms
-    const query = {
-      roundTime: { $gte: lastMonthTime },
-    };
-    const projection = {
-      projection: {
+    let dataForSend = myCache.get('historyStats');
+    if (!dataForSend) {
+      const database = db.db(config.database.local.database);
+      // last month
+      const lastMonthTime = new Date().getTime() - 2592000000; // 30 days in ms
+      const q = {
+        timestamp: { $gte: lastMonthTime },
+      };
+      const p = {
         _id: 0,
-        roundTime: 1,
-        tier: 1,
-      },
-    };
-    // return latest zelnode round
-    const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection);
-    // array of object containing tier and roundtime
-    const data = {};
-    // this array can be quite large
-    results.forEach((result) => {
-      if (data[result.roundTime]) {
-        if (result.tier === 'BASIC') {
-          if (data[result.roundTime].basic) {
-            data[result.roundTime].basic += 1;
-          } else {
-            data[result.roundTime].basic = 1;
-          }
-        } else if (result.tier === 'SUPER') {
-          if (data[result.roundTime].super) {
-            data[result.roundTime].super += 1;
-          } else {
-            data[result.roundTime].super = 1;
-          }
-        } else if (result.tier === 'BAMF') {
-          if (data[result.roundTime].bamf) {
-            data[result.roundTime].bamf += 1;
-          } else {
-            data[result.roundTime].bamf = 1;
-          }
-        }
-      } else {
-        data[result.roundTime] = {};
-        if (result.tier === 'BASIC') {
-          if (data[result.roundTime].basic) {
-            data[result.roundTime].basic += 1;
-          } else {
-            data[result.roundTime].basic = 1;
-          }
-        } else if (result.tier === 'SUPER') {
-          if (data[result.roundTime].super) {
-            data[result.roundTime].super += 1;
-          } else {
-            data[result.roundTime].super = 1;
-          }
-        } else if (result.tier === 'BAMF') {
-          if (data[result.roundTime].bamf) {
-            data[result.roundTime].bamf += 1;
-          } else {
-            data[result.roundTime].bamf = 1;
-          }
+        timestamp: 1,
+      };
+      const completedRounds = await serviceHelper.findInDatabase(database, completedRoundsCollection, q, p);
+      const bresults = completedRounds.map((x) => x.timestamp);
+      // pick 12 times from each day
+      // data are collected roughly every 15 minutes -> 96 collections per day. Take every 8th data
+      let i = bresults.length;
+      const okTimestamps = [];
+      // eslint-disable-next-line no-plusplus
+      while (i--) {
+        if ((i + 1) % 8) {
+          okTimestamps.push(bresults[i]);
         }
       }
-    });
-    const resMessage = serviceHelper.createDataMessage(data);
+      const queryForTimes = [];
+      okTimestamps.forEach((time) => {
+        const singlequery = {
+          roundTime: time,
+        };
+        queryForTimes.push(singlequery);
+      });
+      const query = {
+        $or: queryForTimes,
+      };
+      const projection = {
+        projection: {
+          _id: 0,
+          roundTime: 1,
+          tier: 1,
+        },
+      };
+      // return latest zelnode round
+      const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection);
+      // array of object containing tier and roundtime
+      const data = {};
+      // this array can be quite large
+      results.forEach((result) => {
+        if (data[result.roundTime]) {
+          if (result.tier === 'BASIC') {
+            if (data[result.roundTime].basic) {
+              data[result.roundTime].basic += 1;
+            } else {
+              data[result.roundTime].basic = 1;
+            }
+          } else if (result.tier === 'SUPER') {
+            if (data[result.roundTime].super) {
+              data[result.roundTime].super += 1;
+            } else {
+              data[result.roundTime].super = 1;
+            }
+          } else if (result.tier === 'BAMF') {
+            if (data[result.roundTime].bamf) {
+              data[result.roundTime].bamf += 1;
+            } else {
+              data[result.roundTime].bamf = 1;
+            }
+          }
+        } else {
+          data[result.roundTime] = {};
+          if (result.tier === 'BASIC') {
+            if (data[result.roundTime].basic) {
+              data[result.roundTime].basic += 1;
+            } else {
+              data[result.roundTime].basic = 1;
+            }
+          } else if (result.tier === 'SUPER') {
+            if (data[result.roundTime].super) {
+              data[result.roundTime].super += 1;
+            } else {
+              data[result.roundTime].super = 1;
+            }
+          } else if (result.tier === 'BAMF') {
+            if (data[result.roundTime].bamf) {
+              data[result.roundTime].bamf += 1;
+            } else {
+              data[result.roundTime].bamf = 1;
+            }
+          }
+        }
+      });
+      myCache.set('historyStats', data);
+      dataForSend = data;
+    }
+    const resMessage = serviceHelper.createDataMessage(dataForSend);
     res.json(resMessage);
   } catch (error) {
     const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
