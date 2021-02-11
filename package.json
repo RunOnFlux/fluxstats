@@ -1,7 +1,7 @@
 {
   "name": "fluxapi",
-  "version": "2.2.4",
-  "description": "Flux API features information about ZelFlux network",
+  "version": "2.3.0",
+  "description": "Flux API features information about Flux network",
   "main": "index.js",
   "scripts": {
     "start": "nodemon --ignore './src/kdaUI/' --ignore './src/fluxHashes' index.js",

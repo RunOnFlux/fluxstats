@@ -435,6 +435,79 @@ async function getAllFluxGeolocationNow(req, res) {
   return res.json(resMessage);
 }
 
+async function fluxNodesHistoryStats(req, res) {
+  try {
+    const database = db.db(config.database.local.database);
+    // last month
+    const lastMonthTime = new Date().getTime() - 2592000000; // 30 days in ms
+    const query = {
+      roundTime: { $gte: lastMonthTime },
+    };
+    const projection = {
+      projection: {
+        _id: 0,
+        roundTime: 1,
+        tier: 1,
+      },
+    };
+    // return latest zelnode round
+    const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection);
+    // array of object containing tier and roundtime
+    const data = {};
+    // this array can be quite large
+    results.forEach((result) => {
+      if (data[result.roundTime]) {
+        if (result.tier === 'BASIC') {
+          if (data[result.roundTime].basic) {
+            data[result.roundTime].basic += 1;
+          } else {
+            data[result.roundTime].basic = 1;
+          }
+        } else if (result.tier === 'SUPER') {
+          if (data[result.roundTime].super) {
+            data[result.roundTime].super += 1;
+          } else {
+            data[result.roundTime].super = 1;
+          }
+        } else if (result.tier === 'BAMF') {
+          if (data[result.roundTime].bamf) {
+            data[result.roundTime].bamf += 1;
+          } else {
+            data[result.roundTime].bamf = 1;
+          }
+        }
+      } else {
+        data[result.roundTime] = {};
+        if (result.tier === 'BASIC') {
+          if (data[result.roundTime].basic) {
+            data[result.roundTime].basic += 1;
+          } else {
+            data[result.roundTime].basic = 1;
+          }
+        } else if (result.tier === 'SUPER') {
+          if (data[result.roundTime].super) {
+            data[result.roundTime].super += 1;
+          } else {
+            data[result.roundTime].super = 1;
+          }
+        } else if (result.tier === 'BAMF') {
+          if (data[result.roundTime].bamf) {
+            data[result.roundTime].bamf += 1;
+          } else {
+            data[result.roundTime].bamf = 1;
+          }
+        }
+      }
+    });
+    const resMessage = serviceHelper.createDataMessage(data);
+    res.json(resMessage);
+  } catch (error) {
+    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+    res.json(errMessage);
+    log.error(error);
+  }
+}
+
 async function start() {
   try {
     db = await serviceHelper.connectMongoDb().catch((error) => {
@@ -474,4 +547,5 @@ module.exports = {
   getAllFluxVersions,
   getCompletedRoundsTimestamps,
   getAllFluxGeolocationNow,
+  fluxNodesHistoryStats,
 };

@@ -28,6 +28,10 @@ module.exports = (app) => {
   app.get('/fluxlocationsnow', cache('5 minutes'), (req, res) => {
     fluxService.getAllFluxGeolocationNow(req, res);
   });
+  // get last month of history stats
+  app.get('/fluxhistorystats', cache('5 minutes'), (req, res) => {
+    fluxService.fluxNodesHistoryStats(req, res);
+  });
 
   app.get('/kadena/outdatednodes', cache('5 minutes'), (req, res) => {
     kadenaService.outdatedNodes(req, res);
