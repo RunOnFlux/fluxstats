@@ -117,8 +117,8 @@ async function beginKadena() {
   for (const index of stringOfTenChars) { // async inside
     const randomNumber = Math.floor((Math.random() * zelnodelist.length));
     const kdaNodes = await getKadenaLocation(zelnodelist[randomNumber]);
-    const kdaNodesValid = kdaNodes.filter((node) => node.hash === 'localSpecificationsVersion5');
-    const kdaNodesINValid = kdaNodes.filter((node) => node.hash !== 'localSpecificationsVersion5');
+    const kdaNodesValid = kdaNodes.filter((node) => (node.hash === 'localSpecificationsVersion5' || node.hash === 'localSpecificationsVersion6'));
+    const kdaNodesINValid = kdaNodes.filter((node) => (node.hash !== 'localSpecificationsVersion5' && node.hash !== 'localSpecificationsVersion6'));
     kdaNodesValid.forEach((node) => {
       chainwebnodelocations.push(node.ip);
     });
@@ -414,7 +414,7 @@ async function getKadenaEligibleDays(req, res) {
   // const filteredResults = results.filter((result) => result.hash === 'localSpecificationsVersion3');
   const filteredResults = results;
   const numberOfChecksPerDay = days * 48;
-  const minimumPresentions = Math.floor(numberOfChecksPerDay * 0.92) - 1; // add one extra less check (useful for 1 day eligibility)
+  const minimumPresentions = Math.floor(numberOfChecksPerDay * 0.08) - 1; // add one extra less check (useful for 1 day eligibility) // 8% REVERT AFTER FORK
   // construct eligibilityCheck
   // node is eligible if is present in at least 95% of checks
   const ips = [];
