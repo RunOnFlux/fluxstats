@@ -414,7 +414,7 @@ async function getKadenaEligibleDays(req, res) {
   // const filteredResults = results.filter((result) => result.hash === 'localSpecificationsVersion3');
   const filteredResults = results;
   const numberOfChecksPerDay = days * 48;
-  const minimumPresentions = Math.floor(numberOfChecksPerDay * 0.5) - 1; // add one extra less check (useful for 1 day eligibility) // 50% REVERT AFTER FORK
+  const minimumPresentions = Math.floor(numberOfChecksPerDay * 0.31) - 1; // add one extra less check (useful for 1 day eligibility) // 31% REVERT AFTER FORK 54/172
   // construct eligibilityCheck
   // node is eligible if is present in at least 95% of checks
   const ips = [];
