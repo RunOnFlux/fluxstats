@@ -27,7 +27,7 @@ let currentFluxNodeIps = [];
 
 async function geFluxNodeList() {
   try {
-    const fluxnodeList = await axios.get(`${config.explorer}/api/zelnode/listzelnodes`, axiosConfig);
+    const fluxnodeList = await axios.get(`${config.explorer}/api/fluxnode/listfluxnodes`, axiosConfig);
     return fluxnodeList.data.result || [];
   } catch (e) {
     log.error(e);
