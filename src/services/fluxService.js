@@ -23,22 +23,22 @@ const geocollection = config.database.local.collections.geolocation;
 const fluxcollection = config.database.local.collections.fluxes;
 const completedRoundsCollection = config.database.local.collections.completedRounds;
 
-let currentZelNodeIps = [];
+let currentFluxNodeIps = [];
 
-async function getZelNodeList() {
+async function geFluxNodeList() {
   try {
-    const zelnodeList = await axios.get(`${config.explorer}/api/zelnode/listzelnodes`, axiosConfig);
-    return zelnodeList.data.result || [];
+    const fluxnodeList = await axios.get(`${config.explorer}/api/zelnode/listzelnodes`, axiosConfig);
+    return fluxnodeList.data.result || [];
   } catch (e) {
     log.error(e);
     return [];
   }
 }
 
-async function getZelNodeIPs(zelnodeList) {
+async function getFluxNodeIPs(fluxnodeList) {
   try {
-    const zelnodes = zelnodeList || await getZelNodeList();
-    const ips = zelnodes.map((zelnode) => zelnode.ip);
+    const fluxnodes = fluxnodeList || await geFluxNodeList();
+    const ips = fluxnodes.map((fluxnode) => fluxnode.ip);
     return ips;
   } catch (e) {
     log.error(e);
@@ -46,7 +46,7 @@ async function getZelNodeIPs(zelnodeList) {
   }
 }
 
-async function getZelNodeGeolocation(ip) {
+async function getFluxNodeGeolocation(ip) {
   try {
     const ipApiUrl = `http://ip-api.com/json/${ip}?fields=status,country,countryCode,lat,lon,query,org`;
     const ipRes = await axios.get(ipApiUrl, axiosConfig);
@@ -137,7 +137,7 @@ async function createHistoryStats() {
       tier: 1,
     },
   };
-  // return latest zelnode round
+  // return latest fluxnode round
   const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection);
   // array of object containing tier and roundtime
   const data = {};
@@ -189,20 +189,20 @@ async function createHistoryStats() {
   myCache.set('historyStats', data);
 }
 
-async function processZelNodes() {
+async function processFluxNodes() {
   try {
     round += 1;
     const currentRoundTime = new Date().getTime();
-    const zelnodes = await getZelNodeList();
+    const fluxnodes = await geFluxNodeList();
     log.info(`Beginning processing of ${currentRoundTime}.`);
     const database = db.db(config.database.local.database);
-    currentZelNodeIps = await getZelNodeIPs(zelnodes);
-    log.info(`Found ${zelnodes.length} Fluxes.`);
+    currentFluxNodeIps = await getFluxNodeIPs(fluxnodes);
+    log.info(`Found ${fluxnodes.length} Fluxes.`);
 
     // eslint-disable-next-line no-restricted-syntax
-    for (const [i, zelnode] of zelnodes.entries()) {
-      const fluxInfo = await getFluxInformation(zelnode.ip);
-      const query = { ip: zelnode.ip };
+    for (const [i, fluxnode] of fluxnodes.entries()) {
+      const fluxInfo = await getFluxInformation(fluxnode.ip);
+      const query = { ip: fluxnode.ip };
       const projection = {
         projection: {
           _id: 0,
@@ -223,7 +223,7 @@ async function processZelNodes() {
       } else {
         // we do not have info about that ip yet. Get it and Store it.
         await serviceHelper.timeout(2000);
-        const geoRes = await getZelNodeGeolocation(zelnode.ip);
+        const geoRes = await getFluxNodeGeolocation(fluxnode.ip);
         if (geoRes) {
           // geo ok, store it and update fluxInfo.
           await serviceHelper.insertOneToDatabase(database, geocollection, geoRes).catch((error) => {
@@ -232,23 +232,23 @@ async function processZelNodes() {
           fluxInfo.geolocation = geoRes;
         }
       }
-      fluxInfo.ip = zelnode.ip;
-      fluxInfo.addedHeight = zelnode.added_height;
-      fluxInfo.confirmedHeight = zelnode.confirmed_height;
-      fluxInfo.lastConfirmedHeight = zelnode.last_confirmed_height;
-      fluxInfo.lastPaidHeight = zelnode.last_paid_height;
-      fluxInfo.tier = zelnode.tier;
-      fluxInfo.paymentAddress = zelnode.payment_address;
-      fluxInfo.activeSince = zelnode.activesince;
-      fluxInfo.collateralHash = getCollateralInfo(zelnode.collateral).txhash;
-      fluxInfo.collateralIndex = getCollateralInfo(zelnode.collateral).txindex;
+      fluxInfo.ip = fluxnode.ip;
+      fluxInfo.addedHeight = fluxnode.added_height;
+      fluxInfo.confirmedHeight = fluxnode.confirmed_height;
+      fluxInfo.lastConfirmedHeight = fluxnode.last_confirmed_height;
+      fluxInfo.lastPaidHeight = fluxnode.last_paid_height;
+      fluxInfo.tier = fluxnode.tier;
+      fluxInfo.paymentAddress = fluxnode.payment_address;
+      fluxInfo.activeSince = fluxnode.activesince;
+      fluxInfo.collateralHash = getCollateralInfo(fluxnode.collateral).txhash;
+      fluxInfo.collateralIndex = getCollateralInfo(fluxnode.collateral).txindex;
       fluxInfo.roundTime = currentRoundTime;
       const curTime = new Date().getTime();
       fluxInfo.dataCollectedAt = curTime;
       if (fluxInfo.zelcash) {
         fluxInfo.daemon = fluxInfo.zelcash;
         fluxInfo.benchmark = fluxInfo.zelbench;
-        fluxInfo.node = fluxInfo.zelnode;
+        fluxInfo.node = fluxInfo.fluxnode;
         fluxInfo.flux = fluxInfo.zelflux;
         fluxInfo.apps = fluxInfo.zelapps;
       } else if (fluxInfo.daemon) {
@@ -262,7 +262,7 @@ async function processZelNodes() {
         log.error(error);
       });
       if ((i + 1) % 25 === 0) {
-        log.info(`Checked ${i + 1}/${zelnodes.length}.`);
+        log.info(`Checked ${i + 1}/${fluxnodes.length}.`);
         const colStats = await serviceHelper.collectionStats(database, fluxcollection).catch((error) => {
           throw error;
         });
@@ -277,7 +277,7 @@ async function processZelNodes() {
       log.error(error);
     });
     setTimeout(() => {
-      processZelNodes();
+      processFluxNodes();
       if (round % 2 === 0) {
         createHistoryStats();
       }
@@ -285,7 +285,7 @@ async function processZelNodes() {
   } catch (e) {
     log.error(e);
     setTimeout(() => {
-      processZelNodes();
+      processFluxNodes();
       if (round % 2 === 0) {
         createHistoryStats();
       }
@@ -328,7 +328,7 @@ async function getAllFluxInformation(req, res) {
   });
   const lastCompletedRound = lastRound ? lastRound.timestamp : 0;
   const queryForIps = [];
-  currentZelNodeIps.forEach((ip) => {
+  currentFluxNodeIps.forEach((ip) => {
     const singlequery = {
       ip,
     };
@@ -366,7 +366,7 @@ async function getAllFluxInformation(req, res) {
       apps: 1,
     },
   };
-  // return latest zelnode round
+  // return latest fluxnode round
   const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection).catch((error) => {
     const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
     res.json(errMessage);
@@ -387,7 +387,7 @@ async function getAllFluxVersions(req, res) {
   });
   const lastCompletedRound = lastRound ? lastRound.timestamp : 0;
   const queryForIps = [];
-  currentZelNodeIps.forEach((ip) => {
+  currentFluxNodeIps.forEach((ip) => {
     const singlequery = {
       ip,
     };
@@ -408,7 +408,7 @@ async function getAllFluxVersions(req, res) {
       flux: 1,
     },
   };
-  // return latest zelnode round
+  // return latest fluxnode round
   const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection).catch((error) => {
     const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
     res.json(errMessage);
@@ -466,7 +466,7 @@ async function getAllFluxGeolocation(req, res) {
   });
   const lastCompletedRound = lastRound ? lastRound.timestamp : 0;
   const queryForIps = [];
-  currentZelNodeIps.forEach((ip) => {
+  currentFluxNodeIps.forEach((ip) => {
     const singlequery = {
       ip,
     };
@@ -482,7 +482,7 @@ async function getAllFluxGeolocation(req, res) {
       geolocation: 1,
     },
   };
-  // return latest zelnode round
+  // return latest fluxnode round
   const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection).catch((error) => {
     const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
     res.json(errMessage);
@@ -532,7 +532,7 @@ async function getFluxIPHistory(req, res) {
       apps: 1,
     },
   };
-  // return latest zelnode round
+  // return latest fluxnode round
   const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection).catch((error) => {
     const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
     res.json(errMessage);
@@ -559,8 +559,8 @@ async function getCompletedRoundsTimestamps(req, res) {
 async function getAllFluxGeolocationNow(req, res) {
   const database = db.db(config.database.local.database);
   const queryForIps = [];
-  const zelnodeIpsNow = await getZelNodeIPs();
-  zelnodeIpsNow.forEach((ip) => {
+  const fluxnodeIpsNow = await getFluxNodeIPs();
+  fluxnodeIpsNow.forEach((ip) => {
     const singlequery = {
       ip,
     };
@@ -575,7 +575,7 @@ async function getAllFluxGeolocationNow(req, res) {
       geolocation: 1,
     },
   };
-  // return latest zelnode round
+  // return latest fluxnode round
   const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection).catch((error) => {
     const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
     res.json(errMessage);
@@ -618,8 +618,8 @@ async function start() {
     database.collection(fluxcollection).createIndex({ collateralHash: 1, collateralIndex: 1 }, { name: 'query for getting list of list of Flux data associated to specific collateral' });
     database.collection(fluxcollection).createIndex({ roundTime: 1 }, { name: 'query for getting list of Flux data that were added in specific roundTime' });
     log.info('Initiating Flux API services...');
-    // begin zelnodes processing;
-    processZelNodes();
+    // begin fluxnodes processing;
+    processFluxNodes();
     createHistoryStats();
   } catch (e) {
     // restart service after 5 mins
@@ -631,7 +631,7 @@ async function start() {
 }
 module.exports = {
   start,
-  getZelNodeIPs,
+  getFluxNodeIPs,
   getAllGeolocation,
   getAllFluxInformation,
   getFluxIPHistory,

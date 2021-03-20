@@ -20,9 +20,9 @@ const axiosConfig = {
 
 async function getKadenaLocation(ip) {
   try {
-    const zelnodeList = await axios.get(`http://${ip}:16127/apps/location/KadenaChainWebNode`, axiosConfig);
-    if (zelnodeList.data.status === 'success') {
-      return zelnodeList.data.data || [];
+    const fluxnodeList = await axios.get(`http://${ip}:16127/apps/location/KadenaChainWebNode`, axiosConfig);
+    if (fluxnodeList.data.status === 'success') {
+      return fluxnodeList.data.data || [];
     }
     return [];
   } catch (e) {
@@ -33,9 +33,9 @@ async function getKadenaLocation(ip) {
 
 async function getKadenaAccount(ip) {
   try {
-    const zelnodeList = await axios.get(`http://${ip}:16127/flux/kadena`, axiosConfig);
-    if (zelnodeList.data.status === 'success') {
-      return zelnodeList.data.data || null;
+    const fluxnodeList = await axios.get(`http://${ip}:16127/flux/kadena`, axiosConfig);
+    if (fluxnodeList.data.status === 'success') {
+      return fluxnodeList.data.data || null;
     }
     return null;
   } catch (e) {
@@ -57,11 +57,11 @@ async function getKadenaHeight(ip) {
   }
 }
 
-async function getZelNodeTier(ip) {
+async function getFluxNodeTier(ip) {
   try {
-    const zelnodeList = await axios.get(`http://${ip}:16127/daemon/getzelnodestatus`, axiosConfig);
-    if (zelnodeList.data.status === 'success') {
-      return zelnodeList.data.data.tier;
+    const fluxnodeList = await axios.get(`http://${ip}:16127/daemon/getzelnodestatus`, axiosConfig);
+    if (fluxnodeList.data.status === 'success') {
+      return fluxnodeList.data.data.tier;
     }
     return null;
   } catch (e) {
@@ -70,11 +70,11 @@ async function getZelNodeTier(ip) {
   }
 }
 
-async function getZelNodeZelID(ip) {
+async function getFluxNodeZelID(ip) {
   try {
-    const zelnodeList = await axios.get(`http://${ip}:16127/flux/zelid`, axiosConfig);
-    if (zelnodeList.data.status === 'success') {
-      return zelnodeList.data.data;
+    const fluxnodeList = await axios.get(`http://${ip}:16127/flux/zelid`, axiosConfig);
+    if (fluxnodeList.data.status === 'success') {
+      return fluxnodeList.data.data;
     }
     return null;
   } catch (e) {
@@ -103,8 +103,8 @@ async function beginKadena() {
   // -> check if kadena is running properly there and check if its +- synced
   const database = db.db(config.database.kadena.database);
   const currentRoundTime = new Date().getTime();
-  const zelnodelist = await fluxService.getZelNodeIPs();
-  if (zelnodelist.length < 10) {
+  const fluxnodelist = await fluxService.getFluxNodeIPs();
+  if (fluxnodelist.length < 10) {
     setTimeout(() => {
       beginKadena();
     }, 60 * 1000);
@@ -115,8 +115,8 @@ async function beginKadena() {
   const outdatedchainweblocations = [];
   // eslint-disable-next-line no-restricted-syntax, no-unused-vars
   for (const index of stringOfTenChars) { // async inside
-    const randomNumber = Math.floor((Math.random() * zelnodelist.length));
-    const kdaNodes = await getKadenaLocation(zelnodelist[randomNumber]);
+    const randomNumber = Math.floor((Math.random() * fluxnodelist.length));
+    const kdaNodes = await getKadenaLocation(fluxnodelist[randomNumber]);
     const kdaNodesValid = kdaNodes.filter((node) => (node.hash === 'localSpecificationsVersion6'));
     const kdaNodesINValid = kdaNodes.filter((node) => (node.hash !== 'localSpecificationsVersion6'));
     kdaNodesValid.forEach((node) => {
@@ -137,8 +137,8 @@ async function beginKadena() {
     const nodeData = {};
     nodeData.ip = kdaNode;
     nodeData.roundTime = currentRoundTime;
-    nodeData.tier = await getZelNodeTier(kdaNode);
-    nodeData.zelid = await getZelNodeZelID(kdaNode);
+    nodeData.tier = await getFluxNodeTier(kdaNode);
+    nodeData.zelid = await getFluxNodeZelID(kdaNode);
     nodeData.account = await getKadenaAccount(kdaNode);
     nodeData.height = await getKadenaHeight(kdaNode);
     nodeData.hash = await getKadenaVerison(kdaNode);
@@ -156,8 +156,8 @@ async function beginKadena() {
     const nodeData = {};
     nodeData.ip = kdaNode;
     nodeData.roundTime = currentRoundTime;
-    nodeData.tier = await getZelNodeTier(kdaNode);
-    nodeData.zelid = await getZelNodeZelID(kdaNode);
+    nodeData.tier = await getFluxNodeTier(kdaNode);
+    nodeData.zelid = await getFluxNodeZelID(kdaNode);
     nodeData.account = await getKadenaAccount(kdaNode);
     nodeData.height = await getKadenaHeight(kdaNode);
     nodeData.hash = await getKadenaVerison(kdaNode);
