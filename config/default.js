@@ -9,9 +9,9 @@ module.exports = {
     local: {
       database: 'testfluxapi2',
       collections: {
-        // Array of round of zelflux/info calls + geolocation.
+        // Array of round of flux/info calls + geolocation.
         fluxes: 'fluxes',
-        // geolocations of ip addresses belonging to zelflux instances
+        // geolocations of ip addresses belonging to flux instances
         geolocation: 'geolocation',
         // timestamp of completed full rounds
         completedRounds: 'completedrounds',
@@ -20,7 +20,7 @@ module.exports = {
     kadena: {
       database: 'kadena',
       collections: {
-        // Array of round of zelflux/info calls + geolocation.
+        // Array of round of flux/info calls + geolocation.
         nodes: 'nodes',
         // timestamp of completed full rounds
         completedRounds: 'completedrounds',

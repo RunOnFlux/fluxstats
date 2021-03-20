@@ -72,7 +72,7 @@ async function getZelNodeGeolocation(ip) {
 
 async function getFluxInformation(ip) {
   try {
-    const fluxInfoUrl = `http://${ip}:16127/zelflux/info`;
+    const fluxInfoUrl = `http://${ip}:16127/flux/info`;
     const fluxRes = await axios.get(fluxInfoUrl, axiosConfig);
     if (fluxRes.data.status === 'success') {
       return fluxRes.data.data;
@@ -144,19 +144,19 @@ async function createHistoryStats() {
   // this array can be quite large
   results.forEach((result) => {
     if (data[result.roundTime]) {
-      if (result.tier === 'BASIC') {
+      if (result.tier === 'BASIC' || result.tier === 'CUMULUS') {
         if (data[result.roundTime].basic) {
           data[result.roundTime].basic += 1;
         } else {
           data[result.roundTime].basic = 1;
         }
-      } else if (result.tier === 'SUPER') {
+      } else if (result.tier === 'SUPER' || result.tier === 'NIMBUS') {
         if (data[result.roundTime].super) {
           data[result.roundTime].super += 1;
         } else {
           data[result.roundTime].super = 1;
         }
-      } else if (result.tier === 'BAMF') {
+      } else if (result.tier === 'BAMF' || result.tier === 'STRATUS') {
         if (data[result.roundTime].bamf) {
           data[result.roundTime].bamf += 1;
         } else {
@@ -165,19 +165,19 @@ async function createHistoryStats() {
       }
     } else {
       data[result.roundTime] = {};
-      if (result.tier === 'BASIC') {
+      if (result.tier === 'BASIC' || result.tier === 'CUMULUS') {
         if (data[result.roundTime].basic) {
           data[result.roundTime].basic += 1;
         } else {
           data[result.roundTime].basic = 1;
         }
-      } else if (result.tier === 'SUPER') {
+      } else if (result.tier === 'SUPER' || result.tier === 'NIMBUS') {
         if (data[result.roundTime].super) {
           data[result.roundTime].super += 1;
         } else {
           data[result.roundTime].super = 1;
         }
-      } else if (result.tier === 'BAMF') {
+      } else if (result.tier === 'BAMF' || result.tier === 'STRATUS') {
         if (data[result.roundTime].bamf) {
           data[result.roundTime].bamf += 1;
         } else {
@@ -245,6 +245,19 @@ async function processZelNodes() {
       fluxInfo.roundTime = currentRoundTime;
       const curTime = new Date().getTime();
       fluxInfo.dataCollectedAt = curTime;
+      if (fluxInfo.zelcash) {
+        fluxInfo.daemon = fluxInfo.zelcash;
+        fluxInfo.benchmark = fluxInfo.zelbench;
+        fluxInfo.node = fluxInfo.zelnode;
+        fluxInfo.flux = fluxInfo.zelflux;
+        fluxInfo.apps = fluxInfo.zelapps;
+      } else if (fluxInfo.daemon) {
+        fluxInfo.zelcash = fluxInfo.daemon;
+        fluxInfo.zelbench = fluxInfo.benchmark;
+        fluxInfo.zelnode = fluxInfo.node;
+        fluxInfo.zelflux = fluxInfo.flux;
+        fluxInfo.zelapps = fluxInfo.apps;
+      }
       await serviceHelper.insertOneToDatabase(database, fluxcollection, fluxInfo).catch((error) => {
         log.error(error);
       });
@@ -346,6 +359,11 @@ async function getAllFluxInformation(req, res) {
       zelbench: 1,
       zelflux: 1,
       zelapps: 1,
+      daemon: 1,
+      node: 1,
+      benchmark: 1,
+      flux: 1,
+      apps: 1,
     },
   };
   // return latest zelnode round
@@ -385,6 +403,9 @@ async function getAllFluxVersions(req, res) {
       zelcash: 1,
       zelbench: 1,
       zelflux: 1,
+      daemon: 1,
+      benchmark: 1,
+      flux: 1,
     },
   };
   // return latest zelnode round
@@ -401,6 +422,20 @@ async function getAllFluxVersions(req, res) {
         zelcash: flux.zelcash.info.version,
         zelbench: flux.zelbench.info.version,
         zelflux: flux.zelflux.version,
+        daemon: flux.zelcash.info.version,
+        benchmark: flux.zelbench.info.version,
+        flux: flux.zelflux.version,
+      };
+      allData.push(fluxData);
+    } else if (flux.daemon) {
+      const fluxData = {
+        ip: flux.flux.ip,
+        zelcash: flux.daemon.info.version,
+        zelbench: flux.benchmark.info.version,
+        zelflux: flux.flux.version,
+        daemon: flux.daemon.info.version,
+        benchmark: flux.benchmark.info.version,
+        flux: flux.flux.version,
       };
       allData.push(fluxData);
     } else {
@@ -409,6 +444,9 @@ async function getAllFluxVersions(req, res) {
         zelcash: null,
         zelbench: null,
         zelflux: null,
+        daemon: null,
+        benchmark: null,
+        flux: null,
       };
       allData.push(fluxData);
     }
@@ -487,6 +525,11 @@ async function getFluxIPHistory(req, res) {
       zelbench: 1,
       zelflux: 1,
       zelapps: 1,
+      daemon: 1,
+      node: 1,
+      benchmark: 1,
+      flux: 1,
+      apps: 1,
     },
   };
   // return latest zelnode round
