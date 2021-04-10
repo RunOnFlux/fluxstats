@@ -147,20 +147,26 @@ async function createHistoryStats() {
       if (result.tier === 'BASIC' || result.tier === 'CUMULUS') {
         if (data[result.roundTime].basic) {
           data[result.roundTime].basic += 1;
+          data[result.roundTime].cumulus += 1;
         } else {
           data[result.roundTime].basic = 1;
+          data[result.roundTime].cumulus = 1;
         }
       } else if (result.tier === 'SUPER' || result.tier === 'NIMBUS') {
         if (data[result.roundTime].super) {
           data[result.roundTime].super += 1;
+          data[result.roundTime].nimbus += 1;
         } else {
           data[result.roundTime].super = 1;
+          data[result.roundTime].nimbus = 1;
         }
       } else if (result.tier === 'BAMF' || result.tier === 'STRATUS') {
         if (data[result.roundTime].bamf) {
           data[result.roundTime].bamf += 1;
+          data[result.roundTime].stratus += 1;
         } else {
           data[result.roundTime].bamf = 1;
+          data[result.roundTime].stratus = 1;
         }
       }
     } else {
@@ -168,20 +174,26 @@ async function createHistoryStats() {
       if (result.tier === 'BASIC' || result.tier === 'CUMULUS') {
         if (data[result.roundTime].basic) {
           data[result.roundTime].basic += 1;
+          data[result.roundTime].cumulus += 1;
         } else {
           data[result.roundTime].basic = 1;
+          data[result.roundTime].cumulus = 1;
         }
       } else if (result.tier === 'SUPER' || result.tier === 'NIMBUS') {
         if (data[result.roundTime].super) {
           data[result.roundTime].super += 1;
+          data[result.roundTime].nimbus += 1;
         } else {
           data[result.roundTime].super = 1;
+          data[result.roundTime].nimbus = 1;
         }
       } else if (result.tier === 'BAMF' || result.tier === 'STRATUS') {
         if (data[result.roundTime].bamf) {
           data[result.roundTime].bamf += 1;
+          data[result.roundTime].stratus += 1;
         } else {
           data[result.roundTime].bamf = 1;
+          data[result.roundTime].stratus = 1;
         }
       }
     }
