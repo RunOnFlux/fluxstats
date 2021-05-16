@@ -245,6 +245,19 @@ async function processFluxNodes() {
       fluxInfo.roundTime = currentRoundTime;
       const curTime = new Date().getTime();
       fluxInfo.dataCollectedAt = curTime;
+      if (fluxInfo.zelcash) {
+        fluxInfo.daemon = fluxInfo.zelcash;
+        fluxInfo.benchmark = fluxInfo.zelbench;
+        fluxInfo.node = fluxInfo.fluxnode;
+        fluxInfo.flux = fluxInfo.zelflux;
+        fluxInfo.apps = fluxInfo.zelapps;
+      } else if (fluxInfo.daemon) {
+        fluxInfo.zelcash = fluxInfo.daemon;
+        fluxInfo.zelbench = fluxInfo.benchmark;
+        fluxInfo.zelnode = fluxInfo.node;
+        fluxInfo.zelflux = fluxInfo.flux;
+        fluxInfo.zelapps = fluxInfo.apps;
+      }
       await serviceHelper.insertOneToDatabase(database, fluxcollection, fluxInfo).catch((error) => {
         log.error(error);
       });
@@ -360,6 +373,11 @@ async function getAllFluxInformation(req, res) {
         benchmark: 1,
         flux: 1,
         apps: 1,
+        zelcash: 1,
+        zelnode: 1,
+        zelbench: 1,
+        zelflux: 1,
+        zelapps: 1,
       },
     };
   }
