@@ -4,6 +4,7 @@ const serviceHelper = require('./src/services/serviceHelper');
 async function removeRecords() {
   let db = null;
   const kadenaNodesCollection = config.database.kadena.collections.nodes;
+  // const completedRoundsCollection = config.database.kadena.collections.completedRounds;
 
   db = await serviceHelper.connectMongoDb();
 
@@ -22,6 +23,13 @@ async function removeRecords() {
   console.log(results[0]);
 
   // const result = await serviceHelper.removeDocumentsFromCollection(database, kadenaNodesCollection, query);
+  // console.log(result);
+
+  // const queryB = {
+  //   timestamp: { $lt: minimumTime },
+  // };
+
+  // const result = await serviceHelper.removeDocumentsFromCollection(database, completedRoundsCollection, queryB);
   // console.log(result);
 }
 
