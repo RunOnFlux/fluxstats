@@ -360,6 +360,95 @@ async function getKadenaAccountHistoryDays(req, res) {
   return res.json(resMessage);
 }
 
+async function getKadenaEligibleStatsDays(req, res) {
+  const database = db.db(config.database.kadena.database);
+  let { days } = req.params;
+  days = days || req.query.days;
+  days = serviceHelper.ensureNumber(days);
+  if (!days || Number.isNaN(days) || days > 35) {
+    const errMessage = serviceHelper.createErrorMessage('Invalid Days provided');
+    return res.json(errMessage);
+  }
+  const daysInMiliseconds = days * 24 * 60 * 60 * 1000;
+  const currentTime = new Date().getTime();
+  const minimumTime = currentTime - daysInMiliseconds;
+
+  const baseTime = 1611710552000;
+  const baseHeight = 26212040;
+  const timeDifference = currentTime - baseTime;
+  const blocksPassedInDifference = (timeDifference / 30000) * 20; // 20 chains with blocktime 30 seconds
+  const blocksInTimeFrame = (daysInMiliseconds / 30000) * 20;
+  const currentBlockEstimation = baseHeight + blocksPassedInDifference;
+  const minimumAcceptedBlockHeight = currentBlockEstimation - blocksInTimeFrame - 200000; // allow being off sync for 200000 blocks;
+
+  const query = {
+    roundTime: { $gte: minimumTime },
+    height: { $gte: minimumAcceptedBlockHeight },
+    tier: { $exists: true, $type: 2 },
+    hash: { $exists: true, $type: 2 },
+    account: { $exists: true, $type: 2 },
+    zelid: { $exists: true, $type: 2 },
+  };
+  const projection = {
+    projection: {
+      _id: 0,
+      ip: 1,
+      tier: 1,
+      roundTime: 1,
+      account: 1,
+      height: 1,
+      hash: 1,
+      zelid: 1,
+    },
+  };
+  const results = await serviceHelper.findInDatabase(database, kadenaNodesCollection, query, projection).catch((error) => {
+    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+    res.json(errMessage);
+    log.error(error);
+  });
+  // a node is eligible if
+  // A) zelid is present
+  // B) account of kadena is present
+  // C) height is bigger than minimumAcceptedBlockHeight
+  // -> this is going to filter;
+  // const filteredResults = results.filter((result) => result.hash === 'localSpecificationsVersion6');
+  const filteredResults = results;
+  const numberOfChecksPerDay = days * 48;
+  const minimumPresentions = Math.floor(numberOfChecksPerDay * 0.90) - 1; // add one extra less check (useful for 1 day eligibility)
+  // construct eligibilityCheck
+  // node is eligible if is present in at least 95% of checks
+  const ips = [];
+  filteredResults.forEach((result) => {
+    ips.push(result.ip);
+  });
+
+  const ipsOK = [...new Set(ips)];
+
+  const countOccurrences = (arr, val) => arr.reduce((a, v) => (v === val ? a + 1 : a), 0);
+  const eligibleIps = [];
+  // eslint-disable-next-line no-restricted-syntax
+  for (const ip of ipsOK) {
+    if (countOccurrences(ips, ip) >= minimumPresentions) {
+      const q = {
+        ip,
+      };
+      const lastData = await serviceHelper.findOneInDatabaseReverse(database, kadenaNodesCollection, q, projection).catch((error) => {
+        log.error(error);
+      });
+      eligibleIps.push(lastData);
+    }
+  }
+  const nimbusesS = eligibleIps.filter((result) => (result.tier === 'NIMBUS'));
+  const stratusesS = eligibleIps.filter((result) => (result.tier === 'STRATUS'));
+  const data = {
+    total: nimbusesS.length + stratusesS.length,
+    nimbus: nimbusesS.length,
+    stratus: stratusesS.length,
+  };
+  const resMessage = serviceHelper.createDataMessage(data);
+  return res.json(resMessage);
+}
+
 async function getKadenaEligibleDays(req, res) {
   const database = db.db(config.database.kadena.database);
   let { days } = req.params;
@@ -525,5 +614,6 @@ module.exports = {
   getKadenaIPHistoryDays,
   getKadenaAccountHistoryDays,
   getKadenaEligibleDays,
+  getKadenaEligibleStatsDays,
   getKadenaNodesForTimestamp,
 };

@@ -10,7 +10,8 @@ module.exports = (app) => {
   app.get('/storedlocations', cache('5 minutes'), (req, res) => {
     fluxService.getAllGeolocation(req, res);
   });
-  app.get('/fluxinfo', cache('10 minutes'), (req, res) => {
+  // strings of projection wanted
+  app.get('/fluxinfo/:projection?', cache('10 minutes'), (req, res) => {
     fluxService.getAllFluxInformation(req, res);
   });
   app.get('/fluxhistory/ip/:ip?', cache('5 minutes'), (req, res) => {
@@ -62,6 +63,9 @@ module.exports = (app) => {
   });
   app.get('/kadena/eligible/:days?', cache('5 minutes'), (req, res) => {
     kadenaService.getKadenaEligibleDays(req, res);
+  });
+  app.get('/kadena/eligiblestats/:days?', cache('5 minutes'), (req, res) => {
+    kadenaService.getKadenaEligibleStatsDays(req, res);
   });
   app.get('/kadena/availabletimes', cache('5 minutes'), (req, res) => {
     kadenaService.getCompletedRoundsTimestamps(req, res);
