@@ -325,29 +325,34 @@ async function getAllFluxInformation(req, res) {
     $or: queryForIps,
     roundTime: lastCompletedRound,
   };
-  const projection = {
-    projection: {
-      _id: 0,
-      ip: 1,
-      addedHeight: 1,
-      lastPaidHeight: 1,
-      tier: 1,
-      activeSince: 1,
-      confirmedHeight: 1,
-      lastConfirmedHeight: 1,
-      collateralHash: 1,
-      collateralIndex: 1,
-      paymentAddress: 1,
-      roundTime: 1,
-      dataCollectedAt: 1,
-      geolocation: 1,
-      daemon: 1,
-      node: 1,
-      benchmark: 1,
-      flux: 1,
-      apps: 1,
-    },
-  };
+  if(req && req.projection && req.projection.projection){
+    req.projection.projection._id = 0;
+  }
+  else{
+    const projection = {
+      projection: {
+        _id: 0,
+        ip: 1,
+        addedHeight: 1,
+        lastPaidHeight: 1,
+        tier: 1,
+        activeSince: 1,
+        confirmedHeight: 1,
+        lastConfirmedHeight: 1,
+        collateralHash: 1,
+        collateralIndex: 1,
+        paymentAddress: 1,
+        roundTime: 1,
+        dataCollectedAt: 1,
+        geolocation: 1,
+        daemon: 1,
+        node: 1,
+        benchmark: 1,
+        flux: 1,
+        apps: 1,
+      },
+    };
+  }
   // return latest fluxnode round
   const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection).catch((error) => {
     const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
