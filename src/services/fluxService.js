@@ -325,11 +325,21 @@ async function getAllFluxInformation(req, res) {
     $or: queryForIps,
     roundTime: lastCompletedRound,
   };
-  if(req && req.projection && req.projection.projection){
-    req.projection.projection._id = 0;
-  }
-  else{
-    const projection = {
+  // projection is comma separated list;
+  let { projection } = req.params;
+  projection = projection || req.query.projection;
+  if (projection) {
+    const projArray = projection.split(',');
+    projection = {
+      projection: {
+        _id: 0,
+      },
+    };
+    projArray.forEach((pr) => {
+      projection.projection[pr] = 1;
+    });
+  } else {
+    projection = {
       projection: {
         _id: 0,
         ip: 1,
