@@ -144,55 +144,43 @@ async function createHistoryStats() {
   // this array can be quite large
   results.forEach((result) => {
     if (data[result.roundTime]) {
-      if (result.tier === 'BASIC' || result.tier === 'CUMULUS') {
-        if (data[result.roundTime].basic) {
-          data[result.roundTime].basic += 1;
+      if (result.tier === 'CUMULUS') {
+        if (data[result.roundTime].cumulus) {
           data[result.roundTime].cumulus += 1;
         } else {
-          data[result.roundTime].basic = 1;
           data[result.roundTime].cumulus = 1;
         }
-      } else if (result.tier === 'SUPER' || result.tier === 'NIMBUS') {
-        if (data[result.roundTime].super) {
-          data[result.roundTime].super += 1;
+      } else if (result.tier === 'NIMBUS') {
+        if (data[result.roundTime].nimbus) {
           data[result.roundTime].nimbus += 1;
         } else {
-          data[result.roundTime].super = 1;
           data[result.roundTime].nimbus = 1;
         }
-      } else if (result.tier === 'BAMF' || result.tier === 'STRATUS') {
-        if (data[result.roundTime].bamf) {
-          data[result.roundTime].bamf += 1;
+      } else if (result.tier === 'STRATUS') {
+        if (data[result.roundTime].stratus) {
           data[result.roundTime].stratus += 1;
         } else {
-          data[result.roundTime].bamf = 1;
           data[result.roundTime].stratus = 1;
         }
       }
     } else {
       data[result.roundTime] = {};
-      if (result.tier === 'BASIC' || result.tier === 'CUMULUS') {
-        if (data[result.roundTime].basic) {
-          data[result.roundTime].basic += 1;
+      if (result.tier === 'CUMULUS') {
+        if (data[result.roundTime].cumulus) {
           data[result.roundTime].cumulus += 1;
         } else {
-          data[result.roundTime].basic = 1;
           data[result.roundTime].cumulus = 1;
         }
-      } else if (result.tier === 'SUPER' || result.tier === 'NIMBUS') {
-        if (data[result.roundTime].super) {
-          data[result.roundTime].super += 1;
+      } else if (result.tier === 'NIMBUS') {
+        if (data[result.roundTime].nimbus) {
           data[result.roundTime].nimbus += 1;
         } else {
-          data[result.roundTime].super = 1;
           data[result.roundTime].nimbus = 1;
         }
-      } else if (result.tier === 'BAMF' || result.tier === 'STRATUS') {
-        if (data[result.roundTime].bamf) {
-          data[result.roundTime].bamf += 1;
+      } else if (result.tier === 'STRATUS') {
+        if (data[result.roundTime].stratus) {
           data[result.roundTime].stratus += 1;
         } else {
-          data[result.roundTime].bamf = 1;
           data[result.roundTime].stratus = 1;
         }
       }
@@ -257,19 +245,6 @@ async function processFluxNodes() {
       fluxInfo.roundTime = currentRoundTime;
       const curTime = new Date().getTime();
       fluxInfo.dataCollectedAt = curTime;
-      if (fluxInfo.zelcash) {
-        fluxInfo.daemon = fluxInfo.zelcash;
-        fluxInfo.benchmark = fluxInfo.zelbench;
-        fluxInfo.node = fluxInfo.fluxnode;
-        fluxInfo.flux = fluxInfo.zelflux;
-        fluxInfo.apps = fluxInfo.zelapps;
-      } else if (fluxInfo.daemon) {
-        fluxInfo.zelcash = fluxInfo.daemon;
-        fluxInfo.zelbench = fluxInfo.benchmark;
-        fluxInfo.zelnode = fluxInfo.node;
-        fluxInfo.zelflux = fluxInfo.flux;
-        fluxInfo.zelapps = fluxInfo.apps;
-      }
       await serviceHelper.insertOneToDatabase(database, fluxcollection, fluxInfo).catch((error) => {
         log.error(error);
       });
@@ -370,11 +345,6 @@ async function getAllFluxInformation(req, res) {
         roundTime: 1,
         dataCollectedAt: 1,
         geolocation: 1,
-        zelcash: 1,
-        zelnode: 1,
-        zelbench: 1,
-        zelflux: 1,
-        zelapps: 1,
         daemon: 1,
         node: 1,
         benchmark: 1,
@@ -417,9 +387,6 @@ async function getAllFluxVersions(req, res) {
   const projection = {
     projection: {
       _id: 0,
-      zelcash: 1,
-      zelbench: 1,
-      zelflux: 1,
       daemon: 1,
       benchmark: 1,
       flux: 1,
@@ -433,23 +400,9 @@ async function getAllFluxVersions(req, res) {
   });
   const allData = [];
   results.forEach((flux) => {
-    if (flux.zelcash) {
-      const fluxData = {
-        ip: flux.zelflux.ip,
-        zelcash: flux.zelcash.info.version,
-        zelbench: flux.zelbench.info.version,
-        zelflux: flux.zelflux.version,
-        daemon: flux.zelcash.info.version,
-        benchmark: flux.zelbench.info.version,
-        flux: flux.zelflux.version,
-      };
-      allData.push(fluxData);
-    } else if (flux.daemon) {
+    if (flux.daemon) {
       const fluxData = {
         ip: flux.flux.ip,
-        zelcash: flux.daemon.info.version,
-        zelbench: flux.benchmark.info.version,
-        zelflux: flux.flux.version,
         daemon: flux.daemon.info.version,
         benchmark: flux.benchmark.info.version,
         flux: flux.flux.version,
@@ -458,9 +411,6 @@ async function getAllFluxVersions(req, res) {
     } else {
       const fluxData = {
         ip: flux.ip,
-        zelcash: null,
-        zelbench: null,
-        zelflux: null,
         daemon: null,
         benchmark: null,
         flux: null,
@@ -537,11 +487,6 @@ async function getFluxIPHistory(req, res) {
       roundTime: 1,
       dataCollectedAt: 1,
       geolocation: 1,
-      zelcash: 1,
-      zelnode: 1,
-      zelbench: 1,
-      zelflux: 1,
-      zelapps: 1,
       daemon: 1,
       node: 1,
       benchmark: 1,
