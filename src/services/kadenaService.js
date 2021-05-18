@@ -2,6 +2,7 @@
 const axios = require('axios');
 const https = require('https');
 const config = require('config');
+const LRU = require('lru-cache');
 const log = require('../lib/log');
 const serviceHelper = require('./serviceHelper');
 const fluxService = require('./fluxService');
@@ -13,6 +14,13 @@ const completedRoundsCollection = config.database.kadena.collections.completedRo
 let outdatedKDANodes = [];
 let currentNodes = [];
 let allNodes = [];
+
+// default cache
+const LRUoptions = {
+  max: 2000, // store 2000 values, we shall not have more values at any period
+  maxAge: 1000 * 60 * 11, // 11 minutes
+};
+const myCache = new LRU(LRUoptions);
 
 const axiosConfig = {
   timeout: 13456,
@@ -401,11 +409,16 @@ async function getKadenaEligibleStatsDays(req, res) {
       zelid: 1,
     },
   };
-  const results = await serviceHelper.findInDatabase(database, kadenaNodesCollection, query, projection).catch((error) => {
-    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
-    res.json(errMessage);
-    log.error(error);
-  });
+  const cacheAsk = `eligible${days}`;
+  let results = myCache.get(cacheAsk);
+  if (!results) {
+    results = await serviceHelper.findInDatabase(database, kadenaNodesCollection, query, projection).catch((error) => {
+      const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+      res.json(errMessage);
+      log.error(error);
+    });
+    myCache.set(cacheAsk, results);
+  }
   // a node is eligible if
   // A) zelid is present
   // B) account of kadena is present
@@ -432,10 +445,18 @@ async function getKadenaEligibleStatsDays(req, res) {
       const q = {
         ip,
       };
-      const lastData = await serviceHelper.findOneInDatabaseReverse(database, kadenaNodesCollection, q, projection).catch((error) => {
-        log.error(error);
-      });
-      eligibleIps.push(lastData);
+      let lastData = myCache.get(ip);
+      if (lastData) {
+        eligibleIps.push(lastData);
+      } else {
+        lastData = await serviceHelper.findOneInDatabaseReverse(database, kadenaNodesCollection, q, projection).catch((error) => {
+          log.error(error);
+        });
+        if (lastData) {
+          myCache.set(ip, lastData);
+          eligibleIps.push(lastData);
+        }
+      }
     }
   }
   const nimbusesS = eligibleIps.filter((result) => (result.tier === 'NIMBUS'));
@@ -490,11 +511,16 @@ async function getKadenaEligibleDays(req, res) {
       zelid: 1,
     },
   };
-  const results = await serviceHelper.findInDatabase(database, kadenaNodesCollection, query, projection).catch((error) => {
-    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
-    res.json(errMessage);
-    log.error(error);
-  });
+  const cacheAsk = `eligible${days}`;
+  let results = myCache.get(cacheAsk);
+  if (!results) {
+    results = await serviceHelper.findInDatabase(database, kadenaNodesCollection, query, projection).catch((error) => {
+      const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+      res.json(errMessage);
+      log.error(error);
+    });
+    myCache.set(cacheAsk, results);
+  }
   // a node is eligible if
   // A) zelid is present
   // B) account of kadena is present
@@ -521,10 +547,18 @@ async function getKadenaEligibleDays(req, res) {
       const q = {
         ip,
       };
-      const lastData = await serviceHelper.findOneInDatabaseReverse(database, kadenaNodesCollection, q, projection).catch((error) => {
-        log.error(error);
-      });
-      eligibleIps.push(lastData);
+      let lastData = myCache.get(ip);
+      if (lastData) {
+        eligibleIps.push(lastData);
+      } else {
+        lastData = await serviceHelper.findOneInDatabaseReverse(database, kadenaNodesCollection, q, projection).catch((error) => {
+          log.error(error);
+        });
+        if (lastData) {
+          myCache.set(ip, lastData);
+          eligibleIps.push(lastData);
+        }
+      }
     }
   }
   const resMessage = serviceHelper.createDataMessage(eligibleIps);
