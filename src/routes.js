@@ -64,7 +64,7 @@ module.exports = (app) => {
   app.get('/kadena/eligible/:days?', cache('5 minutes'), (req, res) => {
     kadenaService.getKadenaEligibleDays(req, res);
   });
-  app.get('/kadena/eligiblestats/:days?', cache('5 minutes'), (req, res) => {
+  app.get('/kadena/eligiblestats/:days?', cache('30 minutes'), (req, res) => {
     kadenaService.getKadenaEligibleStatsDays(req, res);
   });
   app.get('/kadena/availabletimes', cache('5 minutes'), (req, res) => {
