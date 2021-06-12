@@ -125,8 +125,8 @@ async function beginKadena() {
   for (const index of stringOfTenChars) { // async inside
     const randomNumber = Math.floor((Math.random() * fluxnodelist.length));
     const kdaNodes = await getKadenaLocation(fluxnodelist[randomNumber]);
-    const kdaNodesValid = kdaNodes.filter((node) => (node.hash === 'localSpecificationsVersion7' || node.hash === 'localSpecificationsVersion8'));
-    const kdaNodesINValid = kdaNodes.filter((node) => (node.hash !== 'localSpecificationsVersion7' && node.hash !== 'localSpecificationsVersion8'));
+    const kdaNodesValid = kdaNodes.filter((node) => (node.hash === 'localSpecificationsVersion9' || node.hash === 'localSpecificationsVersion8'));
+    const kdaNodesINValid = kdaNodes.filter((node) => (node.hash !== 'localSpecificationsVersion9' && node.hash !== 'localSpecificationsVersion8'));
     kdaNodesValid.forEach((node) => {
       chainwebnodelocations.push(node.ip);
     });
