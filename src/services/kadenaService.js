@@ -381,8 +381,8 @@ async function getKadenaEligibleStatsDays(req, res) {
   const currentTime = new Date().getTime();
   const minimumTime = currentTime - daysInMiliseconds;
 
-  const baseTime = 1623418840000;
-  const baseHeight = 34012893;
+  const baseTime = 1623484964000;
+  const baseHeight = 34057200;
   const timeDifference = currentTime - baseTime;
   const blocksPassedInDifference = (timeDifference / 30000) * 20; // 20 chains with blocktime 30 seconds
   const blocksInTimeFrame = (daysInMiliseconds / 30000) * 20;
@@ -483,8 +483,8 @@ async function getKadenaEligibleDays(req, res) {
   const currentTime = new Date().getTime();
   const minimumTime = currentTime - daysInMiliseconds;
 
-  const baseTime = 1623418840000;
-  const baseHeight = 34012893;
+  const baseTime = 1623484964000;
+  const baseHeight = 34057200;
   const timeDifference = currentTime - baseTime;
   const blocksPassedInDifference = (timeDifference / 30000) * 20; // 20 chains with blocktime 30 seconds
   const blocksInTimeFrame = (daysInMiliseconds / 30000) * 20;
