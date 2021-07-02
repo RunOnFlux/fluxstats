@@ -583,7 +583,11 @@ async function getAllFluxGeolocationNow(req, res) {
 
 async function fluxNodesHistoryStats(req, res) {
   try {
-    const dataForSend = myCache.get('historyStats');
+    let dataForSend = myCache.get('historyStats');
+    if (!dataForSend) {
+      await createHistoryStats();
+    }
+    dataForSend = myCache.get('historyStats');
     const resMessage = serviceHelper.createDataMessage(dataForSend);
     res.json(resMessage);
   } catch (error) {
