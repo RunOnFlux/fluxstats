@@ -382,6 +382,7 @@ async function votePower(zelid) {
   const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection);
   const nodes = [];
   results.forEach((result) => {
+    console.log(result);
     if (result.flux.zelid === zelid) {
       let power = 0;
       if (result.node.tier === 'CUMULUS') {
