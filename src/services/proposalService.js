@@ -381,16 +381,17 @@ async function votePower(zelid) {
   // return latest fluxnode round
   const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection);
   const nodes = [];
-  results.forEach((result) => {
+  let votepowa = 0;
+  // eslint-disable-next-line no-restricted-syntax
+  for (const result of results) {
     if (result.flux && result.node) {
       if (result.flux.zelid === zelid) {
-        let power = 0;
         if (result.node.tier === 'CUMULUS') {
-          power = 10;
+          votepowa = 10;
         } else if (result.node.tier === 'NIMBUS') {
-          power = 25;
+          votepowa = 25;
         } else if (result.node.tier === 'STRATUS') {
-          power = 100;
+          votepowa = 100;
         }
         const nodeInfo = {
           tier: result.node.tier,
@@ -398,13 +399,13 @@ async function votePower(zelid) {
           txhash: result.node.txhash,
           outidx: result.node.outidx,
           address: result.node.payment_address,
-          power,
+          power: votepowa,
           zelid,
         };
         nodes.push(nodeInfo);
       }
     }
-  });
+  }
   let power = 0;
   nodes.forEach((node) => {
     if (node.tier === 'CUMULUS') {
