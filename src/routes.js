@@ -98,7 +98,7 @@ module.exports = (app) => {
     proposalService.voteInformation(req, res);
   });
   app.get('/proposals/votepower/:zelid?', cache('2 minute'), (req, res) => { // object of power as numbeer and array of nodeInfo object { tier, ip, txhash, outidx, address, power, zelid, };
-    proposalService.votePower(req, res);
+    proposalService.getVotePower(req, res);
   });
   app.post('/proposals/submitproposal', (req, res) => {
     proposalService.submitProposal(req, res);
