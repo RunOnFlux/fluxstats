@@ -382,26 +382,27 @@ async function votePower(zelid) {
   const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection);
   const nodes = [];
   results.forEach((result) => {
-    console.log(result);
-    if (result.flux.zelid === zelid) {
-      let power = 0;
-      if (result.node.tier === 'CUMULUS') {
-        power = 10;
-      } else if (result.node.tier === 'NIMBUS') {
-        power = 25;
-      } else if (result.node.tier === 'STRATUS') {
-        power = 100;
+    if (result.flux && result.node) {
+      if (result.flux.zelid === zelid) {
+        let power = 0;
+        if (result.node.tier === 'CUMULUS') {
+          power = 10;
+        } else if (result.node.tier === 'NIMBUS') {
+          power = 25;
+        } else if (result.node.tier === 'STRATUS') {
+          power = 100;
+        }
+        const nodeInfo = {
+          tier: result.node.tier,
+          ip: result.flux.ip,
+          txhash: result.node.txhash,
+          outidx: result.node.outidx,
+          address: result.node.payment_address,
+          power,
+          zelid,
+        };
+        nodes.push(nodeInfo);
       }
-      const nodeInfo = {
-        tier: result.node.tier,
-        ip: result.flux.ip,
-        txhash: result.node.txhash,
-        outidx: result.node.outidx,
-        address: result.node.payment_address,
-        power,
-        zelid,
-      };
-      nodes.push(nodeInfo);
     }
   });
   let power = 0;
