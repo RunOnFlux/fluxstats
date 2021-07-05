@@ -384,21 +384,21 @@ async function votePower(zelid) {
   let votepowa = 0;
   // eslint-disable-next-line no-restricted-syntax
   for (const result of results) {
-    if (result.flux && result.node) {
+    if (result.flux && result.node && result.node.status) {
       if (result.flux.zelid === zelid) {
-        if (result.node.tier === 'CUMULUS') {
+        if (result.node.status.tier === 'CUMULUS') {
           votepowa = 10;
-        } else if (result.node.tier === 'NIMBUS') {
+        } else if (result.node.status.tier === 'NIMBUS') {
           votepowa = 25;
-        } else if (result.node.tier === 'STRATUS') {
+        } else if (result.node.status.tier === 'STRATUS') {
           votepowa = 100;
         }
         const nodeInfo = {
-          tier: result.node.tier,
+          tier: result.node.status.tier,
           ip: result.flux.ip,
-          txhash: result.node.txhash,
-          outidx: result.node.outidx,
-          address: result.node.payment_address,
+          txhash: result.node.status.txhash,
+          outidx: result.node.status.outidx,
+          address: result.node.status.payment_address,
           power: votepowa,
           zelid,
         };
