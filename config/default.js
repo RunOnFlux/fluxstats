@@ -26,5 +26,20 @@ module.exports = {
         completedRounds: 'completedrounds',
       },
     },
+    proposals: {
+      database: 'proposals',
+      collections: {
+        // Proposals {hash,topic,grantValue,grantAddress,description,nickName,submitDate,voteEndDate,votesRequired,status,txid,votesTotal,votesYes,votesNo} where votesTotal,votesYes,votesNo are with 5 min accuracy
+        proposals: 'proposals',
+        // Voting {hash,zelId,vote,voteDate,numberOfVotes,nodeCollateralOut,nodeCollateralIndex,nodeAddress,nodeIp}
+        voting: 'voting',
+      },
+    },
+    general: {
+      database: 'general',
+      collections: {
+        activeMessagePhrases: 'activemessagephrases', // active message phrases used for creation of random messages that user has to sign
+      },
+    },
   },
 };
