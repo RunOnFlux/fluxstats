@@ -164,7 +164,7 @@ function verifyMessage(message, address, signature, pubKeyHash = '00', strMessag
   }
 }
 
-async function messageHash(message) {
+function messageHash(message) {
   if (typeof message !== 'string') {
     return new Error('Invalid message');
   }
