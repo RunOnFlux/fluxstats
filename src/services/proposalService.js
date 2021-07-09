@@ -95,6 +95,8 @@ function getLastProposalTxs(transactions) {
     const txidInThisITx = transactions[numberoftxs].txid; // clicking on tx open explorer
 
     const messageInThisITx = isMessage;
+    console.log(isMessage);
+    console.log(amountInThisITx);
     if (amountInThisITx === satoshisRequired) {
       lightTransactions.push({
         txid: txidInThisITx, // txid
