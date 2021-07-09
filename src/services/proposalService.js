@@ -95,7 +95,7 @@ function getLastProposalTxs(transactions) {
     const txidInThisITx = transactions[numberoftxs].txid; // clicking on tx open explorer
 
     const messageInThisITx = isMessage;
-    if (amountInThisITx === satoshisRequired) {
+    if (amountInThisITx === satoshisRequired && messageInThisITx.length > 20) {
       lightTransactions.push({
         txid: txidInThisITx, // txid
         message: messageInThisITx, // our proposal hash
