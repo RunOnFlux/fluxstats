@@ -95,8 +95,6 @@ function getLastProposalTxs(transactions) {
     const txidInThisITx = transactions[numberoftxs].txid; // clicking on tx open explorer
 
     const messageInThisITx = isMessage;
-    console.log(isMessage);
-    console.log(amountInThisITx);
     if (amountInThisITx === satoshisRequired) {
       lightTransactions.push({
         txid: txidInThisITx, // txid
@@ -105,13 +103,7 @@ function getLastProposalTxs(transactions) {
     }
     // console.log(lightTransactions)
   }
-  // console.log(lightTransactions);
-  const sortedLightTransactions = lightTransactions.sort((a, b) => {
-    if (a.timestamp < b.timestamp) return 1;
-    if (a.timestamp > b.timestamp) return -1;
-    return 0;
-  });
-  return sortedLightTransactions;
+  return lightTransactions;
 }
 
 async function checkForMissingTransactions() {
@@ -123,7 +115,8 @@ async function checkForMissingTransactions() {
     const response = await axios.get(transactionsUrl, axiosConfig);
     const lightTransactions = response.data.items;
     if (typeof lightTransactions !== 'object') throw new Error('Transactions are not an object');
-    const sortedTxs = getLastProposalTxs(lightTransactions);
+    const proposalTxs = getLastProposalTxs(lightTransactions);
+    console.log(proposalTxs);
     // get our proposals with status 'unpaid'
     const database = db.db(databaseLink);
     const query = {
@@ -137,7 +130,7 @@ async function checkForMissingTransactions() {
     const results = await serviceHelper.findInDatabase(database, proposalsCollection, query, projection);
     // eslint-disable-next-line no-restricted-syntax
     for (const proposal of results) {
-      const isPaid = sortedTxs.find((tx) => tx.txid === proposal.hash);
+      const isPaid = proposalTxs.find((tx) => tx.message === proposal.hash);
       if (isPaid) {
         // update our database that it is now Open
         const queryUpdate = { hash: proposal.hash };
