@@ -462,8 +462,12 @@ async function submitProposal(req, res) {
         const {
           topic, description, grantValue, grantAddress, nickName,
         } = processedBody;
-        if (!topic || !description || !grantValue || !grantAddress || !nickName) {
-          throw new Error('Missing proposal parameter');
+        if (!topic) {
+          throw new Error('Missing proposal topic');
+        }
+
+        if (!description) {
+          throw new Error('Missing proposal description');
         }
 
         const submitDate = new Date().getTime();
