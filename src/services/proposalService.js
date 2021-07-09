@@ -566,14 +566,26 @@ async function voteProposal(req, res) {
         const {
           hash, zelid, message, signature, vote,
         } = processedBody;
-        if (!hash || !zelid || !message || !signature || !vote) {
-          throw new Error('Missing proposal parameter');
+        if (!hash) {
+          throw new Error('Missing hash parameter');
+        }
+        if (!zelid) {
+          throw new Error('Missing vote parameter');
+        }
+        if (!message) {
+          throw new Error('Missing message parameter');
+        }
+        if (!signature) {
+          throw new Error('Missing signature parameter');
+        }
+        if (vote !== true && vote !== false) {
+          throw new Error('Vote must be true or false');
         }
         const zelidValid = generalService.verifyZelID(zelid);
         if (zelidValid !== true) {
           throw new Error('Invalid zelid');
         }
-        // check if proposal exists and is Open stat
+        // check if vote exists and is Open stat
         const database = db.db(databaseLink);
         const query = {
           hash,
