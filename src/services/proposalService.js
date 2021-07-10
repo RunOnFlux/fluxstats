@@ -613,8 +613,6 @@ async function voteProposal(req, res) {
         if (messageOk !== true) {
           throw new Error('Invalid message received');
         }
-        // delete the message used for signing from our db so nobody can use it again - important step!
-        await generalService.deleteMessagePhrase(message);
         const signatureOk = await generalService.verifyMessage(message, zelid, signature);
         if (signatureOk !== true) {
           throw new Error('Invalid signature');
@@ -644,6 +642,8 @@ async function voteProposal(req, res) {
           castedVotes.push(data);
           await serviceHelper.insertOneToDatabase(database, votingCollection, data);
         }
+        // delete the message used for signing from our db so nobody can use it again - important step!
+        await generalService.deleteMessagePhrase(message);
         const resMessage = serviceHelper.createDataMessage(results);
         res.json(resMessage);
         userVoting = false;
