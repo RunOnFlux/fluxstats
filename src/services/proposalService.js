@@ -5,8 +5,8 @@ const log = require('../lib/log');
 const serviceHelper = require('./serviceHelper');
 const generalService = require('./generalService');
 
-const satoshisRequired = 100000000; // satoshi (1 flux, todo 10000000000 satoshis for 100 flux), our address
-const proposalAddress = 't1UPSwfMYLe18ezbCqnR5QgdJGznzCUYHkj'; // TODO
+const satoshisRequired = 10000000000; // 100 flux
+const proposalAddress = 't1Mzja9iJcEYeW5B4m4s1tJG8M42odFZ16A'; // flux team proposal wallet
 const expirationPeriod = 3600000; // 60 mins, after that unpaid proposals are expired => Rejected Unpaid
 const voteEndPeriod = 604800000; // 1 week
 const miVotesCoefficient = 0.3; // 30 percent of network potential. 10 votes for cumulus, 25 nimbus, 100 stratus
@@ -116,7 +116,6 @@ async function checkForMissingTransactions() {
     const lightTransactions = response.data.items;
     if (typeof lightTransactions !== 'object') throw new Error('Transactions are not an object');
     const proposalTxs = getLastProposalTxs(lightTransactions);
-    console.log(proposalTxs);
     // get our proposals with status 'unpaid'
     const database = db.db(databaseLink);
     const query = {
@@ -379,7 +378,6 @@ async function votePower(zelid, hash) {
   const fluxcollection = config.database.local.collections.fluxes;
   const completedRoundsCollection = config.database.local.collections.completedRounds;
   const lastRound = await serviceHelper.findOneInDatabaseReverse(database, completedRoundsCollection, q, p);
-  console.log(lastRound);
   const lastCompletedRound = lastRound ? lastRound.timestamp : 0;
   const query = {
     roundTime: lastCompletedRound, // may not contain completely accurate list which is 'ok'
