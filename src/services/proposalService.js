@@ -369,6 +369,9 @@ async function votePower(zelid, hash) {
     };
     const databaseProposals = db.db(databaseLink);
     const result = await serviceHelper.findOneInDatabase(databaseProposals, proposalsCollection, query, projection);
+    if (!result) {
+      throw new Error('Proposal not found');
+    }
     q = {
       timestamp: { $lt: result.submitDate },
     };
