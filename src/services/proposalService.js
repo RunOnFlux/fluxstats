@@ -351,15 +351,30 @@ async function voteInformation(req, res) {
 }
 
 // allow throw;
-async function votePower(zelid, timestamp) {
+async function votePower(zelid, hash) {
   const zelidValid = generalService.verifyZelID(zelid);
   if (zelidValid !== true) {
     throw new Error('Invalid zelid');
   }
   const database = db.db(config.database.local.database);
-  const q = {
-    timestamp: { $lt: timestamp },
-  };
+  // if hash is present, find proposal
+  let q = {};
+  if (hash) {
+    const query = {
+      hash,
+    };
+    const projection = {
+      projection: {
+        _id: 0, // all except id
+      },
+    };
+    const databaseProposals = db.db(databaseLink);
+    const result = await serviceHelper.findOneInDatabase(databaseProposals, proposalsCollection, query, projection);
+    q = {
+      timestamp: { $lt: result.submitDate },
+    };
+  }
+
   const p = {};
   const fluxcollection = config.database.local.collections.fluxes;
   const completedRoundsCollection = config.database.local.collections.completedRounds;
@@ -426,12 +441,14 @@ async function getVotePower(req, res) {
     // get current vote power of zelid
     let { zelid } = req.params;
     zelid = zelid || req.query.zelid;
+    let { hash } = req.params;
+    hash = hash || req.query.hash;
     if (!zelid) {
       const errMessage = serviceHelper.createErrorMessage('No zelid provided');
       res.json(errMessage);
       return;
     }
-    const data = await votePower(zelid);
+    const data = await votePower(zelid, hash);
     const resMessage = serviceHelper.createDataMessage(data);
     res.json(resMessage);
   } catch (error) {
@@ -623,7 +640,7 @@ async function voteProposal(req, res) {
         // verification done
         // get votingPower
         const voteDate = new Date().getTime();
-        const vPower = await votePower(zelid);
+        const vPower = await votePower(zelid, hash);
         if (vPower.nodes.length < 1) {
           throw new Error(`No active nodes found for ${zelid}`);
         }
