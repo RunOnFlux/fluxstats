@@ -351,17 +351,20 @@ async function voteInformation(req, res) {
 }
 
 // allow throw;
-async function votePower(zelid) {
+async function votePower(zelid, timestamp) {
   const zelidValid = generalService.verifyZelID(zelid);
   if (zelidValid !== true) {
     throw new Error('Invalid zelid');
   }
   const database = db.db(config.database.local.database);
-  const q = {};
+  const q = {
+    timestamp: { $lt: timestamp },
+  };
   const p = {};
   const fluxcollection = config.database.local.collections.fluxes;
   const completedRoundsCollection = config.database.local.collections.completedRounds;
   const lastRound = await serviceHelper.findOneInDatabaseReverse(database, completedRoundsCollection, q, p);
+  console.log(lastRound);
   const lastCompletedRound = lastRound ? lastRound.timestamp : 0;
   const query = {
     roundTime: lastCompletedRound, // may not contain completely accurate list which is 'ok'
