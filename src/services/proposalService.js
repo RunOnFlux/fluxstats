@@ -5,7 +5,7 @@ const log = require('../lib/log');
 const serviceHelper = require('./serviceHelper');
 const generalService = require('./generalService');
 
-const satoshisRequired = 50000000000; // 500 flux
+const satoshisRequired = 20000000000; // 200 flux
 const proposalAddress = 't1Mzja9iJcEYeW5B4m4s1tJG8M42odFZ16A'; // flux team proposal wallet
 const expirationPeriod = 3600000; // 60 mins, after that unpaid proposals are expired => Rejected Unpaid
 const voteEndPeriod = 604800000; // 1 week
