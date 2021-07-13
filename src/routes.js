@@ -91,6 +91,9 @@ module.exports = (app) => {
   app.get('/proposals/listproposals', cache('1 minute'), (req, res) => {
     proposalService.listProposals(req, res);
   });
+  app.get('/proposals/price', cache('1 minute'), (req, res) => {
+    proposalService.getPrice(req, res);
+  });
   app.get('/proposals/proposaldetail/:hash?', cache('1 minute'), (req, res) => {
     proposalService.proposalDetail(req, res);
   });

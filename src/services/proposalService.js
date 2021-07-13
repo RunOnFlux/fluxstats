@@ -5,7 +5,7 @@ const log = require('../lib/log');
 const serviceHelper = require('./serviceHelper');
 const generalService = require('./generalService');
 
-const satoshisRequired = 10000000000; // 100 flux
+const satoshisRequired = 50000000000; // 500 flux
 const proposalAddress = 't1Mzja9iJcEYeW5B4m4s1tJG8M42odFZ16A'; // flux team proposal wallet
 const expirationPeriod = 3600000; // 60 mins, after that unpaid proposals are expired => Rejected Unpaid
 const voteEndPeriod = 604800000; // 1 week
@@ -259,6 +259,18 @@ async function listProposals(req, res) {
     };
     const results = await serviceHelper.findInDatabase(database, proposalsCollection, query, projection);
     const resMessage = serviceHelper.createDataMessage(results);
+    res.json(resMessage);
+  } catch (error) {
+    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+    res.json(errMessage);
+    log.error(error);
+  }
+}
+
+async function getPrice(req, res) {
+  try {
+    const price = satoshisRequired / 1e8;
+    const resMessage = serviceHelper.createDataMessage(price);
     res.json(resMessage);
   } catch (error) {
     const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
@@ -712,6 +724,7 @@ async function start() {
 module.exports = {
   start,
   listProposals,
+  getPrice,
   proposalDetail,
   voteInformation,
   getVotePower,
