@@ -2,6 +2,8 @@ const apicache = require('apicache');
 const path = require('path');
 const fluxService = require('./services/fluxService');
 const kadenaService = require('./services/kadenaService');
+const proposalService = require('./services/proposalService');
+const generalService = require('./services/generalService');
 
 const cache = apicache.middleware;
 
@@ -77,5 +79,34 @@ module.exports = (app) => {
 
   app.get('/hashes', cache('1 minute'), (req, res) => {
     res.sendFile(path.join(__dirname, './fluxHashes'));
+  });
+
+  app.get('/general/messagephrase', (req, res) => { // get message phrase for vote signing
+    generalService.getMessagePhrase(req, res);
+  });
+  app.get('/general/allactivemessagephrase', (req, res) => {
+    generalService.activeMessagePhrases(req, res);
+  });
+
+  app.get('/proposals/listproposals', cache('1 minute'), (req, res) => {
+    proposalService.listProposals(req, res);
+  });
+  app.get('/proposals/price', cache('1 minute'), (req, res) => {
+    proposalService.getPrice(req, res);
+  });
+  app.get('/proposals/proposaldetail/:hash?', cache('1 minute'), (req, res) => {
+    proposalService.proposalDetail(req, res);
+  });
+  app.get('/proposals/voteinformation/:hash?/:zelid?', cache('1 minute'), (req, res) => { // if data array is empty, user did not vote
+    proposalService.voteInformation(req, res);
+  });
+  app.get('/proposals/votepower/:zelid?/:hash?', cache('2 minute'), (req, res) => { // object of power as numbeer and array of nodeInfo object { tier, ip, txhash, outidx, address, power, zelid, };
+    proposalService.getVotePower(req, res);
+  });
+  app.post('/proposals/submitproposal', (req, res) => {
+    proposalService.submitProposal(req, res);
+  });
+  app.post('/proposals/voteproposal', (req, res) => {
+    proposalService.voteProposal(req, res);
   });
 };

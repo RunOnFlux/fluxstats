@@ -478,11 +478,15 @@ async function getAllFluxGeolocation(req, res) {
     },
   };
   // return latest fluxnode round
-  const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection).catch((error) => {
-    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
-    res.json(errMessage);
-    log.error(error);
-  });
+  let results = myCache.get('geolocation');
+  if (!results) {
+    results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection).catch((error) => {
+      const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+      res.json(errMessage);
+      log.error(error);
+    });
+    myCache.set('geolocation', results);
+  }
   const bresults = results.map((x) => x.geolocation);
   const resMessage = serviceHelper.createDataMessage(bresults);
   return res.json(resMessage);
@@ -579,7 +583,11 @@ async function getAllFluxGeolocationNow(req, res) {
 
 async function fluxNodesHistoryStats(req, res) {
   try {
-    const dataForSend = myCache.get('historyStats');
+    let dataForSend = myCache.get('historyStats');
+    if (!dataForSend) {
+      await createHistoryStats();
+    }
+    dataForSend = myCache.get('historyStats');
     const resMessage = serviceHelper.createDataMessage(dataForSend);
     res.json(resMessage);
   } catch (error) {
