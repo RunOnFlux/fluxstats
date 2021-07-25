@@ -10,6 +10,8 @@ const axiosConfig = {
   timeout: 5000,
 };
 
+let round = 0;
+
 const httpFluxInfo = rateLimit(axios.create(), { maxRequests: 10, perMilliseconds: 1000 });
 const httpGeo = rateLimit(axios.create(), { maxRequests: 1, perMilliseconds: 2000 });
 
@@ -260,6 +262,7 @@ async function processFluxNodes() {
   executingProcessFluxNodes = true;
   const startRefresh = new Date();
   try {
+    round += 1;
     fluxNodesWithError = [];
     const currentRoundTime = new Date().getTime();
     const fluxnodes = await geFluxNodeList();
@@ -315,6 +318,13 @@ async function processFluxNodes() {
   } catch (e) {
     log.error(e);
   }
+  // for every 2 runs start createHistoryStatys after 60 seconds
+  if (round % 2 === 0) {
+    setTimeout(() => {
+      createHistoryStats();
+    }, 1 * 60 * 1000);
+  }
+
   const endRefresh = new Date() - startRefresh;
   log.info('Execution time of processFluxNodes: %dms', endRefresh);
   executingProcessFluxNodes = false;
@@ -653,9 +663,6 @@ async function start() {
         log.info('processFluxNodes() interval skipped, still running.');
       }
     }, 15 * 60 * 1000);
-    setInterval(() => {
-      createHistoryStats();
-    }, 30 * 60 * 1000);
   } catch (e) {
     // restart service after 5 mins
     log.error(e);
