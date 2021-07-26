@@ -157,7 +157,6 @@ async function collectionStats(database, collection) {
   return result;
 }
 
-
 module.exports = {
   timeout,
   ensureBoolean,

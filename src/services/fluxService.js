@@ -286,10 +286,9 @@ async function processFluxNodes() {
     }
     let fluxNodesWithErrorAux = [];
     let retry = 0;
-    while (fluxNodesWithError.length > 0 && retry < 5) {
+    while (fluxNodesWithError.length > 0 && retry < 3) {
       log.info(`Found ${fluxNodesWithError.length} with errors.`);
       fluxNodesWithErrorAux = [...fluxNodesWithError];
-      retry += 1;
       // eslint-disable-next-line no-restricted-syntax
       for (let i = 0; i < fluxNodesWithErrorAux.length; i += 1) {
         const fluxnode = fluxNodesWithErrorAux[i];
@@ -305,6 +304,7 @@ async function processFluxNodes() {
         await Promise.allSettled(promiseArray);
         promiseArray = [];
       }
+      retry += 1;
     }
     log.info(`Processing of ${currentRoundTime} finished.`);
     log.info(`Total Nodes with errors: ${fluxNodesWithError.length}`);

@@ -18,15 +18,14 @@ const completedRoundsCollection = config.database.kadena.collections.completedRo
 let outdatedKDANodes = [];
 let currentNodes = [];
 let allNodes = [];
+
+// helpers
 let allKDANodes = [];
 let outKDA = [];
 let syncedKDAnodes = [];
-let chainwebnodelocations = [];
-let outdatedchainweblocations = [];
-
 let kdaNodesWithErrors = [];
 
-let beginKadenExecuting = false;
+// let beginKadenExecuting = false;
 
 // default cache
 const LRUoptions = {
@@ -58,10 +57,10 @@ async function getKadenaAccount(ip) {
     if (fluxnodeList.data.status === 'success') {
       return fluxnodeList.data.data || null;
     }
-    return false;
+    return null;
   } catch (e) {
     log.error(`getKadenaAccount of IP ${ip} error`);
-    return false;
+    return null;
   }
 }
 
@@ -84,10 +83,10 @@ async function getFluxNodeTier(ip) {
     if (fluxnodeList.data.status === 'success') {
       return fluxnodeList.data.data.tier;
     }
-    return false;
+    return null;
   } catch (e) {
     log.error(`getFluxNodeTier of IP ${ip} error`);
-    return false;
+    return null;
   }
 }
 
@@ -97,27 +96,27 @@ async function getFluxNodeZelID(ip) {
     if (fluxnodeList.data.status === 'success') {
       return fluxnodeList.data.data;
     }
-    return false;
+    return null;
   } catch (e) {
     log.error(`getFluxNodeZelID of IP ${ip} error`);
-    return false;
+    return null;
   }
 }
 
-async function getKadenaVerison(ip) {
+async function getKadenaVersion(ip) {
   try {
     const appData = await http.get(`http://${ip}:16127/apps/installedapps/KadenaChainWebNode`, axiosConfig);
     if (appData.data.status === 'success') {
       return appData.data.data[0].hash;
     }
-    return false;
+    return null;
   } catch (e) {
-    log.error(`getKadenaVerison of IP ${ip} error`);
-    return false;
+    log.error(`getKadenaVersion of IP ${ip} error`);
+    return null;
   }
 }
 
-async function processKdaNode(kdaNode, currentRoundTime, synced) {
+async function processKdaNode(kdaNode, currentRoundTime, synced, finishProcessing) {
   const database = db.db(config.database.kadena.database);
   const nodeData = {};
   nodeData.ip = kdaNode;
@@ -125,23 +124,31 @@ async function processKdaNode(kdaNode, currentRoundTime, synced) {
   nodeData.tier = await getFluxNodeTier(kdaNode);
   if (!nodeData.tier) {
     kdaNodesWithErrors.push(kdaNode);
-    return;
+    if (!finishProcessing) {
+      return;
+    }
   }
   nodeData.zelid = await getFluxNodeZelID(kdaNode);
   if (!nodeData.zelid) {
     kdaNodesWithErrors.push(kdaNode);
-    return;
+    if (!finishProcessing) {
+      return;
+    }
   }
   nodeData.account = await getKadenaAccount(kdaNode);
   if (!nodeData.account) {
     kdaNodesWithErrors.push(kdaNode);
-    return;
+    if (!finishProcessing) {
+      return;
+    }
   }
   nodeData.height = await getKadenaHeight(kdaNode);
-  nodeData.hash = await getKadenaVerison(kdaNode);
+  nodeData.hash = await getKadenaVersion(kdaNode);
   if (!nodeData.hash) {
     kdaNodesWithErrors.push(kdaNode);
-    return;
+    if (!finishProcessing) {
+      return;
+    }
   }
   if (synced) {
     syncedKDAnodes.push(nodeData);
@@ -155,7 +162,7 @@ async function processKdaNode(kdaNode, currentRoundTime, synced) {
 }
 
 async function beginKadena() {
-  beginKadenExecuting = true;
+  // beginKadenExecuting = true;
   const startRefresh = new Date();
   // -> every hour get list of kadena nodes from 10 random fluxes calling /location/kadenachainwebnode api
   // -> since lists may differ we merge the list together to get an accurate list
@@ -172,8 +179,8 @@ async function beginKadena() {
   log.info(`beginKadena fluxnodelist length = ${fluxnodelist.length}`);
   // choose 10 random nodes and get chainwebnode locations from them
   const stringOfTenChars = 'qwertyuiop';
-  chainwebnodelocations = [];
-  outdatedchainweblocations = [];
+  const chainwebnodelocations = [];
+  const outdatedchainweblocations = [];
   // eslint-disable-next-line no-restricted-syntax, no-unused-vars
   for (const index of stringOfTenChars) { // async inside
     const randomNumber = Math.floor((Math.random() * fluxnodelist.length));
@@ -215,17 +222,17 @@ async function beginKadena() {
   }
   let kdaNodesWithErrorsAux = [];
   let retry = 0;
-  // lets process the nodes that we got a http error getting the information, max retrys 5
-  while (kdaNodesWithErrors.length > 0 && retry < 5) {
+  // lets process the nodes that we got a http error getting the information, max retrys 3
+  while (kdaNodesWithErrors.length > 0 && retry < 3) {
     log.info(`Found KadenaOld ${kdaNodesWithErrors.length} with errors.`);
     kdaNodesWithErrorsAux = [...kdaNodesWithErrors];
-    retry += 1;
     // eslint-disable-next-line no-restricted-syntax
     for (let i = 0; i < kdaNodesWithErrors.length; i += 1) {
       const kdaNode = kdaNodesWithErrors[i];
       const index = kdaNodesWithErrors.indexOf(kdaNode);
       kdaNodesWithErrors.splice(index, 1);
-      promiseArray.push(processKdaNode(kdaNode, currentRoundTime, false));
+      const lastTry = retry === 2; // insertToDB if last try
+      promiseArray.push(processKdaNode(kdaNode, currentRoundTime, false, lastTry));
       if ((i + 1) % 30 === 0) {
         await Promise.allSettled(promiseArray);
         promiseArray = [];
@@ -235,6 +242,7 @@ async function beginKadena() {
       await Promise.allSettled(promiseArray);
       promiseArray = [];
     }
+    retry += 1;
   }
   log.info(`Finished with KadenaOld ${kdaNodesWithErrors.length} with errors.`);
   kdaNodesWithErrors = [];
@@ -261,17 +269,17 @@ async function beginKadena() {
   }
   kdaNodesWithErrorsAux = [];
   retry = 0;
-  // lets process the nodes that we got a http error getting the information, max retrys 5
-  while (kdaNodesWithErrors.length > 0 && retry < 5) {
+  // lets process the nodes that we got a http error getting the information, max retrys 3
+  while (kdaNodesWithErrors.length > 0 && retry < 3) {
     log.info(`Found KadenaOk ${kdaNodesWithErrors.length} with errors.`);
     kdaNodesWithErrorsAux = [...kdaNodesWithErrors];
-    retry += 1;
     // eslint-disable-next-line no-restricted-syntax
     for (let i = 0; i < kdaNodesWithErrorsAux.length; i += 1) {
       const kdaNode = kdaNodesWithErrorsAux[i];
       const index = kdaNodesWithErrors.indexOf(kdaNode);
       kdaNodesWithErrors.splice(index, 1);
-      promiseArray.push(processKdaNode(kdaNode, currentRoundTime, true));
+      const lastTry = retry === 2; // insertToDB if last try
+      promiseArray.push(processKdaNode(kdaNode, currentRoundTime, true, lastTry));
       if ((i + 1) % 30 === 0) {
         await Promise.allSettled(promiseArray);
         promiseArray = [];
@@ -281,6 +289,7 @@ async function beginKadena() {
       await Promise.allSettled(promiseArray);
       promiseArray = [];
     }
+    retry += 1;
   }
   log.info(`Finished with KadenaOk ${kdaNodesWithErrors.length} with errors.`);
   kdaNodesWithErrors = [];
@@ -300,7 +309,7 @@ async function beginKadena() {
   });
   const endRefresh = new Date() - startRefresh;
   log.info('Execution time of beginKadena: %dms', endRefresh);
-  beginKadenExecuting = false;
+  // beginKadenExecuting = false;
 }
 
 async function outdatedNodes(req, res) {
@@ -748,11 +757,11 @@ async function start() {
     log.info('Initiating Kadena API services...');
     beginKadena();
     setInterval(() => {
-      if (!beginKadenExecuting) {
-        beginKadena();
-      } else {
-        log.info('beginKadena() interval skipped, still running.');
-      }
+      // if (!beginKadenExecuting) {
+      beginKadena(); // TODO prevent some loop
+      // } else {
+      //   log.info('beginKadena() interval skipped, still running.');
+      // }
     }, 30 * 60 * 1000); // run every 30 minutes
   } catch (e) {
     log.error(e);
