@@ -1,13 +1,19 @@
 /* eslint-disable no-await-in-loop */
 const axios = require('axios');
+const rateLimit = require('axios-rate-limit');
 const config = require('config');
 const LRU = require('lru-cache');
 const log = require('../lib/log');
 const serviceHelper = require('./serviceHelper');
 
 const axiosConfig = {
-  timeout: 13456,
+  timeout: 5000,
 };
+
+let round = 0;
+
+const httpFluxInfo = rateLimit(axios.create(), { maxRequests: 10, perMilliseconds: 1000 });
+const httpGeo = rateLimit(axios.create(), { maxRequests: 1, perMilliseconds: 2000 });
 
 // default cache
 const LRUoptions = {
@@ -16,14 +22,14 @@ const LRUoptions = {
 };
 const myCache = new LRU(LRUoptions);
 
-let round = 0;
-
 let db = null;
 const geocollection = config.database.local.collections.geolocation;
 const fluxcollection = config.database.local.collections.fluxes;
 const completedRoundsCollection = config.database.local.collections.completedRounds;
 
 let currentFluxNodeIps = [];
+let fluxNodesWithError = [];
+let executingProcessFluxNodes = false;
 
 async function geFluxNodeList() {
   try {
@@ -49,7 +55,7 @@ async function getFluxNodeIPs(fluxnodeList) {
 async function getFluxNodeGeolocation(ip) {
   try {
     const ipApiUrl = `http://ip-api.com/json/${ip}?fields=status,country,countryCode,lat,lon,query,org`;
-    const ipRes = await axios.get(ipApiUrl, axiosConfig);
+    const ipRes = await httpGeo.get(ipApiUrl, axiosConfig);
     if (ipRes.data.status === 'success') {
       const information = {
         ip: ipRes.data.query,
@@ -73,19 +79,15 @@ async function getFluxNodeGeolocation(ip) {
 async function getFluxInformation(ip) {
   try {
     const fluxInfoUrl = `http://${ip}:16127/flux/info`;
-    const fluxRes = await axios.get(fluxInfoUrl, axiosConfig);
+    const fluxRes = await httpFluxInfo.get(fluxInfoUrl, axiosConfig);
     if (fluxRes.data.status === 'success') {
       return fluxRes.data.data;
     }
     log.warn(`Flux information of IP ${ip} is bad`);
-    return {
-      error: true,
-    };
+    return false;
   } catch (e) {
     log.error(`Flux information of IP ${ip} error`);
-    return {
-      error: true,
-    };
+    return false;
   }
 }
 
@@ -189,108 +191,143 @@ async function createHistoryStats() {
   myCache.set('historyStats', data);
 }
 
+async function processFluxNode(fluxnode, currentRoundTime) {
+  const database = db.db(config.database.local.database);
+  const fluxInfo = await getFluxInformation(fluxnode.ip);
+  if (!fluxInfo) {
+    fluxNodesWithError.push(fluxnode);
+    return;
+  }
+  const query = { ip: fluxnode.ip };
+  const projection = {
+    projection: {
+      _id: 0,
+      ip: 1,
+      country: 1,
+      countryCode: 1,
+      lat: 1,
+      lon: 1,
+      org: 1,
+    },
+  };
+  // we shall always have geolocation
+  const result = await serviceHelper.findOneInDatabase(database, geocollection, query, projection).catch((error) => {
+    log.error(error);
+  });
+  if (result) {
+    fluxInfo.geolocation = result;
+  } else {
+    // we do not have info about that ip yet. Get it and Store it.
+    const geoRes = await getFluxNodeGeolocation(fluxnode.ip);
+    if (geoRes) {
+      // geo ok, store it and update fluxInfo.
+      await serviceHelper.insertOneToDatabase(database, geocollection, geoRes).catch((error) => {
+        log.error(error);
+      });
+      fluxInfo.geolocation = geoRes;
+    }
+  }
+  fluxInfo.ip = fluxnode.ip;
+  fluxInfo.addedHeight = fluxnode.added_height;
+  fluxInfo.confirmedHeight = fluxnode.confirmed_height;
+  fluxInfo.lastConfirmedHeight = fluxnode.last_confirmed_height;
+  fluxInfo.lastPaidHeight = fluxnode.last_paid_height;
+  fluxInfo.tier = fluxnode.tier;
+  fluxInfo.paymentAddress = fluxnode.payment_address;
+  fluxInfo.activeSince = fluxnode.activesince;
+  fluxInfo.collateralHash = getCollateralInfo(fluxnode.collateral).txhash;
+  fluxInfo.collateralIndex = getCollateralInfo(fluxnode.collateral).txindex;
+  fluxInfo.roundTime = currentRoundTime;
+  const curTime = new Date().getTime();
+  fluxInfo.dataCollectedAt = curTime;
+  if (fluxInfo.zelcash) {
+    fluxInfo.daemon = fluxInfo.zelcash;
+    fluxInfo.benchmark = fluxInfo.zelbench;
+    fluxInfo.node = fluxInfo.fluxnode;
+    fluxInfo.flux = fluxInfo.zelflux;
+    fluxInfo.apps = fluxInfo.zelapps;
+  } else if (fluxInfo.daemon) {
+    fluxInfo.zelcash = fluxInfo.daemon;
+    fluxInfo.zelbench = fluxInfo.benchmark;
+    fluxInfo.zelnode = fluxInfo.node;
+    fluxInfo.zelflux = fluxInfo.flux;
+    fluxInfo.zelapps = fluxInfo.apps;
+  }
+  await serviceHelper.insertOneToDatabase(database, fluxcollection, fluxInfo).catch((error) => {
+    log.error(error);
+  });
+}
+
 async function processFluxNodes() {
+  executingProcessFluxNodes = true;
+  const startRefresh = new Date();
   try {
     round += 1;
+    fluxNodesWithError = [];
     const currentRoundTime = new Date().getTime();
     const fluxnodes = await geFluxNodeList();
     log.info(`Beginning processing of ${currentRoundTime}.`);
     const database = db.db(config.database.local.database);
     currentFluxNodeIps = await getFluxNodeIPs(fluxnodes);
     log.info(`Found ${fluxnodes.length} Fluxes.`);
-
+    let promiseArray = [];
     // eslint-disable-next-line no-restricted-syntax
     for (const [i, fluxnode] of fluxnodes.entries()) {
-      const fluxInfo = await getFluxInformation(fluxnode.ip);
-      const query = { ip: fluxnode.ip };
-      const projection = {
-        projection: {
-          _id: 0,
-          ip: 1,
-          country: 1,
-          countryCode: 1,
-          lat: 1,
-          lon: 1,
-          org: 1,
-        },
-      };
-      // we shall always have geolocation
-      const result = await serviceHelper.findOneInDatabase(database, geocollection, query, projection).catch((error) => {
-        log.error(error);
-      });
-      if (result) {
-        fluxInfo.geolocation = result;
-      } else {
-        // we do not have info about that ip yet. Get it and Store it.
-        await serviceHelper.timeout(2000);
-        const geoRes = await getFluxNodeGeolocation(fluxnode.ip);
-        if (geoRes) {
-          // geo ok, store it and update fluxInfo.
-          await serviceHelper.insertOneToDatabase(database, geocollection, geoRes).catch((error) => {
-            log.error(error);
-          });
-          fluxInfo.geolocation = geoRes;
-        }
-      }
-      fluxInfo.ip = fluxnode.ip;
-      fluxInfo.addedHeight = fluxnode.added_height;
-      fluxInfo.confirmedHeight = fluxnode.confirmed_height;
-      fluxInfo.lastConfirmedHeight = fluxnode.last_confirmed_height;
-      fluxInfo.lastPaidHeight = fluxnode.last_paid_height;
-      fluxInfo.tier = fluxnode.tier;
-      fluxInfo.paymentAddress = fluxnode.payment_address;
-      fluxInfo.activeSince = fluxnode.activesince;
-      fluxInfo.collateralHash = getCollateralInfo(fluxnode.collateral).txhash;
-      fluxInfo.collateralIndex = getCollateralInfo(fluxnode.collateral).txindex;
-      fluxInfo.roundTime = currentRoundTime;
-      const curTime = new Date().getTime();
-      fluxInfo.dataCollectedAt = curTime;
-      if (fluxInfo.zelcash) {
-        fluxInfo.daemon = fluxInfo.zelcash;
-        fluxInfo.benchmark = fluxInfo.zelbench;
-        fluxInfo.node = fluxInfo.fluxnode;
-        fluxInfo.flux = fluxInfo.zelflux;
-        fluxInfo.apps = fluxInfo.zelapps;
-      } else if (fluxInfo.daemon) {
-        fluxInfo.zelcash = fluxInfo.daemon;
-        fluxInfo.zelbench = fluxInfo.benchmark;
-        fluxInfo.zelnode = fluxInfo.node;
-        fluxInfo.zelflux = fluxInfo.flux;
-        fluxInfo.zelapps = fluxInfo.apps;
-      }
-      await serviceHelper.insertOneToDatabase(database, fluxcollection, fluxInfo).catch((error) => {
-        log.error(error);
-      });
-      if ((i + 1) % 25 === 0) {
-        log.info(`Checked ${i + 1}/${fluxnodes.length}.`);
-        const colStats = await serviceHelper.collectionStats(database, fluxcollection).catch((error) => {
-          throw error;
-        });
-        log.info('FLUX', colStats.size, colStats.count, colStats.avgObjSize);
+      promiseArray.push(processFluxNode(fluxnode, currentRoundTime));
+      if ((i + 1) % 30 === 0) {
+        await Promise.allSettled(promiseArray);
+        promiseArray = [];
+        log.info(`Flux Nodes Processed: ${i + 1}`);
       }
     }
+    if (promiseArray.length > 0) {
+      await Promise.allSettled(promiseArray);
+      promiseArray = [];
+    }
+    let fluxNodesWithErrorAux = [];
+    let retry = 0;
+    while (fluxNodesWithError.length > 0 && retry < 3) {
+      log.info(`Found ${fluxNodesWithError.length} with errors.`);
+      fluxNodesWithErrorAux = [...fluxNodesWithError];
+      // eslint-disable-next-line no-restricted-syntax
+      for (let i = 0; i < fluxNodesWithErrorAux.length; i += 1) {
+        const fluxnode = fluxNodesWithErrorAux[i];
+        const index = fluxNodesWithError.indexOf(fluxnode);
+        fluxNodesWithError.splice(index, 1);
+        promiseArray.push(processFluxNode(fluxnode, currentRoundTime));
+        if ((i + 1) % 30 === 0) {
+          await Promise.allSettled(promiseArray);
+          promiseArray = [];
+        }
+      }
+      if (promiseArray.length > 0) {
+        await Promise.allSettled(promiseArray);
+        promiseArray = [];
+      }
+      retry += 1;
+    }
     log.info(`Processing of ${currentRoundTime} finished.`);
+    log.info(`Total Nodes with errors: ${fluxNodesWithError.length}`);
+    fluxNodesWithErrorAux = [];
     const crt = {
       timestamp: currentRoundTime,
     };
     await serviceHelper.insertOneToDatabase(database, completedRoundsCollection, crt).catch((error) => {
       log.error(error);
     });
-    setTimeout(() => {
-      processFluxNodes();
-      if (round % 2 === 0) {
-        createHistoryStats();
-      }
-    }, 1 * 60 * 1000);
   } catch (e) {
     log.error(e);
+  }
+  // for every 2 runs start createHistoryStatys after 60 seconds
+  if (round % 2 === 0) {
     setTimeout(() => {
-      processFluxNodes();
-      if (round % 2 === 0) {
-        createHistoryStats();
-      }
+      createHistoryStats();
     }, 1 * 60 * 1000);
   }
+
+  const endRefresh = new Date() - startRefresh;
+  log.info('Execution time of processFluxNodes: %dms', endRefresh);
+  executingProcessFluxNodes = false;
 }
 
 async function getAllGeolocation(req, res) {
@@ -619,12 +656,19 @@ async function start() {
     // begin fluxnodes processing;
     processFluxNodes();
     createHistoryStats();
+    setInterval(() => {
+      if (!executingProcessFluxNodes) {
+        processFluxNodes();
+      } else {
+        log.info('processFluxNodes() interval skipped, still running.');
+      }
+    }, 15 * 60 * 1000);
   } catch (e) {
     // restart service after 5 mins
     log.error(e);
     setTimeout(() => {
       start();
-    }, 5 * 30 * 1000);
+    }, 5 * 60 * 1000);
   }
 }
 module.exports = {
