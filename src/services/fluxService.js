@@ -48,7 +48,8 @@ async function geFluxNodeList() {
 
 async function getFluxNodeIPs(fluxnodeList) {
   try {
-    const ips = fluxnodeList.map((fluxnode) => fluxnode.ip);
+    const fluxnodes = fluxnodeList || await geFluxNodeList();
+    const ips = fluxnodes.map((fluxnode) => fluxnode.ip);
     return ips;
   } catch (e) {
     log.error(e);
