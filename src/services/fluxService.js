@@ -10,6 +10,10 @@ const axiosConfig = {
   timeout: 5000,
 };
 
+const axiosExplorerConfig = {
+  timeout: 10000,
+};
+
 let round = 0;
 
 const httpFluxInfo = rateLimit(axios.create(), { maxRequests: 10, perMilliseconds: 1000 });
@@ -33,18 +37,18 @@ let executingProcessFluxNodes = false;
 
 async function geFluxNodeList() {
   try {
-    const fluxnodeList = await axios.get(`${config.explorer}/api/fluxnode/listfluxnodes`, axiosConfig);
+    const fluxnodeList = await axios.get(`${config.explorer}/api/fluxnode/listfluxnodes`, axiosExplorerConfig);
     return fluxnodeList.data.result || [];
   } catch (e) {
     log.error(e);
+    log.error('Error getting flux node list from explorer.');
     return [];
   }
 }
 
 async function getFluxNodeIPs(fluxnodeList) {
   try {
-    const fluxnodes = fluxnodeList || await geFluxNodeList();
-    const ips = fluxnodes.map((fluxnode) => fluxnode.ip);
+    const ips = fluxnodeList.map((fluxnode) => fluxnode.ip);
     return ips;
   } catch (e) {
     log.error(e);
@@ -264,70 +268,74 @@ async function processFluxNodes() {
   try {
     round += 1;
     fluxNodesWithError = [];
-    const currentRoundTime = new Date().getTime();
-    const fluxnodes = await geFluxNodeList();
-    log.info(`Beginning processing of ${currentRoundTime}.`);
     const database = db.db(config.database.local.database);
-    currentFluxNodeIps = await getFluxNodeIPs(fluxnodes);
+    const currentRoundTime = new Date().getTime();
+    log.info(`Beginning processing of ${currentRoundTime}.`);
+    const fluxnodes = await geFluxNodeList();
     log.info(`Found ${fluxnodes.length} Fluxes.`);
-    let promiseArray = [];
-    // eslint-disable-next-line no-restricted-syntax
-    for (const [i, fluxnode] of fluxnodes.entries()) {
-      promiseArray.push(processFluxNode(fluxnode, currentRoundTime));
-      if ((i + 1) % 30 === 0) {
-        await Promise.allSettled(promiseArray);
-        promiseArray = [];
-        log.info(`Flux Nodes Processed: ${i + 1}`);
-      }
-    }
-    if (promiseArray.length > 0) {
-      await Promise.allSettled(promiseArray);
-      promiseArray = [];
-    }
-    let fluxNodesWithErrorAux = [];
-    let retry = 0;
-    while (fluxNodesWithError.length > 0 && retry < 3) {
-      log.info(`Found ${fluxNodesWithError.length} with errors.`);
-      fluxNodesWithErrorAux = [...fluxNodesWithError];
+    if (fluxnodes && fluxnodes.length > 0) {
+      currentFluxNodeIps = await getFluxNodeIPs(fluxnodes);
+      let promiseArray = [];
       // eslint-disable-next-line no-restricted-syntax
-      for (let i = 0; i < fluxNodesWithErrorAux.length; i += 1) {
-        const fluxnode = fluxNodesWithErrorAux[i];
-        const index = fluxNodesWithError.indexOf(fluxnode);
-        fluxNodesWithError.splice(index, 1);
+      for (const [i, fluxnode] of fluxnodes.entries()) {
         promiseArray.push(processFluxNode(fluxnode, currentRoundTime));
         if ((i + 1) % 30 === 0) {
           await Promise.allSettled(promiseArray);
           promiseArray = [];
+          log.info(`Flux Nodes Processed: ${i + 1}`);
         }
       }
       if (promiseArray.length > 0) {
         await Promise.allSettled(promiseArray);
         promiseArray = [];
       }
-      retry += 1;
+      let fluxNodesWithErrorAux = [];
+      let retry = 0;
+      while (fluxNodesWithError.length > 0 && retry < 3) {
+        log.info(`Found ${fluxNodesWithError.length} with errors.`);
+        fluxNodesWithErrorAux = [...fluxNodesWithError];
+        // eslint-disable-next-line no-restricted-syntax
+        for (let i = 0; i < fluxNodesWithErrorAux.length; i += 1) {
+          const fluxnode = fluxNodesWithErrorAux[i];
+          const index = fluxNodesWithError.indexOf(fluxnode);
+          fluxNodesWithError.splice(index, 1);
+          promiseArray.push(processFluxNode(fluxnode, currentRoundTime));
+          if ((i + 1) % 30 === 0) {
+            await Promise.allSettled(promiseArray);
+            promiseArray = [];
+          }
+        }
+        if (promiseArray.length > 0) {
+          await Promise.allSettled(promiseArray);
+          promiseArray = [];
+        }
+        retry += 1;
+      }
+      log.info(`Processing of ${currentRoundTime} finished.`);
+      log.info(`Total Nodes with errors: ${fluxNodesWithError.length}`);
+      fluxNodesWithErrorAux = [];
+      const crt = {
+        timestamp: currentRoundTime,
+      };
+      await serviceHelper.insertOneToDatabase(database, completedRoundsCollection, crt).catch((error) => {
+        log.error(error);
+      });
+      // for every 2 runs start createHistoryStatys after 60 seconds
+      if (round % 2 === 0) {
+        setTimeout(() => {
+          createHistoryStats();
+        }, 1 * 60 * 1000);
+      }
+    } else {
+      log.error('No flux Nodes Found');
     }
-    log.info(`Processing of ${currentRoundTime} finished.`);
-    log.info(`Total Nodes with errors: ${fluxNodesWithError.length}`);
-    fluxNodesWithErrorAux = [];
-    const crt = {
-      timestamp: currentRoundTime,
-    };
-    await serviceHelper.insertOneToDatabase(database, completedRoundsCollection, crt).catch((error) => {
-      log.error(error);
-    });
   } catch (e) {
     log.error(e);
+  } finally {
+    executingProcessFluxNodes = false;
+    const endRefresh = new Date() - startRefresh;
+    log.info('Execution time of processFluxNodes: %dms', endRefresh);
   }
-  // for every 2 runs start createHistoryStatys after 60 seconds
-  if (round % 2 === 0) {
-    setTimeout(() => {
-      createHistoryStats();
-    }, 1 * 60 * 1000);
-  }
-
-  const endRefresh = new Date() - startRefresh;
-  log.info('Execution time of processFluxNodes: %dms', endRefresh);
-  executingProcessFluxNodes = false;
 }
 
 async function getAllGeolocation(req, res) {
