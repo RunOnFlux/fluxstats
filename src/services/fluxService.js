@@ -33,7 +33,7 @@ const completedRoundsCollection = config.database.local.collections.completedRou
 
 let currentFluxNodeIps = [];
 let fluxNodesWithError = [];
-let executingProcessFluxNodes = false;
+// let executingProcessFluxNodes = false;
 
 async function geFluxNodeList() {
   try {
@@ -264,7 +264,7 @@ async function processFluxNode(fluxnode, currentRoundTime) {
 }
 
 async function processFluxNodes() {
-  executingProcessFluxNodes = true;
+  // executingProcessFluxNodes = true;
   const startRefresh = new Date();
   try {
     round += 1;
@@ -333,7 +333,7 @@ async function processFluxNodes() {
   } catch (e) {
     log.error(e);
   } finally {
-    executingProcessFluxNodes = false;
+    // executingProcessFluxNodes = false;
     const endRefresh = new Date() - startRefresh;
     log.info('Execution time of processFluxNodes: %dms', endRefresh);
   }
@@ -666,11 +666,11 @@ async function start() {
     processFluxNodes();
     createHistoryStats();
     setInterval(() => {
-      if (!executingProcessFluxNodes) {
-        processFluxNodes();
-      } else {
-        log.info('processFluxNodes() interval skipped, still running.');
-      }
+      // if (!executingProcessFluxNodes) {
+      processFluxNodes();
+      // } else {
+      //   log.info('processFluxNodes() interval skipped, still running.');
+      // }
     }, 15 * 60 * 1000);
   } catch (e) {
     // restart service after 5 mins
