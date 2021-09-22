@@ -292,7 +292,7 @@ async function processFluxNodes() {
       }
       let fluxNodesWithErrorAux = [];
       let retry = 0;
-      while (fluxNodesWithError.length > 0 && retry < 5) {
+      while (fluxNodesWithError.length > 0 && retry < 6) {
         log.info(`Found ${fluxNodesWithError.length} with errors.`);
         fluxNodesWithErrorAux = [...fluxNodesWithError];
         // eslint-disable-next-line no-restricted-syntax
