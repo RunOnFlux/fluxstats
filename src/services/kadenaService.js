@@ -223,7 +223,7 @@ async function beginKadena() {
   let kdaNodesWithErrorsAux = [];
   let retry = 0;
   // lets process the nodes that we got a http error getting the information, max retrys 3
-  while (kdaNodesWithErrors.length > 0 && retry < 3) {
+  while (kdaNodesWithErrors.length > 0 && retry < 6) {
     log.info(`Found KadenaOld ${kdaNodesWithErrors.length} with errors.`);
     kdaNodesWithErrorsAux = [...kdaNodesWithErrors];
     // eslint-disable-next-line no-restricted-syntax
@@ -231,7 +231,7 @@ async function beginKadena() {
       const kdaNode = kdaNodesWithErrors[i];
       const index = kdaNodesWithErrors.indexOf(kdaNode);
       kdaNodesWithErrors.splice(index, 1);
-      const lastTry = retry === 2; // insertToDB if last try
+      const lastTry = retry === 5; // insertToDB if last try
       promiseArray.push(processKdaNode(kdaNode, currentRoundTime, false, lastTry));
       if ((i + 1) % 30 === 0) {
         await Promise.allSettled(promiseArray);

@@ -259,7 +259,7 @@ async function processFluxNode(fluxnode, currentRoundTime) {
     fluxInfo.zelapps = fluxInfo.apps;
   }
   await serviceHelper.insertOneToDatabase(database, fluxcollection, fluxInfo).catch((error) => {
-    log.error(error);
+    log.error(`Flux information of IP ${fluxnode.ip} error inserting in db: ${error}`);
   });
 }
 
@@ -292,7 +292,7 @@ async function processFluxNodes() {
       }
       let fluxNodesWithErrorAux = [];
       let retry = 0;
-      while (fluxNodesWithError.length > 0 && retry < 3) {
+      while (fluxNodesWithError.length > 0 && retry < 6) {
         log.info(`Found ${fluxNodesWithError.length} with errors.`);
         fluxNodesWithErrorAux = [...fluxNodesWithError];
         // eslint-disable-next-line no-restricted-syntax
