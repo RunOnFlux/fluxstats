@@ -81,10 +81,10 @@ async function getFluxNodeGeolocation(ip) {
   }
 }
 
-async function getFluxInformation(ip) {
+async function getFluxInformation(ip, timeoutConfig) {
   try {
     const fluxInfoUrl = `http://${ip}:16127/flux/info`;
-    const fluxRes = await httpFluxInfo.get(fluxInfoUrl, axiosConfig);
+    const fluxRes = await httpFluxInfo.get(fluxInfoUrl, timeoutConfig);
     if (fluxRes.data.status === 'success') {
       return fluxRes.data.data;
     }
@@ -196,9 +196,9 @@ async function createHistoryStats() {
   myCache.set('historyStats', data);
 }
 
-async function processFluxNode(fluxnode, currentRoundTime) {
+async function processFluxNode(fluxnode, currentRoundTime, timeoutConfig) {
   const database = db.db(config.database.local.database);
-  const fluxInfo = await getFluxInformation(fluxnode.ip);
+  const fluxInfo = await getFluxInformation(fluxnode.ip, timeoutConfig);
   if (!fluxInfo) {
     fluxNodesWithError.push(fluxnode);
     return;
@@ -279,8 +279,8 @@ async function processFluxNodes() {
       let promiseArray = [];
       // eslint-disable-next-line no-restricted-syntax
       for (const [i, fluxnode] of fluxnodes.entries()) {
-        promiseArray.push(processFluxNode(fluxnode, currentRoundTime));
-        if ((i + 1) % 30 === 0) {
+        promiseArray.push(processFluxNode(fluxnode, currentRoundTime, axiosConfig));
+        if ((i + 1) % 50 === 0) {
           await Promise.allSettled(promiseArray);
           promiseArray = [];
           log.info(`Flux Nodes Processed: ${i + 1}`);
@@ -292,7 +292,7 @@ async function processFluxNodes() {
       }
       let fluxNodesWithErrorAux = [];
       let retry = 0;
-      while (fluxNodesWithError.length > 0 && retry < 6) {
+      while (fluxNodesWithError.length > 0 && retry < 10) {
         log.info(`Found ${fluxNodesWithError.length} with errors.`);
         fluxNodesWithErrorAux = [...fluxNodesWithError];
         // eslint-disable-next-line no-restricted-syntax
@@ -300,7 +300,11 @@ async function processFluxNodes() {
           const fluxnode = fluxNodesWithErrorAux[i];
           const index = fluxNodesWithError.indexOf(fluxnode);
           fluxNodesWithError.splice(index, 1);
-          promiseArray.push(processFluxNode(fluxnode, currentRoundTime));
+          let timeoutConfig = axiosConfig;
+          if (retry === 9) {
+            timeoutConfig = axiosExplorerConfig;
+          }
+          promiseArray.push(processFluxNode(fluxnode, currentRoundTime, timeoutConfig));
           if ((i + 1) % 30 === 0) {
             await Promise.allSettled(promiseArray);
             promiseArray = [];
