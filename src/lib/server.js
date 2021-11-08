@@ -11,7 +11,7 @@ if (nodeEnv !== 'test') {
   app.use(morgan('combined'));
 }
 
-app.use(cors());
+app.use(cors({ origin: '*' }));
 const kdaui = path.join(__dirname, '../kdaUI');
 app.use(express.static(kdaui));
 require('../routes')(app);
