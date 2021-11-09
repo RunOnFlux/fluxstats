@@ -371,11 +371,13 @@ async function getAllGeolocation(req, res) {
   return res.json(resMessage);
 }
 
-async function getAllFluxInformation(req, res) {
+async function getAllFluxInformation(req, res, i = 0) {
   try {
     if (fluxInformationRunning) {
       await serviceHelper.timeout(100);
-      getAllFluxInformation(req, res);
+      if (i < 300) {
+        getAllFluxInformation(req, res, i + 1);
+      }
       return;
     }
     fluxInformationRunning = true;
@@ -524,11 +526,13 @@ async function getAllFluxVersions(req, res) {
   }
 }
 
-async function getAllFluxGeolocation(req, res) {
+async function getAllFluxGeolocation(req, res, i = 0) {
   try {
     if (fluxLocationsRunning) {
       await serviceHelper.timeout(100);
-      getAllFluxGeolocation(req, res);
+      if (i < 300) {
+        getAllFluxGeolocation(req, res, i + 1);
+      }
       return;
     }
     fluxLocationsRunning = true;
@@ -688,11 +692,13 @@ async function getAllFluxGeolocationNow(req, res) {
   }
 }
 
-async function fluxNodesHistoryStats(req, res) {
+async function fluxNodesHistoryStats(req, res, i = 0) {
   try {
     if (fluxNodeHistoryStatsRunning) {
       await serviceHelper.timeout(100);
-      fluxNodesHistoryStats(req, res);
+      if (i < 300) {
+        fluxNodesHistoryStats(req, res, i + 1);
+      }
       return;
     }
     fluxNodeHistoryStatsRunning = true;

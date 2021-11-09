@@ -551,7 +551,7 @@ async function getKadenaAccountHistoryDays(req, res) {
   }
 }
 
-async function getKadenaEligibleStatsDays(req, res) {
+async function getKadenaEligibleStatsDays(req, res, i = 0) {
   try {
     const database = db.db(config.database.kadena.database);
     let { days } = req.params;
@@ -564,7 +564,9 @@ async function getKadenaEligibleStatsDays(req, res) {
     }
     if (kadenaEligibleStatsRunning) {
       await serviceHelper.timeout(100);
-      getKadenaEligibleStatsDays(req, res);
+      if (i < 300) {
+        getKadenaEligibleStatsDays(req, res, i + 1);
+      }
       return;
     }
     kadenaEligibleStatsRunning = true;
@@ -668,7 +670,7 @@ async function getKadenaEligibleStatsDays(req, res) {
   }
 }
 
-async function getKadenaEligibleDays(req, res) {
+async function getKadenaEligibleDays(req, res, i = 0) {
   try {
     const database = db.db(config.database.kadena.database);
     let { days } = req.params;
@@ -681,7 +683,9 @@ async function getKadenaEligibleDays(req, res) {
     }
     if (kadenaEligibleRunning) {
       await serviceHelper.timeout(100);
-      getKadenaEligibleStatsDays(req, res);
+      if (i < 300) {
+        getKadenaEligibleStatsDays(req, res, i + 1);
+      }
       return;
     }
     kadenaEligibleRunning = true;

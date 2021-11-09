@@ -22,7 +22,7 @@ module.exports = (app) => {
   app.get('/fluxversions', cache('5 minutes'), (req, res) => {
     fluxService.getAllFluxVersions(req, res);
   });
-  app.get('/fluxlocations', cache('5 minutes'), (req, res) => {
+  app.get('/fluxlocations', cache('20 minutes'), (req, res) => {
     fluxService.getAllFluxGeolocation(req, res);
   });
   app.get('/availabletimes', cache('5 minutes'), (req, res) => {
@@ -32,7 +32,7 @@ module.exports = (app) => {
     fluxService.getAllFluxGeolocationNow(req, res);
   });
   // get last month of history stats
-  app.get('/fluxhistorystats', cache('5 minutes'), (req, res) => {
+  app.get('/fluxhistorystats', cache('15 minutes'), (req, res) => {
     fluxService.fluxNodesHistoryStats(req, res);
   });
 
@@ -63,7 +63,7 @@ module.exports = (app) => {
   app.get('/kadena/nodes/:timestamp?', cache('5 minutes'), (req, res) => {
     kadenaService.getKadenaNodesForTimestamp(req, res);
   });
-  app.get('/kadena/eligible/:days?', cache('5 minutes'), (req, res) => {
+  app.get('/kadena/eligible/:days?', cache('10 minutes'), (req, res) => {
     kadenaService.getKadenaEligibleDays(req, res);
   });
   app.get('/kadena/eligiblestats/:days?', cache('30 minutes'), (req, res) => {
