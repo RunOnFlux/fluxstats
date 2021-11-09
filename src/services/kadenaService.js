@@ -38,6 +38,9 @@ const axiosConfig = {
   timeout: 5000,
 };
 
+let kadenaEligibleRunning = false;
+let kadenaEligibleStatsRunning = false;
+
 async function getKadenaLocation(ip) {
   try {
     const fluxnodeList = await http.get(`http://${ip}:16127/apps/location/KadenaChainWebNode`, axiosConfig);
@@ -313,415 +316,518 @@ async function beginKadena() {
 }
 
 async function outdatedNodes(req, res) {
-  const results = outdatedKDANodes;
-  const resMessage = serviceHelper.createDataMessage(results);
-  res.json(resMessage);
+  try {
+    const results = outdatedKDANodes;
+    const resMessage = serviceHelper.createDataMessage(results);
+    res.json(resMessage);
+  } catch (error) {
+    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+    res.json(errMessage);
+    log.error(error);
+  }
 }
 
 async function uptodateNodes(req, res) {
-  const results = currentNodes;
-  const resMessage = serviceHelper.createDataMessage(results);
-  res.json(resMessage);
+  try {
+    const results = currentNodes;
+    const resMessage = serviceHelper.createDataMessage(results);
+    res.json(resMessage);
+  } catch (error) {
+    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+    res.json(errMessage);
+    log.error(error);
+  }
 }
 
 async function allNodesAPI(req, res) {
-  const results = allNodes;
-  const resMessage = serviceHelper.createDataMessage(results);
-  res.json(resMessage);
+  try {
+    const results = allNodes;
+    const resMessage = serviceHelper.createDataMessage(results);
+    res.json(resMessage);
+  } catch (error) {
+    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+    res.json(errMessage);
+    log.error(error);
+  }
 }
 
 async function getCompletedRoundsTimestamps(req, res) {
-  const database = db.db(config.database.kadena.database);
-  const q = {};
-  const p = {};
-  const completedRounds = await serviceHelper.findInDatabase(database, completedRoundsCollection, q, p).catch((error) => {
+  try {
+    const database = db.db(config.database.kadena.database);
+    const q = {};
+    const p = {};
+    const completedRounds = await serviceHelper.findInDatabase(database, completedRoundsCollection, q, p).catch((error) => {
+      const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+      res.json(errMessage);
+      log.error(error);
+    });
+    const bresults = completedRounds.map((x) => x.timestamp);
+    const resMessage = serviceHelper.createDataMessage(bresults);
+    res.json(resMessage);
+  } catch (error) {
     const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
     res.json(errMessage);
     log.error(error);
-  });
-  const bresults = completedRounds.map((x) => x.timestamp);
-  const resMessage = serviceHelper.createDataMessage(bresults);
-  return res.json(resMessage);
+  }
 }
 
 async function getKadenaIPHistory(req, res) {
-  const database = db.db(config.database.kadena.database);
-  let { ip } = req.params;
-  ip = ip || req.query.ip;
-  if (!ip) {
-    const errMessage = serviceHelper.createErrorMessage('No IP provided');
-    return res.json(errMessage);
-  }
-  const query = {
-    ip,
-  };
-  const projection = {
-    projection: {
-      _id: 0,
-      ip: 1,
-      tier: 1,
-      roundTime: 1,
-      account: 1,
-      height: 1,
-      hash: 1,
-      zelid: 1,
-    },
-  };
-  const results = await serviceHelper.findInDatabase(database, kadenaNodesCollection, query, projection).catch((error) => {
+  try {
+    const database = db.db(config.database.kadena.database);
+    let { ip } = req.params;
+    ip = ip || req.query.ip;
+    if (!ip) {
+      const errMessage = serviceHelper.createErrorMessage('No IP provided');
+      res.json(errMessage);
+      return;
+    }
+    const query = {
+      ip,
+    };
+    const projection = {
+      projection: {
+        _id: 0,
+        ip: 1,
+        tier: 1,
+        roundTime: 1,
+        account: 1,
+        height: 1,
+        hash: 1,
+        zelid: 1,
+      },
+    };
+    const results = await serviceHelper.findInDatabase(database, kadenaNodesCollection, query, projection).catch((error) => {
+      const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+      res.json(errMessage);
+      log.error(error);
+    });
+    const resMessage = serviceHelper.createDataMessage(results);
+    res.json(resMessage);
+  } catch (error) {
     const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
     res.json(errMessage);
     log.error(error);
-  });
-  const resMessage = serviceHelper.createDataMessage(results);
-  return res.json(resMessage);
+  }
 }
 
 async function getKadenaAccountHistory(req, res) {
-  const database = db.db(config.database.kadena.database);
-  let { account } = req.params;
-  account = account || req.query.account;
-  if (!account) {
-    const errMessage = serviceHelper.createErrorMessage('No Account provided');
-    return res.json(errMessage);
-  }
-  const query = {
-    account,
-  };
-  const projection = {
-    projection: {
-      _id: 0,
-      ip: 1,
-      tier: 1,
-      roundTime: 1,
-      account: 1,
-      height: 1,
-      hash: 1,
-      zelid: 1,
-    },
-  };
-  const results = await serviceHelper.findInDatabase(database, kadenaNodesCollection, query, projection).catch((error) => {
+  try {
+    const database = db.db(config.database.kadena.database);
+    let { account } = req.params;
+    account = account || req.query.account;
+    if (!account) {
+      const errMessage = serviceHelper.createErrorMessage('No Account provided');
+      res.json(errMessage);
+      return;
+    }
+    const query = {
+      account,
+    };
+    const projection = {
+      projection: {
+        _id: 0,
+        ip: 1,
+        tier: 1,
+        roundTime: 1,
+        account: 1,
+        height: 1,
+        hash: 1,
+        zelid: 1,
+      },
+    };
+    const results = await serviceHelper.findInDatabase(database, kadenaNodesCollection, query, projection).catch((error) => {
+      const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+      res.json(errMessage);
+      log.error(error);
+    });
+    const resMessage = serviceHelper.createDataMessage(results);
+    res.json(resMessage);
+  } catch (error) {
     const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
     res.json(errMessage);
     log.error(error);
-  });
-  const resMessage = serviceHelper.createDataMessage(results);
-  return res.json(resMessage);
+  }
 }
 
 async function getKadenaIPHistoryDays(req, res) {
-  const database = db.db(config.database.kadena.database);
-  let { ip } = req.params;
-  ip = ip || req.query.ip;
-  if (!ip) {
-    const errMessage = serviceHelper.createErrorMessage('No IP provided');
-    return res.json(errMessage);
-  }
-  let { days } = req.params;
-  days = days || req.query.days;
-  days = serviceHelper.ensureNumber(days);
-  if (!days || Number.isNaN(days)) {
-    const errMessage = serviceHelper.createErrorMessage('No last number of Days provided');
-    return res.json(errMessage);
-  }
-  const daysInMiliseconds = days * 24 * 60 * 60 * 1000;
-  const currentTime = new Date().getTime();
-  const minimumTime = currentTime - daysInMiliseconds;
-  const query = {
-    ip,
-    roundTime: { $gte: minimumTime },
-  };
-  const projection = {
-    projection: {
-      _id: 0,
-      ip: 1,
-      tier: 1,
-      roundTime: 1,
-      account: 1,
-      height: 1,
-      hash: 1,
-      zelid: 1,
-    },
-  };
-  const results = await serviceHelper.findInDatabase(database, kadenaNodesCollection, query, projection).catch((error) => {
+  try {
+    const database = db.db(config.database.kadena.database);
+    let { ip } = req.params;
+    ip = ip || req.query.ip;
+    if (!ip) {
+      const errMessage = serviceHelper.createErrorMessage('No IP provided');
+      res.json(errMessage);
+      return;
+    }
+    let { days } = req.params;
+    days = days || req.query.days;
+    days = serviceHelper.ensureNumber(days);
+    if (!days || Number.isNaN(days)) {
+      const errMessage = serviceHelper.createErrorMessage('No last number of Days provided');
+      res.json(errMessage);
+      return;
+    }
+    const daysInMiliseconds = days * 24 * 60 * 60 * 1000;
+    const currentTime = new Date().getTime();
+    const minimumTime = currentTime - daysInMiliseconds;
+    const query = {
+      ip,
+      roundTime: { $gte: minimumTime },
+    };
+    const projection = {
+      projection: {
+        _id: 0,
+        ip: 1,
+        tier: 1,
+        roundTime: 1,
+        account: 1,
+        height: 1,
+        hash: 1,
+        zelid: 1,
+      },
+    };
+    const results = await serviceHelper.findInDatabase(database, kadenaNodesCollection, query, projection).catch((error) => {
+      const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+      res.json(errMessage);
+      log.error(error);
+    });
+    const resMessage = serviceHelper.createDataMessage(results);
+    res.json(resMessage);
+  } catch (error) {
     const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
     res.json(errMessage);
     log.error(error);
-  });
-  const resMessage = serviceHelper.createDataMessage(results);
-  return res.json(resMessage);
+  }
 }
 
 async function getKadenaAccountHistoryDays(req, res) {
-  const database = db.db(config.database.kadena.database);
-  let { account } = req.params;
-  account = account || req.query.account;
-  if (!account) {
-    const errMessage = serviceHelper.createErrorMessage('No Account provided');
-    return res.json(errMessage);
-  }
-  let { days } = req.params;
-  days = days || req.query.days;
-  days = serviceHelper.ensureNumber(days);
-  if (!days || Number.isNaN(days)) {
-    const errMessage = serviceHelper.createErrorMessage('No last number of Days provided');
-    return res.json(errMessage);
-  }
-  const daysInMiliseconds = days * 24 * 60 * 60 * 1000;
-  const currentTime = new Date().getTime();
-  const minimumTime = currentTime - daysInMiliseconds;
-  const query = {
-    account,
-    roundTime: { $gte: minimumTime },
-  };
-  const projection = {
-    projection: {
-      _id: 0,
-      ip: 1,
-      tier: 1,
-      roundTime: 1,
-      account: 1,
-      height: 1,
-      hash: 1,
-      zelid: 1,
-    },
-  };
-  const results = await serviceHelper.findInDatabase(database, kadenaNodesCollection, query, projection).catch((error) => {
+  try {
+    const database = db.db(config.database.kadena.database);
+    let { account } = req.params;
+    account = account || req.query.account;
+    if (!account) {
+      const errMessage = serviceHelper.createErrorMessage('No Account provided');
+      res.json(errMessage);
+      return;
+    }
+    let { days } = req.params;
+    days = days || req.query.days;
+    days = serviceHelper.ensureNumber(days);
+    if (!days || Number.isNaN(days)) {
+      const errMessage = serviceHelper.createErrorMessage('No last number of Days provided');
+      res.json(errMessage);
+      return;
+    }
+    const daysInMiliseconds = days * 24 * 60 * 60 * 1000;
+    const currentTime = new Date().getTime();
+    const minimumTime = currentTime - daysInMiliseconds;
+    const query = {
+      account,
+      roundTime: { $gte: minimumTime },
+    };
+    const projection = {
+      projection: {
+        _id: 0,
+        ip: 1,
+        tier: 1,
+        roundTime: 1,
+        account: 1,
+        height: 1,
+        hash: 1,
+        zelid: 1,
+      },
+    };
+    const results = await serviceHelper.findInDatabase(database, kadenaNodesCollection, query, projection).catch((error) => {
+      const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+      res.json(errMessage);
+      log.error(error);
+    });
+    const resMessage = serviceHelper.createDataMessage(results);
+    res.json(resMessage);
+  } catch (error) {
     const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
     res.json(errMessage);
     log.error(error);
-  });
-  const resMessage = serviceHelper.createDataMessage(results);
-  return res.json(resMessage);
+  }
 }
 
 async function getKadenaEligibleStatsDays(req, res) {
-  const database = db.db(config.database.kadena.database);
-  let { days } = req.params;
-  days = days || req.query.days;
-  days = serviceHelper.ensureNumber(days);
-  if (!days || Number.isNaN(days) || days > 35) {
-    const errMessage = serviceHelper.createErrorMessage('Invalid Days provided');
-    return res.json(errMessage);
-  }
-  const daysInMiliseconds = days * 24 * 60 * 60 * 1000;
-  const currentTime = new Date().getTime();
-  const minimumTime = currentTime - daysInMiliseconds;
-
-  const baseTime = 1622640408000;
-  const baseHeight = 5331005;
-  const timeDifference = currentTime - baseTime;
-  const blocksPassedInDifference = (timeDifference / 30000) * 20; // 20 chains with blocktime 30 seconds
-  const blocksInTimeFrame = (daysInMiliseconds / 30000) * 20;
-  const currentBlockEstimation = baseHeight + blocksPassedInDifference;
-  const minimumAcceptedBlockHeight = currentBlockEstimation - blocksInTimeFrame - 200000; // allow being off sync for 200000 blocks;
-
-  const query = {
-    roundTime: { $gte: minimumTime },
-    height: { $gte: minimumAcceptedBlockHeight },
-    tier: { $exists: true, $type: 2 },
-    hash: { $exists: true, $type: 2 },
-    account: { $exists: true, $type: 2 },
-    zelid: { $exists: true, $type: 2 },
-  };
-  const projection = {
-    projection: {
-      _id: 0,
-      ip: 1,
-      tier: 1,
-      roundTime: 1,
-      account: 1,
-      height: 1,
-      hash: 1,
-      zelid: 1,
-    },
-  };
-  const cacheAsk = `eligible${days}`;
-  let results = myCache.get(cacheAsk);
-  if (!results) {
-    results = await serviceHelper.findInDatabase(database, kadenaNodesCollection, query, projection).catch((error) => {
-      const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+  try {
+    const database = db.db(config.database.kadena.database);
+    let { days } = req.params;
+    days = days || req.query.days;
+    days = serviceHelper.ensureNumber(days);
+    if (!days || Number.isNaN(days) || days > 35) {
+      const errMessage = serviceHelper.createErrorMessage('Invalid Days provided');
       res.json(errMessage);
-      log.error(error);
+      return;
+    }
+    if (kadenaEligibleStatsRunning) {
+      await serviceHelper.timeout(100);
+      getKadenaEligibleStatsDays(req, res);
+      return;
+    }
+    kadenaEligibleStatsRunning = true;
+    const daysInMiliseconds = days * 24 * 60 * 60 * 1000;
+    const currentTime = new Date().getTime();
+    const minimumTime = currentTime - daysInMiliseconds;
+
+    const baseTime = 1622640408000;
+    const baseHeight = 5331005;
+    const timeDifference = currentTime - baseTime;
+    const blocksPassedInDifference = (timeDifference / 30000) * 20; // 20 chains with blocktime 30 seconds
+    const blocksInTimeFrame = (daysInMiliseconds / 30000) * 20;
+    const currentBlockEstimation = baseHeight + blocksPassedInDifference;
+    const minimumAcceptedBlockHeight = currentBlockEstimation - blocksInTimeFrame - 200000; // allow being off sync for 200000 blocks;
+
+    const query = {
+      roundTime: { $gte: minimumTime },
+      height: { $gte: minimumAcceptedBlockHeight },
+      tier: { $exists: true, $type: 2 },
+      hash: { $exists: true, $type: 2 },
+      account: { $exists: true, $type: 2 },
+      zelid: { $exists: true, $type: 2 },
+    };
+    const projection = {
+      projection: {
+        _id: 0,
+        ip: 1,
+        tier: 1,
+        roundTime: 1,
+        account: 1,
+        height: 1,
+        hash: 1,
+        zelid: 1,
+      },
+    };
+    const cacheAsk = `eligible${days}`;
+    let results = myCache.get(cacheAsk);
+    if (!results) {
+      results = await serviceHelper.findInDatabase(database, kadenaNodesCollection, query, projection).catch((error) => {
+        const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+        res.json(errMessage);
+        log.error(error);
+      });
+      myCache.set(cacheAsk, results);
+    }
+    // a node is eligible if
+    // A) zelid is present
+    // B) account of kadena is present
+    // C) height is bigger than minimumAcceptedBlockHeight
+    // -> this is going to filter;
+    // const filteredResults = results.filter((result) => result.hash === 'localSpecificationsVersion6');
+    const filteredResults = results;
+    const numberOfChecksPerDay = days * 48;
+    const minimumPresentions = Math.floor(numberOfChecksPerDay * 0.80) - 1; // add one extra less check (useful for 1 day eligibility)
+    // construct eligibilityCheck
+    // node is eligible if is present in at least 95% of checks
+    const ips = [];
+    filteredResults.forEach((result) => {
+      ips.push(result.ip);
     });
-    myCache.set(cacheAsk, results);
-  }
-  // a node is eligible if
-  // A) zelid is present
-  // B) account of kadena is present
-  // C) height is bigger than minimumAcceptedBlockHeight
-  // -> this is going to filter;
-  // const filteredResults = results.filter((result) => result.hash === 'localSpecificationsVersion6');
-  const filteredResults = results;
-  const numberOfChecksPerDay = days * 48;
-  const minimumPresentions = Math.floor(numberOfChecksPerDay * 0.80) - 1; // add one extra less check (useful for 1 day eligibility)
-  // construct eligibilityCheck
-  // node is eligible if is present in at least 95% of checks
-  const ips = [];
-  filteredResults.forEach((result) => {
-    ips.push(result.ip);
-  });
 
-  const ipsOK = [...new Set(ips)];
+    const ipsOK = [...new Set(ips)];
 
-  const countOccurrences = (arr, val) => arr.reduce((a, v) => (v === val ? a + 1 : a), 0);
-  const eligibleIps = [];
-  // eslint-disable-next-line no-restricted-syntax
-  for (const ip of ipsOK) {
-    if (countOccurrences(ips, ip) >= minimumPresentions) {
-      const q = {
-        ip,
-      };
-      let lastData = myCache.get(ip);
-      if (lastData) {
-        eligibleIps.push(lastData);
-      } else {
-        lastData = await serviceHelper.findOneInDatabaseReverse(database, kadenaNodesCollection, q, projection).catch((error) => {
-          log.error(error);
-        });
+    const countOccurrences = (arr, val) => arr.reduce((a, v) => (v === val ? a + 1 : a), 0);
+    const eligibleIps = [];
+    // eslint-disable-next-line no-restricted-syntax
+    for (const ip of ipsOK) {
+      if (countOccurrences(ips, ip) >= minimumPresentions) {
+        const q = {
+          ip,
+        };
+        let lastData = myCache.get(ip);
         if (lastData) {
-          myCache.set(ip, lastData);
           eligibleIps.push(lastData);
+        } else {
+          lastData = await serviceHelper.findOneInDatabaseReverse(database, kadenaNodesCollection, q, projection).catch((error) => {
+            log.error(error);
+          });
+          if (lastData) {
+            myCache.set(ip, lastData);
+            eligibleIps.push(lastData);
+          }
         }
       }
     }
-  }
-  const nimbusesS = eligibleIps.filter((result) => (result.tier === 'NIMBUS'));
-  const stratusesS = eligibleIps.filter((result) => (result.tier === 'STRATUS'));
-  const data = {
-    total: nimbusesS.length + stratusesS.length,
-    nimbus: nimbusesS.length,
-    stratus: stratusesS.length,
-  };
-  const resMessage = serviceHelper.createDataMessage(data);
-  return res.json(resMessage);
-}
-
-async function getKadenaEligibleDays(req, res) {
-  const database = db.db(config.database.kadena.database);
-  let { days } = req.params;
-  days = days || req.query.days;
-  days = serviceHelper.ensureNumber(days);
-  if (!days || Number.isNaN(days) || days > 35) {
-    const errMessage = serviceHelper.createErrorMessage('Invalid Days provided');
-    return res.json(errMessage);
-  }
-  const daysInMiliseconds = days * 24 * 60 * 60 * 1000;
-  const currentTime = new Date().getTime();
-  const minimumTime = currentTime - daysInMiliseconds;
-
-  const baseTime = 1622640408000;
-  const baseHeight = 5331005;
-  const timeDifference = currentTime - baseTime;
-  const blocksPassedInDifference = (timeDifference / 30000) * 20; // 20 chains with blocktime 30 seconds
-  const blocksInTimeFrame = (daysInMiliseconds / 30000) * 20;
-  const currentBlockEstimation = baseHeight + blocksPassedInDifference;
-  const minimumAcceptedBlockHeight = currentBlockEstimation - blocksInTimeFrame - 200000; // allow being off sync for 200000 blocks;
-
-  const query = {
-    roundTime: { $gte: minimumTime },
-    height: { $gte: minimumAcceptedBlockHeight },
-    tier: { $exists: true, $type: 2 },
-    hash: { $exists: true, $type: 2 },
-    account: { $exists: true, $type: 2 },
-    zelid: { $exists: true, $type: 2 },
-  };
-  const projection = {
-    projection: {
-      _id: 0,
-      ip: 1,
-      tier: 1,
-      roundTime: 1,
-      account: 1,
-      height: 1,
-      hash: 1,
-      zelid: 1,
-    },
-  };
-  const cacheAsk = `eligible${days}`;
-  let results = myCache.get(cacheAsk);
-  if (!results) {
-    results = await serviceHelper.findInDatabase(database, kadenaNodesCollection, query, projection).catch((error) => {
-      const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
-      res.json(errMessage);
-      log.error(error);
-    });
-    myCache.set(cacheAsk, results);
-  }
-  // a node is eligible if
-  // A) zelid is present
-  // B) account of kadena is present
-  // C) height is bigger than minimumAcceptedBlockHeight
-  // -> this is going to filter;
-  // const filteredResults = results.filter((result) => result.hash === 'localSpecificationsVersion6');
-  const filteredResults = results;
-  const numberOfChecksPerDay = days * 48;
-  const minimumPresentions = Math.floor(numberOfChecksPerDay * 0.80) - 1; // add one extra less check (useful for 1 day eligibility)
-  // construct eligibilityCheck
-  // node is eligible if is present in at least 95% of checks
-  const ips = [];
-  filteredResults.forEach((result) => {
-    ips.push(result.ip);
-  });
-
-  const ipsOK = [...new Set(ips)];
-
-  const countOccurrences = (arr, val) => arr.reduce((a, v) => (v === val ? a + 1 : a), 0);
-  const eligibleIps = [];
-  // eslint-disable-next-line no-restricted-syntax
-  for (const ip of ipsOK) {
-    if (countOccurrences(ips, ip) >= minimumPresentions) {
-      const q = {
-        ip,
-      };
-      let lastData = myCache.get(ip);
-      if (lastData) {
-        eligibleIps.push(lastData);
-      } else {
-        lastData = await serviceHelper.findOneInDatabaseReverse(database, kadenaNodesCollection, q, projection).catch((error) => {
-          log.error(error);
-        });
-        if (lastData) {
-          myCache.set(ip, lastData);
-          eligibleIps.push(lastData);
-        }
-      }
-    }
-  }
-  const resMessage = serviceHelper.createDataMessage(eligibleIps);
-  return res.json(resMessage);
-}
-
-async function getKadenaNodesForTimestamp(req, res) {
-  const database = db.db(config.database.kadena.database);
-  let { timestamp } = req.params;
-  timestamp = timestamp || req.query.timestamp;
-  if (!timestamp) {
-    const errMessage = serviceHelper.createErrorMessage('No Timestamp provided');
-    return res.json(errMessage);
-  }
-  timestamp = serviceHelper.ensureNumber(timestamp);
-  const query = {
-    roundTime: timestamp,
-  };
-  const projection = {
-    projection: {
-      _id: 0,
-      ip: 1,
-      tier: 1,
-      roundTime: 1,
-      account: 1,
-      height: 1,
-      hash: 1,
-      zelid: 1,
-    },
-  };
-  const results = await serviceHelper.findInDatabase(database, kadenaNodesCollection, query, projection).catch((error) => {
+    const nimbusesS = eligibleIps.filter((result) => (result.tier === 'NIMBUS'));
+    const stratusesS = eligibleIps.filter((result) => (result.tier === 'STRATUS'));
+    const data = {
+      total: nimbusesS.length + stratusesS.length,
+      nimbus: nimbusesS.length,
+      stratus: stratusesS.length,
+    };
+    const resMessage = serviceHelper.createDataMessage(data);
+    kadenaEligibleStatsRunning = false;
+    res.json(resMessage);
+  } catch (error) {
+    kadenaEligibleStatsRunning = false;
     const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
     res.json(errMessage);
     log.error(error);
-  });
-  const resMessage = serviceHelper.createDataMessage(results);
-  return res.json(resMessage);
+  }
+}
+
+async function getKadenaEligibleDays(req, res) {
+  try {
+    const database = db.db(config.database.kadena.database);
+    let { days } = req.params;
+    days = days || req.query.days;
+    days = serviceHelper.ensureNumber(days);
+    if (!days || Number.isNaN(days) || days > 35) {
+      const errMessage = serviceHelper.createErrorMessage('Invalid Days provided');
+      res.json(errMessage);
+      return;
+    }
+    if (kadenaEligibleRunning) {
+      await serviceHelper.timeout(100);
+      getKadenaEligibleStatsDays(req, res);
+      return;
+    }
+    kadenaEligibleRunning = true;
+    const cacheAsk = `eligible${days}`;
+    let results = myCache.get(cacheAsk);
+    if (!results) {
+      const daysInMiliseconds = days * 24 * 60 * 60 * 1000;
+      const currentTime = new Date().getTime();
+      const minimumTime = currentTime - daysInMiliseconds;
+
+      const baseTime = 1622640408000;
+      const baseHeight = 5331005;
+      const timeDifference = currentTime - baseTime;
+      const blocksPassedInDifference = (timeDifference / 30000) * 20; // 20 chains with blocktime 30 seconds
+      const blocksInTimeFrame = (daysInMiliseconds / 30000) * 20;
+      const currentBlockEstimation = baseHeight + blocksPassedInDifference;
+      const minimumAcceptedBlockHeight = currentBlockEstimation - blocksInTimeFrame - 200000; // allow being off sync for 200000 blocks;
+
+      const query = {
+        roundTime: { $gte: minimumTime },
+        height: { $gte: minimumAcceptedBlockHeight },
+        tier: { $exists: true, $type: 2 },
+        hash: { $exists: true, $type: 2 },
+        account: { $exists: true, $type: 2 },
+        zelid: { $exists: true, $type: 2 },
+      };
+      const projection = {
+        projection: {
+          _id: 0,
+          ip: 1,
+          tier: 1,
+          roundTime: 1,
+          account: 1,
+          height: 1,
+          hash: 1,
+          zelid: 1,
+        },
+      };
+      results = await serviceHelper.findInDatabase(database, kadenaNodesCollection, query, projection).catch((error) => {
+        const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+        res.json(errMessage);
+        log.error(error);
+      });
+      myCache.set(cacheAsk, results);
+    }
+    // a node is eligible if
+    // A) zelid is present
+    // B) account of kadena is present
+    // C) height is bigger than minimumAcceptedBlockHeight
+    // -> this is going to filter;
+    // const filteredResults = results.filter((result) => result.hash === 'localSpecificationsVersion6');
+    const filteredResults = results;
+    const numberOfChecksPerDay = days * 48;
+    const minimumPresentions = Math.floor(numberOfChecksPerDay * 0.80) - 1; // add one extra less check (useful for 1 day eligibility)
+    // construct eligibilityCheck
+    // node is eligible if is present in at least 95% of checks
+    const ips = [];
+    filteredResults.forEach((result) => {
+      ips.push(result.ip);
+    });
+
+    const ipsOK = [...new Set(ips)];
+
+    const countOccurrences = (arr, val) => arr.reduce((a, v) => (v === val ? a + 1 : a), 0);
+    const eligibleIps = [];
+    // eslint-disable-next-line no-restricted-syntax
+    for (const ip of ipsOK) {
+      if (countOccurrences(ips, ip) >= minimumPresentions) {
+        const q = {
+          ip,
+        };
+        let lastData = myCache.get(ip);
+        if (lastData) {
+          eligibleIps.push(lastData);
+        } else {
+          const projection = {
+            projection: {
+              _id: 0,
+              ip: 1,
+              tier: 1,
+              roundTime: 1,
+              account: 1,
+              height: 1,
+              hash: 1,
+              zelid: 1,
+            },
+          };
+          lastData = await serviceHelper.findOneInDatabaseReverse(database, kadenaNodesCollection, q, projection).catch((error) => {
+            log.error(error);
+          });
+          if (lastData) {
+            myCache.set(ip, lastData);
+            eligibleIps.push(lastData);
+          }
+        }
+      }
+    }
+    const resMessage = serviceHelper.createDataMessage(eligibleIps);
+    kadenaEligibleRunning = false;
+    res.json(resMessage);
+  } catch (error) {
+    kadenaEligibleRunning = false;
+    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+    res.json(errMessage);
+    log.error(error);
+  }
+}
+
+async function getKadenaNodesForTimestamp(req, res) {
+  try {
+    const database = db.db(config.database.kadena.database);
+    let { timestamp } = req.params;
+    timestamp = timestamp || req.query.timestamp;
+    if (!timestamp) {
+      const errMessage = serviceHelper.createErrorMessage('No Timestamp provided');
+      res.json(errMessage);
+      return;
+    }
+    timestamp = serviceHelper.ensureNumber(timestamp);
+    const query = {
+      roundTime: timestamp,
+    };
+    const projection = {
+      projection: {
+        _id: 0,
+        ip: 1,
+        tier: 1,
+        roundTime: 1,
+        account: 1,
+        height: 1,
+        hash: 1,
+        zelid: 1,
+      },
+    };
+    const results = await serviceHelper.findInDatabase(database, kadenaNodesCollection, query, projection).catch((error) => {
+      const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+      res.json(errMessage);
+      log.error(error);
+    });
+    const resMessage = serviceHelper.createDataMessage(results);
+    res.json(resMessage);
+  } catch (error) {
+    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+    res.json(errMessage);
+    log.error(error);
+  }
 }
 
 async function start() {
