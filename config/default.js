@@ -41,5 +41,11 @@ module.exports = {
         activeMessagePhrases: 'activemessagephrases', // active message phrases used for creation of random messages that user has to sign
       },
     },
+    marketplace: {
+      database: 'marketplace',
+      collections: {
+        apps: 'apps',
+      },
+    },
   },
 };

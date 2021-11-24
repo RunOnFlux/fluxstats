@@ -4,6 +4,7 @@ const fluxService = require('./services/fluxService');
 const kadenaService = require('./services/kadenaService');
 const proposalService = require('./services/proposalService');
 const generalService = require('./services/generalService');
+const marketplaceService = require('./services/marketplaceService');
 
 const cache = apicache.middleware;
 
@@ -108,5 +109,9 @@ module.exports = (app) => {
   });
   app.post('/proposals/voteproposal', (req, res) => {
     proposalService.voteProposal(req, res);
+  });
+
+  app.get('/marketplace/listapps', cache('1 minute'), (req, res) => {
+    marketplaceService.listApps(req, res);
   });
 };
