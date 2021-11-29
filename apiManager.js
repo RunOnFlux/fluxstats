@@ -168,11 +168,6 @@ function addNewApp() {
     },
     {
       type: 'input',
-      name: 'hash',
-      message: 'Enter the hash',
-    },
-    {
-      type: 'input',
       name: 'description',
       message: 'Enter the description',
     },
@@ -184,8 +179,8 @@ function addNewApp() {
     },
     {
       type: 'input',
-      name: 'repotag',
-      message: 'Enter the repo tag',
+      name: 'owner',
+      message: 'Enter the Owner',
     },
     {
       type: 'number',
@@ -194,62 +189,110 @@ function addNewApp() {
     },
     {
       type: 'number',
+      name: 'instances',
+      message: 'Enter the number of instances',
+    },
+    {
+      type: 'number',
       name: 'price',
       message: 'Enter the price',
     },
     {
       type: 'number',
-      name: 'cpu',
-      message: 'Enter the cpu requirements',
+      name: 'components',
+      message: 'Enter the number of components',
     },
-    {
-      type: 'number',
-      name: 'ram',
-      message: 'Enter the ram requirements',
-    },
-    {
-      type: 'number',
-      name: 'hdd',
-      message: 'Enter the hdd requirements',
-    },
-    {
-      type: 'input',
-      name: 'ports',
-      message: 'Enter the ports, separated by commas',
-    },
-    {
-      type: 'input',
-      name: 'containerPorts',
-      message: 'Enter the container ports, separated by commas',
-    },
-    {
-      type: 'input',
-      name: 'commands',
-      message: 'Enter the commands, separated by commas',
-    },
-    {
-      type: 'input',
-      name: 'environmentParameters',
-      message: 'Enter the environment parameters, separated by commas',
-    },
-    
   ]).then(async (answers) => {
+    const components = [];
+    for (let i=0;i<answers.components;i++) {
+      let componentAnswer = await inquirer.prompt([
+        {
+          type: 'input',
+          name: 'name',
+          message: `Enter the name for component ${i+1}`,
+        },
+        {
+          type: 'input',
+          name: 'description',
+          message: `Enter the description for component ${i+1}`,
+        },
+        {
+          type: 'input',
+          name: 'repotag',
+          message: `Enter the repo tag for component ${i+1}`,
+        },
+        {
+          type: 'input',
+          name: 'ports',
+          message: `Enter the ports, separated by commas for component ${i+1}`,
+        },
+        {
+          type: 'input',
+          name: 'containerPorts',
+          message: `Enter the container ports, separated by commas for component ${i+1}`,
+        },
+        {
+          type: 'input',
+          name: 'domains',
+          message: `Enter the domains, separated by commas for component ${i+1}`,
+        },
+        {
+          type: 'input',
+          name: 'environmentParameters',
+          message: `Enter the environment parameters, separated by commas for component ${i+1}`,
+        },
+        {
+          type: 'input',
+          name: 'commands',
+          message: `Enter the commands, separated by commas for component ${i+1}`,
+        },
+        {
+          type: 'input',
+          name: 'containerData',
+          message: `Enter the container data volume for component ${i+1}`,
+        },
+        {
+          type: 'number',
+          name: 'cpu',
+          message: `Enter the cpu requirements for component ${i+1}`,
+        },
+        {
+          type: 'number',
+          name: 'ram',
+          message: `Enter the ram requirements for component ${i+1}`,
+        },
+        {
+          type: 'number',
+          name: 'hdd',
+          message: `Enter the hdd requirements for component ${i+1}`,
+        },
+      ]);
+      const component = {
+        name: componentAnswer.name,
+        description: componentAnswer.description,
+        repotag: componentAnswer.repotag,
+        ports: componentAnswer.ports.length > 0 ? componentAnswer.ports.split(',') : [],
+        containerPorts: componentAnswer.containerPorts.length > 0 ? componentAnswer.containerPorts.split(',') : [],
+        domains: componentAnswer.domains.length > 0 ? componentAnswer.domains.split(',') : [],
+        environmentParameters: componentAnswer.environmentParameters.length > 0 ? componentAnswer.environmentParameters.split(',') : [],
+        commands: componentAnswer.commands.length > 0 ? componentAnswer.commands.split(',') : [],
+        containerData: componentAnswer.containerData,
+        tiered: false,
+        cpu: componentAnswer.cpu,
+        ram: componentAnswer.ram,
+        hdd: componentAnswer.hdd,
+      };
+      components.push(component);
+    }
     const app = {
-      hash: answers.hash,
       description: answers.description,
       price: answers.price,
       category: answers.category,
-      cpu: answers.cpu,
-      ram: answers.ram,
-      hdd: answers.hdd,
-      repotag: answers.repotag,
-      tiered: false,
       version: answers.version,
       name: answers.name,
-      commands: answers.commands.length > 0 ? answers.commands.split(',') : [],
-      containerPorts: answers.containerPorts.length > 0 ? answers.containerPorts.split(',') : [],
-      environmentParameters: answers.environmentParameters.length > 0 ? answers.environmentParameters.split(',') : [],
-      ports: answers.ports.length > 0 ? answers.ports.split(',') : [],
+      owner: answers.owner,
+      instances: answers.instances,
+      compose: components,
     };
     await marketplace.addApp(app);
     chooseMarketplaceOperation();
@@ -296,19 +339,11 @@ async function modifyApp() {
       message: 'Select the field to edit',
       choices: [
         'Name',
-        'Hash',
         'Description',
         'Category',
-        'Repotag',
         'Version',
         'Price',
-        'CPU',
-        'RAM',
-        'HDD',
-        'Ports',
-        'Container Ports',
-        'Commands',
-        'Environment Parameters',
+        'Component',
         new inquirer.Separator(),
         'Back',
         new inquirer.Separator(),
@@ -316,7 +351,7 @@ async function modifyApp() {
     }
   ]).then(async (answers) => {
     const appSpec = allApps.find((app) => app.name === answers.appName);
-    if (answers.field === 'Main Menu') {
+    if (answers.field === 'Back') {
       chooseMarketplaceOperation();
       return;
     }
@@ -326,19 +361,6 @@ async function modifyApp() {
       return;
     }
     switch (answers.field) {
-      case 'Hash':
-        inquirer.prompt([
-          {
-            type: 'input',
-            name: 'newHash',
-            message: `Enter the new hash (${appSpec.hash})`,
-          }
-        ]).then(async (answers) => {
-          appSpec.hash = answers.newHash;
-          await marketplace.modifyApp(appSpec);
-          chooseMarketplaceOperation();
-        });
-        break;
       case 'Name':
         inquirer.prompt([
           {
@@ -379,19 +401,6 @@ async function modifyApp() {
           chooseMarketplaceOperation();
         });
         break;
-      case 'Repotag':
-        inquirer.prompt([
-          {
-            type: 'input',
-            name: 'newRepotag',
-            message: `Enter the new repotag (${appSpec.repotag})`,
-          }
-        ]).then(async (answers) => {
-          appSpec.repotag = answers.newRepotag;
-          await marketplace.modifyApp(appSpec);
-          chooseMarketplaceOperation();
-        });
-        break;
       case 'Version':
         inquirer.prompt([
           {
@@ -418,95 +427,202 @@ async function modifyApp() {
           chooseMarketplaceOperation();
         });
         break;
-      case 'CPU':
+      case 'Component':
         inquirer.prompt([
           {
             type: 'number',
-            name: 'newCPU',
-            message: `Enter the new CPU (${appSpec.cpu} cores)`,
+            name: 'component',
+            message: `Enter the component to edit (1 - ${appSpec.compose.length})`,
           }
         ]).then(async (answers) => {
-          appSpec.cpu = answers.newCPU;
-          await marketplace.modifyApp(appSpec);
-          chooseMarketplaceOperation();
-        });
-        break;
-      case 'RAM':
-        inquirer.prompt([
-          {
-            type: 'number',
-            name: 'newRAM',
-            message: `Enter the new RAM (${appSpec.ram} GB)`,
-          }
-        ]).then(async (answers) => {
-          appSpec.ram = answers.newRAM;
-          await marketplace.modifyApp(appSpec);
-          chooseMarketplaceOperation();
-        });
-        break;
-      case 'HDD':
-        inquirer.prompt([
-          {
-            type: 'number',
-            name: 'newHDD',
-            message: `Enter the new HDD (${appSpec.hdd} GB)`,
-          }
-        ]).then(async (answers) => {
-          appSpec.hdd = answers.newHDD;
-          await marketplace.modifyApp(appSpec);
-          chooseMarketplaceOperation();
-        });
-        break;
-      case 'Ports':
-        inquirer.prompt([
-          {
-            type: 'input',
-            name: 'newPorts',
-            message: `Enter the new Ports (${appSpec.ports.join(', ')})`,
-          }
-        ]).then(async (answers) => {
-          appSpec.ports = answers.newPorts.length > 0 ? answers.newPorts.split(',') : [];
-          await marketplace.modifyApp(appSpec);
-          chooseMarketplaceOperation();
-        });
-        break;
-      case 'Container Ports':
-        inquirer.prompt([
-          {
-            type: 'input',
-            name: 'newContainerPorts',
-            message: `Enter the new Container Ports (${appSpec.containerPorts.join(', ')})`,
-          }
-        ]).then(async (answers) => {
-          appSpec.containerPorts = answers.newContainerPorts.length > 0 ? answers.newContainerPorts.split(',') : [];
-          await marketplace.modifyApp(appSpec);
-          chooseMarketplaceOperation();
-        });
-        break;
-      case 'Commands':
-        inquirer.prompt([
-          {
-            type: 'input',
-            name: 'newCommands',
-            message: `Enter the new Commands (${appSpec.commands.join(', ')})`,
-          }
-        ]).then(async (answers) => {
-          appSpec.commands = answers.newCommands.length > 0 ? answers.newCommands.split(',') : [];
-          await marketplace.modifyApp(appSpec);
-          chooseMarketplaceOperation();
-        });
-        break;
-      case 'Environment Parameters':
-        inquirer.prompt([
-          {
-            type: 'input',
-            name: 'newEnvironmentParameters',
-            message: `Enter the new Environment Parameters (${appSpec.environmentParameters.join(', ')})`,
-          }
-        ]).then(async (answers) => {
-          appSpec.environmentParameters = answers.newEnvironmentParameters.length > 0 ? answers.newEnvironmentParameters.split(',') : [];
-          await marketplace.modifyApp(appSpec);
-          chooseMarketplaceOperation();
+          const component = appSpec.compose[answers.component-1];
+          inquirer.prompt([
+            {
+              type: 'list',
+              name: 'field',
+              message: 'Select the field to edit',
+              choices: [
+                'Name',
+                'Description',
+                'Repotag',
+                'Ports',
+                'Container Ports',
+                'Domains',
+                'Environment Parameters',
+                'Commands',
+                'Container Data',
+                'CPU',
+                'RAM',
+                'HDD',
+                new inquirer.Separator(),
+                'Back',
+                new inquirer.Separator(),
+              ]
+            }
+          ]).then(async (componentAnswer) => {
+            if (componentAnswer.field === 'Back') {
+              chooseMarketplaceOperation();
+              return;
+            }
+            switch (componentAnswer.field) {
+              case 'Name':
+                inquirer.prompt([
+                  {
+                    type: 'input',
+                    name: 'newName',
+                    message: `Enter the new name (${component.name})`,
+                  }
+                ]).then(async (componentFieldAnswer) => {
+                  appSpec.compose[answers.component-1].name = componentFieldAnswer.newName;
+                  await marketplace.modifyApp(appSpec);
+                  chooseMarketplaceOperation();
+                });
+                break;
+              case 'Description':
+                inquirer.prompt([
+                  {
+                    type: 'input',
+                    name: 'newDescription',
+                    message: `Enter the new description (${component.description})`,
+                  }
+                ]).then(async (componentFieldAnswer) => {
+                  appSpec.compose[answers.component-1].description = componentFieldAnswer.newDescription;
+                  await marketplace.modifyApp(appSpec);
+                  chooseMarketplaceOperation();
+                });
+                break;
+              case 'Repotag':
+                inquirer.prompt([
+                  {
+                    type: 'input',
+                    name: 'newRepotag',
+                    message: `Enter the new repotag (${component.repotag})`,
+                  }
+                ]).then(async (componentFieldAnswer) => {
+                  appSpec.compose[answers.component-1].repotag = componentFieldAnswer.newRepotag;
+                  await marketplace.modifyApp(appSpec);
+                  chooseMarketplaceOperation();
+                });
+                break;
+              case 'Ports':
+                inquirer.prompt([
+                  {
+                    type: 'input',
+                    name: 'newPorts',
+                    message: `Enter the new Ports (${component.ports.join(', ')})`,
+                  }
+                ]).then(async (componentFieldAnswer) => {
+                  appSpec.compose[answers.component-1].ports = componentFieldAnswer.newPorts.length > 0 ? componentFieldAnswer.newPorts.split(',') : [];
+                  await marketplace.modifyApp(appSpec);
+                  chooseMarketplaceOperation();
+                });
+                break;
+              case 'Container Ports':
+                inquirer.prompt([
+                  {
+                    type: 'input',
+                    name: 'newContainerPorts',
+                    message: `Enter the new Container Ports (${component.containerPorts.join(', ')})`,
+                  }
+                ]).then(async (componentFieldAnswer) => {
+                  appSpec.compose[answers.component-1].containerPorts = componentFieldAnswer.newContainerPorts.length > 0 ? componentFieldAnswer.newContainerPorts.split(',') : [];
+                  await marketplace.modifyApp(appSpec);
+                  chooseMarketplaceOperation();
+                });
+                break;
+              case 'Domains':
+                inquirer.prompt([
+                  {
+                    type: 'input',
+                    name: 'newDomains',
+                    message: `Enter the new Domains (${component.domains.join(', ')})`,
+                  }
+                ]).then(async (componentFieldAnswer) => {
+                  appSpec.compose[answers.component-1].domains = componentFieldAnswer.newDomains.length > 0 ? componentFieldAnswer.newDomains.split(',') : [];
+                  await marketplace.modifyApp(appSpec);
+                  chooseMarketplaceOperation();
+                });
+                break;
+              case 'Environment Parameters':
+                inquirer.prompt([
+                  {
+                    type: 'input',
+                    name: 'newEnvironmentParameters',
+                    message: `Enter the new Environment Parameters (${component.environmentParameters.join(', ')})`,
+                  }
+                ]).then(async (componentFieldAnswer) => {
+                  appSpec.compose[answers.component-1].environmentParameters = componentFieldAnswer.newEnvironmentParameters.length > 0 ? componentFieldAnswer.newEnvironmentParameters.split(',') : [];
+                  await marketplace.modifyApp(appSpec);
+                  chooseMarketplaceOperation();
+                });
+                break;
+              case 'Commands':
+                inquirer.prompt([
+                  {
+                    type: 'input',
+                    name: 'newCommands',
+                    message: `Enter the new Commands (${component.commands.join(', ')})`,
+                  }
+                ]).then(async (componentFieldAnswer) => {
+                  appSpec.compose[answers.component-1].commands = componentFieldAnswer.newCommands.length > 0 ? componentFieldAnswer.newCommands.split(',') : [];
+                  await marketplace.modifyApp(appSpec);
+                  chooseMarketplaceOperation();
+                });
+                break;
+              case 'Container Data':
+                inquirer.prompt([
+                  {
+                    type: 'input',
+                    name: 'newContainerData',
+                    message: `Enter the new Container Data (${component.containerData})`,
+                  }
+                ]).then(async (componentFieldAnswer) => {
+                  appSpec.compose[answers.component-1].containerData = componentFieldAnswer.newContainerData;
+                  await marketplace.modifyApp(appSpec);
+                  chooseMarketplaceOperation();
+                });
+                break;
+              case 'CPU':
+                inquirer.prompt([
+                  {
+                    type: 'number',
+                    name: 'newCPU',
+                    message: `Enter the new CPU (${component.cpu} cores)`,
+                  }
+                ]).then(async (componentFieldAnswer) => {
+                  appSpec.compose[answers.component-1].cpu = componentFieldAnswer.newCPU;
+                  await marketplace.modifyApp(appSpec);
+                  chooseMarketplaceOperation();
+                });
+                break;
+              case 'RAM':
+                inquirer.prompt([
+                  {
+                    type: 'number',
+                    name: 'newRAM',
+                    message: `Enter the new RAM (${component.ram} GB)`,
+                  }
+                ]).then(async (componentFieldAnswer) => {
+                  appSpec.compose[answers.component-1].ram = componentFieldAnswer.newRAM;
+                  await marketplace.modifyApp(appSpec);
+                  chooseMarketplaceOperation();
+                });
+                break;
+              case 'HDD':
+                inquirer.prompt([
+                  {
+                    type: 'number',
+                    name: 'newHDD',
+                    message: `Enter the new HDD (${component.hdd} GB)`,
+                  }
+                ]).then(async (componentFieldAnswer) => {
+                  appSpec.compose[answers.component-1].hdd = componentFieldAnswer.newHDD;
+                  await marketplace.modifyApp(appSpec);
+                  chooseMarketplaceOperation();
+                });
+                break;
+              }
+          });
         });
         break;
       }
