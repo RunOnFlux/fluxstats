@@ -198,6 +198,16 @@ function addNewApp() {
       message: 'Enter the price',
     },
     {
+      type: 'confirm',
+      name: 'visible',
+      message: 'Is app visible on the marketplace?'
+    },
+    {
+      type: 'confirm',
+      name: 'enabled',
+      message: 'Is app enabled on the marketplace?'
+    },
+    {
       type: 'number',
       name: 'components',
       message: 'Enter the number of components',
@@ -224,7 +234,7 @@ function addNewApp() {
         {
           type: 'input',
           name: 'ports',
-          message: `Enter the ports, separated by commas for component ${i+1}`,
+          message: `Enter the ports as a range (e.g. 35000-35100), separated by commas for component ${i+1}`,
         },
         {
           type: 'input',
@@ -267,12 +277,14 @@ function addNewApp() {
           message: `Enter the hdd requirements for component ${i+1}`,
         },
       ]);
+      const containerPorts = (componentAnswer.containerPorts.length > 0 ? componentAnswer.containerPorts.split(',') : []).map((value) => Number(value));
+      const ports = (componentAnswer.ports.length > 0 ? componentAnswer.ports.split(',') : []);
       const component = {
         name: componentAnswer.name,
         description: componentAnswer.description,
         repotag: componentAnswer.repotag,
-        ports: componentAnswer.ports.length > 0 ? componentAnswer.ports.split(',') : [],
-        containerPorts: componentAnswer.containerPorts.length > 0 ? componentAnswer.containerPorts.split(',') : [],
+        portSpecs: ports,
+        containerPorts: containerPorts,
         domains: componentAnswer.domains.length > 0 ? componentAnswer.domains.split(',') : [],
         environmentParameters: componentAnswer.environmentParameters.length > 0 ? componentAnswer.environmentParameters.split(',') : [],
         commands: componentAnswer.commands.length > 0 ? componentAnswer.commands.split(',') : [],
@@ -281,6 +293,15 @@ function addNewApp() {
         cpu: componentAnswer.cpu,
         ram: componentAnswer.ram,
         hdd: componentAnswer.hdd,
+        cpubasic: componentAnswer.cpu,
+        cpusuper: componentAnswer.cpu,
+        cpubamf: componentAnswer.cpu,
+        rambasic: componentAnswer.ram,
+        ramsuper: componentAnswer.ram,
+        rambamf: componentAnswer.ram,
+        hddbasic: componentAnswer.hdd,
+        hddsuper: componentAnswer.hdd,
+        hddbamf: componentAnswer.hdd,
       };
       components.push(component);
     }
@@ -293,6 +314,8 @@ function addNewApp() {
       owner: answers.owner,
       instances: answers.instances,
       compose: components,
+      visible: answers.visible,
+      enabled: answers.enabled,
     };
     await marketplace.addApp(app);
     chooseMarketplaceOperation();
@@ -343,6 +366,8 @@ async function modifyApp() {
         'Category',
         'Version',
         'Price',
+        'Visible',
+        'Enabled',
         'Component',
         new inquirer.Separator(),
         'Back',
@@ -423,6 +448,32 @@ async function modifyApp() {
           }
         ]).then(async (answers) => {
           appSpec.price = answers.newPrice;
+          await marketplace.modifyApp(appSpec);
+          chooseMarketplaceOperation();
+        });
+        break;
+      case 'Visible':
+        inquirer.prompt([
+          {
+            type: 'confirm',
+            name: 'newVisible',
+            message: 'Is the app visible on the marketplace? ',
+          }
+        ]).then(async (answers) => {
+          appSpec.visible = answers.newVisible;
+          await marketplace.modifyApp(appSpec);
+          chooseMarketplaceOperation();
+        });
+        break;
+      case 'Enabled':
+        inquirer.prompt([
+          {
+            type: 'confirm',
+            name: 'newEnabled',
+            message: 'Is the app enabled on the marketplace? ',
+          }
+        ]).then(async (answers) => {
+          appSpec.enabled = answers.newEnabled;
           await marketplace.modifyApp(appSpec);
           chooseMarketplaceOperation();
         });
@@ -509,10 +560,11 @@ async function modifyApp() {
                   {
                     type: 'input',
                     name: 'newPorts',
-                    message: `Enter the new Ports (${component.ports.join(', ')})`,
+                    message: `Enter the new Ports as a range (e.g. 35000-35100) (${component.portSpecs.join(', ')})`,
                   }
                 ]).then(async (componentFieldAnswer) => {
-                  appSpec.compose[answers.component-1].ports = componentFieldAnswer.newPorts.length > 0 ? componentFieldAnswer.newPorts.split(',') : [];
+                  const ports = (componentFieldAnswer.newPorts.length > 0 ? componentFieldAnswer.newPorts.split(',') : []);
+                  appSpec.compose[answers.component-1].portSpecs = ports;
                   await marketplace.modifyApp(appSpec);
                   chooseMarketplaceOperation();
                 });
@@ -525,7 +577,8 @@ async function modifyApp() {
                     message: `Enter the new Container Ports (${component.containerPorts.join(', ')})`,
                   }
                 ]).then(async (componentFieldAnswer) => {
-                  appSpec.compose[answers.component-1].containerPorts = componentFieldAnswer.newContainerPorts.length > 0 ? componentFieldAnswer.newContainerPorts.split(',') : [];
+                  const containerPorts = (componentFieldAnswer.newContainerPorts.length > 0 ? componentFieldAnswer.newContainerPorts.split(',') : []).map((value) => Number(value));
+                  appSpec.compose[answers.component-1].containerPorts = containerPorts;
                   await marketplace.modifyApp(appSpec);
                   chooseMarketplaceOperation();
                 });
@@ -591,6 +644,9 @@ async function modifyApp() {
                   }
                 ]).then(async (componentFieldAnswer) => {
                   appSpec.compose[answers.component-1].cpu = componentFieldAnswer.newCPU;
+                  appSpec.compose[answers.component-1].cpubasic = componentFieldAnswer.newCPU;
+                  appSpec.compose[answers.component-1].cpusuper = componentFieldAnswer.newCPU;
+                  appSpec.compose[answers.component-1].cpubamf = componentFieldAnswer.newCPU;
                   await marketplace.modifyApp(appSpec);
                   chooseMarketplaceOperation();
                 });
@@ -604,6 +660,9 @@ async function modifyApp() {
                   }
                 ]).then(async (componentFieldAnswer) => {
                   appSpec.compose[answers.component-1].ram = componentFieldAnswer.newRAM;
+                  appSpec.compose[answers.component-1].rambasic = componentFieldAnswer.newRAM;
+                  appSpec.compose[answers.component-1].ramsuper = componentFieldAnswer.newRAM;
+                  appSpec.compose[answers.component-1].rambamf = componentFieldAnswer.newRAM;
                   await marketplace.modifyApp(appSpec);
                   chooseMarketplaceOperation();
                 });
@@ -617,6 +676,9 @@ async function modifyApp() {
                   }
                 ]).then(async (componentFieldAnswer) => {
                   appSpec.compose[answers.component-1].hdd = componentFieldAnswer.newHDD;
+                  appSpec.compose[answers.component-1].hddbasic = componentFieldAnswer.newHDD;
+                  appSpec.compose[answers.component-1].hddsuper = componentFieldAnswer.newHDD;
+                  appSpec.compose[answers.component-1].hddbamf = componentFieldAnswer.newHDD;
                   await marketplace.modifyApp(appSpec);
                   chooseMarketplaceOperation();
                 });
