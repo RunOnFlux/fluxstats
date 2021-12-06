@@ -249,7 +249,12 @@ function addNewApp() {
         {
           type: 'input',
           name: 'environmentParameters',
-          message: `Enter the environment parameters, separated by commas for component ${i+1}`,
+          message: `Enter the static environment parameters, separated by commas for component ${i+1}`,
+        },
+        {
+          type: 'input',
+          name: 'userEnvironmentParameters',
+          message: `Enter the user environment parameters as a single line JSON object for component ${i+1}`,
         },
         {
           type: 'input',
@@ -287,6 +292,7 @@ function addNewApp() {
         containerPorts: containerPorts,
         domains: componentAnswer.domains.length > 0 ? componentAnswer.domains.split(',') : [],
         environmentParameters: componentAnswer.environmentParameters.length > 0 ? componentAnswer.environmentParameters.split(',') : [],
+        userEnvironmentParameters: componentAnswer.userEnvironmentParameters,
         commands: componentAnswer.commands.length > 0 ? componentAnswer.commands.split(',') : [],
         containerData: componentAnswer.containerData,
         tiered: false,
@@ -499,7 +505,8 @@ async function modifyApp() {
                 'Ports',
                 'Container Ports',
                 'Domains',
-                'Environment Parameters',
+                'Static Environment Parameters',
+                'User Environment Parameters',
                 'Commands',
                 'Container Data',
                 'CPU',
@@ -596,15 +603,28 @@ async function modifyApp() {
                   chooseMarketplaceOperation();
                 });
                 break;
-              case 'Environment Parameters':
+              case 'Static Environment Parameters':
                 inquirer.prompt([
                   {
                     type: 'input',
                     name: 'newEnvironmentParameters',
-                    message: `Enter the new Environment Parameters (${component.environmentParameters.join(', ')})`,
+                    message: `Enter the new Static Environment Parameters (${component.environmentParameters.join(', ')})`,
                   }
                 ]).then(async (componentFieldAnswer) => {
                   appSpec.compose[answers.component-1].environmentParameters = componentFieldAnswer.newEnvironmentParameters.length > 0 ? componentFieldAnswer.newEnvironmentParameters.split(',') : [];
+                  await marketplace.modifyApp(appSpec);
+                  chooseMarketplaceOperation();
+                });
+                break;
+              case 'User Environment Parameters':
+                inquirer.prompt([
+                  {
+                    type: 'input',
+                    name: 'newUserEnvironmentParameters',
+                    message: `Enter the new User Environment Parameters as JSON (${component.userEnvironmentParameters})`,
+                  }
+                ]).then(async (componentFieldAnswer) => {
+                  appSpec.compose[answers.component-1].userEnvironmentParameters = componentFieldAnswer.newUserEnvironmentParameters;
                   await marketplace.modifyApp(appSpec);
                   chooseMarketplaceOperation();
                 });
