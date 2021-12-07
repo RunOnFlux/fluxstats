@@ -1,0 +1,58 @@
+[
+  {
+    "description": "A simple hello world app with parameterized content",
+    "price": 0.09,
+    "category": "Hosting",
+    "version": 4,
+    "name": "HelloWorldParams",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "helloworldparams",
+        "description": "Parameters are PAGE_TITLE and PAGE_CONTENT",
+        "repotag": "jeffvaderflux/helloworld_params:latest",
+        "containerPorts": [
+          80
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [
+          "VALUE=1"
+        ],
+        "commands": [],
+        "containerData": "/tmp",
+        "tiered": false,
+        "cpu": 0.1,
+        "ram": 100,
+        "hdd": 1,
+        "cpubasic": 0.1,
+        "cpusuper": 0.1,
+        "cpubamf": 0.1,
+        "rambasic": 100,
+        "ramsuper": 100,
+        "rambamf": 100,
+        "hddbasic": 1,
+        "hddsuper": 1,
+        "hddbamf": 1,
+        "portSpecs": [
+          "37185-37285"
+        ],
+        "userEnvironmentParameters": [
+          {
+            "name": "PAGE_TITLE",
+            "description": "The title of the page",
+            "placeholder": "Page Title"
+          },
+          {
+            "name": "PAGE_CONTENT",
+            "description": "The content of the page",
+            "placeholder": "Page Content"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  }
+]
