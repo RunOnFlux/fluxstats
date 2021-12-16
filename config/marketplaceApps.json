@@ -54,5 +54,103 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "Host your Firo Node on the Flux Network",
+    "price": 2,
+    "category": "Crypto",
+    "version": 4,
+    "name": "FiroNode",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "node",
+        "description": "The Firo Node container",
+        "repotag": "runonflux/fironode:latest",
+        "containerPorts": [
+          8168
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/root/.firo",
+        "tiered": false,
+        "cpu": 1,
+        "ram": 2000,
+        "hdd": 100,
+        "cpubasic": 1,
+        "cpusuper": 1,
+        "cpubamf": 1,
+        "rambasic": 2000,
+        "ramsuper": 2000,
+        "rambamf": 2000,
+        "hddbasic": 100,
+        "hddsuper": 100,
+        "hddbamf": 100,
+        "portSpecs": [
+          "38000-38999"
+        ],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Enter your key here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Presearch is a Decentralized Search Engine - Host your Presearch Node on the Flux Network",
+    "price": 0.5,
+    "category": "Crypto",
+    "version": 4,
+    "name": "PresearchNode",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "node",
+        "description": "The Presearch node container",
+        "repotag": "presearch/node:latest",
+        "containerPorts": [
+          38253
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/app/node",
+        "tiered": false,
+        "cpu": 0.3,
+        "ram": 300,
+        "hdd": 2,
+        "cpubasic": 0.3,
+        "cpusuper": 0.3,
+        "cpubamf": 0.3,
+        "rambasic": 300,
+        "ramsuper": 300,
+        "rambamf": 300,
+        "hddbasic": 2,
+        "hddsuper": 2,
+        "hddbamf": 2,
+        "portSpecs": [
+          "39000-39999"
+        ],
+        "userEnvironmentParameters": [
+          {
+            "name": "REGISTRATION_CODE",
+            "description": "Your node registration code",
+            "placeholder": "Enter your code here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
