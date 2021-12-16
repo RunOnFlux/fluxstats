@@ -100,7 +100,9 @@
           }
         ]
       }
-    ]
+    ],
+    "visible": true,
+    "enabled": true
   },
   {
     "description": "Presearch is a Decentralized Search Engine - Host your Presearch Node on the Flux Network",
@@ -147,6 +149,8 @@
           }
         ]
       }
-    ]
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
