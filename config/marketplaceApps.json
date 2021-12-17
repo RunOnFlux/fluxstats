@@ -1,7 +1,7 @@
 [
   {
     "description": "A simple hello world app with parameterized content",
-    "price": 0.09,
+    "price": 100,
     "category": "Hosting",
     "version": 4,
     "name": "HelloWorldParams",
@@ -106,7 +106,7 @@
   },
   {
     "description": "Presearch is a Decentralized Search Engine - Host your Presearch Node on the Flux Network",
-    "price": 0.5,
+    "price": 100,
     "category": "Crypto",
     "version": 4,
     "name": "PresearchNode",
