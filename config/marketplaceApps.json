@@ -1,7 +1,7 @@
 [
   {
     "description": "A simple hello world app with parameterized content",
-    "price": 100,
+    "price": 0.1,
     "category": "Hosting",
     "version": 4,
     "name": "HelloWorldParams",
@@ -53,11 +53,11 @@
       }
     ],
     "visible": true,
-    "enabled": true
+    "enabled": false
   },
   {
     "description": "Host your Firo Node on the Flux Network",
-    "price": 2,
+    "price": 3,
     "category": "Crypto",
     "version": 4,
     "name": "FiroNode",
@@ -102,11 +102,11 @@
       }
     ],
     "visible": true,
-    "enabled": true
+    "enabled": false
   },
   {
     "description": "Presearch is a Decentralized Search Engine - Host your Presearch Node on the Flux Network",
-    "price": 100,
+    "price": 0.6,
     "category": "Crypto",
     "version": 4,
     "name": "PresearchNode",
@@ -151,6 +151,6 @@
       }
     ],
     "visible": true,
-    "enabled": true
+    "enabled": false
   }
 ]
