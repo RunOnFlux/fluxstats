@@ -53,7 +53,7 @@
       }
     ],
     "visible": true,
-    "enabled": false
+    "enabled": true
   },
   {
     "description": "Host your Firo Node on the Flux Network",
@@ -102,7 +102,7 @@
       }
     ],
     "visible": true,
-    "enabled": false
+    "enabled": true
   },
   {
     "description": "Presearch is a Decentralized Search Engine - Host your Presearch Node on the Flux Network",
@@ -151,6 +151,6 @@
       }
     ],
     "visible": true,
-    "enabled": false
+    "enabled": true
   }
 ]
