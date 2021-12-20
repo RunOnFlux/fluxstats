@@ -3,8 +3,6 @@ const kda = require('./src/management/kda');
 const flux = require('./src/management/flux');
 const xdao = require('./src/management/xdao');
 
-mainMenu();
-
 function mainMenu() {
   inquirer.prompt([
     {
@@ -21,14 +19,18 @@ function mainMenu() {
       ],
     },
   ]).then((answers) => {
-    switch(answers.section) {
+    // eslint-disable-next-line default-case
+    switch (answers.section) {
       case 'KDA':
+        // eslint-disable-next-line no-use-before-define
         chooseKDAOperation();
         break;
       case 'Flux':
+        // eslint-disable-next-line no-use-before-define
         chooseFluxOperation();
         break;
       case 'xDAO':
+        // eslint-disable-next-line no-use-before-define
         chooseXDAOOperation();
         break;
       case 'Quit':
@@ -51,6 +53,7 @@ function chooseKDAOperation() {
       ],
     },
   ]).then(async (answers) => {
+    // eslint-disable-next-line default-case
     switch (answers.section) {
       case 'Remove Old Records':
         await kda.removeRecords();
@@ -77,6 +80,7 @@ function chooseFluxOperation() {
       ],
     },
   ]).then(async (answers) => {
+    // eslint-disable-next-line default-case
     switch (answers.section) {
       case 'Remove Old Records':
         await flux.removeRecords();
@@ -103,6 +107,7 @@ function chooseXDAOOperation() {
       ],
     },
   ]).then(async (answers) => {
+    // eslint-disable-next-line default-case
     switch (answers.section) {
       case 'Remove Old Records':
         await xdao.removeRejectedUnpaidRecords();
@@ -114,3 +119,5 @@ function chooseXDAOOperation() {
     }
   });
 }
+
+mainMenu();

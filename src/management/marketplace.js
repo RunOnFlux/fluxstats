@@ -35,6 +35,7 @@ async function deleteApp(appSpec) {
 
   const database = db.db(config.database.marketplace.database);
   const query = {
+    // eslint-disable-next-line no-underscore-dangle
     _id: new ObjectId(appSpec._id),
   };
 
@@ -50,6 +51,7 @@ async function modifyApp(appSpec) {
 
   const database = db.db(config.database.marketplace.database);
   const query = {
+    // eslint-disable-next-line no-underscore-dangle
     _id: new ObjectId(appSpec._id),
   };
   const update = {
@@ -61,7 +63,7 @@ async function modifyApp(appSpec) {
 }
 
 function listCategories() {
-  return [ 'Games', 'Productivity', 'Crypto', 'Hosting' ];
+  return ['Games', 'Productivity', 'Crypto', 'Hosting'];
 }
 
 module.exports = {
