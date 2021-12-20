@@ -18,6 +18,7 @@ module.exports = {
       },
     ],
     'no-console': 'off',
+    'default-param-last': 'off',
     'import/extensions': [
       'error',
       'never',
