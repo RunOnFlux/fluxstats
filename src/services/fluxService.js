@@ -100,6 +100,66 @@ async function getFluxInformation(ip, timeoutConfig) {
   }
 }
 
+async function getFluxAppsHashes(ip, timeoutConfig) {
+  try {
+    const fluxInfoUrl = `http://${ip}:16127/apps/hashes`;
+    const fluxRes = await httpFluxInfo.get(fluxInfoUrl, timeoutConfig);
+    if (fluxRes.data.status === 'success') {
+      return fluxRes.data.data;
+    }
+    log.warn(`Flux apps/hashes of IP ${ip} is bad`);
+    return false;
+  } catch (e) {
+    log.error(`Flux apps/hashes of IP ${ip} error`);
+    return false;
+  }
+}
+
+async function getFluxSyncedHeight(ip, timeoutConfig) {
+  try {
+    const fluxInfoUrl = `http://${ip}:16127/explorer/scannedheight`;
+    const fluxRes = await httpFluxInfo.get(fluxInfoUrl, timeoutConfig);
+    if (fluxRes.data.status === 'success') {
+      return fluxRes.data.data;
+    }
+    log.warn(`Flux height of IP ${ip} is bad`);
+    return false;
+  } catch (e) {
+    log.error(`Flux height of IP ${ip} error`);
+    return false;
+  }
+}
+
+async function getConnectionsOut(ip, timeoutConfig) {
+  try {
+    const fluxInfoUrl = `http://${ip}:16127/flux/connectedpeers`;
+    const fluxRes = await httpFluxInfo.get(fluxInfoUrl, timeoutConfig);
+    if (fluxRes.data.status === 'success') {
+      return fluxRes.data.data;
+    }
+    log.warn(`Flux out peers of IP ${ip} is bad`);
+    return false;
+  } catch (e) {
+    log.error(`Flux out peers of IP ${ip} error`);
+    return false;
+  }
+}
+
+async function getConnectionsIn(ip, timeoutConfig) {
+  try {
+    const fluxInfoUrl = `http://${ip}:16127/flux/incomingconnections`;
+    const fluxRes = await httpFluxInfo.get(fluxInfoUrl, timeoutConfig);
+    if (fluxRes.data.status === 'success') {
+      return fluxRes.data.data;
+    }
+    log.warn(`Flux in peers of IP ${ip} is bad`);
+    return false;
+  } catch (e) {
+    log.error(`Flux in peers of IP ${ip} error`);
+    return false;
+  }
+}
+
 function getCollateralInfo(collateralOutpoint) {
   const a = collateralOutpoint;
   const b = a.split(', ');
@@ -203,6 +263,10 @@ async function createHistoryStats() {
 async function processFluxNode(fluxnode, currentRoundTime, timeoutConfig) {
   const database = db.db(config.database.local.database);
   const fluxInfo = await getFluxInformation(fluxnode.ip, timeoutConfig);
+  const appsHashes = await getFluxAppsHashes(fluxnode.ip, timeoutConfig);
+  const scannedHeightInfo = await getFluxSyncedHeight(fluxnode.ip, timeoutConfig);
+  const conOut = await getConnectionsOut(fluxnode.ip, timeoutConfig);
+  const conIn = await getConnectionsIn(fluxnode.ip, timeoutConfig);
   if (!fluxInfo) {
     fluxNodesWithError.push(fluxnode);
     return;
@@ -247,6 +311,28 @@ async function processFluxNode(fluxnode, currentRoundTime, timeoutConfig) {
   fluxInfo.collateralHash = getCollateralInfo(fluxnode.collateral).txhash;
   fluxInfo.collateralIndex = getCollateralInfo(fluxnode.collateral).txindex;
   fluxInfo.roundTime = currentRoundTime;
+  if (appsHashes) {
+    const hashesOk = appsHashes.filter((data) => data.height >= 964000);
+    fluxInfo.appsHashesTotal = hashesOk.length;
+    fluxInfo.hashesPresent = hashesOk.filter((mes) => mes.message === true).length;
+  }
+
+  if (scannedHeightInfo) {
+    fluxInfo.scannedHeight = scannedHeightInfo.generalScannedHeight;
+  }
+
+  if (conOut) {
+    fluxInfo.connectionsOut = conOut;
+  }
+
+  if (conIn) {
+    const conInOk = [];
+    conIn.forEach((con) => {
+      conInOk.push(con.replace('::ffff:', ''));
+    });
+    fluxInfo.connectionsIn = conInOk;
+  }
+
   const curTime = new Date().getTime();
   fluxInfo.dataCollectedAt = curTime;
   // additionally has daemon, benchmark, node, flux, apps
@@ -719,6 +805,11 @@ async function start() {
     database.collection(fluxcollection).createIndex({ lastConfirmedHeight: 1 }, { name: 'query for getting list of Flux data that were lastlyconfirmed on specific height' });
     database.collection(fluxcollection).createIndex({ collateralHash: 1, collateralIndex: 1 }, { name: 'query for getting list of list of Flux data associated to specific collateral' });
     database.collection(fluxcollection).createIndex({ roundTime: 1 }, { name: 'query for getting list of Flux data that were added in specific roundTime' });
+    database.collection(fluxcollection).createIndex({ appsHashesTotal: 1 }, { name: 'query for getting app hashes' });
+    database.collection(fluxcollection).createIndex({ hashesPresent: 1 }, { name: 'query for getting app hashes present' });
+    database.collection(fluxcollection).createIndex({ scannedHeight: 1 }, { name: 'query for getting scanned height' });
+    database.collection(fluxcollection).createIndex({ connectionsOut: 1 }, { name: 'query for getting connections out' });
+    database.collection(fluxcollection).createIndex({ connectionsIn: 1 }, { name: 'query for getting connections in' });
     log.info('Initiating Flux API services...');
     // begin fluxnodes processing;
     processFluxNodes();
