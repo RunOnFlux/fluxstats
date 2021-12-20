@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon --ignore './src/kdaUI/' --ignore './src/fluxHashes' index.js",
     "test": "echo 'No tests have been implemented' && exit 1",
-    "lint": "eslint src/"
+    "lint": "eslint ./ --fix"
   },
   "author": "Tadeas Kmenta",
   "contributors": [
