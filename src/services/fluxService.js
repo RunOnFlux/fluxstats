@@ -412,7 +412,7 @@ async function processFluxNodes() {
   } catch (e) {
     log.error(e);
   } finally {
-    processFluxNode();
+    processFluxNodes();
     const endRefresh = new Date() - startRefresh;
     log.info('Execution time of processFluxNodes: %dms', endRefresh);
   }
