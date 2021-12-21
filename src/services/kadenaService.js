@@ -166,7 +166,7 @@ async function processKdaNode(kdaNode, currentRoundTime, synced, finishProcessin
 
 async function beginKadena() {
   // beginKadenExecuting = true;
-  const startRefresh = new Date();
+  const startRefresh = new Date().getTime();
   // -> every hour get list of kadena nodes from 10 random fluxes calling /location/kadenachainwebnode api
   // -> since lists may differ we merge the list together to get an accurate list
   // -> on every node get its tier, check if its running and get its kadena account (if all ok continue)
@@ -310,8 +310,8 @@ async function beginKadena() {
   await serviceHelper.insertOneToDatabase(database, completedRoundsCollection, crt).catch((error) => {
     log.error(error);
   });
-  const endRefresh = new Date() - startRefresh;
-  log.info('Execution time of beginKadena: %dms', endRefresh);
+  const endRefresh = new Date().getTime() - startRefresh;
+  log.info(`Execution time of beginKadena: ${endRefresh} ms`);
   // beginKadenExecuting = false;
 }
 
