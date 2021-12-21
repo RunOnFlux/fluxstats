@@ -197,9 +197,10 @@ async function createHistoryStats() {
     };
     queryForTimes.push(singlequery);
   });
-  const query = {
-    $or: queryForTimes,
-  };
+  const query = { };
+  if (queryForTimes.length > 0) {
+    query.$or = queryForTimes;
+  }
   const projection = {
     projection: {
       _id: 0,
@@ -469,9 +470,11 @@ async function getAllFluxInformation(req, res, i = 0) {
       queryForIps.push(singlequery);
     });
     const query = {
-      $or: queryForIps,
       roundTime: lastCompletedRound,
     };
+    if (queryForIps.length > 0) {
+      query.$or = queryForIps;
+    }
     // projection is comma separated list;
     let { projection } = req.params;
     projection = projection || req.query.projection;
@@ -551,9 +554,11 @@ async function getAllFluxVersions(req, res) {
       queryForIps.push(singlequery);
     });
     const query = {
-      $or: queryForIps,
       roundTime: lastCompletedRound,
     };
+    if (queryForIps.length > 0) {
+      query.$or = queryForIps;
+    }
     const projection = {
       projection: {
         _id: 0,
@@ -624,9 +629,11 @@ async function getAllFluxGeolocation(req, res, i = 0) {
       queryForIps.push(singlequery);
     });
     const query = {
-      $or: queryForIps,
       roundTime: lastCompletedRound,
     };
+    if (queryForIps.length > 0) {
+      query.$or = queryForIps;
+    }
     const projection = {
       projection: {
         _id: 0,
@@ -737,9 +744,10 @@ async function getAllFluxGeolocationNow(req, res) {
       };
       queryForIps.push(singlequery);
     });
-    const query = {
-      $or: queryForIps,
-    };
+    const query = { };
+    if (queryForIps.length > 0) {
+      query.$or = queryForIps;
+    }
     const projection = {
       projection: {
         _id: 0,
