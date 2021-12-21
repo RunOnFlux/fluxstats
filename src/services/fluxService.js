@@ -507,6 +507,11 @@ async function getAllFluxInformation(req, res, i = 0) {
           benchmark: 1,
           flux: 1,
           apps: 1,
+          appsHashesTotal: 1,
+          hashesPresent: 1,
+          scannedHeight: 1,
+          connectionsOut: 1,
+          connectionsIn: 1,
         },
       };
     }
