@@ -264,10 +264,10 @@ async function processFluxNode(fluxnode, currentRoundTime, timeoutConfig) {
   try {
     const database = db.db(config.database.local.database);
     const fluxInfo = await getFluxInformation(fluxnode.ip, timeoutConfig);
-    const appsHashes = await getFluxAppsHashes(fluxnode.ip, timeoutConfig);
-    const scannedHeightInfo = await getFluxSyncedHeight(fluxnode.ip, timeoutConfig);
+    // const appsHashes = await getFluxAppsHashes(fluxnode.ip, timeoutConfig);
+    // const scannedHeightInfo = await getFluxSyncedHeight(fluxnode.ip, timeoutConfig);
     const conOut = await getConnectionsOut(fluxnode.ip, timeoutConfig);
-    const conIn = await getConnectionsIn(fluxnode.ip, timeoutConfig);
+    // const conIn = await getConnectionsIn(fluxnode.ip, timeoutConfig);
     if (!fluxInfo) {
       fluxNodesWithError.push(fluxnode);
       return;
@@ -312,27 +312,27 @@ async function processFluxNode(fluxnode, currentRoundTime, timeoutConfig) {
     fluxInfo.collateralHash = getCollateralInfo(fluxnode.collateral).txhash;
     fluxInfo.collateralIndex = getCollateralInfo(fluxnode.collateral).txindex;
     fluxInfo.roundTime = currentRoundTime;
-    if (appsHashes) {
-      const hashesOk = appsHashes.filter((data) => data.height >= 964000);
-      fluxInfo.appsHashesTotal = hashesOk.length;
-      fluxInfo.hashesPresent = hashesOk.filter((mes) => mes.message === true).length;
-    }
+    // if (appsHashes) {
+    //   const hashesOk = appsHashes.filter((data) => data.height >= 964000);
+    //   fluxInfo.appsHashesTotal = hashesOk.length;
+    //   fluxInfo.hashesPresent = hashesOk.filter((mes) => mes.message === true).length;
+    // }
 
-    if (scannedHeightInfo) {
-      fluxInfo.scannedHeight = scannedHeightInfo.generalScannedHeight;
-    }
+    // if (scannedHeightInfo) {
+    //   fluxInfo.scannedHeight = scannedHeightInfo.generalScannedHeight;
+    // }
 
     if (conOut) {
       fluxInfo.connectionsOut = conOut;
     }
 
-    if (conIn) {
-      const conInOk = [];
-      conIn.forEach((con) => {
-        conInOk.push(con.replace('::ffff:', ''));
-      });
-      fluxInfo.connectionsIn = conInOk;
-    }
+    // if (conIn) {
+    //   const conInOk = [];
+    //   conIn.forEach((con) => {
+    //     conInOk.push(con.replace('::ffff:', ''));
+    //   });
+    //   fluxInfo.connectionsIn = conInOk;
+    // }
 
     const curTime = new Date().getTime();
     fluxInfo.dataCollectedAt = curTime;
@@ -340,6 +340,7 @@ async function processFluxNode(fluxnode, currentRoundTime, timeoutConfig) {
     await serviceHelper.insertOneToDatabase(database, fluxcollection, fluxInfo).catch((error) => {
       log.error(`Flux information of IP ${fluxnode.ip} error inserting in db: ${error}`);
     });
+    log.info(fluxInfo);
   } catch (error) {
     log.error(error);
   }
@@ -373,7 +374,7 @@ async function processFluxNodes() {
       }
       let fluxNodesWithErrorAux = [];
       let retry = 0;
-      while (fluxNodesWithError.length > 0 && retry < 10) {
+      while (fluxNodesWithError.length > 0 && retry < 5) {
         log.info(`Found ${fluxNodesWithError.length} with errors.`);
         fluxNodesWithErrorAux = [...fluxNodesWithError];
         // eslint-disable-next-line no-restricted-syntax
@@ -382,7 +383,7 @@ async function processFluxNodes() {
           const index = fluxNodesWithError.indexOf(fluxnode);
           fluxNodesWithError.splice(index, 1);
           let timeoutConfig = axiosConfig;
-          if (retry === 9) {
+          if (retry === 4) {
             timeoutConfig = axiosExplorerConfig;
           }
           promiseArray.push(processFluxNode(fluxnode, currentRoundTime, timeoutConfig));
@@ -417,9 +418,9 @@ async function processFluxNodes() {
   } catch (e) {
     log.error(e);
   } finally {
-    processFluxNodes();
     const endRefresh = new Date().getTime() - startRefresh;
     log.info(`Execution time of processFluxNodes: ${endRefresh} ms`);
+    processFluxNodes();
   }
 }
 
