@@ -264,7 +264,7 @@ async function processFluxNode(fluxnode, currentRoundTime, timeoutConfig) {
   try {
     const database = db.db(config.database.local.database);
     const fluxInfo = await getFluxInformation(fluxnode.ip, timeoutConfig);
-    const appsHashes = await getFluxAppsHashes(fluxnode.ip, getFluxAppsHashes);
+    const appsHashes = await getFluxAppsHashes(fluxnode.ip, axiosExplorerConfig);
     const scannedHeightInfo = await getFluxSyncedHeight(fluxnode.ip, timeoutConfig);
     const conOut = await getConnectionsOut(fluxnode.ip, timeoutConfig);
     // const conIn = await getConnectionsIn(fluxnode.ip, timeoutConfig);
