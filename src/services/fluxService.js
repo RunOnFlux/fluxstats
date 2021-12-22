@@ -264,7 +264,7 @@ async function processFluxNode(fluxnode, currentRoundTime, timeoutConfig) {
   try {
     const database = db.db(config.database.local.database);
     const fluxInfo = await getFluxInformation(fluxnode.ip, timeoutConfig);
-    // const appsHashes = await getFluxAppsHashes(fluxnode.ip, timeoutConfig);
+    const appsHashes = await getFluxAppsHashes(fluxnode.ip, getFluxAppsHashes);
     const scannedHeightInfo = await getFluxSyncedHeight(fluxnode.ip, timeoutConfig);
     const conOut = await getConnectionsOut(fluxnode.ip, timeoutConfig);
     // const conIn = await getConnectionsIn(fluxnode.ip, timeoutConfig);
@@ -312,11 +312,12 @@ async function processFluxNode(fluxnode, currentRoundTime, timeoutConfig) {
     fluxInfo.collateralHash = getCollateralInfo(fluxnode.collateral).txhash;
     fluxInfo.collateralIndex = getCollateralInfo(fluxnode.collateral).txindex;
     fluxInfo.roundTime = currentRoundTime;
-    // if (appsHashes) {
-    //   const hashesOk = appsHashes.filter((data) => data.height >= 964000);
-    //   fluxInfo.appsHashesTotal = hashesOk.length;
-    //   fluxInfo.hashesPresent = hashesOk.filter((mes) => mes.message === true).length;
-    // }
+    if (appsHashes) {
+      const hashesOk = appsHashes.filter((data) => data.height >= 964000);
+      fluxInfo.appsHashesTotal = hashesOk.length;
+      const mesOK = hashesOk.filter((mes) => mes.message === true);
+      fluxInfo.hashesPresent = mesOK.length;
+    }
 
     if (scannedHeightInfo) {
       fluxInfo.scannedHeight = scannedHeightInfo.generalScannedHeight;
