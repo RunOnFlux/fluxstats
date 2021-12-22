@@ -264,10 +264,10 @@ async function processFluxNode(fluxnode, currentRoundTime, timeoutConfig) {
   try {
     const database = db.db(config.database.local.database);
     const fluxInfo = await getFluxInformation(fluxnode.ip, timeoutConfig);
-    const appsHashes = await getFluxAppsHashes(fluxnode.ip, axiosExplorerConfig);
+    // const appsHashes = await getFluxAppsHashes(fluxnode.ip, axiosExplorerConfig);
     const scannedHeightInfo = await getFluxSyncedHeight(fluxnode.ip, timeoutConfig);
     const conOut = await getConnectionsOut(fluxnode.ip, timeoutConfig);
-    // const conIn = await getConnectionsIn(fluxnode.ip, timeoutConfig);
+    const conIn = await getConnectionsIn(fluxnode.ip, timeoutConfig);
     if (!fluxInfo) {
       fluxNodesWithError.push(fluxnode);
       return;
@@ -312,12 +312,12 @@ async function processFluxNode(fluxnode, currentRoundTime, timeoutConfig) {
     fluxInfo.collateralHash = getCollateralInfo(fluxnode.collateral).txhash;
     fluxInfo.collateralIndex = getCollateralInfo(fluxnode.collateral).txindex;
     fluxInfo.roundTime = currentRoundTime;
-    if (appsHashes) {
-      const hashesOk = appsHashes.filter((data) => data.height >= 964000);
-      fluxInfo.appsHashesTotal = hashesOk.length;
-      const mesOK = hashesOk.filter((mes) => mes.message === true);
-      fluxInfo.hashesPresent = mesOK.length;
-    }
+    // if (appsHashes) {
+    //   const hashesOk = appsHashes.filter((data) => data.height >= 964000);
+    //   fluxInfo.appsHashesTotal = hashesOk.length;
+    //   const mesOK = hashesOk.filter((mes) => mes.message === true);
+    //   fluxInfo.hashesPresent = mesOK.length;
+    // }
 
     if (scannedHeightInfo) {
       fluxInfo.scannedHeight = scannedHeightInfo.generalScannedHeight;
@@ -327,13 +327,13 @@ async function processFluxNode(fluxnode, currentRoundTime, timeoutConfig) {
       fluxInfo.connectionsOut = conOut;
     }
 
-    // if (conIn) {
-    //   const conInOk = [];
-    //   conIn.forEach((con) => {
-    //     conInOk.push(con.replace('::ffff:', ''));
-    //   });
-    //   fluxInfo.connectionsIn = conInOk;
-    // }
+    if (conIn) {
+      const conInOk = [];
+      conIn.forEach((con) => {
+        conInOk.push(con.replace('::ffff:', ''));
+      });
+      fluxInfo.connectionsIn = conInOk;
+    }
 
     const curTime = new Date().getTime();
     fluxInfo.dataCollectedAt = curTime;
