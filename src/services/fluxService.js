@@ -265,7 +265,7 @@ async function processFluxNode(fluxnode, currentRoundTime, timeoutConfig) {
     const database = db.db(config.database.local.database);
     const fluxInfo = await getFluxInformation(fluxnode.ip, timeoutConfig);
     // const appsHashes = await getFluxAppsHashes(fluxnode.ip, timeoutConfig);
-    // const scannedHeightInfo = await getFluxSyncedHeight(fluxnode.ip, timeoutConfig);
+    const scannedHeightInfo = await getFluxSyncedHeight(fluxnode.ip, timeoutConfig);
     const conOut = await getConnectionsOut(fluxnode.ip, timeoutConfig);
     // const conIn = await getConnectionsIn(fluxnode.ip, timeoutConfig);
     if (!fluxInfo) {
@@ -318,9 +318,9 @@ async function processFluxNode(fluxnode, currentRoundTime, timeoutConfig) {
     //   fluxInfo.hashesPresent = hashesOk.filter((mes) => mes.message === true).length;
     // }
 
-    // if (scannedHeightInfo) {
-    //   fluxInfo.scannedHeight = scannedHeightInfo.generalScannedHeight;
-    // }
+    if (scannedHeightInfo) {
+      fluxInfo.scannedHeight = scannedHeightInfo.generalScannedHeight;
+    }
 
     if (conOut) {
       fluxInfo.connectionsOut = conOut;
