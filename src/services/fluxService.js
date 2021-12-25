@@ -267,7 +267,7 @@ async function processFluxNode(fluxnode, currentRoundTime, timeoutConfig) {
     // const appsHashes = await getFluxAppsHashes(fluxnode.ip, axiosExplorerConfig);
     const scannedHeightInfo = await getFluxSyncedHeight(fluxnode.ip, timeoutConfig);
     const conOut = await getConnectionsOut(fluxnode.ip, timeoutConfig);
-    const conIn = await getConnectionsIn(fluxnode.ip, timeoutConfig);
+    // const conIn = await getConnectionsIn(fluxnode.ip, timeoutConfig);
     if (!fluxInfo) {
       fluxNodesWithError.push(fluxnode);
       return;
@@ -327,13 +327,13 @@ async function processFluxNode(fluxnode, currentRoundTime, timeoutConfig) {
       fluxInfo.connectionsOut = conOut;
     }
 
-    if (conIn) {
-      const conInOk = [];
-      conIn.forEach((con) => {
-        conInOk.push(con.replace('::ffff:', ''));
-      });
-      fluxInfo.connectionsIn = conInOk;
-    }
+    // if (conIn) {
+    //   const conInOk = [];
+    //   conIn.forEach((con) => {
+    //     conInOk.push(con.replace('::ffff:', ''));
+    //   });
+    //   fluxInfo.connectionsIn = conInOk;
+    // }
 
     const curTime = new Date().getTime();
     fluxInfo.dataCollectedAt = curTime;
