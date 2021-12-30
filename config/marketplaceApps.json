@@ -152,5 +152,103 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "Host your PivX Node on the Flux Network",
+    "price": 3,
+    "category": "Crypto",
+    "version": 4,
+    "name": "PivXNode",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "node",
+        "description": "The PivX Node container",
+        "repotag": "runonflux/pivxnode:latest",
+        "containerPorts": [
+          51472
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/root/.pivx",
+        "tiered": false,
+        "cpu": 1,
+        "ram": 2000,
+        "hdd": 50,
+        "cpubasic": 1,
+        "cpusuper": 1,
+        "cpubamf": 1,
+        "rambasic": 2000,
+        "ramsuper": 2000,
+        "rambamf": 2000,
+        "hddbasic": 50,
+        "hddsuper": 50,
+        "hddbamf": 50,
+        "portSpecs": [
+          "37300-37500"
+        ],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Enter your key here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Dash Node on the Flux Network",
+    "price": 3,
+    "category": "Crypto",
+    "version": 4,
+    "name": "DashNode",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "node",
+        "description": "The Dash Node container",
+        "repotag": "runonflux/dashnode:latest",
+        "containerPorts": [
+          9999
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/root/.dashcore",
+        "tiered": false,
+        "cpu": 1,
+        "ram": 2000,
+        "hdd": 50,
+        "cpubasic": 1,
+        "cpusuper": 1,
+        "cpubamf": 1,
+        "rambasic": 2000,
+        "ramsuper": 2000,
+        "rambamf": 2000,
+        "hddbasic": 50,
+        "hddsuper": 50,
+        "hddbamf": 50,
+        "portSpecs": [
+          "37500-37700"
+        ],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Enter your key here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
