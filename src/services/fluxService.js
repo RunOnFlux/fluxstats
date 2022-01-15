@@ -6,17 +6,13 @@ const LRU = require('lru-cache');
 const log = require('../lib/log');
 const serviceHelper = require('./serviceHelper');
 
-const axiosConfig = {
-  timeout: 5000,
-};
+const defaultTimeout = 5000;
 
-const axiosExplorerConfig = {
-  timeout: 10000,
-};
+const explorerTimeout = 10000;
 
 let round = 0;
 
-const httpFluxInfo = rateLimit(axios.create(), { maxRequests: 10, perMilliseconds: 1000 });
+const httpFluxInfo = rateLimit(axios.create(), { maxRequests: 20, perMilliseconds: 1000 });
 const httpGeo = rateLimit(axios.create(), { maxRequests: 1, perMilliseconds: 2000 });
 
 // default cache
@@ -40,7 +36,7 @@ let fluxNodeHistoryStatsRunning = false;
 
 async function geFluxNodeList() {
   try {
-    const fluxnodeList = await axios.get(`${config.explorer}/api/fluxnode/listfluxnodes`, axiosExplorerConfig);
+    const fluxnodeList = await axios.get(`${config.explorer}/api/fluxnode/listfluxnodes`, { timeout: explorerTimeout });
     return fluxnodeList.data.result || [];
   } catch (e) {
     log.error(e);
@@ -62,8 +58,20 @@ async function getFluxNodeIPs(fluxnodeList) {
 
 async function getFluxNodeGeolocation(ip) {
   try {
+    const { CancelToken } = axios;
+    const source = CancelToken.source();
+    let isResolved = false;
+    setTimeout(() => {
+      if (!isResolved) {
+        source.cancel('Operation canceled by the user.');
+      }
+    }, defaultTimeout * 2);
     const ipApiUrl = `http://ip-api.com/json/${ip}?fields=status,country,countryCode,lat,lon,query,org`;
-    const ipRes = await httpGeo.get(ipApiUrl, axiosConfig);
+    const ipRes = await httpGeo.get(ipApiUrl, {
+      cancelToken: source.token,
+      defaultTimeout,
+    });
+    isResolved = true;
     if (ipRes.data.status === 'success') {
       const information = {
         ip: ipRes.data.query,
@@ -84,10 +92,22 @@ async function getFluxNodeGeolocation(ip) {
   }
 }
 
-async function getFluxInformation(ip, timeoutConfig) {
+async function getFluxInformation(ip, timeout) {
   try {
+    const { CancelToken } = axios;
+    const source = CancelToken.source();
+    let isResolved = false;
+    setTimeout(() => {
+      if (!isResolved) {
+        source.cancel('Operation canceled by the user.');
+      }
+    }, timeout * 2);
     const fluxInfoUrl = `http://${ip}:16127/flux/info`;
-    const fluxRes = await httpFluxInfo.get(fluxInfoUrl, timeoutConfig);
+    const fluxRes = await httpFluxInfo.get(fluxInfoUrl, {
+      cancelToken: source.token,
+      timeout,
+    });
+    isResolved = true;
     if (fluxRes.data.status === 'success') {
       return fluxRes.data.data;
     }
@@ -99,10 +119,22 @@ async function getFluxInformation(ip, timeoutConfig) {
   }
 }
 
-async function getFluxAppsHashes(ip, timeoutConfig) {
+async function getFluxAppsHashes(ip, timeout) {
   try {
+    const { CancelToken } = axios;
+    const source = CancelToken.source();
+    let isResolved = false;
+    setTimeout(() => {
+      if (!isResolved) {
+        source.cancel('Operation canceled by the user.');
+      }
+    }, timeout * 2);
     const fluxInfoUrl = `http://${ip}:16127/apps/hashes`;
-    const fluxRes = await httpFluxInfo.get(fluxInfoUrl, timeoutConfig);
+    const fluxRes = await httpFluxInfo.get(fluxInfoUrl, {
+      cancelToken: source.token,
+      timeout,
+    });
+    isResolved = true;
     if (fluxRes.data.status === 'success') {
       return fluxRes.data.data;
     }
@@ -114,10 +146,22 @@ async function getFluxAppsHashes(ip, timeoutConfig) {
   }
 }
 
-async function getFluxSyncedHeight(ip, timeoutConfig) {
+async function getFluxSyncedHeight(ip, timeout) {
   try {
+    const { CancelToken } = axios;
+    const source = CancelToken.source();
+    let isResolved = false;
+    setTimeout(() => {
+      if (!isResolved) {
+        source.cancel('Operation canceled by the user.');
+      }
+    }, timeout * 2);
     const fluxInfoUrl = `http://${ip}:16127/explorer/scannedheight`;
-    const fluxRes = await httpFluxInfo.get(fluxInfoUrl, timeoutConfig);
+    const fluxRes = await httpFluxInfo.get(fluxInfoUrl, {
+      cancelToken: source.token,
+      timeout,
+    });
+    isResolved = true;
     if (fluxRes.data.status === 'success') {
       return fluxRes.data.data;
     }
@@ -129,10 +173,22 @@ async function getFluxSyncedHeight(ip, timeoutConfig) {
   }
 }
 
-async function getConnectionsOut(ip, timeoutConfig) {
+async function getConnectionsOut(ip, timeout) {
   try {
+    const { CancelToken } = axios;
+    const source = CancelToken.source();
+    let isResolved = false;
+    setTimeout(() => {
+      if (!isResolved) {
+        source.cancel('Operation canceled by the user.');
+      }
+    }, timeout * 2);
     const fluxInfoUrl = `http://${ip}:16127/flux/connectedpeers`;
-    const fluxRes = await httpFluxInfo.get(fluxInfoUrl, timeoutConfig);
+    const fluxRes = await httpFluxInfo.get(fluxInfoUrl, {
+      cancelToken: source.token,
+      timeout,
+    });
+    isResolved = true;
     if (fluxRes.data.status === 'success') {
       return fluxRes.data.data;
     }
@@ -144,10 +200,22 @@ async function getConnectionsOut(ip, timeoutConfig) {
   }
 }
 
-async function getConnectionsIn(ip, timeoutConfig) {
+async function getConnectionsIn(ip, timeout) {
   try {
+    const { CancelToken } = axios;
+    const source = CancelToken.source();
+    let isResolved = false;
+    setTimeout(() => {
+      if (!isResolved) {
+        source.cancel('Operation canceled by the user.');
+      }
+    }, timeout * 2);
     const fluxInfoUrl = `http://${ip}:16127/flux/incomingconnections`;
-    const fluxRes = await httpFluxInfo.get(fluxInfoUrl, timeoutConfig);
+    const fluxRes = await httpFluxInfo.get(fluxInfoUrl, {
+      cancelToken: source.token,
+      timeout,
+    });
+    isResolved = true;
     if (fluxRes.data.status === 'success') {
       return fluxRes.data.data;
     }
@@ -260,18 +328,18 @@ async function createHistoryStats() {
   myCache.set('historyStats', data);
 }
 
-async function processFluxNode(fluxnode, currentRoundTime, timeoutConfig) {
+async function processFluxNode(fluxnode, currentRoundTime, timeout) {
   try {
     const database = db.db(config.database.local.database);
-    const fluxInfo = await getFluxInformation(fluxnode.ip, timeoutConfig);
-    // const appsHashes = await getFluxAppsHashes(fluxnode.ip, axiosExplorerConfig);
-    const scannedHeightInfo = await getFluxSyncedHeight(fluxnode.ip, timeoutConfig);
-    const conOut = await getConnectionsOut(fluxnode.ip, timeoutConfig);
-    // const conIn = await getConnectionsIn(fluxnode.ip, timeoutConfig);
+    const fluxInfo = await getFluxInformation(fluxnode.ip, timeout);
     if (!fluxInfo) {
       fluxNodesWithError.push(fluxnode);
       return;
     }
+    const appsHashes = await getFluxAppsHashes(fluxnode.ip, timeout * 3);
+    const scannedHeightInfo = await getFluxSyncedHeight(fluxnode.ip, timeout);
+    const conOut = await getConnectionsOut(fluxnode.ip, timeout);
+    const conIn = await getConnectionsIn(fluxnode.ip, timeout);
     const query = { ip: fluxnode.ip };
     const projection = {
       projection: {
@@ -312,12 +380,12 @@ async function processFluxNode(fluxnode, currentRoundTime, timeoutConfig) {
     fluxInfo.collateralHash = getCollateralInfo(fluxnode.collateral).txhash;
     fluxInfo.collateralIndex = getCollateralInfo(fluxnode.collateral).txindex;
     fluxInfo.roundTime = currentRoundTime;
-    // if (appsHashes) {
-    //   const hashesOk = appsHashes.filter((data) => data.height >= 964000);
-    //   fluxInfo.appsHashesTotal = hashesOk.length;
-    //   const mesOK = hashesOk.filter((mes) => mes.message === true);
-    //   fluxInfo.hashesPresent = mesOK.length;
-    // }
+    if (appsHashes) {
+      const hashesOk = appsHashes.filter((data) => data.height >= 964000);
+      fluxInfo.appsHashesTotal = hashesOk.length;
+      const mesOK = hashesOk.filter((mes) => mes.message === true);
+      fluxInfo.hashesPresent = mesOK.length;
+    }
 
     if (scannedHeightInfo) {
       fluxInfo.scannedHeight = scannedHeightInfo.generalScannedHeight;
@@ -327,13 +395,13 @@ async function processFluxNode(fluxnode, currentRoundTime, timeoutConfig) {
       fluxInfo.connectionsOut = conOut;
     }
 
-    // if (conIn) {
-    //   const conInOk = [];
-    //   conIn.forEach((con) => {
-    //     conInOk.push(con.replace('::ffff:', ''));
-    //   });
-    //   fluxInfo.connectionsIn = conInOk;
-    // }
+    if (conIn) {
+      const conInOk = [];
+      conIn.forEach((con) => {
+        conInOk.push(con.replace('::ffff:', ''));
+      });
+      fluxInfo.connectionsIn = conInOk;
+    }
 
     const curTime = new Date().getTime();
     fluxInfo.dataCollectedAt = curTime;
@@ -341,7 +409,6 @@ async function processFluxNode(fluxnode, currentRoundTime, timeoutConfig) {
     await serviceHelper.insertOneToDatabase(database, fluxcollection, fluxInfo).catch((error) => {
       log.error(`Flux information of IP ${fluxnode.ip} error inserting in db: ${error}`);
     });
-    log.info(fluxInfo);
   } catch (error) {
     log.error(error);
   }
@@ -356,14 +423,15 @@ async function processFluxNodes() {
     const currentRoundTime = new Date().getTime();
     log.info(`Beginning processing of ${currentRoundTime}.`);
     const fluxnodes = await geFluxNodeList();
+    // const fluxnodes = [{ ip: '78.216.167.78' }]; // fluxnode that was causing the hang.
     log.info(`Found ${fluxnodes.length} Fluxes.`);
     if (fluxnodes && fluxnodes.length > 0) {
       currentFluxNodeIps = await getFluxNodeIPs(fluxnodes);
       let promiseArray = [];
       // eslint-disable-next-line no-restricted-syntax
       for (const [i, fluxnode] of fluxnodes.entries()) {
-        promiseArray.push(processFluxNode(fluxnode, currentRoundTime, axiosConfig));
-        if ((i + 1) % 10 === 0) {
+        promiseArray.push(processFluxNode(fluxnode, currentRoundTime, defaultTimeout));
+        if ((i + 1) % 30 === 0) {
           await Promise.allSettled(promiseArray);
           promiseArray = [];
           log.info(`Flux Nodes Processed: ${i + 1}`);
@@ -383,12 +451,12 @@ async function processFluxNodes() {
           const fluxnode = fluxNodesWithErrorAux[i];
           const index = fluxNodesWithError.indexOf(fluxnode);
           fluxNodesWithError.splice(index, 1);
-          let timeoutConfig = axiosConfig;
+          let timeoutConfig = defaultTimeout;
           if (retry === 4) {
-            timeoutConfig = axiosExplorerConfig;
+            timeoutConfig = explorerTimeout;
           }
           promiseArray.push(processFluxNode(fluxnode, currentRoundTime, timeoutConfig));
-          if ((i + 1) % 10 === 0) {
+          if ((i + 1) % 30 === 0) {
             await Promise.allSettled(promiseArray);
             promiseArray = [];
           }

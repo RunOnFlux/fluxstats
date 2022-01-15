@@ -9,7 +9,7 @@ const log = require('../lib/log');
 const serviceHelper = require('./serviceHelper');
 const fluxService = require('./fluxService');
 
-const http = rateLimit(axios.create(), { maxRequests: 10, perMilliseconds: 1000 });
+const http = rateLimit(axios.create(), { maxRequests: 20, perMilliseconds: 1000 });
 
 let db = null;
 const kadenaNodesCollection = config.database.kadena.collections.nodes;
@@ -34,16 +34,26 @@ const LRUoptions = {
 };
 const myCache = new LRU(LRUoptions);
 
-const axiosConfig = {
-  timeout: 5000,
-};
+const timeout = 5000;
 
 let kadenaEligibleRunning = false;
 let kadenaEligibleStatsRunning = false;
 
 async function getKadenaLocation(ip) {
   try {
-    const fluxnodeList = await http.get(`http://${ip}:16127/apps/location/KadenaChainWebNode`, axiosConfig);
+    const { CancelToken } = axios;
+    const source = CancelToken.source();
+    let isResolved = false;
+    setTimeout(() => {
+      if (!isResolved) {
+        source.cancel('Operation canceled by the user.');
+      }
+    }, timeout * 2);
+    const fluxnodeList = await http.get(`http://${ip}:16127/apps/location/KadenaChainWebNode`, {
+      cancelToken: source.token,
+      timeout,
+    });
+    isResolved = true;
     if (fluxnodeList.data.status === 'success') {
       return fluxnodeList.data.data || [];
     }
@@ -56,7 +66,19 @@ async function getKadenaLocation(ip) {
 
 async function getKadenaAccount(ip) {
   try {
-    const fluxnodeList = await http.get(`http://${ip}:16127/flux/kadena`, axiosConfig);
+    const { CancelToken } = axios;
+    const source = CancelToken.source();
+    let isResolved = false;
+    setTimeout(() => {
+      if (!isResolved) {
+        source.cancel('Operation canceled by the user.');
+      }
+    }, timeout * 2);
+    const fluxnodeList = await http.get(`http://${ip}:16127/flux/kadena`, {
+      cancelToken: source.token,
+      timeout,
+    });
+    isResolved = true;
     if (fluxnodeList.data.status === 'success') {
       return fluxnodeList.data.data || null;
     }
@@ -72,7 +94,16 @@ async function getKadenaHeight(ip) {
     const agent = new https.Agent({
       rejectUnauthorized: false,
     });
-    const kadenaData = await http.get(`https://${ip}:30004/chainweb/0.0/mainnet01/cut`, { httpsAgent: agent, timeout: 13456 });
+    const { CancelToken } = axios;
+    const source = CancelToken.source();
+    let isResolved = false;
+    setTimeout(() => {
+      if (!isResolved) {
+        source.cancel('Operation canceled by the user.');
+      }
+    }, timeout * 5);
+    const kadenaData = await http.get(`https://${ip}:30004/chainweb/0.0/mainnet01/cut`, { cancelToken: source.token, httpsAgent: agent, timeout: 13456 });
+    isResolved = true;
     return kadenaData.data.height;
   } catch (e) {
     log.error(`getKadenaHeight of IP ${ip} error`);
@@ -82,7 +113,19 @@ async function getKadenaHeight(ip) {
 
 async function getFluxNodeTier(ip) {
   try {
-    const fluxnodeList = await http.get(`http://${ip}:16127/daemon/getzelnodestatus`, axiosConfig);
+    const { CancelToken } = axios;
+    const source = CancelToken.source();
+    let isResolved = false;
+    setTimeout(() => {
+      if (!isResolved) {
+        source.cancel('Operation canceled by the user.');
+      }
+    }, timeout * 2);
+    const fluxnodeList = await http.get(`http://${ip}:16127/daemon/getzelnodestatus`, {
+      cancelToken: source.token,
+      timeout,
+    });
+    isResolved = true;
     if (fluxnodeList.data.status === 'success') {
       return fluxnodeList.data.data.tier;
     }
@@ -95,7 +138,19 @@ async function getFluxNodeTier(ip) {
 
 async function getFluxNodeZelID(ip) {
   try {
-    const fluxnodeList = await http.get(`http://${ip}:16127/flux/zelid`, axiosConfig);
+    const { CancelToken } = axios;
+    const source = CancelToken.source();
+    let isResolved = false;
+    setTimeout(() => {
+      if (!isResolved) {
+        source.cancel('Operation canceled by the user.');
+      }
+    }, timeout * 2);
+    const fluxnodeList = await http.get(`http://${ip}:16127/flux/zelid`, {
+      cancelToken: source.token,
+      timeout,
+    });
+    isResolved = true;
     if (fluxnodeList.data.status === 'success') {
       return fluxnodeList.data.data;
     }
@@ -108,7 +163,19 @@ async function getFluxNodeZelID(ip) {
 
 async function getKadenaVersion(ip) {
   try {
-    const appData = await http.get(`http://${ip}:16127/apps/installedapps/KadenaChainWebNode`, axiosConfig);
+    const { CancelToken } = axios;
+    const source = CancelToken.source();
+    let isResolved = false;
+    setTimeout(() => {
+      if (!isResolved) {
+        source.cancel('Operation canceled by the user.');
+      }
+    }, timeout * 2);
+    const appData = await http.get(`http://${ip}:16127/apps/installedapps/KadenaChainWebNode`, {
+      cancelToken: source.token,
+      timeout,
+    });
+    isResolved = true;
     if (appData.data.status === 'success') {
       return appData.data.data[0].hash;
     }
