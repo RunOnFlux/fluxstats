@@ -381,7 +381,7 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout) {
     fluxInfo.collateralIndex = getCollateralInfo(fluxnode.collateral).txindex;
     fluxInfo.roundTime = currentRoundTime;
     if (appsHashes) {
-      const hashesOk = appsHashes.filter((data) => data.height >= 964000);
+      const hashesOk = appsHashes.filter((data) => data.height >= 694000);
       fluxInfo.appsHashesTotal = hashesOk.length;
       const mesOK = hashesOk.filter((mes) => mes.message === true);
       fluxInfo.hashesPresent = mesOK.length;
