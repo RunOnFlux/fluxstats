@@ -111,7 +111,7 @@ async function checkForMissingTransactions() {
     // get proposals that are unpaid and check if tx with that hash exists
     // 100000000 satoshit (1 flux, todo 10000000000 satoshis for 100 flux), our address
     // we do not assume that unpaid proposal is further than last 50 transactions. Proposal is marked as Rejected Unpaid after 60 mins of not being paid
-    const transactionsUrl = `https://explorer.runonflux.io/api/addrs/${proposalAddress}/txs?from=0&to=50`; // todo resolve attacks on address later
+    const transactionsUrl = `${config.explorer}/api/addrs/${proposalAddress}/txs?from=0&to=50`; // todo resolve attacks on address later
     const response = await axios.get(transactionsUrl, axiosConfig);
     const lightTransactions = response.data.items;
     if (typeof lightTransactions !== 'object') throw new Error('Transactions are not an object');
