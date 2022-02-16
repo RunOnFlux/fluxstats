@@ -669,7 +669,7 @@ async function getKadenaEligibleStatsDays(req, res, i = 0) {
         zelid: 1,
       },
     };
-    const cacheAsk = `eligible${days}`;
+    const cacheAsk = `eligiblestats${days}`;
     let results = myCache.get(cacheAsk);
     if (!results) {
       results = await serviceHelper.findInDatabase(database, kadenaNodesCollection, query, projection).catch((error) => {
