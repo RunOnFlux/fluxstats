@@ -751,7 +751,7 @@ async function getKadenaEligibleDays(req, res, i = 0) {
     if (kadenaEligibleRunning) {
       await serviceHelper.timeout(100);
       if (i < 300) {
-        getKadenaEligibleStatsDays(req, res, i + 1);
+        getKadenaEligibleDays(req, res, i + 1);
       }
       return;
     }
