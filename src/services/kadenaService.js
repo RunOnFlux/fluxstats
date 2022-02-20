@@ -255,8 +255,8 @@ async function beginKadena() {
   for (const index of stringOfTenChars) { // async inside
     const randomNumber = Math.floor((Math.random() * fluxnodelist.length));
     const kdaNodes = await getKadenaLocation(fluxnodelist[randomNumber]);
-    const kdaNodesValid = kdaNodes.filter((node) => (node.hash === 'localSpecificationsVersion15' || node.hash === 'localSpecificationsVersion16'));
-    const kdaNodesINValid = kdaNodes.filter((node) => (node.hash !== 'localSpecificationsVersion15' && node.hash !== 'localSpecificationsVersion16'));
+    const kdaNodesValid = kdaNodes.filter((node) => (node.hash === 'localSpecificationsVersion17' || node.hash === 'localSpecificationsVersion16'));
+    const kdaNodesINValid = kdaNodes.filter((node) => (node.hash !== 'localSpecificationsVersion17' && node.hash !== 'localSpecificationsVersion16'));
     kdaNodesValid.forEach((node) => {
       chainwebnodelocations.push(node.ip);
     });
@@ -641,8 +641,8 @@ async function getKadenaEligibleStatsDays(req, res, i = 0) {
     const currentTime = new Date().getTime();
     const minimumTime = currentTime - daysInMiliseconds;
 
-    const baseTime = 1622640408000;
-    const baseHeight = 5331005;
+    const baseTime = 1645254979000;
+    const baseHeight = 48560472;
     const timeDifference = currentTime - baseTime;
     const blocksPassedInDifference = (timeDifference / 30000) * 20; // 20 chains with blocktime 30 seconds
     const blocksInTimeFrame = (daysInMiliseconds / 30000) * 20;
@@ -763,8 +763,8 @@ async function getKadenaEligibleDays(req, res, i = 0) {
       const currentTime = new Date().getTime();
       const minimumTime = currentTime - daysInMiliseconds;
 
-      const baseTime = 1622640408000;
-      const baseHeight = 5331005;
+      const baseTime = 1645254979000;
+      const baseHeight = 48560472;
       const timeDifference = currentTime - baseTime;
       const blocksPassedInDifference = (timeDifference / 30000) * 20; // 20 chains with blocktime 30 seconds
       const blocksInTimeFrame = (daysInMiliseconds / 30000) * 20;
