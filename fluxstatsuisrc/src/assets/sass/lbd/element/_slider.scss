@@ -1,0 +1,34 @@
+@import "../variables";
+
+@mixin slider($name, $color, $height: 4px){
+  .slider-#{$name}{
+    .el-slider__bar {
+      height: $height;
+      background-color: $color;
+    }
+    .el-slider__runway{
+      height: $height;
+    }
+    .el-tooltip{
+      border: none;
+    }
+    .el-slider__button{
+      &.hover,
+      &:hover,
+      &.dragging {
+        height: $height * 4.5;
+        width: $height * 4.5;
+      }
+      background-color: white;
+      height: $height * 4;
+      width: $height * 4;
+      box-shadow: 0 1px 13px 0 rgba(0, 0, 0, 0.2);
+    }
+  }
+}
+
+@include slider('info', $info-color)
+@include slider('primary', $primary-color)
+@include slider('success', $success-color)
+@include slider('warning', $warning-color)
+@include slider('danger', $danger-color)

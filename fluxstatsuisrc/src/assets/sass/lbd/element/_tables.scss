@@ -1,0 +1,35 @@
+@import "../variables";
+// Element UI override
+
+.el-table td, .el-table th.is-leaf{
+  border: none;
+}
+.el-table {
+  .el-checkbox__inner:hover,
+  .el-checkbox__input.is-checked .el-checkbox__inner{
+    background-color: $default-color;
+    border-color: $default-color;
+  }
+
+  .el-checkbox__input.is-focus .el-checkbox__inner{
+    border-color: $default-color;
+  }
+}
+
+.el-table .el-table__footer .cell{
+  font-weight: bold;
+  font-size: $font-size-medium;
+}
+.el-table  {
+  tbody tr td:first-child,
+  thead tr th:first-child{
+    padding-left: $padding-base-horizontal;
+  }
+}
+
+.card-plain .el-table {
+  background-color: transparent;
+  tr {
+    background-color: transparent;
+  }
+}

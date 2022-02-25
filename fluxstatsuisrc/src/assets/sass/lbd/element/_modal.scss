@@ -1,0 +1,8 @@
+.el-dialog__wrapper .el-dialog{
+  border-radius: $border-radius-base;
+  .el-dialog__headerbtn .el-dialog__close{
+    &:hover{
+      color: $info-color;
+    }
+  }
+}

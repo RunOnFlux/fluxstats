@@ -1,0 +1,18 @@
+.vue-tabs {
+  .nav > li span.title{
+    color: $info-color;
+  }
+  .nav.nav-tabs > li > a {
+    &.active_tab {
+      border-bottom: 1px solid white !important;
+      span.title {
+        color: $black-color;
+      }
+    }
+    &:hover,
+    &:focus {
+      background-color: white !important;
+      border: 1px solid $medium-gray;
+    }
+  }
+}
