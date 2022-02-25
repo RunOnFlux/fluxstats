@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const homeDirPath = path.join(__dirname, '../../');
+const homeDirPath = path.join(__dirname, '../../logs/');
 
 function getFilesizeInBytes(filename) {
   try {
