@@ -1,46 +1,50 @@
 <template>
   <div>
       <div class="row">
+        <div>
+          <loading :active.sync="isLoading" 
+          :can-cancel="true"></loading>
+        </div>
         <div class="col-xl-3 col-md-6">
-          <stats-card title="150GB" subTitle="Numbers">
+          <stats-card :title="totalNumberOfNodes" subTitle="Total Nodes">
             <div slot="header" class="icon-warning">
               <i class="nc-icon nc-chart text-warning"></i>
             </div>
             <template slot="footer">
-              <i class="fa fa-refresh"></i>Updated now
+              Cumulus + Nimbus + Stratus
             </template>
           </stats-card>
         </div>
 
         <div class="col-xl-3 col-md-6">
-          <stats-card title="$ 1,345" subTitle="Revenue">
+          <stats-card :title="totalNumberOfCumulus" subTitle="Cumulus">
             <div slot="header" class="icon-success">
-              <i class="nc-icon nc-light-3 text-success"></i>
+              <i class="nc-icon nc-chart text-success"></i>
             </div>
             <template slot="footer">
-              <i class="fa fa-calendar-o"></i>Last day
+              10,000 Flux
             </template>
           </stats-card>
         </div>
 
         <div class="col-xl-3 col-md-6">
-          <stats-card title="23" subTitle="Errors">
+          <stats-card :title="totalNumberOfNimbus" subTitle="Nimbus">
             <div slot="header" class="icon-danger">
-              <i class="nc-icon nc-vector text-danger"></i>
+              <i class="nc-icon nc-chart text-danger"></i>
             </div>
             <template slot="footer">
-              <i class="fa fa-clock-o"></i>Last day
+              25,000 Flux
             </template>
           </stats-card>
         </div>
 
         <div class="col-xl-3 col-md-6">
-          <stats-card title="+45K" subTitle="Followers">
+          <stats-card :title="totalNumberOfStratus" subTitle="Stratus">
             <div slot="header" class="icon-info">
-              <i class="nc-icon nc-favourite-28 text-primary"></i>
+              <i class="nc-icon nc-chart text-primary"></i>
             </div>
             <template slot="footer">
-              <i class="fa fa-refresh"></i>Updated now
+              100,000 Flux
             </template>
           </stats-card>
         </div>
@@ -51,19 +55,15 @@
         <div class="col-md-4">
           <chart-card :chart-data="pieChart.data" chart-type="Pie">
             <template slot="header">
-              <h4 class="card-title">Email Statistics</h4>
-              <p class="card-category">Last Campaign Performance</p>
+              <h4 class="card-title">Nodes Statistics</h4>
             </template>
             <template slot="footer">
               <div class="legend">
-                <i class="fa fa-circle text-info"></i> Open
-                <i class="fa fa-circle text-danger"></i> Bounce
-                <i class="fa fa-circle text-warning"></i> Unsubscribe
+                <i class="fa fa-circle text-info"></i> Cumulus
+                <i class="fa fa-circle text-danger"></i> Nimbus
+                <i class="fa fa-circle text-warning"></i> Stratus
               </div>
               <hr>
-              <div class="stats">
-                <i class="fa fa-clock-o"></i> Campaign sent 2 days ago
-              </div>
             </template>
           </chart-card>
         </div>
@@ -73,18 +73,17 @@
                       :chart-options="lineChart.options"
                       :responsive-options="lineChart.responsiveOptions">
             <template slot="header">
-              <h4 class="card-title">Users Behavior</h4>
+              <h4 class="card-title">Nodes History</h4>
               <p class="card-category">24 Hours performance</p>
             </template>
             <template slot="footer">
               <div class="legend">
-                <i class="fa fa-circle text-info"></i> Open
-                <i class="fa fa-circle text-danger"></i> Click
-                <i class="fa fa-circle text-warning"></i> Click Second Time
+                <i class="fa fa-circle text-info"></i> Cumulus
+                <i class="fa fa-circle text-danger"></i> Nimbus
+                <i class="fa fa-circle text-warning"></i> Stratus
               </div>
               <hr>
               <div class="stats">
-                <i class="fa fa-history"></i> Updated 3 minutes ago
               </div>
             </template>
           </chart-card>
@@ -99,17 +98,17 @@
             :chart-responsive-options="barChart.responsiveOptions"
             chart-type="Bar">
             <template slot="header">
-              <h4 class="card-title">2014 Sales</h4>
-              <p class="card-category">All products including Taxes</p>
+              <h4 class="card-title">2022 Nodes Average Count</h4>
+              <p class="card-category">Average Count Of Nodes Per Tier</p>
             </template>
             <template slot="footer">
               <div class="legend">
-                <i class="fa fa-circle text-info"></i> Tesla Model S
-                <i class="fa fa-circle text-danger"></i> BMW 5 Series
+                <i class="fa fa-circle text-info"></i> Cumulus
+                <i class="fa fa-circle text-danger"></i> Nimbus
+                <i class="fa fa-circle text-warning"></i> Stratus
               </div>
               <hr>
               <div class="stats">
-                <i class="fa fa-check"></i> Data information certified
               </div>
             </template>
           </chart-card>
@@ -134,7 +133,6 @@
               </template>
             </l-table>
             <div class="stats" slot="footer">
-              <i class="fa fa-history"></i> Updated 3 minutes ago
             </div>
           </card>
 
@@ -144,6 +142,9 @@
 </template>
 <script>
   import {ChartCard, StatsCard, Card, Table as LTable, Checkbox} from 'src/components/index'
+  import axios from 'axios'
+  import Loading from 'vue-loading-overlay';
+  import 'vue-loading-overlay/dist/vue-loading.css';
 
   export default {
     components: {
@@ -151,16 +152,15 @@
       Card,
       LTable,
       ChartCard,
-      StatsCard
+      StatsCard,
+      Loading
     },
     data () {
       return {
-        editTooltip: 'Edit Task',
-        deleteTooltip: 'Remove',
         pieChart: {
           data: {
-            labels: ['40%', '20%', '40%'],
-            series: [40, 20, 40]
+            labels: [],
+            series: []
           }
         },
         lineChart: {
@@ -224,20 +224,43 @@
             }]
           ]
         },
-        tableData: {
-          data: [
-            {title: 'Sign contract for "What are conference organizers afraid of?"', checked: false},
-            {title: 'Lines From Great Russian Literature? Or E-mails From My Boss?', checked: true},
-            {
-              title: 'Flooded: One year later, assessing what was lost and what was found when a ravaging rain swept through metro Detroit',
-              checked: true
-            },
-            {title: 'Create 4 Invisible User Experiences you Never Knew About', checked: false},
-            {title: 'Read "Following makes Medium better"', checked: false},
-            {title: 'Unfollow 5 enemies from twitter', checked: false}
-          ]
-        }
+        tableData: [],
+        totalNumberOfNodes: 0,
+        totalNumberOfCumulus: 0,
+        totalNumberOfNimbus: 0,
+        totalNumberOfStratus: 0,
+        isLoading: true,
+        pieChartPercentageCumulus: 0,
+        pieChartPercentageNimbus: 0,
+        pieChartPercentageStratus: 0,
       }
+    },
+    mounted () {
+      this.isLoading = true
+      axios
+        .get('https://stats.runonflux.io/fluxinfo?projection=ip,tier')
+        .then(response => {
+          this.totalNumberOfNodes = Object.keys(response.data.data).length
+          this.totalNumberOfCumulus = 0
+          this.totalNumberOfNimbus = 0
+          this.totalNumberOfStratus = 0
+          this.tableData = response.data.data
+          this.tableData.forEach ((data) => {
+            if (data.tier === 'CUMULUS') {
+              this.totalNumberOfCumulus++
+            } else if (data.tier === 'NIMBUS') {
+              this.totalNumberOfNimbus++
+            } else if (data.tier === 'STRATUS') {
+              this.totalNumberOfStratus++
+            }
+          })
+          this.pieChartPercentageCumulus = ((this.totalNumberOfCumulus/this.totalNumberOfNodes) * 100).toFixed(2)
+          this.pieChartPercentageNimbus = ((this.totalNumberOfNimbus/this.totalNumberOfNodes) * 100).toFixed(2)
+          this.pieChartPercentageStratus = ((this.totalNumberOfStratus/this.totalNumberOfNodes) * 100).toFixed(2)
+          this.pieChart.data.labels = [`${this.pieChartPercentageCumulus} %`,`${this.pieChartPercentageNimbus} %`,`${this.pieChartPercentageStratus} %`]
+          this.pieChart.data.series = [this.pieChartPercentageCumulus,this.pieChartPercentageNimbus,this.pieChartPercentageStratus]
+          this.isLoading = false
+        });
     }
   }
 </script>
