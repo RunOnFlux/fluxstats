@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-md-12">
-      <h2 class="title">History Stats</h2>
+      <h2 class="title">Info</h2>
     </div>
     <p class="category">
     </p>
@@ -29,7 +29,7 @@
             <el-input type="search"
                       class="mb-3"
                       style="width: 200px"
-                      placeholder="Search records"
+                      placeholder="Search Round Time"
                       v-model="searchQuery"
                       aria-controls="datatables"/>
           </div>
@@ -87,7 +87,7 @@
           total: 0
         },
         searchQuery: '',
-        propsToSearch: ['id'],
+        propsToSearch: ['roundTime'],
         tableColumns: [
           {
             prop: 'roundTime',
@@ -126,11 +126,21 @@
        * @returns {computed.pagedData}
        */
       queriedData () {
-        let result = this.tableData
+        let result;
+
         if (this.searchQuery !== '') {
-          result = this.fuseSearch.search(this.searchQuery)
+          var temp = []
+          result = this.fuseSearch.search(`=${this.searchQuery}`)
+          for (let i=0; i < Object.keys(result).length; i++) {
+            temp.push(result[i].item)
+          }
+          result = temp
           this.paginationTotal(result.length) 
+        } else {
+          this.paginationTotal(this.tableData.length)
+          result = this.tableData
         }
+
         return result.slice(this.from, this.to)
       },
       to () {
@@ -148,7 +158,7 @@
         return this.tableData.length
       }
     },
-     methods: {
+    methods: {
       paginationTotal (value) {
         this.pagination.total = value
       }
@@ -167,7 +177,7 @@
               stratus: value.stratus
             })
           }
-          this.fuseSearch = new Fuse(this.tableData, {keys: ['roundTime']})
+          this.fuseSearch = new Fuse(this.tableData, {useExtendedSearch: true, keys: ['roundTime']})
         });
     }
   }
