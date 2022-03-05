@@ -29,7 +29,7 @@
             <el-input type="search"
                       class="mb-3"
                       style="width: 200px"
-                      placeholder="Search records"
+                      placeholder="Search IP"
                       v-model="searchQuery"
                       aria-controls="datatables"/>
           </div>
@@ -101,7 +101,7 @@
           total: 0
         },
         searchQuery: '',
-        propsToSearch: ['ip'],
+        propsToSearch: ['node.status.ip'],
         tableColumns: [
           {
             prop: 'node.status.ip',
@@ -140,11 +140,21 @@
        * @returns {computed.pagedData}
        */
       queriedData () {
-        let result = this.tableData
+        let result;
+
         if (this.searchQuery !== '') {
-          result = this.fuseSearch.search(this.searchQuery)
+          var temp = []
+          result = this.fuseSearch.search(`=${this.searchQuery}`)
+          for (let i=0; i < Object.keys(result).length; i++) {
+            temp.push(result[i].item)
+          }
+          result = temp
           this.paginationTotal(result.length) 
+        } else {
+          this.paginationTotal(this.tableData.length)
+          result = this.tableData
         }
+
         return result.slice(this.from, this.to)
       },
       to () {
@@ -162,7 +172,7 @@
         return this.tableData.length
       }
     },
-     methods: {
+    methods: {
       paginationTotal (value) {
         this.pagination.total = value
       }
@@ -174,7 +184,7 @@
         .then(response => {
           this.isLoading = false
           this.tableData = response.data.data
-          this.fuseSearch = new Fuse(this.tableData, {keys: ['ip']})
+          this.fuseSearch = new Fuse(this.tableData, {useExtendedSearch: true, keys: ['node.status.ip']})
         });
     }
   }
