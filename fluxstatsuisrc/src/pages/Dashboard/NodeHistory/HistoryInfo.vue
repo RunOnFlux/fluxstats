@@ -95,6 +95,11 @@
             minWidth: 200
           },
           {
+            prop: 'roundTimeConverted',
+            label: 'Round Time Converted',
+            minWidth: 200
+          },
+          {
             prop: 'cumulus',
             label: 'Cumulus',
             minWidth: 250
@@ -168,16 +173,17 @@
       axios
         .get('https://stats.runonflux.io/fluxhistorystats')
         .then(response => {
-          this.isLoading = false
           for (const [key, value] of Object.entries(response.data.data)) {
             this.tableData.push({
               roundTime: key,
+              roundTimeConverted: `${new Date(parseInt(key)).toLocaleDateString()} ${new Date(parseInt(key)).toLocaleTimeString()}`,
               cumulus: value.cumulus,
               nimbus: value.nimbus,
               stratus: value.stratus
             })
           }
           this.fuseSearch = new Fuse(this.tableData, {useExtendedSearch: true, keys: ['roundTime']})
+          this.isLoading = false
         });
     }
   }

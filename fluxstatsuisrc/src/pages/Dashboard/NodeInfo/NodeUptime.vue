@@ -97,12 +97,22 @@
           {
             prop: 'activeSince',
             label: 'Active Since',
-            minWidth: 250
+            minWidth: 200
+          },
+          {
+            prop: 'activeSinceConverted',
+            label: 'Active Since Converted',
+            minWidth: 200
           },
           {
             prop: 'dataCollectedAt',
             label: 'Data Collected At',
-            minWidth: 100
+            minWidth: 150
+          },
+          {
+            prop: 'dataCollectedAtConverted',
+            label: 'Data Collected At Converted',
+            minWidth: 150
           }
         ],
         tableData: [],
@@ -163,9 +173,18 @@
       axios
         .get('https://stats.runonflux.io/fluxinfo?projection=ip,activeSince,dataCollectedAt')
         .then(response => {
-          this.isLoading = false
-          this.tableData = response.data.data
+          let temp = response.data.data
+          temp.forEach((value) => {
+            this.tableData.push({
+              ip: value.ip,
+              activeSince: value.activeSince,
+              activeSinceConverted: `${new Date(parseInt(value.activeSince * 1000)).toLocaleDateString()} ${new Date(parseInt(value.activeSince * 1000)).toLocaleTimeString()}`,
+              dataCollectedAt: value.dataCollectedAt,
+              dataCollectedAtConverted: `${new Date(parseInt(value.dataCollectedAt)).toLocaleDateString()} ${new Date(parseInt(value.dataCollectedAt)).toLocaleTimeString()}`
+            })
+          })
           this.fuseSearch = new Fuse(this.tableData, {useExtendedSearch: true, keys: ['ip']})
+          this.isLoading = false
         });
     }
   }

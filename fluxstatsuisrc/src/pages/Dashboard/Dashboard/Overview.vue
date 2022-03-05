@@ -6,9 +6,9 @@
           :can-cancel="true"></loading>
         </div>
         <div class="col-xl-3 col-md-6">
-          <stats-card :title="totalNumberOfNodes" subTitle="Total Nodes">
-            <div slot="header" class="icon-warning">
-              <i class="nc-icon nc-chart text-warning"></i>
+          <stats-card :title="totalNumberOfNodes.toString()" subTitle="Total Nodes">
+            <div slot="header" class="icon-success">
+              <i class="nc-icon nc-chart text-success"></i>
             </div>
             <template slot="footer">
               Cumulus + Nimbus + Stratus
@@ -17,9 +17,9 @@
         </div>
 
         <div class="col-xl-3 col-md-6">
-          <stats-card :title="totalNumberOfCumulus" subTitle="Cumulus">
-            <div slot="header" class="icon-success">
-              <i class="nc-icon nc-chart text-success"></i>
+          <stats-card :title="totalNumberOfCumulus.toString()" subTitle="Cumulus">
+            <div slot="header" class="icon-info">
+              <i class="nc-icon nc-chart text-info"></i>
             </div>
             <template slot="footer">
               10,000 Flux
@@ -28,7 +28,7 @@
         </div>
 
         <div class="col-xl-3 col-md-6">
-          <stats-card :title="totalNumberOfNimbus" subTitle="Nimbus">
+          <stats-card :title="totalNumberOfNimbus.toString()" subTitle="Nimbus">
             <div slot="header" class="icon-danger">
               <i class="nc-icon nc-chart text-danger"></i>
             </div>
@@ -39,9 +39,9 @@
         </div>
 
         <div class="col-xl-3 col-md-6">
-          <stats-card :title="totalNumberOfStratus" subTitle="Stratus">
-            <div slot="header" class="icon-info">
-              <i class="nc-icon nc-chart text-primary"></i>
+          <stats-card :title="totalNumberOfStratus.toString()" subTitle="Stratus">
+            <div slot="header" class="icon-warning">
+              <i class="nc-icon nc-chart text-warning"></i>
             </div>
             <template slot="footer">
               100,000 Flux
@@ -74,7 +74,7 @@
                       :responsive-options="lineChart.responsiveOptions">
             <template slot="header">
               <h4 class="card-title">Nodes History</h4>
-              <p class="card-category">24 Hours performance</p>
+              <p class="card-category">Last 5 Round Time</p>
             </template>
             <template slot="footer">
               <div class="legend">
@@ -114,29 +114,6 @@
           </chart-card>
         </div>
 
-        <div class="col-md-6">
-          <card class="card-tasks" title="Tasks" subTitle="Backend development">
-            <l-table :data="tableData.data">
-              <template slot-scope="{row}">
-                <td>
-                  <Checkbox v-model="row.checked"></Checkbox>
-                </td>
-                <td>{{row.title}}</td>
-                <td class="td-actions d-flex justify-content-end">
-                  <div class="btn btn-info btn-simple btn-link" v-tooltip.top-center="editTooltip">
-                    <i class="fa fa-edit"></i>
-                  </div>
-                  <div class="btn btn-danger btn-simple btn-link" v-tooltip.top-center="deleteTooltip">
-                    <i class="fa fa-times"></i>
-                  </div>
-                </td>
-              </template>
-            </l-table>
-            <div class="stats" slot="footer">
-            </div>
-          </card>
-
-        </div>
       </div>
   </div>
 </template>
@@ -148,9 +125,6 @@
 
   export default {
     components: {
-      Checkbox,
-      Card,
-      LTable,
       ChartCard,
       StatsCard,
       Loading
@@ -165,16 +139,16 @@
         },
         lineChart: {
           data: {
-            labels: ['9:00AM', '12:00AM', '3:00PM', '6:00PM', '9:00PM', '12:00PM', '3:00AM', '6:00AM'],
+            labels: [],
             series: [
-              [287, 385, 490, 492, 554, 586, 698, 695],
-              [67, 152, 143, 240, 287, 335, 435, 437],
-              [23, 113, 67, 108, 190, 239, 307, 308]
+              [],
+              [],
+              []
             ]
           },
           options: {
             low: 0,
-            high: 800,
+            high: 1500,
             showArea: false,
             height: '245px',
             axisX: {
@@ -225,14 +199,16 @@
           ]
         },
         tableData: [],
+        tableData1: [],
         totalNumberOfNodes: 0,
         totalNumberOfCumulus: 0,
         totalNumberOfNimbus: 0,
         totalNumberOfStratus: 0,
-        isLoading: true,
         pieChartPercentageCumulus: 0,
         pieChartPercentageNimbus: 0,
         pieChartPercentageStratus: 0,
+        isLoading: true,
+        statsLength: 0
       }
     },
     mounted () {
@@ -257,9 +233,45 @@
           this.pieChartPercentageCumulus = ((this.totalNumberOfCumulus/this.totalNumberOfNodes) * 100).toFixed(2)
           this.pieChartPercentageNimbus = ((this.totalNumberOfNimbus/this.totalNumberOfNodes) * 100).toFixed(2)
           this.pieChartPercentageStratus = ((this.totalNumberOfStratus/this.totalNumberOfNodes) * 100).toFixed(2)
-          this.pieChart.data.labels = [`${this.pieChartPercentageCumulus} %`,`${this.pieChartPercentageNimbus} %`,`${this.pieChartPercentageStratus} %`]
-          this.pieChart.data.series = [this.pieChartPercentageCumulus,this.pieChartPercentageNimbus,this.pieChartPercentageStratus]
-          this.isLoading = false
+          this.pieChart.data.labels = [`${this.pieChartPercentageCumulus} %`, `${this.pieChartPercentageNimbus} %`, `${this.pieChartPercentageStratus} %`]
+          this.pieChart.data.series = [this.pieChartPercentageCumulus, this.pieChartPercentageNimbus, this.pieChartPercentageStratus]
+
+          axios
+          .get('https://stats.runonflux.io/fluxhistorystats')
+          .then(response => {
+            for (const [key, value] of Object.entries(response.data.data)) {
+              this.tableData1.push({
+                roundTime: key,
+                cumulus: value.cumulus,
+                nimbus: value.nimbus,
+                stratus: value.stratus
+              })
+            }
+            this.statsLength = Object.keys(response.data.data).length
+            let item1 = new Date(parseInt(this.tableData1[this.statsLength - 1].roundTime))
+            let item2 = new Date(parseInt(this.tableData1[this.statsLength - 2].roundTime))
+            let item3 = new Date(parseInt(this.tableData1[this.statsLength - 3].roundTime))
+            let item4 = new Date(parseInt(this.tableData1[this.statsLength - 4].roundTime))
+            let item5 = new Date(parseInt(this.tableData1[this.statsLength - 5].roundTime))
+            
+            this.lineChart.data.labels = [
+              `${item1.toLocaleDateString()} ${item1.toLocaleTimeString()}`,
+              `${item2.toLocaleDateString()} ${item2.toLocaleTimeString()}`,
+              `${item3.toLocaleDateString()} ${item3.toLocaleTimeString()}`,
+              `${item4.toLocaleDateString()} ${item4.toLocaleTimeString()}`,
+              `${item5.toLocaleDateString()} ${item5.toLocaleTimeString()}`
+            ],
+            this.lineChart.data.series = [
+              [this.tableData1[this.statsLength - 1].cumulus, this.tableData1[this.statsLength - 2].cumulus, this.tableData1[this.statsLength - 3].cumulus, 
+              this.tableData1[this.statsLength - 4].cumulus, this.tableData1[this.statsLength - 5].cumulus, this.tableData1[this.statsLength - 6].cumulus],
+              [this.tableData1[this.statsLength - 1].nimbus, this.tableData1[this.statsLength - 2].nimbus, this.tableData1[this.statsLength - 3].nimbus, 
+              this.tableData1[this.statsLength - 4].nimbus, this.tableData1[this.statsLength - 5].nimbus, this.tableData1[this.statsLength - 6].nimbus],
+              [this.tableData1[this.statsLength - 1].stratus, this.tableData1[this.statsLength - 2].stratus, this.tableData1[this.statsLength - 3].stratus, 
+              this.tableData1[this.statsLength - 4].stratus, this.tableData1[this.statsLength - 5].stratus, this.tableData1[this.statsLength - 6].stratus]
+            ]
+
+            this.isLoading = false
+          });
         });
     }
   }

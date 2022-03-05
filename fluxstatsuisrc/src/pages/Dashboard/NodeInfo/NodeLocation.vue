@@ -178,9 +178,9 @@
       axios
         .get('https://stats.runonflux.io/fluxinfo?projection=ip,geolocation')
         .then(response => {
-          this.isLoading = false
           this.tableData = response.data.data
           this.fuseSearch = new Fuse(this.tableData, {useExtendedSearch: true, keys: ['ip']})
+          this.isLoading = false
         });
     }
   }

@@ -48,7 +48,9 @@
                   <p><b>Last Paid Height:</b> {{ props.row.node.status.last_paid_height }}</p>
                   <p><b>Payment Address:</b> {{ props.row.node.status.payment_address }}</p>
                   <p><b>Active Since:</b> {{ props.row.node.status.activesince }}</p>
+                  <p><b>Active Since Converted:</b> {{ new Date(parseInt(props.row.node.status.activesince * 1000)).toLocaleDateString() }} {{ new Date(parseInt(props.row.node.status.activesince * 1000)).toLocaleTimeString() }}</p>
                   <p><b>Last Paid:</b> {{ props.row.node.status.lastpaid }}</p>
+                  <p><b>Last Paid Converted:</b> {{ new Date(parseInt(props.row.node.status.lastpaid * 1000)).toLocaleDateString() }} {{ new Date(parseInt(props.row.node.status.lastpaid * 1000)).toLocaleTimeString() }}</p>
                   <p><b>Amount:</b> {{ props.row.node.status.amount }}</p>
                 </template>
               </el-table-column>
@@ -182,9 +184,9 @@
       axios
         .get('https://stats.runonflux.io/fluxinfo?projection=node')
         .then(response => {
-          this.isLoading = false
           this.tableData = response.data.data
           this.fuseSearch = new Fuse(this.tableData, {useExtendedSearch: true, keys: ['node.status.ip']})
+          this.isLoading = false
         });
     }
   }

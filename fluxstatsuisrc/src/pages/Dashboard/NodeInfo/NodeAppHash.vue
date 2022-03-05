@@ -181,9 +181,9 @@
       axios
         .get('https://stats.runonflux.io/fluxinfo?projection=ip,collateralIndex,collateralHash,appsHashesTotal,hashesPresent,addedHeight,lastPaidHeight,confirmedHeight,lastConfirmedHeight,scannedHeight')
         .then(response => {
-          this.isLoading = false
           this.tableData = response.data.data
           this.fuseSearch = new Fuse(this.tableData, {useExtendedSearch: true, keys: ['ip']})
+          this.isLoading = false
         });
     }
   }
