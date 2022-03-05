@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-md-12">
-      <h2 class="title">Nodes Location</h2>
+      <h2 class="title">UpTime</h2>
     </div>
     <p class="category">
     </p>
@@ -64,7 +64,6 @@
 <script>
   import { Table, TableColumn, Select, Option } from 'element-ui'
   import {Pagination as LPagination} from 'src/components/index'
-  import users from './users'
   import Fuse from 'fuse.js'
   import axios from 'axios'
   import Loading from 'vue-loading-overlay';
@@ -96,24 +95,14 @@
             minWidth: 200
           },
           {
-            prop: 'country',
-            label: 'Country',
+            prop: 'activeSince',
+            label: 'Active Since',
             minWidth: 250
           },
           {
-            prop: 'lat',
-            label: 'Latitude',
+            prop: 'dataCollectedAt',
+            label: 'Data Collected At',
             minWidth: 100
-          },
-          {
-            prop: 'lon',
-            label: 'Longtitude',
-            minWidth: 120
-          },
-          {
-            prop: 'org',
-            label: 'Organization',
-            minWidth: 120
           }
         ],
         tableData: [],
@@ -162,7 +151,7 @@
     mounted () {
       this.isLoading = true
       axios
-        .get('https://stats.runonflux.io/fluxlocations')
+        .get('https://stats.runonflux.io/fluxinfo?projection=ip,activeSince,dataCollectedAt')
         .then(response => {
           this.isLoading = false
           this.tableData = response.data.data

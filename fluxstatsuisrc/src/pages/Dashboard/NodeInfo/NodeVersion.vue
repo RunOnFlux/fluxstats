@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-md-12">
-      <h2 class="title">Nodes Version</h2>
+      <h2 class="title">Version</h2>
     </div>
     <p class="category">
     </p>
@@ -38,6 +38,46 @@
                       style="width: 100%;"
                       :data="queriedData"
                       border>
+              <el-table-column type="expand">
+                <template slot-scope="props">
+                  <p><b>Flux Info:</b></p>
+                  <p><b>Zel ID:</b> {{ props.row.flux.zelid }} </p>
+                  <p><b>Crux ID:</b> {{ props.row.flux.cruxid }}</p>
+                  <p><b>DOS State:</b> {{ props.row.flux.dos.dosState }}</p>
+                  <p><b>DOS Message:</b> {{ props.row.flux.dos.dosMessage }}</p>
+                  <br>
+                  <p><b>Daemon Info:</b></p>
+                  <p><b>Protocol Version:</b> {{ props.row.daemon.info.protocolversion }} </p>
+                  <p><b>Wallet Version:</b> {{ props.row.daemon.info.walletversion }}</p>
+                  <p><b>Blocks:</b> {{ props.row.daemon.info.blocks }}</p>
+                  <p><b>Time Offset:</b> {{ props.row.daemon.info.timeoffset }}</p>
+                  <p><b>Connections:</b> {{ props.row.daemon.info.connections }}</p>
+                  <p><b>Proxy:</b> {{ props.row.daemon.info.proxy }}</p>
+                  <p><b>Difficulty:</b> {{ props.row.daemon.info.difficulty }}</p>
+                  <p><b>Testnet:</b> {{ props.row.daemon.info.testnet }}</p>
+                  <p><b>Key Pool Old Test:</b> {{ props.row.daemon.info.keypoololdest }}</p>
+                  <p><b>Key Pool Size:</b> {{ props.row.daemon.info.keypoolsize }}</p>
+                  <p><b>Pay Txn Fee:</b> {{ props.row.daemon.info.paytxfee }}</p>
+                  <p><b>Relay Fee:</b> {{ props.row.daemon.info.relayfee }}</p>
+                  <p><b>Errors:</b> {{ props.row.daemon.info.errors }}</p>
+                  <br>
+                  <p><b>Benchmark Info:</b></p>
+                  <p><b>RPC Port:</b> {{ props.row.benchmark.info.rpcport }} </p>
+                  <p><b>Architecture:</b> {{ props.row.benchmark.bench.architecture }}</p>
+                  <p><b>Arm Board:</b> {{ props.row.benchmark.bench.armboard }}</p>
+                  <p><b>Time:</b> {{ props.row.benchmark.bench.time }}</p>
+                  <p><b>Real Cores:</b> {{ props.row.benchmark.bench.real_cores }}</p>
+                  <p><b>Cores:</b> {{ props.row.benchmark.bench.cores }}</p>
+                  <p><b>RAM:</b> {{ props.row.benchmark.bench.ram }}</p>
+                  <p><b>HDD:</b> {{ props.row.benchmark.bench.hdd }}</p>
+                  <p><b>Total Storage:</b> {{ props.row.benchmark.bench.totalstorage }}</p>
+                  <p><b>Disk:</b> {{ props.row.benchmark.bench.disksinfo.disk }}</p>
+                  <p><b>Disk Size:</b> {{ props.row.benchmark.bench.disksinfo.size }}</p>
+                  <p><b>Disk Write Speed:</b> {{ props.row.benchmark.bench.disksinfo.writespeed }}</p>
+                  <p><b>EPS:</b> {{ props.row.benchmark.bench.eps }}</p>
+                  <p><b>Errors:</b> {{ props.row.benchmark.bench.error }}</p>
+                </template>
+              </el-table-column>
               <el-table-column v-for="column in tableColumns"
                                :key="column.label"
                                :min-width="column.minWidth"
@@ -64,7 +104,6 @@
 <script>
   import { Table, TableColumn, Select, Option } from 'element-ui'
   import {Pagination as LPagination} from 'src/components/index'
-  import users from './users'
   import Fuse from 'fuse.js'
   import axios from 'axios'
   import Loading from 'vue-loading-overlay';
@@ -96,17 +135,17 @@
             minWidth: 200
           },
           {
-            prop: 'daemon',
-            label: 'Daemon',
+            prop: 'daemon.info.version',
+            label: 'Daemon Version',
             minWidth: 250
           },
           {
-            prop: 'benchmark',
-            label: 'Benchmark',
+            prop: 'benchmark.info.version',
+            label: 'Benchmark Version',
             minWidth: 100
           },
           {
-            prop: 'flux',
+            prop: 'flux.version',
             label: 'Flux Version',
             minWidth: 120
           },
@@ -157,7 +196,7 @@
     mounted () {
       this.isLoading = true
       axios
-        .get('https://stats.runonflux.io/fluxversions')
+        .get('https://stats.runonflux.io/fluxinfo?projection=ip,daemon,benchmark,flux')
         .then(response => {
           this.isLoading = false
           this.tableData = response.data.data

@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-md-12">
-      <h2 class="title">History Stats</h2>
+      <h2 class="title">Node</h2>
     </div>
     <p class="category">
     </p>
@@ -38,6 +38,20 @@
                       style="width: 100%;"
                       :data="queriedData"
                       border>
+              <el-table-column type="expand">
+                <template slot-scope="props">
+                  <p><b>Collateral:</b> {{ props.row.node.status.collateral }} </p>
+                  <p><b>Txn Hash:</b> {{ props.row.node.status.txhash }}</p>
+                  <p><b>Added Height:</b> {{ props.row.node.status.added_height }}</p>
+                  <p><b>Confirmed Height:</b> {{ props.row.node.status.confirmed_height }}</p>
+                  <p><b>Last Confirmed Height:</b> {{ props.row.node.status.last_confirmed_height }}</p>
+                  <p><b>Last Paid Height:</b> {{ props.row.node.status.last_paid_height }}</p>
+                  <p><b>Payment Address:</b> {{ props.row.node.status.payment_address }}</p>
+                  <p><b>Active Since:</b> {{ props.row.node.status.activesince }}</p>
+                  <p><b>Last Paid:</b> {{ props.row.node.status.lastpaid }}</p>
+                  <p><b>Amount:</b> {{ props.row.node.status.amount }}</p>
+                </template>
+              </el-table-column>
               <el-table-column v-for="column in tableColumns"
                                :key="column.label"
                                :min-width="column.minWidth"
@@ -64,7 +78,6 @@
 <script>
   import { Table, TableColumn, Select, Option } from 'element-ui'
   import {Pagination as LPagination} from 'src/components/index'
-  import users from './users'
   import Fuse from 'fuse.js'
   import axios from 'axios'
   import Loading from 'vue-loading-overlay';
@@ -88,27 +101,27 @@
           total: 0
         },
         searchQuery: '',
-        propsToSearch: ['id'],
+        propsToSearch: ['ip'],
         tableColumns: [
           {
-            prop: 'roundTime',
-            label: 'Round Time',
-            minWidth: 200
+            prop: 'node.status.ip',
+            label: 'IP Address',
+            minWidth: 70
           },
           {
-            prop: 'cumulus',
-            label: 'Cumulus',
-            minWidth: 250
+            prop: 'node.status.network',
+            label: 'Network Protocol',
+            minWidth: 40
           },
           {
-            prop: 'nimbus',
-            label: 'Nimbus',
-            minWidth: 100
+            prop: 'node.status.tier',
+            label: 'Tier',
+            minWidth: 90
           },
           {
-            prop: 'stratus',
-            label: 'Stratus',
-            minWidth: 120
+            prop: 'node.status.status',
+            label: 'Status',
+            minWidth: 50
           }
         ],
         tableData: [],
@@ -157,18 +170,11 @@
     mounted () {
       this.isLoading = true
       axios
-        .get('https://stats.runonflux.io/fluxhistorystats')
+        .get('https://stats.runonflux.io/fluxinfo?projection=node')
         .then(response => {
           this.isLoading = false
-          for (const [key, value] of Object.entries(response.data.data)) {
-            this.tableData.push({
-              roundTime: key,
-              cumulus: value.cumulus,
-              nimbus: value.nimbus,
-              stratus: value.stratus
-            })
-          }
-          this.fuseSearch = new Fuse(this.tableData, {keys: ['roundTime']})
+          this.tableData = response.data.data
+          this.fuseSearch = new Fuse(this.tableData, {keys: ['ip']})
         });
     }
   }

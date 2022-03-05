@@ -5,12 +5,16 @@ import Overview from 'src/pages/Dashboard/Dashboard/Overview.vue'
 import Stats from 'src/pages/Dashboard/Dashboard/Stats.vue'
 
 // NodeInfo pages
-const ActiveNodes = () => import('@/pages/Dashboard/NodeInfo/ActiveNodes.vue')
-const NodesVersion = () => import('@/pages/Dashboard/NodeInfo/NodesVersion.vue')
-const NodesLocation = () => import('@/pages/Dashboard/NodeInfo/NodesLocation.vue')
+const Node = () => import('@/pages/Dashboard/NodeInfo/Node.vue')
+const NodeVersion = () => import('@/pages/Dashboard/NodeInfo/NodeVersion.vue')
+const NodeLocation = () => import('@/pages/Dashboard/NodeInfo/NodeLocation.vue')
+const NodeUptime = () => import('@/pages/Dashboard/NodeInfo/NodeUptime.vue')
+const NodeApp = () => import('@/pages/Dashboard/NodeInfo/NodeApp.vue')
+const NodeAppHash = () => import('@/pages/Dashboard/NodeInfo/NodeAppHash.vue')
+const NodeConnection = () => import('@/pages/Dashboard/NodeInfo/NodeConnection.vue')
 
 // NodeHistory pages
-const HistoryStats = () => import('@/pages/Dashboard/NodeHistory/HistoryStats.vue')
+const HistoryInfo = () => import('@/pages/Dashboard/NodeHistory/HistoryInfo.vue')
 
 // Calendar
 const Calendar = () => import('src/pages/Dashboard/Calendar/CalendarRoute.vue')
@@ -24,31 +28,51 @@ let nodeInfo = {
   redirect: '/nodeinfo/active',
   children: [
     {
-      path: 'active',
-      name: 'Active Nodes',
-      component: ActiveNodes
+      path: 'uptime',
+      name: 'UpTime',
+      component: NodeUptime
+    },
+    {
+      path: 'hashes',
+      name: 'Hashes',
+      component: NodeAppHash
+    },
+    {
+      path: 'node',
+      name: 'Node',
+      component: Node
     },
     {
       path: 'version',
-      name: 'Nodes Version',
-      component: NodesVersion
+      name: 'Version',
+      component: NodeVersion
+    },
+    {
+      path: 'app',
+      name: 'App',
+      component: NodeApp
+    },
+    {
+      path: 'connection',
+      name: 'Connection',
+      component: NodeConnection
     },
     {
       path: 'location',
-      name: 'Nodes Location',
-      component: NodesLocation
+      name: 'Location',
+      component: NodeLocation
     },]
 }
 
 let nodeHistory = {
   path: '/nodehistory',
   component: DashboardLayout,
-  redirect: '/nodehistory/historystats',
+  redirect: '/nodehistory/historyinfo',
   children: [
     {
-      path: 'historystats',
-      name: 'History Stats',
-      component: HistoryStats
+      path: 'historyinfo',
+      name: 'History Info',
+      component: HistoryInfo
     }]
 }
 

@@ -1,7 +1,7 @@
 <template>
   <div class="row">
     <div class="col-md-12">
-      <h2 class="title">Nodes</h2>
+      <h2 class="title">Hashes</h2>
     </div>
     <p class="category">
     </p>
@@ -38,6 +38,14 @@
                       style="width: 100%;"
                       :data="queriedData"
                       border>
+              <el-table-column type="expand">
+                <template slot-scope="props">
+                  <p><b>Added Height:</b> {{ props.row.addedHeight }} </p>
+                  <p><b>Confirmed Height:</b> {{ props.row.confirmedHeight }}</p>
+                  <p><b>Last Confirmed Height:</b> {{ props.row.lastConfirmedHeight }}</p>
+                  <p><b>Scanned Height:</b> {{ props.row.scannedHeight }}</p>
+                </template>
+              </el-table-column>
               <el-table-column v-for="column in tableColumns"
                                :key="column.label"
                                :min-width="column.minWidth"
@@ -64,7 +72,6 @@
 <script>
   import { Table, TableColumn, Select, Option } from 'element-ui'
   import {Pagination as LPagination} from 'src/components/index'
-  import users from './users'
   import Fuse from 'fuse.js'
   import axios from 'axios'
   import Loading from 'vue-loading-overlay';
@@ -91,24 +98,29 @@
         propsToSearch: ['ip'],
         tableColumns: [
           {
-            prop: 'node.status.ip',
+            prop: 'ip',
             label: 'IP Address',
-            minWidth: 70
+            minWidth: 200
           },
           {
-            prop: 'node.status.network',
-            label: 'Network Protocol',
-            minWidth: 40
+            prop: 'hashesPresent',
+            label: 'Hashes Present',
+            minWidth: 250
           },
           {
-            prop: 'node.status.tier',
-            label: 'Tier',
-            minWidth: 90
+            prop: 'appsHashesTotal',
+            label: 'App Hashes Total',
+            minWidth: 250
           },
           {
-            prop: 'node.status.status',
-            label: 'Status',
-            minWidth: 50
+            prop: 'collateralHash',
+            label: 'Collateral Hash',
+            minWidth: 250
+          },
+          {
+            prop: 'collateralIndex',
+            label: 'Collateral Index',
+            minWidth: 150
           }
         ],
         tableData: [],
@@ -157,7 +169,7 @@
     mounted () {
       this.isLoading = true
       axios
-        .get('https://stats.runonflux.io/fluxinfo')
+        .get('https://stats.runonflux.io/fluxinfo?projection=ip,collateralIndex,collateralHash,appsHashesTotal,hashesPresent,addedHeight,lastPaidHeight,confirmedHeight,lastConfirmedHeight,scannedHeight')
         .then(response => {
           this.isLoading = false
           this.tableData = response.data.data
