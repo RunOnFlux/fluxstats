@@ -40,7 +40,6 @@
                       border>
               <el-table-column type="expand">
                 <template slot-scope="props">
-                  <p><b>Applications:</b></p>
                     <p v-for="(item,index) in props.row.apps.runningapps" :key="index">
                       <b>Application {{ index + 1}}:</b> <br>
                         <b>ID:</b> {{ item.Id }} <br>

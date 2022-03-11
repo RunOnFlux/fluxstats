@@ -1,10 +1,11 @@
 <template>
   <div>
-      <div class="row">
-        <div>
-          <loading :active.sync="isLoading" 
-          :can-cancel="true"></loading>
-        </div>
+      <div>
+        <loading :active.sync="isLoading" 
+        :can-cancel="true"></loading>
+      </div>
+
+      <div class="row" v-if="!isFetching">
         <div class="col-xl-3 col-md-6">
           <stats-card :title="totalNumberOfNodes.toString()" subTitle="Total Nodes">
             <div slot="header" class="icon-success">
@@ -15,7 +16,6 @@
             </template>
           </stats-card>
         </div>
-
         <div class="col-xl-3 col-md-6">
           <stats-card :title="totalNumberOfCumulus.toString()" subTitle="Cumulus">
             <div slot="header" class="icon-info">
@@ -26,7 +26,6 @@
             </template>
           </stats-card>
         </div>
-
         <div class="col-xl-3 col-md-6">
           <stats-card :title="totalNumberOfNimbus.toString()" subTitle="Nimbus">
             <div slot="header" class="icon-danger">
@@ -37,7 +36,6 @@
             </template>
           </stats-card>
         </div>
-
         <div class="col-xl-3 col-md-6">
           <stats-card :title="totalNumberOfStratus.toString()" subTitle="Stratus">
             <div slot="header" class="icon-warning">
@@ -50,8 +48,8 @@
         </div>
 
       </div>
-      <div class="row">
 
+      <div class="row" v-if="!isFetching">
         <div class="col-md-4">
           <chart-card :chart-data="pieChart.data" chart-type="Pie">
             <template slot="header">
@@ -67,7 +65,6 @@
             </template>
           </chart-card>
         </div>
-
         <div class="col-md-8">
           <chart-card :chart-data="lineChart.data"
                       :chart-options="lineChart.options"
@@ -90,7 +87,7 @@
         </div>
       </div>
 
-      <div class="row">
+      <div class="row" v-if="!isFetching">
         <div class="col-md-6">
           <chart-card
             :chart-data="barChart.data"
@@ -109,11 +106,11 @@
               </div>
               <hr>
               <div class="stats">
+                <i class="fa fa-check"></i> On-going Implementation
               </div>
             </template>
           </chart-card>
         </div>
-
       </div>
   </div>
 </template>
@@ -140,11 +137,7 @@
         lineChart: {
           data: {
             labels: [],
-            series: [
-              [],
-              [],
-              []
-            ]
+            series: []
           },
           options: {
             low: 0,
@@ -177,6 +170,7 @@
             labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
             series: [
               [542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895],
+              [412, 243, 280, 580, 453, 353, 300, 364, 368, 410, 636, 695],
               [412, 243, 280, 580, 453, 353, 300, 364, 368, 410, 636, 695]
             ]
           },
@@ -205,72 +199,94 @@
         totalNumberOfNimbus: 0,
         totalNumberOfStratus: 0,
         isLoading: true,
-        statsLength: 0
+        statsLength: 0,
+        isFetching: true
       }
     },
-    mounted () {
+    async created () {
       this.isLoading = true
+      
       axios
-        .get('https://stats.runonflux.io/fluxinfo?projection=ip,tier')
+      .get('https://stats.runonflux.io/fluxinfo?projection=ip,tier')
+      .then(response => {
+        this.totalNumberOfNodes = Object.keys(response.data.data).length
+        this.totalNumberOfCumulus = 0
+        this.totalNumberOfNimbus = 0
+        this.totalNumberOfStratus = 0
+        this.tableData = response.data.data
+        this.tableData.forEach ((data) => {
+          if (data.tier === 'CUMULUS') {
+            this.totalNumberOfCumulus++
+          } else if (data.tier === 'NIMBUS') {
+            this.totalNumberOfNimbus++
+          } else if (data.tier === 'STRATUS') {
+            this.totalNumberOfStratus++
+          }
+        })
+        let pieChartPercentageCumulus = ((this.totalNumberOfCumulus/this.totalNumberOfNodes) * 100).toFixed(2)
+        let pieChartPercentageNimbus = ((this.totalNumberOfNimbus/this.totalNumberOfNodes) * 100).toFixed(2)
+        let pieChartPercentageStratus = ((this.totalNumberOfStratus/this.totalNumberOfNodes) * 100).toFixed(2)
+        this.pieChart.data.labels = [`${pieChartPercentageCumulus} %`, `${pieChartPercentageNimbus} %`, `${pieChartPercentageStratus} %`]
+        this.pieChart.data.series = [pieChartPercentageCumulus, pieChartPercentageNimbus, pieChartPercentageStratus]
+      }).then(() => {
+        axios
+        .get('https://stats.runonflux.io/fluxhistorystats')
         .then(response => {
-          this.totalNumberOfNodes = Object.keys(response.data.data).length
-          this.totalNumberOfCumulus = 0
-          this.totalNumberOfNimbus = 0
-          this.totalNumberOfStratus = 0
-          this.tableData = response.data.data
-          this.tableData.forEach ((data) => {
-            if (data.tier === 'CUMULUS') {
-              this.totalNumberOfCumulus++
-            } else if (data.tier === 'NIMBUS') {
-              this.totalNumberOfNimbus++
-            } else if (data.tier === 'STRATUS') {
-              this.totalNumberOfStratus++
-            }
-          })
-          let pieChartPercentageCumulus = ((this.totalNumberOfCumulus/this.totalNumberOfNodes) * 100).toFixed(2)
-          let pieChartPercentageNimbus = ((this.totalNumberOfNimbus/this.totalNumberOfNodes) * 100).toFixed(2)
-          let pieChartPercentageStratus = ((this.totalNumberOfStratus/this.totalNumberOfNodes) * 100).toFixed(2)
-          this.pieChart.data.labels = [`${pieChartPercentageCumulus} %`, `${pieChartPercentageNimbus} %`, `${pieChartPercentageStratus} %`]
-          this.pieChart.data.series = [pieChartPercentageCumulus, pieChartPercentageNimbus, pieChartPercentageStratus]
+          for (const [key, value] of Object.entries(response.data.data)) {
+            this.tableData1.push({
+              roundTime: key,
+              cumulus: value.cumulus,
+              nimbus: value.nimbus,
+              stratus: value.stratus
+            })
+          }
+          let statsLength = Object.keys(response.data.data).length
+          let item1 = new Date(parseInt(this.tableData1[statsLength - 1].roundTime))
+          let item2 = new Date(parseInt(this.tableData1[statsLength - 2].roundTime))
+          let item3 = new Date(parseInt(this.tableData1[statsLength - 3].roundTime))
+          let item4 = new Date(parseInt(this.tableData1[statsLength - 4].roundTime))
+          let item5 = new Date(parseInt(this.tableData1[statsLength - 5].roundTime))
 
-          axios
-            .get('https://stats.runonflux.io/fluxhistorystats')
-            .then(response => {
-              for (const [key, value] of Object.entries(response.data.data)) {
-                this.tableData1.push({
-                  roundTime: key,
-                  cumulus: value.cumulus,
-                  nimbus: value.nimbus,
-                  stratus: value.stratus
-                })
-              }
-              let statsLength = Object.keys(response.data.data).length
-              let item1 = new Date(parseInt(this.tableData1[statsLength - 1].roundTime))
-              let item2 = new Date(parseInt(this.tableData1[statsLength - 2].roundTime))
-              let item3 = new Date(parseInt(this.tableData1[statsLength - 3].roundTime))
-              let item4 = new Date(parseInt(this.tableData1[statsLength - 4].roundTime))
-              let item5 = new Date(parseInt(this.tableData1[statsLength - 5].roundTime))
-              
-              this.lineChart.data.labels = [
-                `${item1.toLocaleDateString()} ${item1.toLocaleTimeString()}`,
-                `${item2.toLocaleDateString()} ${item2.toLocaleTimeString()}`,
-                `${item3.toLocaleDateString()} ${item3.toLocaleTimeString()}`,
-                `${item4.toLocaleDateString()} ${item4.toLocaleTimeString()}`,
-                `${item5.toLocaleDateString()} ${item5.toLocaleTimeString()}`
-              ],
-              
-              this.lineChart.data.series = [
-                [this.tableData1[statsLength - 1].cumulus, this.tableData1[statsLength - 2].cumulus, this.tableData1[statsLength - 3].cumulus, 
-                this.tableData1[statsLength - 4].cumulus, this.tableData1[statsLength - 5].cumulus, this.tableData1[statsLength - 6].cumulus],
-                [this.tableData1[statsLength - 1].nimbus, this.tableData1[statsLength - 2].nimbus, this.tableData1[statsLength - 3].nimbus, 
-                this.tableData1[statsLength - 4].nimbus, this.tableData1[statsLength - 5].nimbus, this.tableData1[statsLength - 6].nimbus],
-                [this.tableData1[statsLength - 1].stratus, this.tableData1[statsLength - 2].stratus, this.tableData1[statsLength - 3].stratus, 
-                this.tableData1[statsLength - 4].stratus, this.tableData1[statsLength - 5].stratus, this.tableData1[statsLength - 6].stratus]
-              ]
-
-              this.isLoading = false
-            });
-        });
+          this.lineChart.data.series = [
+            [
+              this.tableData1[statsLength - 1].cumulus, 
+              this.tableData1[statsLength - 2].cumulus, 
+              this.tableData1[statsLength - 3].cumulus, 
+              this.tableData1[statsLength - 4].cumulus, 
+              this.tableData1[statsLength - 5].cumulus, 
+              this.tableData1[statsLength - 6].cumulus
+            ],
+            [
+              this.tableData1[statsLength - 1].nimbus, 
+              this.tableData1[statsLength - 2].nimbus, 
+              this.tableData1[statsLength - 3].nimbus, 
+              this.tableData1[statsLength - 4].nimbus, 
+              this.tableData1[statsLength - 5].nimbus, 
+              this.tableData1[statsLength - 6].nimbus
+            ],
+            [
+              this.tableData1[statsLength - 1].stratus, 
+              this.tableData1[statsLength - 2].stratus, 
+              this.tableData1[statsLength - 3].stratus, 
+              this.tableData1[statsLength - 4].stratus, 
+              this.tableData1[statsLength - 5].stratus, 
+              this.tableData1[statsLength - 6].stratus
+            ]
+          ]
+          
+          this.lineChart.data.labels = [
+            `${item1.toLocaleDateString()} ${item1.toLocaleTimeString()}`,
+            `${item2.toLocaleDateString()} ${item2.toLocaleTimeString()}`,
+            `${item3.toLocaleDateString()} ${item3.toLocaleTimeString()}`,
+            `${item4.toLocaleDateString()} ${item4.toLocaleTimeString()}`,
+            `${item5.toLocaleDateString()} ${item5.toLocaleTimeString()}`
+          ]
+        }).then(() => {
+          this.isLoading = false
+          this.isFetching = false
+        })
+      })
+      
     }
   }
 </script>
