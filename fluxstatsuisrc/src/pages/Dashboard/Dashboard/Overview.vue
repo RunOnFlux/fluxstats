@@ -96,18 +96,17 @@
             chart-type="Bar">
             <template slot="header">
               <h4 class="card-title">Top 10 Node Location</h4>
-              <p class="card-category">Countries With Highes Node Count</p>
+              <p class="card-category">Countries With Highest Node Count</p>
             </template>
             <template slot="footer">
               <div class="legend">
                 <i class="fa fa-circle text-info"></i> Cumulus
                 <i class="fa fa-circle text-danger"></i> Nimbus
                 <i class="fa fa-circle text-warning"></i> Stratus
-                <i class="fa fa-circle indigo"></i> Total Node
+                <i class="fa fa-circle text-success"></i> Total Node
               </div>
               <hr>
               <div class="stats">
-                <i class="fa fa-check"></i> On-going Implementation
               </div>
             </template>
           </chart-card>
