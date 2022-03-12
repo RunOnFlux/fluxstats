@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const homeDirPath = path.join(__dirname, '../../logs/');
+const logsDirPath = path.join(__dirname, '../../logs/');
 
 function getFilesizeInBytes(filename) {
   try {
@@ -36,7 +36,7 @@ function debug(args) {
   try {
     console.log(args);
     // write to file
-    const filepath = `${homeDirPath}debug.log`;
+    const filepath = `${logsDirPath}debug.log`;
     writeToFile(filepath, args);
   } catch (err) {
     console.error('This shall not have happened');
@@ -48,7 +48,7 @@ function error(args) {
   try {
     // console.error(args);
     // write to file
-    const filepath = `${homeDirPath}error.log`;
+    const filepath = `${logsDirPath}error.log`;
     writeToFile(filepath, args);
     debug(args);
   } catch (err) {
@@ -61,7 +61,7 @@ function warn(args) {
   try {
     // console.warn(args);
     // write to file
-    const filepath = `${homeDirPath}warn.log`;
+    const filepath = `${logsDirPath}warn.log`;
     writeToFile(filepath, args);
     debug(args);
   } catch (err) {
@@ -74,7 +74,7 @@ function info(args) {
   try {
     // console.log(args);
     // write to file
-    const filepath = `${homeDirPath}info.log`;
+    const filepath = `${logsDirPath}info.log`;
     writeToFile(filepath, args);
     debug(args);
   } catch (err) {
