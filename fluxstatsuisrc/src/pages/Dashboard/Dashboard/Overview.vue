@@ -2,7 +2,7 @@
   <div>
       <div>
         <loading :active.sync="isLoading" 
-        :can-cancel="true"></loading>
+        :can-cancel="false"></loading>
       </div>
 
       <div class="row" v-if="!isFetching">
@@ -95,14 +95,15 @@
             :chart-responsive-options="barChart.responsiveOptions"
             chart-type="Bar">
             <template slot="header">
-              <h4 class="card-title">2022 Nodes Average Count</h4>
-              <p class="card-category">Average Count Of Nodes Per Tier</p>
+              <h4 class="card-title">Top 10 Node Location</h4>
+              <p class="card-category">Countries With Highes Node Count</p>
             </template>
             <template slot="footer">
               <div class="legend">
                 <i class="fa fa-circle text-info"></i> Cumulus
                 <i class="fa fa-circle text-danger"></i> Nimbus
                 <i class="fa fa-circle text-warning"></i> Stratus
+                <i class="fa fa-circle indigo"></i> Total Node
               </div>
               <hr>
               <div class="stats">
@@ -167,12 +168,8 @@
         },
         barChart: {
           data: {
-            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'Mai', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-            series: [
-              [542, 443, 320, 780, 553, 453, 326, 434, 568, 610, 756, 895],
-              [412, 243, 280, 580, 453, 353, 300, 364, 368, 410, 636, 695],
-              [412, 243, 280, 580, 453, 353, 300, 364, 368, 410, 636, 695]
-            ]
+            labels: [],
+            series: []
           },
           options: {
             seriesBarDistance: 10,
@@ -205,9 +202,13 @@
     },
     async created () {
       this.isLoading = true
-      
+      let map = new Map();
+      let mapCumulus = new Map();
+      let mapNimbus = new Map();
+      let mapStratus = new Map();
+
       axios
-      .get('https://stats.runonflux.io/fluxinfo?projection=ip,tier')
+      .get('https://stats.runonflux.io/fluxinfo?projection=ip,tier,geolocation')
       .then(response => {
         this.totalNumberOfNodes = Object.keys(response.data.data).length
         this.totalNumberOfCumulus = 0
@@ -222,12 +223,63 @@
           } else if (data.tier === 'STRATUS') {
             this.totalNumberOfStratus++
           }
+
+          if (map.has(data.geolocation.country)) {
+            map.set(data.geolocation.country, map.get(data.geolocation.country)+1)
+          } else {
+            map.set(data.geolocation.country, 1)
+            mapCumulus.set(data.geolocation.country, 0)
+            mapNimbus.set(data.geolocation.country, 0)
+            mapStratus.set(data.geolocation.country, 0)
+          }
+
+          if (data.tier === 'CUMULUS') {
+            mapCumulus.set(data.geolocation.country, mapCumulus.get(data.geolocation.country)+1)
+          } else if (data.tier === 'NIMBUS') {
+            mapNimbus.set(data.geolocation.country, mapNimbus.get(data.geolocation.country)+1)
+          } else if (data.tier === 'STRATUS') {
+            mapStratus.set(data.geolocation.country, mapStratus.get(data.geolocation.country)+1)
+          }
         })
+
         let pieChartPercentageCumulus = ((this.totalNumberOfCumulus/this.totalNumberOfNodes) * 100).toFixed(2)
         let pieChartPercentageNimbus = ((this.totalNumberOfNimbus/this.totalNumberOfNodes) * 100).toFixed(2)
         let pieChartPercentageStratus = ((this.totalNumberOfStratus/this.totalNumberOfNodes) * 100).toFixed(2)
         this.pieChart.data.labels = [`${pieChartPercentageCumulus} %`, `${pieChartPercentageNimbus} %`, `${pieChartPercentageStratus} %`]
         this.pieChart.data.series = [pieChartPercentageCumulus, pieChartPercentageNimbus, pieChartPercentageStratus]
+
+        let idx = 0;
+        let ent = [];
+        for (var entry of new Map([...map.entries()].sort((a, b) => b[1] - a[1])).entries()) {
+          var key = entry[0],
+              value = entry[1];
+
+          ent.push({
+            name: key,
+            total: value,
+          });
+          
+          if (idx < 9) {
+            idx++;
+          } else {
+            break;
+          }
+        }
+
+        this.barChart.data.labels = [ent[0].name, ent[1].name, ent[2].name, ent[3].name, ent[4].name,
+          ent[5].name, ent[6].name, ent[7].name, ent[8].name, ent[9].name]
+
+        console.log(mapCumulus.get(ent[0].name))
+
+        this.barChart.data.series = [
+          [mapCumulus.get(ent[0].name), mapCumulus.get(ent[1].name), mapCumulus.get(ent[2].name), mapCumulus.get(ent[3].name), mapCumulus.get(ent[4].name),
+           mapCumulus.get(ent[5].name), mapCumulus.get(ent[6].name), mapCumulus.get(ent[7].name), mapCumulus.get(ent[8].name), mapCumulus.get(ent[9].name)],
+          [mapNimbus.get(ent[0].name), mapNimbus.get(ent[1].name), mapNimbus.get(ent[2].name), mapNimbus.get(ent[3].name), mapNimbus.get(ent[4].name),
+           mapNimbus.get(ent[5].name), mapNimbus.get(ent[6].name), mapNimbus.get(ent[7].name), mapNimbus.get(ent[8].name), mapNimbus.get(ent[9].name)],
+          [mapStratus.get(ent[0].name), mapStratus.get(ent[1].name), mapStratus.get(ent[2].name), mapStratus.get(ent[3].name), mapStratus.get(ent[4].name),
+           mapStratus.get(ent[5].name), mapStratus.get(ent[6].name), mapStratus.get(ent[7].name), mapStratus.get(ent[8].name), mapStratus.get(ent[9].name)],
+          [ent[0].total, ent[1].total, ent[2].total, ent[3].total, ent[4].total, ent[5].total, ent[6].total, ent[7].total, ent[8].total, ent[9].total],
+        ]
       }).then(() => {
         axios
         .get('https://stats.runonflux.io/fluxhistorystats')

@@ -7,7 +7,7 @@
     </p>
     <div>
         <loading :active.sync="isLoading" 
-        :can-cancel="true"></loading>
+        :can-cancel="false"></loading>
     </div>
     <div class="col-12">
       <card>
