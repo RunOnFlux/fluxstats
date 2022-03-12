@@ -268,8 +268,6 @@
         this.barChart.data.labels = [ent[0].name, ent[1].name, ent[2].name, ent[3].name, ent[4].name,
           ent[5].name, ent[6].name, ent[7].name, ent[8].name, ent[9].name]
 
-        console.log(mapCumulus.get(ent[0].name))
-
         this.barChart.data.series = [
           [mapCumulus.get(ent[0].name), mapCumulus.get(ent[1].name), mapCumulus.get(ent[2].name), mapCumulus.get(ent[3].name), mapCumulus.get(ent[4].name),
            mapCumulus.get(ent[5].name), mapCumulus.get(ent[6].name), mapCumulus.get(ent[7].name), mapCumulus.get(ent[8].name), mapCumulus.get(ent[9].name)],
