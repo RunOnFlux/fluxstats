@@ -103,7 +103,7 @@
                 <i class="fa fa-circle text-info"></i> Cumulus
                 <i class="fa fa-circle text-danger"></i> Nimbus
                 <i class="fa fa-circle text-warning"></i> Stratus
-                <i class="fa fa-circle text-success"></i> Total Node
+                <i class="fa fa-circle text-success"></i> Total Nodes
               </div>
               <hr>
               <div class="stats">
