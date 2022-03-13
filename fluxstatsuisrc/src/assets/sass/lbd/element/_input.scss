@@ -1,0 +1,31 @@
+@import "../variables";
+
+@mixin input_validation($type, $color) {
+  .form-group,
+  .form-group.#{$type} {
+    .el-input__inner,
+    .el-textarea__inner,
+    .el-input-number__decrease:hover,
+    .el-input-number__increase:hover,
+    .el-message-box__input input.invalid {
+      &:focus {
+        border-color: $color !important;
+      }
+
+      @if ($type == '') {
+        color: #565656;
+      } @else {
+        color: $color;
+      }
+    }
+  }
+}
+
+.form-group {
+  .el-input__inner{
+    @extend .form-control;
+  }
+  .el-input-number, .el-select, .el-input__inner {
+    width: 100%;
+  }
+}

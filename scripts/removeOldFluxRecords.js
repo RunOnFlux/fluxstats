@@ -1,5 +1,5 @@
 const config = require('config');
-const serviceHelper = require('./src/services/serviceHelper');
+const serviceHelper = require('../src/services/serviceHelper');
 
 async function removeRecords() {
   let db = null;

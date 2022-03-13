@@ -4,7 +4,7 @@
   "description": "Flux API features information about Flux network",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --ignore './src/kdaUI/' --ignore './src/fluxHashes' index.js",
+    "start": "nodemon --ignore './src/kdaUI/' --ignore './src/fluxHashes' --ignore './src/fluxStatsUI' index.js",
     "test": "echo 'No tests have been implemented' && exit 1",
     "lint": "eslint ./ --fix"
   },

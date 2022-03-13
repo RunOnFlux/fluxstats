@@ -1,0 +1,44 @@
+@import "../variables";
+
+@mixin tag($type, $color){
+  .el-tag,
+  .el-tag.el-tag--#{$type} {
+    .el-tag__close{
+      opacity: 0;
+    }
+    .el-tag__close:hover{
+      background-color: transparent;
+      color: $color;
+      font-weight: bold;
+      font-size: 18px;
+      border-radius: 0;
+      opacity: 1;
+      transition: opacity .2s ease-out;
+    }
+    border-color: $color;
+    background-color: white;
+    border-radius: 3px;
+    color: $color;
+    font-weight: bold;
+
+  }
+}
+.el-tag{
+  margin-left:10px;
+  margin-bottom:5px;
+}
+.input-new-tag{
+  margin-left:10px;
+  width: 80px !important;
+  height: 24px;
+  display: inline;
+  border-radius: 3px;
+
+}
+
+@include tag('info', $info-color)
+@include tag('primary', $primary-color)
+@include tag('success', $success-color)
+@include tag('warning', $warning-color)
+@include tag('danger', $danger-color)
+@include tag('default', $default-color)

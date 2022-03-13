@@ -1,0 +1,22 @@
+@mixin bootstrap-switch-color($name, $color) {
+  .bootstrap-switch.bootstrap-switch-#{$name} .bootstrap-switch-handle-on,
+  .bootstrap-switch.bootstrap-switch-#{$name} .bootstrap-switch-handle-off {
+    background-color: $color;
+  }
+
+  .bootstrap-switch.bootstrap-switch-#{$name}.bootstrap-switch-on{
+    .bootstrap-switch-handle-off{
+      background-color: $color;
+    }
+  }
+  .bootstrap-switch.bootstrap-switch-#{$name} .bootstrap-switch-handle-off{
+    background-color: $medium-gray;
+  }
+
+  .bootstrap-switch.bootstrap-switch-#{$name}.bootstrap-switch-off{
+    .bootstrap-switch-handle-on{
+      background-color: $medium-gray;
+    }
+  }
+}
+
