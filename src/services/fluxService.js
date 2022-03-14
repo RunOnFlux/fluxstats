@@ -722,7 +722,7 @@ async function getAllFluxGeolocation(req, res, i = 0) {
         res.json(errMessage);
         log.error(error);
       });
-      results = results.filter((node) => node.ip);
+      results = results.filter((node) => node.geolocation);
       myCache.set('geolocation', results);
     }
     const bresults = results.map((x) => x.geolocation);
@@ -835,7 +835,7 @@ async function getAllFluxGeolocationNow(req, res) {
       res.json(errMessage);
       log.error(error);
     });
-    results = results.filter((node) => node.ip);
+    results = results.filter((node) => node.geolocation);
     const bresults = results.map((x) => x.geolocation);
     const cresults = [...new Set(bresults)];
     const resMessage = serviceHelper.createDataMessage(cresults);
