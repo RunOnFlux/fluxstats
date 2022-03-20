@@ -70,6 +70,7 @@ async function processKDA() {
   try {
     let nodes = await getNodes();
     const kdaRunningNodes = await kadenaAppLocations();
+    const kdaRunningNodesChainweb = await kadenaAppLocationsNode();
     nodes = nodes.filter((node) => node.tier !== 'CUMULUS' && node.last_paid_height); // only nodes that are longer on the network
     const nodesWithKDAset = [];
     const time = new Date().getTime();
@@ -114,7 +115,7 @@ async function processKDA() {
       }
     }
     // eslint-disable-next-line no-restricted-syntax
-    for (const kdaNode of kadenaAppLocationsNode) {
+    for (const kdaNode of kdaRunningNodesChainweb) {
       const nodeExists = nodesWithKDAset.find((node) => node.ip === kdaNode.ip);
       if (nodeExists) {
         const chainwebDataNode = JSON.parse(JSON.stringify(nodeExists));
