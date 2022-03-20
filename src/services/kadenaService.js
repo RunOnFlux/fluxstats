@@ -80,6 +80,9 @@ async function processKDA() {
     for (const node of nodes) {
       i += 1;
       try {
+        const adjustedNode = {};
+        adjustedNode.tier = node.tier;
+        adjustedNode.ip = node.ip;
         const { CancelToken } = axios;
         const source = CancelToken.source();
         let isResolved = false;
@@ -88,16 +91,16 @@ async function processKDA() {
             source.cancel('Operation canceled by the user.');
           }
         }, timeout * 2);
-        const port = node.ip.split(':')[1] || 16127;
-        const fluxnodeList = await http.get(`http://${node.ip.split(':')[0]}:${port}/flux/kadena`, {
+        const port = adjustedNode.ip.split(':')[1] || 16127;
+        const fluxnodeList = await http.get(`http://${adjustedNode.ip.split(':')[0]}:${port}/flux/kadena`, {
           cancelToken: source.token,
           timeout,
         });
         isResolved = true;
         if (fluxnodeList.data.status === 'success') {
-          node.kadena = fluxnodeList.data.data;
-          node.time = time;
-          nodesWithKDAset.push(node);
+          adjustedNode.kadena = fluxnodeList.data.data;
+          adjustedNode.time = time;
+          nodesWithKDAset.push(adjustedNode);
         }
         processingStatus = `${i} of ${l}`;
       } catch (error) {
