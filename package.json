@@ -1,6 +1,6 @@
 {
   "name": "fluxapi",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "description": "Flux API features information about Flux network",
   "main": "index.js",
   "scripts": {
@@ -26,27 +26,28 @@
   "license": "MIT",
   "dependencies": {
     "apicache": "^1.6.3",
-    "axios": "^0.24.0",
+    "axios": "^0.26.1",
     "axios-rate-limit": "^1.3.0",
     "bitgo-utxo-lib": "https://github.com/zelcore-io/bitgo-utxo-lib",
-    "bson": "^4.6.0",
-    "config": "^3.3.6",
+    "bson": "^4.6.1",
+    "config": "^3.3.7",
     "cors": "^2.8.5",
-    "express": "^4.17.2",
-    "inquirer": "^8.2.0",
+    "express": "^4.17.3",
+    "inquirer": "^8.2.1",
     "lru-cache": "^6.0.0",
-    "mongodb": "^4.2.2",
+    "mongodb": "^4.4.1",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.15",
-    "qs": "^6.10.2",
+    "qs": "^6.10.3",
     "zelcorejs": "https://github.com/zelcore-io/zelcorejs"
   },
   "devDependencies": {
     "babel-eslint": "^10.1.0",
-    "eslint": "^8.5.0",
-    "eslint-config-airbnb": "^19.0.2",
-    "eslint-plugin-import": "^2.25.3",
+    "eslint": "^8.11.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jsx-a11y": "^6.5.1",
-    "eslint-plugin-react": "^7.27.1"
+    "eslint-plugin-react": "^7.29.4",
+    "eslint-plugin-vue": "^8.5.0"
   }
 }
