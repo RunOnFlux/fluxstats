@@ -97,7 +97,7 @@ async function processKDA() {
           timeout,
         });
         isResolved = true;
-        if (fluxnodeList.data.status === 'success') {
+        if (fluxnodeList.data.status === 'success' && fluxnodeList.data.data) {
           adjustedNode.kadena = fluxnodeList.data.data;
           adjustedNode.time = time;
           nodesWithKDAset.push(adjustedNode);
