@@ -150,8 +150,8 @@
         ]
       }
     ],
-    "visible": true,
-    "enabled": true
+    "visible": false,
+    "enabled": false
   },
   {
     "description": "Host your PivX Node on the Flux Network",
