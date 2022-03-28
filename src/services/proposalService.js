@@ -9,7 +9,7 @@ const satoshisRequired = 20000000000; // 200 flux
 const proposalAddress = 't1Mzja9iJcEYeW5B4m4s1tJG8M42odFZ16A'; // flux team proposal wallet
 const expirationPeriod = 3600000; // 60 mins, after that unpaid proposals are expired => Rejected Unpaid
 const voteEndPeriod = 604800000; // 1 week
-const miVotesCoefficient = 0.3; // 30 percent of network potential. 10 votes for cumulus, 25 nimbus, 100 stratus
+const miVotesCoefficient = 0.3; // 30 percent of network potential. 1 votes for cumulus, 12.5 nimbus, 40 stratus
 
 let userVoting = false;
 
@@ -413,11 +413,11 @@ async function votePower(zelid, hash) {
     if (result.flux && result.node && result.node.status) {
       if (result.flux.zelid === zelid) {
         if (result.node.status.tier === 'CUMULUS') {
-          votepowa = 10;
+          votepowa = 1;
         } else if (result.node.status.tier === 'NIMBUS') {
-          votepowa = 25;
+          votepowa = 12.5;
         } else if (result.node.status.tier === 'STRATUS') {
-          votepowa = 100;
+          votepowa = 40;
         }
         const nodeInfo = {
           tier: result.node.status.tier,
@@ -435,11 +435,11 @@ async function votePower(zelid, hash) {
   let power = 0;
   nodes.forEach((node) => {
     if (node.tier === 'CUMULUS') {
-      power += 10;
+      power += 1;
     } else if (node.tier === 'NIMBUS') {
-      power += 25;
+      power += 12.5;
     } else if (node.tier === 'STRATUS') {
-      power += 100;
+      power += 40;
     }
   });
   const data = {
@@ -513,9 +513,9 @@ async function submitProposal(req, res) {
         // get votesRequired as flux network potential
         const countUrl = 'https://api.runonflux.io/daemon/getzelnodecount';
         const response = await axios.get(countUrl, axiosConfig);
-        const cumulusVotes = response.data.data['cumulus-enabled'] * 10;
-        const nimbusVotes = response.data.data['nimbus-enabled'] * 25;
-        const stratusVotes = response.data.data['stratus-enabled'] * 100;
+        const cumulusVotes = response.data.data['cumulus-enabled'] * 1;
+        const nimbusVotes = response.data.data['nimbus-enabled'] * 12.5;
+        const stratusVotes = response.data.data['stratus-enabled'] * 40;
         const votePotential = cumulusVotes + nimbusVotes + stratusVotes;
         const votesRequired = Math.round(votePotential * miVotesCoefficient);
         const proposalToStore = {
