@@ -38,6 +38,7 @@
         "portSpecs": [
           "37185-37285"
         ],
+        "ports": [37185],
         "userEnvironmentParameters": [
           {
             "name": "PAGE_TITLE",
@@ -92,6 +93,7 @@
         "portSpecs": [
           "38000-38999"
         ],
+        "ports": [38000],
         "userEnvironmentParameters": [
           {
             "name": "KEY",
@@ -141,6 +143,7 @@
         "portSpecs": [
           "39000-39999"
         ],
+        "ports": [39000],
         "userEnvironmentParameters": [
           {
             "name": "REGISTRATION_CODE",
@@ -190,6 +193,7 @@
         "portSpecs": [
           "37300-37500"
         ],
+        "ports": [37300],
         "userEnvironmentParameters": [
           {
             "name": "KEY",
@@ -239,6 +243,7 @@
         "portSpecs": [
           "37500-37700"
         ],
+        "ports": [37500],
         "userEnvironmentParameters": [
           {
             "name": "KEY",
