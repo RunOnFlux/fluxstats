@@ -13,7 +13,7 @@ const explorerTimeout = 10000;
 let round = 0;
 
 const httpFluxInfo = rateLimit(axios.create(), { maxRequests: 20, perMilliseconds: 1000 });
-const httpGeo = rateLimit(axios.create(), { maxRequests: 1, perMilliseconds: 2000 });
+const httpGeo = rateLimit(axios.create(), { maxRequests: 1, perMilliseconds: 1500 });
 
 // default cache
 const LRUoptions = {
@@ -66,11 +66,9 @@ async function getFluxNodeGeolocation(ip) {
         source.cancel('Operation canceled by the user.');
       }
     }, defaultTimeout * 2);
-    const ipApiUrl = `http://ip-api.com/json/${ip}?fields=status,country,countryCode,lat,lon,query,org`;
-    const ipRes = await httpGeo.get(ipApiUrl, {
-      cancelToken: source.token,
-      defaultTimeout,
-    });
+    const auxIp = ip.includes(':') ? ip.split(':')[0] : ip;
+    const ipApiUrl = `http://ip-api.com/json/${auxIp}?fields=status,country,countryCode,lat,lon,query,org`;
+    const ipRes = await httpGeo.get(ipApiUrl);
     isResolved = true;
     if (ipRes.data.status === 'success') {
       const information = {
@@ -84,10 +82,10 @@ async function getFluxNodeGeolocation(ip) {
       // push this to our database
       return information;
     }
-    log.warn(`Geolocation of IP ${ip} is unavailable`);
+    log.warn(`Geolocation of IP ${auxIp} is unavailable`);
     return false;
   } catch (e) {
-    log.error(`Geolocation of IP ${ip} error`);
+    log.error(`Geolocation of IP ${ip} error ${e}`);
     return false;
   }
 }
@@ -102,7 +100,8 @@ async function getFluxInformation(ip, timeout) {
         source.cancel('Operation canceled by the user.');
       }
     }, timeout * 2);
-    const fluxInfoUrl = `http://${ip}:16127/flux/info`;
+    const auxip = ip.includes(':') ? ip.split(':')[0] : `${ip}:16127`;
+    const fluxInfoUrl = `http://${auxip}/flux/info`;
     const fluxRes = await httpFluxInfo.get(fluxInfoUrl, {
       cancelToken: source.token,
       timeout,
@@ -129,7 +128,8 @@ async function getFluxAppsHashes(ip, timeout) {
         source.cancel('Operation canceled by the user.');
       }
     }, timeout * 2);
-    const fluxInfoUrl = `http://${ip}:16127/apps/hashes`;
+    const auxip = ip.includes(':') ? ip.split(':')[0] : `${ip}:16127`;
+    const fluxInfoUrl = `http://${auxip}/apps/hashes`;
     const fluxRes = await httpFluxInfo.get(fluxInfoUrl, {
       cancelToken: source.token,
       timeout,
@@ -138,7 +138,7 @@ async function getFluxAppsHashes(ip, timeout) {
     if (fluxRes.data.status === 'success') {
       return fluxRes.data.data;
     }
-    log.warn(`Flux apps/hashes of IP ${ip} is bad`);
+    log.warn(`Flux apps/hashes of IP ${auxip} is bad`);
     return false;
   } catch (e) {
     log.error(`Flux apps/hashes of IP ${ip} error`);
@@ -156,7 +156,8 @@ async function getFluxSyncedHeight(ip, timeout) {
         source.cancel('Operation canceled by the user.');
       }
     }, timeout * 2);
-    const fluxInfoUrl = `http://${ip}:16127/explorer/scannedheight`;
+    const auxip = ip.includes(':') ? ip.split(':')[0] : `${ip}:16127`;
+    const fluxInfoUrl = `http://${auxip}/explorer/scannedheight`;
     const fluxRes = await httpFluxInfo.get(fluxInfoUrl, {
       cancelToken: source.token,
       timeout,
@@ -165,7 +166,7 @@ async function getFluxSyncedHeight(ip, timeout) {
     if (fluxRes.data.status === 'success') {
       return fluxRes.data.data;
     }
-    log.warn(`Flux height of IP ${ip} is bad`);
+    log.warn(`Flux height of IP ${auxip} is bad`);
     return false;
   } catch (e) {
     log.error(`Flux height of IP ${ip} error`);
@@ -183,7 +184,8 @@ async function getConnectionsOut(ip, timeout) {
         source.cancel('Operation canceled by the user.');
       }
     }, timeout * 2);
-    const fluxInfoUrl = `http://${ip}:16127/flux/connectedpeers`;
+    const auxip = ip.includes(':') ? ip.split(':')[0] : `${ip}:16127`;
+    const fluxInfoUrl = `http://${auxip}/flux/connectedpeers`;
     const fluxRes = await httpFluxInfo.get(fluxInfoUrl, {
       cancelToken: source.token,
       timeout,
@@ -192,7 +194,7 @@ async function getConnectionsOut(ip, timeout) {
     if (fluxRes.data.status === 'success') {
       return fluxRes.data.data;
     }
-    log.warn(`Flux out peers of IP ${ip} is bad`);
+    log.warn(`Flux out peers of IP ${auxip} is bad`);
     return false;
   } catch (e) {
     log.error(`Flux out peers of IP ${ip} error`);
@@ -210,7 +212,8 @@ async function getConnectionsIn(ip, timeout) {
         source.cancel('Operation canceled by the user.');
       }
     }, timeout * 2);
-    const fluxInfoUrl = `http://${ip}:16127/flux/incomingconnections`;
+    const auxip = ip.includes(':') ? ip.split(':')[0] : `${ip}:16127`;
+    const fluxInfoUrl = `http://${auxip}/flux/incomingconnections`;
     const fluxRes = await httpFluxInfo.get(fluxInfoUrl, {
       cancelToken: source.token,
       timeout,
@@ -219,7 +222,7 @@ async function getConnectionsIn(ip, timeout) {
     if (fluxRes.data.status === 'success') {
       return fluxRes.data.data;
     }
-    log.warn(`Flux in peers of IP ${ip} is bad`);
+    log.warn(`Flux in peers of IP ${auxip} is bad`);
     return false;
   } catch (e) {
     log.error(`Flux in peers of IP ${ip} error`);
@@ -340,7 +343,8 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout) {
     const scannedHeightInfo = await getFluxSyncedHeight(fluxnode.ip, timeout);
     const conOut = await getConnectionsOut(fluxnode.ip, timeout);
     const conIn = await getConnectionsIn(fluxnode.ip, timeout);
-    const query = { ip: fluxnode.ip };
+    const auxIp = fluxnode.ip.includes(':') ? fluxnode.ip.split(':')[0] : fluxnode.ip;
+    const query = { ip: auxIp };
     const projection = {
       projection: {
         _id: 0,
@@ -880,6 +884,7 @@ async function start() {
       throw error;
     });
     const database = db.db(config.database.local.database);
+    database.collection(geocollection).createIndex({ ip: 1 }, { name: 'query for getting geolocation of a fluxnode IP address' });
     database.collection(fluxcollection).createIndex({ ip: 1 }, { name: 'query for getting list of Flux data associated to IP address' });
     database.collection(fluxcollection).createIndex({ ip: 1, roundTime: 1 }, { name: 'query for getting list of Flux data associated to IP address since some roundTime' });
     database.collection(fluxcollection).createIndex({ addedHeight: 1 }, { name: 'query for getting list of Flux data tied to addedHeight' });
