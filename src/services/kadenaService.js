@@ -67,7 +67,9 @@ async function getNodes() {
 }
 
 async function processKDA() {
+  const startRefresh = new Date().getTime();
   try {
+    log.info(`Beginning processing processKDA of ${startRefresh}.`);
     let nodes = await getNodes();
     const kdaRunningNodes = await kadenaAppLocations();
     const kdaRunningNodesChainweb = await kadenaAppLocationsNode();
@@ -76,6 +78,7 @@ async function processKDA() {
     const time = new Date().getTime();
     let i = 0;
     const l = nodes.length;
+    log.info(`Found ${l} FluxNode Kadena eligible.`);
     // eslint-disable-next-line no-restricted-syntax
     for (const node of nodes) {
       i += 1;
@@ -103,8 +106,11 @@ async function processKDA() {
           nodesWithKDAset.push(adjustedNode);
         }
         processingStatus = `${i} of ${l}`;
+        if ((i + 1) % 75 === 0) {
+          log.info(`Flux Kadena Nodes Processed: ${i + 1}`);
+        }
       } catch (error) {
-        log.error(error);
+        log.error(`Error Getting Kadena info from IP ${node.ip}`);
       }
     }
     // if node runs kda app
@@ -127,14 +133,19 @@ async function processKDA() {
       }
     }
     processedKDAnodes = nodesWithKDAset;
-    processKDA();
   } catch (e) {
     log.error(e);
-    processKDA();
+  } finally {
+    const endRefresh = new Date().getTime() - startRefresh;
+    log.info(`Execution time of processKDA: ${endRefresh} ms`);
+    setTimeout(() => {
+      processKDA();
+    }, 2 * 60 * 60 * 1000);
+    // Executions in 2h interval
   }
 }
 
-async function getKadenNodes(req, res) {
+async function getKadenaNodes(req, res) {
   try {
     const results = processedKDAnodes;
     if (!results.length) {
@@ -157,5 +168,5 @@ async function getKadenNodes(req, res) {
 
 module.exports = {
   processKDA,
-  getKadenNodes,
+  getKadenaNodes,
 };

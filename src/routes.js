@@ -38,7 +38,7 @@ module.exports = (app) => {
   });
 
   app.get('/kadena/nodes', cache('1 minute'), (req, res) => {
-    kadenaService.getKadenNodes(req, res);
+    kadenaService.getKadenaNodes(req, res);
   });
 
   app.get('/hashes', cache('1 minute'), (req, res) => {
