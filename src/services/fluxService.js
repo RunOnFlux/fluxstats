@@ -625,7 +625,7 @@ async function processFluxNodes() {
   }
 }
 
-async function getAllGeolocation(res) {
+async function getAllGeolocation(req, res) {
   const database = db.db(config.database.local.database);
   const query = {};
   const projection = {
@@ -741,7 +741,7 @@ async function getAllFluxInformation(req, res, i = 0) {
   }
 }
 
-async function getAllFluxVersions(res) {
+async function getAllFluxVersions(req, res) {
   try {
     const database = db.db(config.database.local.database);
     const q = {};
@@ -920,7 +920,7 @@ async function getFluxIPHistory(req, res) {
   }
 }
 
-async function getCompletedRoundsTimestamps(res) {
+async function getCompletedRoundsTimestamps(req, res) {
   try {
     const database = db.db(config.database.local.database);
     const q = {};
@@ -940,7 +940,7 @@ async function getCompletedRoundsTimestamps(res) {
   }
 }
 
-async function getAllFluxGeolocationNow(res) {
+async function getAllFluxGeolocationNow(req, res) {
   try {
     const database = db.db(config.database.local.database);
     const queryForIps = [];
