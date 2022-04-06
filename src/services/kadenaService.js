@@ -34,7 +34,7 @@ async function kadenaAppLocationsNode() { // chainwebnode only
 }
 
 async function kadenaAppLocations() { // chainwebdata
-  const apps = ['Kadena', 'Kadena2'];
+  const apps = ['Kadena', 'Kadena2', 'Kadena3', 'Kadena4', 'Kadena5'];
   let locations = [];
   try {
     // eslint-disable-next-line no-restricted-syntax
