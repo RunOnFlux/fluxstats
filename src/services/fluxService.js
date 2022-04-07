@@ -19,9 +19,22 @@ const httpGeoBatch = rateLimit(axios.create(), { maxRequests: 1, perMilliseconds
 // default cache
 const LRUoptions = {
   max: 500, // store 500 values, we shall not have more values at any period
-  maxAge: 1000 * 60 * 60, // 1 hour
+  ttl: 1000 * 60 * 60, // 1 hour
 };
 const myCache = new LRU(LRUoptions);
+
+const LRUoptionsMid = {
+  max: 500, // store 500 values, we shall not have more values at any period
+  ttl: 1000 * 60 * 20, // 20 mins
+};
+const myCacheMid = new LRU(LRUoptionsMid);
+
+const LRUoptionsShort = {
+  max: 500, // store 500 values, we shall not have more values at any period
+  ttl: 1000 * 60 * 5, // 5 mins
+};
+
+const myCacheShort = new LRU(LRUoptionsShort);
 
 let db = null;
 const geocollection = config.database.local.collections.geolocation;
@@ -31,18 +44,32 @@ const completedRoundsCollection = config.database.local.collections.completedRou
 let currentFluxNodeIps = [];
 let fluxNodesWithError = [];
 
-let fluxInformationRunning = false;
-let fluxLocationsRunning = false;
-let fluxNodeHistoryStatsRunning = false;
-
 let firstExecution = true;
 let processedFluxNodes = [];
 
-async function geFluxNodeList() {
+let runninggetFluxNodeList = false;
+async function getFluxNodeList(i = 0) {
   try {
+    const list = myCacheShort.get('fluxnodelist');
+    if (list) {
+      return list;
+    }
+    if (runninggetFluxNodeList) {
+      await serviceHelper.timeout(100);
+      if (i < 300) {
+        return getFluxNodeList(i + 1);
+      }
+      throw new Error('Internal error. Try again later');
+    }
+    runninggetFluxNodeList = true;
     const fluxnodeList = await axios.get(`${config.explorer}/api/fluxnode/listfluxnodes`, { timeout: explorerTimeout });
+    if (fluxnodeList.data.result.length) {
+      myCacheShort.set('fluxnodelist', fluxnodeList.data.result);
+    }
+    runninggetFluxNodeList = false;
     return fluxnodeList.data.result || [];
   } catch (e) {
+    runninggetFluxNodeList = false;
     log.error(e);
     log.error('Error getting flux node list from explorer.');
     return [];
@@ -51,7 +78,7 @@ async function geFluxNodeList() {
 
 async function getFluxNodeIPs(fluxnodeList) {
   try {
-    const fluxnodes = fluxnodeList || await geFluxNodeList();
+    const fluxnodes = fluxnodeList || await getFluxNodeList();
     const ips = fluxnodes.map((fluxnode) => fluxnode.ip);
     return ips;
   } catch (e) {
@@ -549,7 +576,7 @@ async function processFluxNodes() {
     const database = db.db(config.database.local.database);
     const currentRoundTime = new Date().getTime();
     log.info(`Beginning processing processFluxNodes of ${currentRoundTime}.`);
-    const fluxnodes = await geFluxNodeList();
+    const fluxnodes = await getFluxNodeList();
     // const fluxnodes = [{ ip: '78.216.167.78' }]; // fluxnode that was causing the hang.
     log.info(`Found ${fluxnodes.length} Fluxes.`);
     if (fluxnodes && fluxnodes.length > 0) {
@@ -625,62 +652,86 @@ async function processFluxNodes() {
   }
 }
 
-async function getAllGeolocation(req, res) {
-  const database = db.db(config.database.local.database);
-  const query = {};
-  const projection = {
-    projection: {
-      _id: 0,
-      ip: 1,
-      country: 1,
-      countryCode: 1,
-      lat: 1,
-      lon: 1,
-      org: 1,
-    },
-  };
-  const results = await serviceHelper.findInDatabase(database, geocollection, query, projection).catch((error) => {
+let runninggetAllGeolocation = false;
+async function getAllGeolocation(req, res, i = 0) {
+  try {
+    let list = myCacheShort.get('allgeolocation');
+    if (!list) {
+      if (runninggetAllGeolocation) {
+        await serviceHelper.timeout(100);
+        if (i < 300) {
+          getAllGeolocation(req, res, i + 1);
+        }
+        throw new Error('Internal error. Try again later');
+      }
+      runninggetAllGeolocation = true;
+      const database = db.db(config.database.local.database);
+      const query = {};
+      const projection = {
+        projection: {
+          _id: 0,
+          ip: 1,
+          country: 1,
+          countryCode: 1,
+          lat: 1,
+          lon: 1,
+          org: 1,
+        },
+      };
+      list = await serviceHelper.findInDatabase(database, geocollection, query, projection);
+      myCacheShort.set('allgeolocation', list);
+      runninggetAllGeolocation = false;
+    }
+    const resMessage = serviceHelper.createDataMessage(list);
+    res.json(resMessage);
+  } catch (error) {
+    runninggetAllGeolocation = false;
     const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
     res.json(errMessage);
     log.error(error);
-    throw error;
-  });
-  const resMessage = serviceHelper.createDataMessage(results);
-  return res.json(resMessage);
+  }
 }
 
-async function getAllFluxInformation(req, res, i = 0) {
-  try {
-    if (fluxInformationRunning) {
+let runninggetLastRound = false;
+async function getLastRound(i = 0) {
+  let lastRound = myCacheShort.get('lastround');
+  if (!lastRound) {
+    if (runninggetLastRound) {
       await serviceHelper.timeout(100);
       if (i < 300) {
-        getAllFluxInformation(req, res, i + 1);
+        return getLastRound(i + 1);
       }
-      return;
     }
-    fluxInformationRunning = true;
+    runninggetLastRound = true;
     const database = db.db(config.database.local.database);
     const q = {};
     const p = {};
-    const lastRound = await serviceHelper.findOneInDatabaseReverse(database, completedRoundsCollection, q, p).catch((error) => {
-      const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
-      res.json(errMessage);
-      log.error(error);
-    });
+    lastRound = await serviceHelper.findOneInDatabaseReverse(database, completedRoundsCollection, q, p);
+    myCacheShort.set('lastround', lastRound);
+    runninggetLastRound = false;
+  }
+  return lastRound;
+}
+
+let fluxInformationRunning = false;
+async function getAllFluxInformation(req, res, i = 0) {
+  try {
+    const database = db.db(config.database.local.database);
+    const lastRound = await getLastRound();
     const lastCompletedRound = lastRound ? lastRound.timestamp : 0;
-    const queryForIps = [];
-    currentFluxNodeIps.forEach((ip) => {
-      const singlequery = {
-        ip,
-      };
-      queryForIps.push(singlequery);
-    });
     const query = {
       roundTime: lastCompletedRound,
     };
-    if (queryForIps.length > 0) {
-      query.$or = queryForIps;
-    }
+    // const queryForIps = []; // disable
+    // currentFluxNodeIps.forEach((ip) => {
+    //   const singlequery = {
+    //     ip,
+    //   };
+    //   queryForIps.push(singlequery);
+    // });
+    // if (queryForIps.length > 0) {
+    //   query.$or = queryForIps;
+    // }
     // projection is comma separated list;
     let { projection } = req.params;
     projection = projection || req.query.projection;
@@ -724,15 +775,24 @@ async function getAllFluxInformation(req, res, i = 0) {
         },
       };
     }
-    // return latest fluxnode round
-    const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection).catch((error) => {
-      const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
-      res.json(errMessage);
-      log.error(error);
-    });
+    const cacheKey = `fluxinfo${JSON.stringify(query)}${JSON.stringify(projection)}`;
+    let results = myCacheMid.get(cacheKey);
+    if (!results) {
+      if (fluxInformationRunning) {
+        await serviceHelper.timeout(500);
+        if (i < 60) {
+          getAllFluxInformation(req, res, i + 1);
+        }
+        return;
+      }
+      fluxInformationRunning = true;
+      // return latest fluxnode round
+      results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection);
+      myCacheMid.set(cacheKey, results);
+      fluxInformationRunning = false;
+    }
     const resMessage = serviceHelper.createDataMessage(results);
     res.json(resMessage);
-    fluxInformationRunning = false;
   } catch (error) {
     fluxInformationRunning = false;
     const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
@@ -741,125 +801,124 @@ async function getAllFluxInformation(req, res, i = 0) {
   }
 }
 
-async function getAllFluxVersions(req, res) {
+let runninggetAllFluxVersions = false;
+async function getAllFluxVersions(req, res, i = 0) {
   try {
-    const database = db.db(config.database.local.database);
-    const q = {};
-    const p = {};
-    const lastRound = await serviceHelper.findOneInDatabaseReverse(database, completedRoundsCollection, q, p).catch((error) => {
-      const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
-      res.json(errMessage);
-      log.error(error);
-    });
-    const lastCompletedRound = lastRound ? lastRound.timestamp : 0;
-    const queryForIps = [];
-    currentFluxNodeIps.forEach((ip) => {
-      const singlequery = {
-        ip,
-      };
-      queryForIps.push(singlequery);
-    });
-    const query = {
-      roundTime: lastCompletedRound,
-    };
-    if (queryForIps.length > 0) {
-      query.$or = queryForIps;
-    }
-    const projection = {
-      projection: {
-        _id: 0,
-        daemon: 1,
-        benchmark: 1,
-        flux: 1,
-      },
-    };
-    // return latest fluxnode round
-    const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection).catch((error) => {
-      const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
-      res.json(errMessage);
-      log.error(error);
-    });
-    const allData = [];
-    results.forEach((flux) => {
-      if (flux.daemon) {
-        const fluxData = {
-          ip: flux.flux.ip,
-          daemon: flux.daemon.info.version,
-          benchmark: flux.benchmark.info.version,
-          flux: flux.flux.version,
-        };
-        allData.push(fluxData);
-      } else {
-        const fluxData = {
-          ip: flux.ip,
-          daemon: null,
-          benchmark: null,
-          flux: null,
-        };
-        allData.push(fluxData);
+    const cacheKey = 'getallfluxversions';
+    let results = myCacheMid.get(cacheKey);
+    if (!results) {
+      if (runninggetAllFluxVersions) {
+        await serviceHelper.timeout(250);
+        if (i < 120) {
+          getAllFluxVersions(req, res, i + 1);
+        }
+        return;
       }
-    });
-    const resMessage = serviceHelper.createDataMessage(allData);
+      runninggetAllFluxVersions = true;
+      const database = db.db(config.database.local.database);
+      const lastRound = await getLastRound();
+      const lastCompletedRound = lastRound ? lastRound.timestamp : 0;
+
+      const query = {
+        roundTime: lastCompletedRound,
+      };
+      // const queryForIps = [];
+      // currentFluxNodeIps.forEach((ip) => {
+      //   const singlequery = {
+      //     ip,
+      //   };
+      //   queryForIps.push(singlequery);
+      // });
+      // if (queryForIps.length > 0) {
+      //   query.$or = queryForIps;
+      // }
+      const projection = {
+        projection: {
+          _id: 0,
+          daemon: 1,
+          benchmark: 1,
+          flux: 1,
+        },
+      };
+      // return latest fluxnode round
+      const response = await serviceHelper.findInDatabase(database, fluxcollection, query, projection);
+      const allData = [];
+      response.forEach((flux) => {
+        if (flux.daemon) {
+          const fluxData = {
+            ip: flux.flux.ip,
+            daemon: flux.daemon.info.version,
+            benchmark: flux.benchmark.info.version,
+            flux: flux.flux.version,
+          };
+          allData.push(fluxData);
+        } else {
+          const fluxData = {
+            ip: flux.ip,
+            daemon: null,
+            benchmark: null,
+            flux: null,
+          };
+          allData.push(fluxData);
+        }
+      });
+      results = allData;
+      myCacheMid.set(cacheKey, allData);
+      runninggetAllFluxVersions = false;
+    }
+    const resMessage = serviceHelper.createDataMessage(results);
     res.json(resMessage);
   } catch (error) {
+    runninggetAllFluxVersions = false;
     const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
     res.json(errMessage);
     log.error(error);
   }
 }
 
+let fluxLocationsRunning = false;
 async function getAllFluxGeolocation(req, res, i = 0) {
   try {
-    if (fluxLocationsRunning) {
-      await serviceHelper.timeout(100);
-      if (i < 300) {
-        getAllFluxGeolocation(req, res, i + 1);
-      }
-      return;
-    }
-    fluxLocationsRunning = true;
-    const database = db.db(config.database.local.database);
-    const q = {};
-    const p = {};
-    const lastRound = await serviceHelper.findOneInDatabaseReverse(database, completedRoundsCollection, q, p).catch((error) => {
-      const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
-      res.json(errMessage);
-      log.error(error);
-    });
-    const lastCompletedRound = lastRound ? lastRound.timestamp : 0;
-    const queryForIps = [];
-    currentFluxNodeIps.forEach((ip) => {
-      const singlequery = {
-        ip,
-      };
-      queryForIps.push(singlequery);
-    });
-    const query = {
-      roundTime: lastCompletedRound,
-    };
-    if (queryForIps.length > 0) {
-      query.$or = queryForIps;
-    }
-    const projection = {
-      projection: {
-        _id: 0,
-        geolocation: 1,
-      },
-    };
-    // return latest fluxnode round
     let results = myCache.get('geolocation');
     if (!results) {
-      results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection).catch((error) => {
-        const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
-        res.json(errMessage);
-        log.error(error);
-      });
+      if (fluxLocationsRunning) {
+        await serviceHelper.timeout(100);
+        if (i < 300) {
+          getAllFluxGeolocation(req, res, i + 1);
+        }
+        return;
+      }
+      fluxLocationsRunning = true;
+      const database = db.db(config.database.local.database);
+      const lastRound = await getLastRound();
+      const lastCompletedRound = lastRound ? lastRound.timestamp : 0;
+      const query = {
+        roundTime: lastCompletedRound,
+      };
+      // const queryForIps = [];
+      // currentFluxNodeIps.forEach((ip) => {
+      //   const singlequery = {
+      //     ip,
+      //   };
+      //   queryForIps.push(singlequery);
+      // });
+      // if (queryForIps.length > 0) {
+      //   query.$or = queryForIps;
+      // }
+      const projection = {
+        projection: {
+          _id: 0,
+          geolocation: 1,
+        },
+      };
+      // return latest fluxnode round
+      results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection);
       results = results.filter((node) => node.geolocation);
-      myCache.set('geolocation', results);
+      const bresults = results.map((x) => x.geolocation);
+      myCache.set('geolocation', bresults);
+      fluxLocationsRunning = false;
     }
-    const bresults = results.map((x) => x.geolocation);
-    const resMessage = serviceHelper.createDataMessage(bresults);
-    fluxLocationsRunning = false;
+    const resMessage = serviceHelper.createDataMessage(results);
     res.json(resMessage);
   } catch (error) {
     fluxLocationsRunning = false;
@@ -875,43 +934,41 @@ async function getFluxIPHistory(req, res) {
     let { ip } = req.params; // we accept both help/command and help?command=getinfo
     ip = ip || req.query.ip;
     if (!ip) {
-      const errMessage = serviceHelper.createErrorMessage('No IP provided');
-      res.json(errMessage);
-      return;
+      throw new Error('No IP provided');
     }
-    const query = {
-      ip,
-    };
-    const projection = {
-      projection: {
-        _id: 0,
-        ip: 1,
-        addedHeight: 1,
-        lastPaidHeight: 1,
-        tier: 1,
-        activeSince: 1,
-        confirmedHeight: 1,
-        lastConfirmedHeight: 1,
-        collateralHash: 1,
-        collateralIndex: 1,
-        paymentAddress: 1,
-        roundTime: 1,
-        dataCollectedAt: 1,
-        geolocation: 1,
-        daemon: 1,
-        node: 1,
-        benchmark: 1,
-        flux: 1,
-        apps: 1,
-      },
-    };
-    // return latest fluxnode round
-    const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection).catch((error) => {
-      const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
-      res.json(errMessage);
-      log.error(error);
-    });
-    const resMessage = serviceHelper.createDataMessage(results);
+    let ipHistory = myCacheShort.get(`ipHistory${ip}`);
+    if (!ipHistory) {
+      const query = {
+        ip,
+      };
+      const projection = {
+        projection: {
+          _id: 0,
+          ip: 1,
+          addedHeight: 1,
+          lastPaidHeight: 1,
+          tier: 1,
+          activeSince: 1,
+          confirmedHeight: 1,
+          lastConfirmedHeight: 1,
+          collateralHash: 1,
+          collateralIndex: 1,
+          paymentAddress: 1,
+          roundTime: 1,
+          dataCollectedAt: 1,
+          geolocation: 1,
+          daemon: 1,
+          node: 1,
+          benchmark: 1,
+          flux: 1,
+          apps: 1,
+        },
+      };
+      // return latest fluxnode round
+      ipHistory = await serviceHelper.findInDatabase(database, fluxcollection, query, projection);
+      myCacheShort.set(`ipHistory${ip}`, ipHistory);
+    }
+    const resMessage = serviceHelper.createDataMessage(ipHistory);
     res.json(resMessage);
   } catch (error) {
     const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
@@ -922,55 +979,16 @@ async function getFluxIPHistory(req, res) {
 
 async function getCompletedRoundsTimestamps(req, res) {
   try {
-    const database = db.db(config.database.local.database);
-    const q = {};
-    const p = {};
-    const completedRounds = await serviceHelper.findInDatabase(database, completedRoundsCollection, q, p).catch((error) => {
-      const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
-      res.json(errMessage);
-      log.error(error);
-    });
-    const bresults = completedRounds.map((x) => x.timestamp);
-    const resMessage = serviceHelper.createDataMessage(bresults);
-    res.json(resMessage);
-  } catch (error) {
-    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
-    res.json(errMessage);
-    log.error(error);
-  }
-}
-
-async function getAllFluxGeolocationNow(req, res) {
-  try {
-    const database = db.db(config.database.local.database);
-    const queryForIps = [];
-    const fluxnodeIpsNow = await getFluxNodeIPs();
-    fluxnodeIpsNow.forEach((ip) => {
-      const singlequery = {
-        ip,
-      };
-      queryForIps.push(singlequery);
-    });
-    const query = {};
-    if (queryForIps.length > 0) {
-      query.$or = queryForIps;
+    let timestamps = myCacheShort.get('getCompletedRoundsTimestamps');
+    if (!timestamps) {
+      const database = db.db(config.database.local.database);
+      const q = {};
+      const p = {};
+      const completedRounds = await serviceHelper.findInDatabase(database, completedRoundsCollection, q, p);
+      timestamps = completedRounds.map((x) => x.timestamp);
+      myCacheShort.set('getCompletedRoundsTimestamps', timestamps);
     }
-    const projection = {
-      projection: {
-        _id: 0,
-        geolocation: 1,
-      },
-    };
-    // return latest fluxnode round
-    let results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection).catch((error) => {
-      const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
-      res.json(errMessage);
-      log.error(error);
-    });
-    results = results.filter((node) => node.geolocation);
-    const bresults = results.map((x) => x.geolocation);
-    const cresults = [...new Set(bresults)];
-    const resMessage = serviceHelper.createDataMessage(cresults);
+    const resMessage = serviceHelper.createDataMessage(timestamps);
     res.json(resMessage);
   } catch (error) {
     const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
@@ -979,23 +997,74 @@ async function getAllFluxGeolocationNow(req, res) {
   }
 }
 
+let runninggetAllFluxGeolocationNow = false;
+async function getAllFluxGeolocationNow(req, res, i = 0) {
+  try {
+    let results = myCacheShort.get('getAllFluxGeolocationNow');
+    if (!results) {
+      if (runninggetAllFluxGeolocationNow) {
+        await serviceHelper.timeout(100);
+        if (i < 300) {
+          getAllFluxGeolocationNow(req, res, i + 1);
+        }
+        throw new Error('Internal error. Try again later');
+      }
+      runninggetAllFluxGeolocationNow = true;
+      const database = db.db(config.database.local.database);
+      const queryForIps = [];
+      const fluxnodeIpsNow = await getFluxNodeIPs();
+      fluxnodeIpsNow.forEach((ip) => {
+        const singlequery = {
+          ip,
+        };
+        queryForIps.push(singlequery);
+      });
+      const query = {};
+      if (queryForIps.length > 0) {
+        query.$or = queryForIps;
+      }
+      const projection = {
+        projection: {
+          _id: 0,
+          geolocation: 1,
+        },
+      };
+      // return latest fluxnode round
+      let resultsA = await serviceHelper.findInDatabase(database, fluxcollection, query, projection);
+      resultsA = resultsA.filter((node) => node.geolocation);
+      const bresults = resultsA.map((x) => x.geolocation);
+      results = [...new Set(bresults)];
+      myCacheShort.set('getAllFluxGeolocationNow', results);
+      runninggetAllFluxGeolocationNow = false;
+    }
+    const resMessage = serviceHelper.createDataMessage(results);
+    res.json(resMessage);
+  } catch (error) {
+    runninggetAllFluxGeolocationNow = false;
+    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+    res.json(errMessage);
+    log.error(error);
+  }
+}
+
+let fluxNodeHistoryStatsRunning = false;
 async function fluxNodesHistoryStats(req, res, i = 0) {
   try {
-    if (fluxNodeHistoryStatsRunning) {
-      await serviceHelper.timeout(100);
-      if (i < 300) {
-        fluxNodesHistoryStats(req, res, i + 1);
+    let historystats = myCache.get('historyStats');
+    if (!historystats) {
+      if (fluxNodeHistoryStatsRunning) {
+        await serviceHelper.timeout(100);
+        if (i < 300) {
+          fluxNodesHistoryStats(req, res, i + 1);
+        }
+        throw new Error('Internal error. Try again later');
       }
-      return;
-    }
-    fluxNodeHistoryStatsRunning = true;
-    let dataForSend = myCache.get('historyStats');
-    if (!dataForSend) {
+      fluxNodeHistoryStatsRunning = true;
       await createHistoryStats();
+      fluxNodeHistoryStatsRunning = false;
+      historystats = myCache.get('historyStats');
     }
-    dataForSend = myCache.get('historyStats');
-    const resMessage = serviceHelper.createDataMessage(dataForSend);
-    fluxNodeHistoryStatsRunning = false;
+    const resMessage = serviceHelper.createDataMessage(historystats);
     res.json(resMessage);
   } catch (error) {
     fluxNodeHistoryStatsRunning = false;
