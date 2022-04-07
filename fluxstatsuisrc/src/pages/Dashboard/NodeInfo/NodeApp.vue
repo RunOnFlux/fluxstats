@@ -58,7 +58,8 @@
                                :key="column.label"
                                :min-width="column.minWidth"
                                :prop="column.prop"
-                               :label="column.label">
+                               :label="column.label"
+                               sortable>
               </el-table-column>
             </el-table>
           </div>
@@ -99,7 +100,7 @@
         pagination: {
           perPage: 5,
           currentPage: 1,
-          perPageOptions: [5, 10, 25, 50],
+          perPageOptions: [5, 10, 25, 50, 100, 200, 500, 1000, 2000, 5000, 10000],
           total: 0
         },
         searchQuery: '',
