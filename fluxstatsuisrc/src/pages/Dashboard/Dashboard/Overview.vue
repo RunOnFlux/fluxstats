@@ -141,7 +141,7 @@
           },
           options: {
             low: 0,
-            high: 1500,
+            high: 10000,
             showArea: false,
             height: '245px',
             axisX: {
