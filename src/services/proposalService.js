@@ -75,8 +75,8 @@ function getLastProposalTxs(transactions) {
           const hexx = encodedMessage.toString(); // force conversion
           // console.log(hexx)
           let strx = '';
-          for (let k = 0; k < hexx.length && hexx.substr(k, 2) !== '00'; k += 2) {
-            strx += String.fromCharCode(parseInt(hexx.substr(k, 2), 16));
+          for (let k = 0; k < hexx.length && hexx.slice(k, k + 2) !== '00'; k += 2) {
+            strx += String.fromCharCode(parseInt(hexx.slice(k, k + 2), 16));
           }
           if (strx !== '') {
             isMessage = strx;
