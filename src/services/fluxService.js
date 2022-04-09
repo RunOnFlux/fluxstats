@@ -97,7 +97,7 @@ async function getFluxNodeGeolocation(ip) {
         source.cancel('Operation canceled by the user.');
       }
     }, defaultTimeout * 2);
-    const ipApiUrl = `http://ip-api.com/json/${ip.split(':')[0]}?fields=status,country,countryCode,lat,lon,query,org`;
+    const ipApiUrl = `http://ip-api.com/json/${ip.split(':')[0]}?fields=status,continent,continentCode,country,countryCode,region,regionName,lat,lon,query,org`;
     const ipRes = await httpGeo.get(ipApiUrl);
     isResolved = true;
     if (ipRes.data.status === 'success') {
@@ -107,6 +107,8 @@ async function getFluxNodeGeolocation(ip) {
         continentCode: ipRes.data.continentCode,
         country: ipRes.data.country,
         countryCode: ipRes.data.countryCode,
+        region: ipRes.data.region,
+        regionName: ipRes.data.regionName,
         lat: ipRes.data.lat,
         lon: ipRes.data.lon,
         org: ipRes.data.org,
@@ -385,8 +387,12 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
       projection: {
         _id: 0,
         ip: 1,
+        continent: 1,
+        continentCode: 1,
         country: 1,
         countryCode: 1,
+        region: 1,
+        regionName: 1,
         lat: 1,
         lon: 1,
         org: 1,
@@ -495,6 +501,8 @@ async function getGeolocationInBatchAndRefreshDatabase() {
                 continentCode: geo.continentCode,
                 country: geo.country,
                 countryCode: geo.countryCode,
+                region: geo.region,
+                regionName: geo.regionName,
                 lat: geo.lat,
                 lon: geo.lon,
                 org: geo.org,
@@ -529,6 +537,8 @@ async function getGeolocationInBatchAndRefreshDatabase() {
                 continentCode: geo.continentCode,
                 country: geo.country,
                 countryCode: geo.countryCode,
+                region: geo.region,
+                regionName: geo.regionName,
                 lat: geo.lat,
                 lon: geo.lon,
                 org: geo.org,
@@ -671,8 +681,12 @@ async function getAllGeolocation(req, res, i = 0) {
         projection: {
           _id: 0,
           ip: 1,
+          continent: 1,
+          continentCode: 1,
           country: 1,
           countryCode: 1,
+          region: 1,
+          regionName: 1,
           lat: 1,
           lon: 1,
           org: 1,
