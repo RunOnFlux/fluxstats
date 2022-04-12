@@ -797,7 +797,7 @@ async function getAllFluxInformation(req, res, i = 0) {
         if (i < 60) {
           getAllFluxInformation(req, res, i + 1);
         }
-        return;
+        throw new Error('Internal error. Try again later');
       }
       fluxInformationRunning = true;
       // return latest fluxnode round
@@ -826,7 +826,7 @@ async function getAllFluxVersions(req, res, i = 0) {
         if (i < 120) {
           getAllFluxVersions(req, res, i + 1);
         }
-        return;
+        throw new Error('Internal error. Try again later');
       }
       runninggetAllFluxVersions = true;
       const database = db.db(config.database.local.database);
@@ -900,7 +900,7 @@ async function getAllFluxGeolocation(req, res, i = 0) {
         if (i < 300) {
           getAllFluxGeolocation(req, res, i + 1);
         }
-        return;
+        throw new Error('Internal error. Try again later');
       }
       fluxLocationsRunning = true;
       const database = db.db(config.database.local.database);
