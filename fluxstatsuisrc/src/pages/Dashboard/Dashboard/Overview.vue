@@ -22,7 +22,7 @@
               <i class="nc-icon nc-chart text-info"></i>
             </div>
             <template slot="footer">
-              10,000 Flux
+              1,000 Flux
             </template>
           </stats-card>
         </div>
@@ -32,7 +32,7 @@
               <i class="nc-icon nc-chart text-danger"></i>
             </div>
             <template slot="footer">
-              25,000 Flux
+              12,500 Flux
             </template>
           </stats-card>
         </div>
@@ -42,11 +42,40 @@
               <i class="nc-icon nc-chart text-warning"></i>
             </div>
             <template slot="footer">
-              100,000 Flux
+              40,000 Flux
             </template>
           </stats-card>
         </div>
-
+        <div class="col-xl-3 col-md-6">
+          <stats-card :title="totalTBSSD.toString()" subTitle="TB SSD">
+            <div slot="header" class="icon-success">
+              <i class="nc-icon nc-chart-bar-32 text-success"></i>
+            </div>
+            <template slot="footer">
+              Total Number of Available Storage
+            </template>
+          </stats-card>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <stats-card :title="totalVCores.toString()" subTitle="VCORES">
+            <div slot="header" class="icon-info">
+              <i class="nc-icon nc-chart-bar-32 text-info"></i>
+            </div>
+            <template slot="footer">
+              Total Number of Available Cores
+            </template>
+          </stats-card>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <stats-card :title="totalTBRAM.toString()" subTitle="TB RAM">
+            <div slot="header" class="icon-danger">
+              <i class="nc-icon nc-chart-bar-32 text-danger"></i>
+            </div>
+            <template slot="footer">
+              Total Number of Available RAM
+            </template>
+          </stats-card>
+        </div>
       </div>
 
       <div class="row" v-if="!isFetching">
@@ -111,6 +140,19 @@
             </template>
           </chart-card>
         </div>
+        <div class="col-md-6">
+          <card class="card-tasks" title="Top 5 Organizations" subTitle="Organizations With Highest Node Count">
+            <l-table :data="tableData2.data">
+              <template slot-scope="{row}">
+                <td>{{row.title}}</td>
+                <td class="td-actions d-flex justify-content-end">
+                </td>
+              </template>
+            </l-table>
+            <div class="stats" slot="footer">
+            </div>
+          </card>
+        </div>
       </div>
   </div>
 </template>
@@ -124,7 +166,9 @@
     components: {
       ChartCard,
       StatsCard,
-      Loading
+      Loading,
+      LTable,
+      Card
     },
     data () {
       return {
@@ -190,10 +234,17 @@
         },
         tableData: [],
         tableData1: [],
+        tableData2: {
+          data: [
+          ]
+        },
         totalNumberOfNodes: 0,
         totalNumberOfCumulus: 0,
         totalNumberOfNimbus: 0,
         totalNumberOfStratus: 0,
+        totalTBSSD: 0,
+        totalVCores: 0,
+        totalTBRAM: 0,
         isLoading: true,
         statsLength: 0,
         isFetching: true
@@ -205,9 +256,10 @@
       let mapCumulus = new Map();
       let mapNimbus = new Map();
       let mapStratus = new Map();
+      let mapOrganizations = new Map();
 
       axios
-      .get('https://stats.runonflux.io/fluxinfo?projection=ip,tier,geolocation')
+      .get('https://stats.runonflux.io/fluxinfo?projection=ip,tier,geolocation,benchmark')
       .then(response => {
         this.totalNumberOfNodes = Object.keys(response.data.data).length
         this.totalNumberOfCumulus = 0
@@ -221,6 +273,16 @@
             this.totalNumberOfNimbus++
           } else if (data.tier === 'STRATUS') {
             this.totalNumberOfStratus++
+          }
+
+          this.totalVCores = this.totalVCores + data.benchmark.bench.cores
+          this.totalTBSSD = this.totalTBSSD + data.benchmark.bench.ssd
+          this.totalTBRAM = this.totalTBRAM + data.benchmark.bench.ram
+
+          if (mapOrganizations.has(data.geolocation.org)) {
+            mapOrganizations.set(data.geolocation.org, mapOrganizations.get(data.geolocation.org)+1)
+          } else {
+            mapOrganizations.set(data.geolocation.org, 1)
           }
 
           if (map.has(data.geolocation.country)) {
@@ -240,6 +302,9 @@
             mapStratus.set(data.geolocation.country, mapStratus.get(data.geolocation.country)+1)
           }
         })
+
+        this.totalTBSSD = Number(this.totalTBSSD/100).toFixed(2)
+        this.totalTBRAM = Number(this.totalTBRAM/100).toFixed(2)
 
         let pieChartPercentageCumulus = ((this.totalNumberOfCumulus/this.totalNumberOfNodes) * 100).toFixed(2)
         let pieChartPercentageNimbus = ((this.totalNumberOfNimbus/this.totalNumberOfNodes) * 100).toFixed(2)
@@ -277,6 +342,31 @@
            mapStratus.get(ent[5].name), mapStratus.get(ent[6].name), mapStratus.get(ent[7].name), mapStratus.get(ent[8].name), mapStratus.get(ent[9].name)],
           [ent[0].total, ent[1].total, ent[2].total, ent[3].total, ent[4].total, ent[5].total, ent[6].total, ent[7].total, ent[8].total, ent[9].total],
         ]
+
+        idx = 0;
+        ent = [];
+        for (var entry of new Map([...mapOrganizations.entries()].sort((a, b) => b[1] - a[1])).entries()) {
+          var key = entry[0],
+              value = entry[1];
+
+          ent.push({
+            name: key,
+            total: value,
+          });
+          
+          if (idx < 9) {
+            idx++;
+          } else {
+            break;
+          }
+        }
+
+        this.tableData2.data.push({title: `1. ${ent[0].name} - ${ent[0].total} Nodes`});
+        this.tableData2.data.push({title: `2. ${ent[1].name} - ${ent[1].total} Nodes`});
+        this.tableData2.data.push({title: `3. ${ent[2].name} - ${ent[2].total} Nodes`});
+        this.tableData2.data.push({title: `4. ${ent[3].name} - ${ent[3].total} Nodes`});
+        this.tableData2.data.push({title: `5. ${ent[4].name} - ${ent[4].total} Nodes`});
+
       }).then(() => {
         axios
         .get('https://stats.runonflux.io/fluxhistorystats')

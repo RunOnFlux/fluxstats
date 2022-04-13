@@ -5,19 +5,19 @@
       <user-menu></user-menu>
       <mobile-menu></mobile-menu>
       <template slot="links">
-        <sidebar-item :link="{name: 'Dashboard', icon: 'nc-icon nc-chart-pie-35', path: '/admin/overview'}">
+        <sidebar-item :link="{name: 'Dashboard', icon: 'nc-icon nc-chart-pie-35', path: '/flux/dashboard/overview'}">
         </sidebar-item>
         <sidebar-item :link="{name: 'Node Info', icon: 'nc-icon nc-app'}">
-          <sidebar-item :link="{name: 'Node', path: '/nodeinfo/node'}"></sidebar-item>
-          <sidebar-item :link="{name: 'Application', path: '/nodeinfo/app'}"></sidebar-item>
-          <sidebar-item :link="{name: 'Hashes', path: '/nodeinfo/hashes'}"></sidebar-item>
-          <sidebar-item :link="{name: 'Location', path: '/nodeinfo/location'}"></sidebar-item>
-          <sidebar-item :link="{name: 'Connection', path: '/nodeinfo/connection'}"></sidebar-item>
-          <sidebar-item :link="{name: 'UpTime', path: '/nodeinfo/uptime'}"></sidebar-item>
-          <sidebar-item :link="{name: 'Version', path: '/nodeinfo/version'}"></sidebar-item>
+          <sidebar-item :link="{name: 'Node', path: '/flux/nodeinfo/node'}"></sidebar-item>
+          <sidebar-item :link="{name: 'Application', path: '/flux/nodeinfo/app'}"></sidebar-item>
+          <sidebar-item :link="{name: 'Hashes', path: '/flux/nodeinfo/hashes'}"></sidebar-item>
+          <sidebar-item :link="{name: 'Location', path: '/flux/nodeinfo/location'}"></sidebar-item>
+          <sidebar-item :link="{name: 'Connection', path: '/flux/nodeinfo/connection'}"></sidebar-item>
+          <sidebar-item :link="{name: 'UpTime', path: '/flux/nodeinfo/uptime'}"></sidebar-item>
+          <sidebar-item :link="{name: 'Version', path: '/flux/nodeinfo/version'}"></sidebar-item>
         </sidebar-item>
         <sidebar-item :link="{name: 'History', icon: 'nc-icon nc-notes'}">
-          <sidebar-item :link="{name: 'Info', path: '/nodehistory/historyinfo'}"></sidebar-item>
+          <sidebar-item :link="{name: 'Info', path: '/flux/nodehistory/historyinfo'}"></sidebar-item>
         </sidebar-item>
       </template>
     </side-bar>
