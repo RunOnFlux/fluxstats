@@ -23,9 +23,9 @@ const Calendar = () => import('src/pages/Dashboard/Calendar/CalendarRoute.vue')
 const Charts = () => import('src/pages/Dashboard/Charts.vue')
 
 let nodeInfo = {
-  path: '/nodeinfo',
+  path: '/flux/nodeinfo',
   component: DashboardLayout,
-  redirect: '/nodeinfo/active',
+  redirect: '/flux/nodeinfo/active',
   children: [
     {
       path: 'uptime',
@@ -65,9 +65,9 @@ let nodeInfo = {
 }
 
 let nodeHistory = {
-  path: '/nodehistory',
+  path: '/flux/nodehistory',
   component: DashboardLayout,
-  redirect: '/nodehistory/historyinfo',
+  redirect: '/flux/nodehistory/historyinfo',
   children: [
     {
       path: 'historyinfo',
@@ -79,14 +79,14 @@ let nodeHistory = {
 const routes = [
   {
     path: '/',
-    redirect: '/admin/overview'
+    redirect: '/flux/dashboard/overview'
   },
   nodeInfo,
   nodeHistory,
   {
-    path: '/admin',
+    path: '/flux/dashboard',
     component: DashboardLayout,
-    redirect: '/admin/overview',
+    redirect: '/flux/dashboard/overview',
     children: [
       {
         path: 'overview',
@@ -110,7 +110,7 @@ const routes = [
       }
     ]
   },
-  {path: '*', redirect: '/admin/overview'}
+  {path: '*', redirect: '/flux/dashboard/overview'}
 ]
 
 export default routes
