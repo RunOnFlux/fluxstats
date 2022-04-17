@@ -1,24 +1,29 @@
 @import "../variables";
 
-@mixin slider($name, $color, $height: 4px){
-  .slider-#{$name}{
+@mixin slider($name, $color, $height: 4px) {
+  .slider-#{$name} {
     .el-slider__bar {
       height: $height;
       background-color: $color;
     }
-    .el-slider__runway{
+
+    .el-slider__runway {
       height: $height;
     }
-    .el-tooltip{
+
+    .el-tooltip {
       border: none;
     }
-    .el-slider__button{
+
+    .el-slider__button {
+
       &.hover,
       &:hover,
       &.dragging {
         height: $height * 4.5;
         width: $height * 4.5;
       }
+
       background-color: white;
       height: $height * 4;
       width: $height * 4;

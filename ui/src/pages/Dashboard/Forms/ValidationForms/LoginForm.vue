@@ -9,61 +9,68 @@
         </div>
         <div>
           <ValidationProvider
+            v-slot="{ passed, failed }"
             name="email"
             rules="required|email"
-            v-slot="{ passed, failed }"
           >
-            <fg-input  type="email"
-                       :error="failed ? 'The Email field is required': null"
-                       :hasSuccess="passed"
-                       label="Email address"
-                       name="email"
-                       v-model="email">
-            </fg-input>
+            <fg-input
+              v-model="email"
+              type="email"
+              :error="failed ? 'The Email field is required': null"
+              :has-success="passed"
+              label="Email address"
+              name="email"
+            />
           </ValidationProvider>
 
           <ValidationProvider
+            v-slot="{ passed, failed }"
             name="password"
             rules="required|min:5"
-            v-slot="{ passed, failed }"
           >
-            <fg-input  type="password"
-                       :error="failed ? 'The Password field is required': null"
-                       :hasSuccess="passed"
-                       name="password"
-                       label="Password"
-                       v-model="password">
-            </fg-input>
+            <fg-input
+              v-model="password"
+              type="password"
+              :error="failed ? 'The Password field is required': null"
+              :has-success="passed"
+              name="password"
+              label="Password"
+            />
           </ValidationProvider>
         </div>
         <div class="d-flex justify-content-center">
-          <button type="submit" class="btn btn-fill btn-info btn-wd">Login</button>
+          <button
+            type="submit"
+            class="btn btn-fill btn-info btn-wd"
+          >
+            Login
+          </button>
         </div>
       </card>
     </form>
   </ValidationObserver>
 </template>
 <script>
-import { extend } from "vee-validate";
-import { required, email, min } from "vee-validate/dist/rules";
+import { extend } from 'vee-validate';
+import { required, email, min } from 'vee-validate/dist/rules';
 
-extend("email", email);
-extend("required", required);
-extend("min", min);
+extend('email', email);
+extend('required', required);
+extend('min', min);
 
-  export default {
-    data() {
-      return {
-        email: "",
-        password: ""
-      };
+export default {
+  data() {
+    return {
+      email: '',
+      password: '',
+    };
+  },
+  methods: {
+    submit() {
+      alert('Form has been submitted!');
     },
-    methods: {
-      submit() {
-        alert("Form has been submitted!");
-      }
-    }
-  }
+  },
+};
 </script>
 <style>
 </style>

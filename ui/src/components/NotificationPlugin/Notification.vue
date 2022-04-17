@@ -1,6 +1,5 @@
 <template>
   <div
-    @click="tryClose"
     data-notify="container"
     class="alert open"
     :class="[
@@ -12,6 +11,7 @@
     role="alert"
     :style="customPosition"
     data-notify-position="top-center"
+    @click="tryClose"
   >
     <button
       v-if="showClose"
@@ -21,37 +21,45 @@
       data-notify="dismiss"
       @click="close"
     >
-      <i class="nc-icon nc-simple-remove"></i>
+      <i class="nc-icon nc-simple-remove" />
     </button>
 
-    <span v-if="icon" data-notify="icon" :class="['alert-icon', icon]"></span>
+    <span
+      v-if="icon"
+      data-notify="icon"
+      :class="['alert-icon', icon]"
+    />
     <span data-notify="message">
-      <span v-if="title" class="title"
-        ><b>{{ title }}<br /></b
-      ></span>
-      <span v-if="message" v-html="message"></span>
+      <span
+        v-if="title"
+        class="title"
+      ><b>{{ title }}<br></b></span>
+      <span
+        v-if="message"
+        v-html="message"
+      />
       <content-render
         v-if="!message && component"
         :component="component"
-      ></content-render>
+      />
     </span>
   </div>
 </template>
 <script>
 export default {
-  name: 'notification',
+  name: 'Notification',
   components: {
     contentRender: {
       props: ['component'],
       render(h) {
         // register component locally if it's not registered
-        let componentsObj = this.$options.components;
-        if(!componentsObj[this.component.name]) {
+        const componentsObj = this.$options.components;
+        if (!componentsObj[this.component.name]) {
           componentsObj[this.component.name] = this.component;
         }
-        return h(this.component)
-      }
-    }
+        return h(this.component);
+      },
+    },
   },
   props: {
     message: String,
@@ -60,60 +68,58 @@ export default {
     verticalAlign: {
       type: String,
       default: 'top',
-      validator: value => {
-        let acceptedValues = ['top', 'bottom'];
+      validator: (value) => {
+        const acceptedValues = ['top', 'bottom'];
         return acceptedValues.indexOf(value) !== -1;
-      }
+      },
     },
     horizontalAlign: {
       type: String,
       default: 'right',
-      validator: value => {
-        let acceptedValues = ['left', 'center', 'right'];
+      validator: (value) => {
+        const acceptedValues = ['left', 'center', 'right'];
         return acceptedValues.indexOf(value) !== -1;
-      }
+      },
     },
     type: {
       type: String,
       default: 'info',
-      validator: value => {
-        let acceptedValues = [
+      validator: (value) => {
+        const acceptedValues = [
           'info',
           'primary',
           'danger',
           'warning',
-          'success'
+          'success',
         ];
         return acceptedValues.indexOf(value) !== -1;
-      }
+      },
     },
     timeout: {
       type: Number,
       default: 5000,
-      validator: value => {
-        return value >= 0;
-      }
+      validator: (value) => value >= 0,
     },
     timestamp: {
       type: Date,
-      default: () => new Date()
+      default: () => new Date(),
     },
     component: {
-      type: [Object, Function]
+      type: [Object, Function],
     },
     showClose: {
       type: Boolean,
-      default: true
+      default: true,
     },
     closeOnClick: {
       type: Boolean,
-      default: true
+      default: true,
     },
-    clickHandler: Function
+    clickHandler: Function,
   },
   data() {
     return {
-      elmHeight: 0
+      elmHeight: 0,
     };
   },
   computed: {
@@ -124,26 +130,30 @@ export default {
       return `alert-${this.type}`;
     },
     customPosition() {
-      let initialMargin = 20;
-      let alertHeight = this.elmHeight + 10;
-      let sameAlertsCount = this.$notifications.state.filter(alert => {
-        return (
-          alert.horizontalAlign === this.horizontalAlign &&
-          alert.verticalAlign === this.verticalAlign &&
-          alert.timestamp <= this.timestamp
-        );
-      }).length;
+      const initialMargin = 20;
+      const alertHeight = this.elmHeight + 10;
+      let sameAlertsCount = this.$notifications.state.filter((alert) => (
+        alert.horizontalAlign === this.horizontalAlign
+          && alert.verticalAlign === this.verticalAlign
+          && alert.timestamp <= this.timestamp
+      )).length;
       if (this.$notifications.settings.overlap) {
         sameAlertsCount = 1;
       }
-      let pixels = (sameAlertsCount - 1) * alertHeight + initialMargin;
-      let styles = {};
+      const pixels = (sameAlertsCount - 1) * alertHeight + initialMargin;
+      const styles = {};
       if (this.verticalAlign === 'top') {
         styles.top = `${pixels}px`;
       } else {
         styles.bottom = `${pixels}px`;
       }
       return styles;
+    },
+  },
+  mounted() {
+    this.elmHeight = this.$el.clientHeight;
+    if (this.timeout) {
+      setTimeout(this.close, this.timeout);
     }
   },
   methods: {
@@ -157,14 +167,8 @@ export default {
       if (this.closeOnClick) {
         this.close();
       }
-    }
+    },
   },
-  mounted() {
-    this.elmHeight = this.$el.clientHeight;
-    if (this.timeout) {
-      setTimeout(this.close, this.timeout);
-    }
-  }
 };
 </script>
 <style lang="scss">
@@ -172,7 +176,7 @@ export default {
   position: fixed;
   z-index: 10000;
 
-  &[data-notify='container'] {
+  &[data-notify="container"] {
     width: 400px;
   }
 

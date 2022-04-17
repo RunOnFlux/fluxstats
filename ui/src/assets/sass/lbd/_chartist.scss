@@ -18,7 +18,7 @@
     clear: both;
   }
 
-  > svg {
+  >svg {
     display: block;
     position: absolute;
     top: 0;
@@ -35,12 +35,17 @@
   -webkit-justify-content: $ct-text-justify;
   -ms-flex-pack: $ct-text-justify;
   justify-content: $ct-text-justify;
+
   // Fallback to text-align for non-flex browsers
-  @if($ct-text-justify == 'flex-start') {
+  @if($ct-text-justify=='flex-start') {
     text-align: left;
-  } @else if ($ct-text-justify == 'flex-end') {
+  }
+
+  @else if ($ct-text-justify=='flex-end') {
     text-align: right;
-  } @else {
+  }
+
+  @else {
     text-align: center;
   }
 }
@@ -101,11 +106,16 @@
 }
 
 @mixin ct-chart-series-color($color) {
-  .#{$ct-class-point}, .#{$ct-class-line}, .#{$ct-class-bar}, .#{$ct-class-slice-donut} {
+
+  .#{$ct-class-point},
+  .#{$ct-class-line},
+  .#{$ct-class-bar},
+  .#{$ct-class-slice-donut} {
     stroke: $color;
   }
 
-  .#{$ct-class-slice-pie}, .#{$ct-class-area} {
+  .#{$ct-class-slice-pie},
+  .#{$ct-class-area} {
     fill: $color;
   }
 }

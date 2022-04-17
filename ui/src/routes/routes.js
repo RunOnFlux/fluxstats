@@ -1,28 +1,28 @@
-import DashboardLayout from 'src/pages/Dashboard/Layout/DashboardLayout.vue'
+import DashboardLayout from 'src/pages/Dashboard/Layout/DashboardLayout.vue';
 
 // Dashboard pages
-import Overview from 'src/pages/Dashboard/Dashboard/Overview.vue'
-import Stats from 'src/pages/Dashboard/Dashboard/Stats.vue'
+import Overview from 'src/pages/Dashboard/Dashboard/Overview.vue';
+import Stats from 'src/pages/Dashboard/Dashboard/Stats.vue';
 
 // NodeInfo pages
-const Node = () => import('@/pages/Dashboard/NodeInfo/Node.vue')
-const NodeVersion = () => import('@/pages/Dashboard/NodeInfo/NodeVersion.vue')
-const NodeLocation = () => import('@/pages/Dashboard/NodeInfo/NodeLocation.vue')
-const NodeUptime = () => import('@/pages/Dashboard/NodeInfo/NodeUptime.vue')
-const NodeApp = () => import('@/pages/Dashboard/NodeInfo/NodeApp.vue')
-const NodeAppHash = () => import('@/pages/Dashboard/NodeInfo/NodeAppHash.vue')
-const NodeConnection = () => import('@/pages/Dashboard/NodeInfo/NodeConnection.vue')
+const Node = () => import('@/pages/Dashboard/NodeInfo/Node.vue');
+const NodeVersion = () => import('@/pages/Dashboard/NodeInfo/NodeVersion.vue');
+const NodeLocation = () => import('@/pages/Dashboard/NodeInfo/NodeLocation.vue');
+const NodeUptime = () => import('@/pages/Dashboard/NodeInfo/NodeUptime.vue');
+const NodeApp = () => import('@/pages/Dashboard/NodeInfo/NodeApp.vue');
+const NodeAppHash = () => import('@/pages/Dashboard/NodeInfo/NodeAppHash.vue');
+const NodeConnection = () => import('@/pages/Dashboard/NodeInfo/NodeConnection.vue');
 
 // NodeHistory pages
-const HistoryInfo = () => import('@/pages/Dashboard/NodeHistory/HistoryInfo.vue')
+const HistoryInfo = () => import('@/pages/Dashboard/NodeHistory/HistoryInfo.vue');
 
 // Calendar
-const Calendar = () => import('src/pages/Dashboard/Calendar/CalendarRoute.vue')
+const Calendar = () => import('src/pages/Dashboard/Calendar/CalendarRoute.vue');
 
 // Charts
-const Charts = () => import('src/pages/Dashboard/Charts.vue')
+const Charts = () => import('src/pages/Dashboard/Charts.vue');
 
-let nodeInfo = {
+const nodeInfo = {
   path: '/flux/nodeinfo',
   component: DashboardLayout,
   redirect: '/flux/nodeinfo/active',
@@ -30,41 +30,41 @@ let nodeInfo = {
     {
       path: 'uptime',
       name: 'UpTime',
-      component: NodeUptime
+      component: NodeUptime,
     },
     {
       path: 'hashes',
       name: 'Hashes',
-      component: NodeAppHash
+      component: NodeAppHash,
     },
     {
       path: 'node',
       name: 'Node',
-      component: Node
+      component: Node,
     },
     {
       path: 'version',
       name: 'Version',
-      component: NodeVersion
+      component: NodeVersion,
     },
     {
       path: 'app',
       name: 'App',
-      component: NodeApp
+      component: NodeApp,
     },
     {
       path: 'connection',
       name: 'Connection',
-      component: NodeConnection
+      component: NodeConnection,
     },
     {
       path: 'location',
       name: 'Location',
-      component: NodeLocation
-    },]
-}
+      component: NodeLocation,
+    }],
+};
 
-let nodeHistory = {
+const nodeHistory = {
   path: '/flux/nodehistory',
   component: DashboardLayout,
   redirect: '/flux/nodehistory/historyinfo',
@@ -72,14 +72,14 @@ let nodeHistory = {
     {
       path: 'historyinfo',
       name: 'History Info',
-      component: HistoryInfo
-    }]
-}
+      component: HistoryInfo,
+    }],
+};
 
 const routes = [
   {
     path: '/',
-    redirect: '/flux/dashboard/overview'
+    redirect: '/flux/dashboard/overview',
   },
   nodeInfo,
   nodeHistory,
@@ -91,26 +91,26 @@ const routes = [
       {
         path: 'overview',
         name: 'Overview',
-        component: Overview
+        component: Overview,
       },
       {
         path: 'stats',
         name: 'Stats',
-        component: Stats
+        component: Stats,
       },
       {
         path: 'calendar',
         name: 'Calendar',
-        component: Calendar
+        component: Calendar,
       },
       {
         path: 'charts',
         name: 'Charts',
-        component: Charts
-      }
-    ]
+        component: Charts,
+      },
+    ],
   },
-  {path: '*', redirect: '/flux/dashboard/overview'}
-]
+  { path: '*', redirect: '/flux/dashboard/overview' },
+];
 
-export default routes
+export default routes;

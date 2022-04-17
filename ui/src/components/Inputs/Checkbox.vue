@@ -1,51 +1,59 @@
 <template>
-  <div class="form-check" :class="[inlineClass, {disabled: disabled}]">
-    <label :for="cbId" class="form-check-label">
-      <input :id="cbId"
-             class="form-check-input"
-             type="checkbox"
-             :disabled="disabled"
-             v-model="model" />
-      <span class="form-check-sign"></span>
-      <slot></slot>
+  <div
+    class="form-check"
+    :class="[inlineClass, {disabled: disabled}]"
+  >
+    <label
+      :for="cbId"
+      class="form-check-label"
+    >
+      <input
+        :id="cbId"
+        v-model="model"
+        class="form-check-input"
+        type="checkbox"
+        :disabled="disabled"
+      >
+      <span class="form-check-sign" />
+      <slot />
     </label>
   </div>
 </template>
 <script>
-  export default{
-    name: 'l-checkbox',
+export default {
+  name: 'LCheckbox',
+  model: {
+    prop: 'checked',
+  },
+  props: {
+    checked: [Array, Boolean],
+    disabled: [Boolean, String],
+    inline: Boolean,
+  },
+  data() {
+    return {
+      cbId: '',
+    };
+  },
+  computed: {
     model: {
-      prop: 'checked'
-    },
-    props: {
-      checked: [Array, Boolean],
-      disabled: [Boolean, String],
-      inline: Boolean
-    },
-    data () {
-      return {
-        cbId: ''
-      }
-    },
-    computed: {
-      model: {
-        get () {
-          return this.checked
-        },
-        set (check) {
-          this.$emit('input', check)
-        }
+      get() {
+        return this.checked;
       },
-      inlineClass () {
-        if (this.inline) {
-          return `checkbox-inline`
-        }
-
-        return false
-      }
+      set(check) {
+        this.$emit('input', check);
+      },
     },
-    created () {
-      this.cbId = Math.random().toString(16).slice(2)
-    }
-  }
+    inlineClass() {
+      if (this.inline) {
+        return 'checkbox-inline';
+      }
+
+      return false;
+    },
+  },
+  created() {
+    this.cbId = Math.random().toString(16).slice(2);
+  },
+};
 </script>

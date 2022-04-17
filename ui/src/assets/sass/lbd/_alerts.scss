@@ -1,15 +1,16 @@
-.alert{
+.alert {
     border: 0;
     border-radius: 0;
     color: #FFFFFF;
     padding: 10px 15px;
     font-size: 14px;
 
-    .container &{
+    .container & {
         border-radius: 4px;
 
     }
-    .navbar &{
+
+    .navbar & {
         border-radius: 0;
         left: 0;
         position: absolute;
@@ -18,11 +19,12 @@
         width: 100%;
         z-index: 3;
     }
-    .navbar:not(.navbar-transparent) &{
+
+    .navbar:not(.navbar-transparent) & {
         top: 70px;
     }
 
-    span[data-notify="icon"]{
+    span[data-notify="icon"] {
         font-size: 30px;
         display: block;
         left: 15px;
@@ -31,12 +33,12 @@
         margin-top: -15px;
     }
 
-    i.nc-simple-remove{
+    i.nc-simple-remove {
         font-size: 12px !important;
         font: bold normal normal 14px/1 'nucleo-icons';
     }
 
-    button.close{
+    button.close {
         position: absolute;
         right: 10px;
         top: 50%;
@@ -54,45 +56,49 @@
         padding: 3px;
         font-weight: 300;
 
-        &:hover{
+        &:hover {
             opacity: .55;
         }
     }
 
-    .close ~ span{
+    .close~span {
         display: block;
         max-width: 89%;
     }
 
-    &[data-notify="container"]{
+    &[data-notify="container"] {
         padding: 10px 10px 10px 20px;
         border-radius: $border-radius-base;
     }
 
-    &.alert-with-icon{
+    &.alert-with-icon {
         padding-left: 65px;
     }
 }
-.alert{
-  &.alert-primary{
-    background-color: $blue-navbar;
-    color: white;
-  }
-  &.alert-info{
-    background-color: $azure-navbar;
-     color: white;
-  }
-  &.alert-success {
-    background-color: $green-navbar;
-     color: white;
-  }
-  &.alert-warning {
-    background-color: $orange-navbar;
-     color: white;
-  }
-  &.alert-danger {
-    background-color: $red-navbar;
-     color: white;
-  }
-}
 
+.alert {
+    &.alert-primary {
+        background-color: $blue-navbar;
+        color: white;
+    }
+
+    &.alert-info {
+        background-color: $azure-navbar;
+        color: white;
+    }
+
+    &.alert-success {
+        background-color: $green-navbar;
+        color: white;
+    }
+
+    &.alert-warning {
+        background-color: $orange-navbar;
+        color: white;
+    }
+
+    &.alert-danger {
+        background-color: $red-navbar;
+        color: white;
+    }
+}

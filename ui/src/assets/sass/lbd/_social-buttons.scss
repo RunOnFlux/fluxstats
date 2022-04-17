@@ -16,7 +16,7 @@
     padding: 8px 5px;
     font-size: 16px;
 
-    .fa{
+    .fa {
       font-size: 20px;
       position: relative;
       top: -2px;
@@ -71,6 +71,6 @@
   @include social-buttons-color($social-tumblr, $social-states-tumblr);
 }
 
-.btn-behance{
+.btn-behance {
   @include social-buttons-color($social-behance, $social-states-behance);
 }

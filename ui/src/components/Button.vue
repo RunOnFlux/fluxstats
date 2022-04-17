@@ -3,7 +3,6 @@
     :is="tag"
     :type="tag === 'button' ? nativeType : ''"
     :disabled="disabled || loading"
-    @click="handleClick"
     class="btn"
     :class="[
       { 'btn-round': round },
@@ -17,23 +16,27 @@
       { 'btn-link': link },
       { disabled: disabled && tag !== 'button' }
     ]"
+    @click="handleClick"
   >
     <slot name="loading">
-      <span v-if="loading" class="btn-label">
-        <i class="fas fa-spinner fa-spin"></i>
+      <span
+        v-if="loading"
+        class="btn-label"
+      >
+        <i class="fas fa-spinner fa-spin" />
       </span>
     </slot>
-    <slot></slot>
+    <slot />
   </component>
 </template>
 <script>
 export default {
-  name: 'l-button',
+  name: 'LButton',
   props: {
     tag: {
       type: String,
       default: 'button',
-      description: 'Button html tag'
+      description: 'Button html tag',
     },
     round: Boolean,
     icon: Boolean,
@@ -45,32 +48,32 @@ export default {
     type: {
       type: String,
       default: 'default',
-      description: 'Button type (primary|secondary|danger etc)'
+      description: 'Button type (primary|secondary|danger etc)',
     },
     nativeType: {
       type: String,
       default: 'button',
-      description: 'Button native type (e.g button, input etc)'
+      description: 'Button native type (e.g button, input etc)',
     },
     size: {
       type: String,
       default: '',
-      description: 'Button size (sm|lg)'
+      description: 'Button size (sm|lg)',
     },
     simple: {
       type: Boolean,
-      description: 'Whether button is simple (outlined)'
+      description: 'Whether button is simple (outlined)',
     },
     link: {
       type: Boolean,
-      description: 'Whether button is a link (no borders or background)'
-    }
+      description: 'Whether button is a link (no borders or background)',
+    },
   },
   methods: {
     handleClick(evt) {
       this.$emit('click', evt);
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped lang="scss">

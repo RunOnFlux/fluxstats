@@ -1,4 +1,4 @@
-let eventGuid = 0;
+const eventGuid = 0;
 const today = new Date();
 const y = today.getFullYear();
 const m = today.getMonth();
@@ -67,5 +67,5 @@ export const INITIAL_EVENTS = [
 ];
 
 export function createEventId() {
-  return String(eventGuid++);
+  return String(eventGuid + 1);
 }

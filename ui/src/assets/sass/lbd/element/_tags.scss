@@ -1,12 +1,14 @@
 @import "../variables";
 
-@mixin tag($type, $color){
+@mixin tag($type, $color) {
+
   .el-tag,
   .el-tag.el-tag--#{$type} {
-    .el-tag__close{
+    .el-tag__close {
       opacity: 0;
     }
-    .el-tag__close:hover{
+
+    .el-tag__close:hover {
       background-color: transparent;
       color: $color;
       font-weight: bold;
@@ -15,6 +17,7 @@
       opacity: 1;
       transition: opacity .2s ease-out;
     }
+
     border-color: $color;
     background-color: white;
     border-radius: 3px;
@@ -23,12 +26,14 @@
 
   }
 }
-.el-tag{
-  margin-left:10px;
-  margin-bottom:5px;
+
+.el-tag {
+  margin-left: 10px;
+  margin-bottom: 5px;
 }
-.input-new-tag{
-  margin-left:10px;
+
+.input-new-tag {
+  margin-left: 10px;
   width: 80px !important;
   height: 24px;
   display: inline;
