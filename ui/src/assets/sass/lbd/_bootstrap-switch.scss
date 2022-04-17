@@ -126,13 +126,13 @@
   }
 }
 
-@include bootstrap-switch-color('blue', $color-blue)
-@include bootstrap-switch-color('azure', $color-azure)
-@include bootstrap-switch-color('orange', $color-orange)
-@include bootstrap-switch-color('green', $color-green)
-@include bootstrap-switch-color('red', $color-red)
-@include bootstrap-switch-color('purple', $color-purple)
-@include bootstrap-switch-color('black', $color-black)
+@include bootstrap-switch-color('blue', $color-blue);
+@include bootstrap-switch-color('azure', $color-azure);
+@include bootstrap-switch-color('orange', $color-orange);
+@include bootstrap-switch-color('green', $color-green);
+@include bootstrap-switch-color('red', $color-red);
+@include bootstrap-switch-color('purple', $color-purple);
+@include bootstrap-switch-color('black', $color-black);
 
 
 .bootstrap-switch.bootstrap-switch-animate .bootstrap-switch-container {
