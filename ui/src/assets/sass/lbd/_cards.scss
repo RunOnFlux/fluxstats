@@ -1,9 +1,9 @@
-.card{
+.card {
   border-radius: $border-radius-base;
   background-color: $white-color;
   margin-bottom: 30px;
 
-  .card-image{
+  .card-image {
     width: 100%;
     overflow: hidden;
     height: 260px;
@@ -17,10 +17,11 @@
       width: 100%;
     }
   }
-  .filter{
+
+  .filter {
     position: absolute;
     z-index: 2;
-    background-color: rgba(0,0,0,.68);
+    background-color: rgba(0, 0, 0, .68);
     top: 0;
     left: 0;
     width: 100%;
@@ -29,82 +30,92 @@
 
     @include opacity(0);
 
-    .btn{
+    .btn {
       @include vertical-align();
     }
   }
-  &:hover .filter{
+
+  &:hover .filter {
     @include opacity(1);
   }
-  .btn-hover{
+
+  .btn-hover {
     @include opacity(0);
   }
-  &:hover .btn-hover{
+
+  &:hover .btn-hover {
     @include opacity(1);
   }
-  .card-body{
+
+  .card-body {
     padding: 15px 15px 10px 15px;
   }
-  .card-header{
+
+  .card-header {
     padding: 15px 15px 0;
     background-color: $white-color;
     border-bottom: none !important;
 
   }
+
   .card-category,
-  label{
+  label {
     font-size: $font-size-base;
     font-weight: $font-weight-normal;
     color: $dark-gray;
     margin-bottom: 0px;
 
-    i{
+    i {
       font-size: $font-paragraph;
     }
   }
 
-  label{
+  label {
     font-size: $font-size-small;
     margin-bottom: 5px;
     text-transform: uppercase;
   }
 
-  .card-title{
+  .card-title {
     margin: $none;
     color: $black-color;
     font-weight: $font-weight-light;
   }
-  .avatar{
+
+  .avatar {
     height: 100%;
     overflow: hidden;
     border-radius: 50%;
     margin-right: 5px;
   }
-  .description{
+
+  .description {
     font-size: $font-size-base;
     color: #333;
   }
-  .card-footer{
+
+  .card-footer {
     padding: 15px 15px 10px 15px;
     background-color: $transparent-bg;
     line-height: 30px;
     border-top: none !important;
     font-size: 14px;
 
-    .legend{
+    .legend {
       padding: 5px 0;
     }
 
-    hr{
+    hr {
       margin-top: 5px;
       margin-bottom: 5px;
     }
   }
-  .stats{
+
+  .stats {
     color: #a9a9a9;
   }
 
-  .author{
+  .author {
     font-size: $font-size-small;
     font-weight: $font-weight-bold;
     text-transform: uppercase;
@@ -120,14 +131,17 @@
     -ms-transition: all 300ms linear;
     transition: all 300ms linear;
   }
-  .author i{
+
+  .author i {
     font-size: $font-size-base;
   }
-  h6{
+
+  h6 {
     font-size: $font-size-small;
     margin: 0;
   }
-  &.card-separator:after{
+
+  &.card-separator:after {
     height: 100%;
     right: -15px;
     top: 0;
@@ -137,31 +151,32 @@
     position: absolute;
   }
 
-  .ct-chart{
+  .ct-chart {
     margin: 30px -10px 30px;
     height: 245px;
   }
 
-  .ct-label{
+  .ct-label {
     font-size: 1rem !important;
   }
 
-  .alert{
+  .alert {
     border-radius: $border-radius-base;
     position: relative;
 
-    &.alert-with-icon{
+    &.alert-with-icon {
       padding-left: 65px;
     }
   }
 
-  &.card-lock{
-    .card-body .card-title{
+  &.card-lock {
+    .card-body .card-title {
       margin-bottom: 20px;
       color: $white-color;
     }
-    .card-header{
-      .author{
+
+    .card-header {
+      .author {
         width: 100px;
         height: 100px;
 
@@ -172,26 +187,28 @@
 
 
 
-.card-stats{
-  .card-body{
+.card-stats {
+  .card-body {
     padding: 15px 15px 0px;
 
-    .numbers{
+    .numbers {
       text-align: right;
 
-      p{
+      p {
         margin-bottom: 0;
       }
     }
   }
-  .card-footer{
+
+  .card-footer {
     padding: 0px 15px 10px 15px;
   }
+
   .icon-big {
     font-size: 3em;
     min-height: 64px;
 
-    i{
+    i {
       line-height: 59px;
     }
   }
@@ -199,76 +216,84 @@
 
 }
 
-.card-user{
-  .card-image{
+.card-user {
+  .card-image {
     height: 110px;
   }
-  .card-image-plain{
+
+  .card-image-plain {
     height: 0;
     margin-top: 110px;
   }
-  .author{
+
+  .author {
     text-align: center;
     text-transform: none;
     margin-top: -70px;
   }
-  .avatar{
+
+  .avatar {
     width: 124px;
     height: 124px;
     border: 5px solid #EEEEEE;
     position: relative;
     margin-bottom: 15px;
 
-    &.border-gray{
+    &.border-gray {
       border-color: #EEEEEE;
     }
   }
-  .title{
+
+  .title {
     line-height: 24px;
   }
-  .card-body{
+
+  .card-body {
     min-height: 240px;
   }
-  .card-header.no-padding{
+
+  .card-header.no-padding {
     padding: 0;
   }
 
-  .card-footer{
-    .button-container .btn{
+  .card-footer {
+    .button-container .btn {
       font-size: 16px;
     }
   }
 }
 
 .card-user,
-.card-price{
-  .card-footer{
+.card-price {
+  .card-footer {
     padding: 5px 15px 10px;
   }
-  hr{
+
+  hr {
     margin: 5px 15px;
   }
 }
-.card-plain{
+
+.card-plain {
   background-color: transparent;
   box-shadow: none;
   border-radius: 0;
 
-  .card-image{
+  .card-image {
     border-radius: 4px;
   }
 }
 
-.card.card-plain{
+.card.card-plain {
   border: none !important;
 
-  .card-header{
+  .card-header {
     background-color: transparent !important;
   }
 }
 
-.card{
-  &.card-login{
+.card {
+  &.card-login {
     box-shadow: 0 25px 30px -13px rgba(40, 40, 40, 0.4);
     border-radius: 10px;
     padding-top: 10px;
@@ -276,19 +301,20 @@
     @include transform-translate-y(0px);
     @include transition(300ms, linear);
 
-    .form-check{
+    .form-check {
       margin-left: -12px;
     }
-    &.card-hidden{
+
+    &.card-hidden {
       opacity: 0;
       @include transform-translate-y(-60px);
     }
   }
 
-  &.card-register{
-    .header-text{
-      hr{
-        border-top: 1px solid rgba(255,255,255,.3);
+  &.card-register {
+    .header-text {
+      hr {
+        border-top: 1px solid rgba(255, 255, 255, .3);
       }
     }
   }

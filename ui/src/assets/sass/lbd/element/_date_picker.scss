@@ -11,6 +11,7 @@
   width: 300px;
   border: 0;
   @extend .card-styles;
+
   .el-date-picker__header,
   .el-picker-panel__content {
     margin: 5px;
@@ -34,19 +35,24 @@
       background-color: #eee;
     }
   }
-  .el-date-picker__header-label, div {
+
+  .el-date-picker__header-label,
+  div {
     font-size: $font-size-base;
     font-weight: $font-weight-light;
     color: $primary-color;
+
     &:hover {
       background-color: #eee;
       border-radius: $border-radius-large;
     }
   }
 }
-.el-picker-panel .el-picker-panel__shortcut:hover{
+
+.el-picker-panel .el-picker-panel__shortcut:hover {
   color: $primary-color;
 }
+
 .el-picker-panel__content {
   .el-date-table th {
     color: $primary-color;
@@ -55,11 +61,13 @@
     font-weight: $font-weight-light;
     border: none;
   }
+
   .el-date-table {
     td.current:not(.disabled) span {
       background-color: $primary-color;
     }
-    td.today span{
+
+    td.today span {
       color: $primary-color;
     }
   }
@@ -71,16 +79,19 @@
   height: 32px;
   width: 32px;
   padding: 0;
+
   &.current span,
   &.current a.cell {
     background-color: $primary-color;
     color: $white-color;
     border-radius: 50%;
   }
+
   div {
     &:hover {
       color: $default-color
     }
+
     height: 100%;
     padding: 0;
   }
@@ -99,10 +110,12 @@
       color: $default-color;
     }
   }
+
   span {
     width: 32px;
     height: 32px;
   }
+
   .cell {
     width: 40px;
     height: 40px;
@@ -115,19 +128,22 @@
 
 .el-date-picker .el-time-panel.el-popper {
   @extend .card-styles;
+
   button {
     @extend .btn-primary, .btn-outline, .btn-sm;
     padding: 7px !important;
     margin: 0 5px 0 0;
     line-height: 14px;
     font-weight: $font-weight-normal;
+
     &:first-child {
       @extend .btn-danger;
     }
   }
 }
 
-.el-date-editor.el-input, .el-date-editor.el-input__inner {
+.el-date-editor.el-input,
+.el-date-editor.el-input__inner {
   width: 100% !important;
 }
 
@@ -145,6 +161,7 @@
 .el-date-picker .el-picker-panel__footer {
   .el-button {
     @extend .btn-primary, .btn-outline, .btn-sm;
+
     &:first-child {
       @extend .btn-info, .btn-outline;
     }
@@ -152,9 +169,10 @@
 }
 
 // Time picker
-.el-time-spinner.has-seconds .el-time-spinner__wrapper:nth-child(2){
+.el-time-spinner.has-seconds .el-time-spinner__wrapper:nth-child(2) {
   margin-left: 0 !important;
 }
-.el-picker-panel .time-select-item.selected:not(.disabled){
+
+.el-picker-panel .time-select-item.selected:not(.disabled) {
   color: $primary-color;
 }

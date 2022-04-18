@@ -1,4 +1,4 @@
-@mixin label-style(){
+@mixin label-style() {
      padding: $padding-label-vertical $padding-label-horizontal;
      border: 1px solid $default-color;
      border-radius: $border-radius-small;
@@ -10,11 +10,12 @@
      vertical-align: middle;
 }
 
-@mixin label-color($color){
+@mixin label-color($color) {
      border-color: $color;
      color: $color;
 }
-@mixin label-color-fill($color){
+
+@mixin label-color-fill($color) {
      border-color: $color;
      color: $white-color;
      background-color: $color;

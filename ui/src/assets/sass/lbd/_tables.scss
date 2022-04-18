@@ -1,8 +1,8 @@
 .table,
-.el-table__body{
+.el-table__body {
 
   .radio,
-  .checkbox{
+  .checkbox {
     position: relative;
     height: 20px;
     display: block;
@@ -10,18 +10,19 @@
     padding: 0px 0px;
     margin: 0px 5px;
   }
-  > thead > tr > th,
-  > tbody > tr > th,
-  > tfoot > tr > th,
-  > thead > tr > td,
-  > tbody > tr > td,
-  > tfoot > tr > td{
+
+  >thead>tr>th,
+  >tbody>tr>th,
+  >tfoot>tr>th,
+  >thead>tr>td,
+  >tbody>tr>td,
+  >tfoot>tr>td {
     padding: 12px 8px;
     vertical-align: middle;
     border-color: $light-gray;
   }
 
-  > thead > tr > th{
+  >thead>tr>th {
     border-bottom-width: 1px;
     font-size: $font-size-small;
     text-transform: uppercase;
@@ -30,116 +31,127 @@
     padding-bottom: 5px;
   }
 
-  table > tr .td-actions{
+  table>tr .td-actions {
     display: inline-flex !important;
   }
 
-  .td-actions .btn{
+  .td-actions .btn {
     @include opacity(0.36);
 
-    &.btn-xs{
+    &.btn-xs {
       padding-left: 3px;
       padding-right: 3px;
     }
   }
-  .td-actions{
+
+  .td-actions {
     min-width: 90px;
   }
 
-  > tbody > tr{
+  >tbody>tr {
     position: relative;
     font-size: 14px !important;
 
 
-    &:hover{
-      .td-actions .btn{
+    &:hover {
+      .td-actions .btn {
         @include opacity(1);
       }
     }
   }
-  thead th{
+
+  thead th {
     border-bottom: none !important;
     border-top: none !important;
   }
 
-  .btn-info.btn-link{
+  .btn-info.btn-link {
     color: $info-color;
   }
-  .btn-danger.btn-link{
+
+  .btn-danger.btn-link {
     color: $danger-color;
   }
-  .btn-success.btn-link{
+
+  .btn-success.btn-link {
     color: $success-color;
   }
-  .btn-warning.btn-link{
+
+  .btn-warning.btn-link {
     color: $warning-color;
   }
 
-  .form-check{
+  .form-check {
+
     .form-check-sign,
     .form-check-sign:before,
-    .form-check-sign:after{
+    .form-check-sign:after {
       margin-top: -14px;
     }
   }
 }
 
-.card{
-  .table{
+.card {
+  .table {
+
     tbody td:first-child,
-    thead th:first-child{
+    thead th:first-child {
       padding-left: 15px;
     }
 
     tbody td:last-child,
-    thead th:last-child{
+    thead th:last-child {
       padding-right: 15px;
       display: block;
     }
   }
 }
 
-.table-bigboy{
-  > thead > tr > th{
+.table-bigboy {
+  >thead>tr>th {
     font-size: $font-size-h6;
     text-transform: uppercase;
     color: $dark-gray;
     font-weight: $font-weight-normal;
   }
-  > tbody > tr > td{
+
+  >tbody>tr>td {
     font-size: $font-size-base;
 
-    b{
+    b {
       display: block;
       margin-bottom: 5px;
     }
   }
-  .td-name
-  {
+
+  .td-name {
     font-weight: $font-weight-light;
     font-size: $font-size-h5;
   }
-  .td-name{
+
+  .td-name {
     min-width: 240px;
   }
-  .td-number{
+
+  .td-number {
     text-align: right;
     min-width: 110px;
 
-    small{
+    small {
       margin-right: 3px;
     }
   }
 
-  .td-actions{
+  .td-actions {
     width: 60px;
     min-width: auto;
 
-    .btn{
+    .btn {
       float: right;
     }
   }
-  .img-container{
+
+  .img-container {
     width: 180px;
     height: 120px;
     overflow: hidden;
@@ -147,7 +159,7 @@
 
     border-radius: $border-radius-large;
 
-    img{
+    img {
       width: 100%;
     }
   }
@@ -155,15 +167,16 @@
 
 }
 
-.table-with-links{
-  .card-body{
+.table-with-links {
+  .card-body {
     padding-bottom: 0 !important;
 
-    .table{
-      .btn{
+    .table {
+      .btn {
         margin-bottom: 0 !important;
       }
-      tr td{
+
+      tr td {
         padding: 7px 3px !important;
       }
     }
@@ -172,33 +185,34 @@
 
 
 .table-with-switches,
-.regular-table-with-color{
-  .card-body{
+.regular-table-with-color {
+  .card-body {
     padding-bottom: 0 !important;
 
-    .table tbody td:last-child{
+    .table tbody td:last-child {
       padding-right: 10px !important;
     }
   }
 }
 
-.table-big-boy{
-  .card-body{
+.table-big-boy {
+  .card-body {
     padding-bottom: 0 !important;
 
-    .table tbody td:last-child{
+    .table tbody td:last-child {
       padding-right: 10px !important;
     }
   }
 }
 
-.bootstrap-table{
-  .table thead th:first-child{
-    padding-left: 0!important;
+.bootstrap-table {
+  .table thead th:first-child {
+    padding-left: 0 !important;
   }
-  .dropdown-menu{
-    li{
-      a{
+
+  .dropdown-menu {
+    li {
+      a {
         display: block;
         padding: 8px 16px;
         clear: both;
@@ -207,12 +221,13 @@
         white-space: nowrap;
         color: #333;
 
-        &:hover{
+        &:hover {
           background-color: #F5F5F5;
         }
       }
-      &.active{
-        a{
+
+      &.active {
+        a {
           background-color: rgba(68, 125, 247, 0.2);
         }
       }
@@ -221,48 +236,56 @@
 
   }
 }
-.data-tables{
-  table{
-    tbody{
-      .btn{
+
+.data-tables {
+  table {
+    tbody {
+      .btn {
         padding: 3px !important;
         font-size: 16px !important;
       }
     }
   }
-  .pagination{
+
+  .pagination {
     float: right;
   }
-  tfoot{
+
+  tfoot {
     font-size: 14px;
   }
 }
 
-.card-tasks{
-  .table tbody{
-    td:last-child{
+.card-tasks {
+  .table tbody {
+    td:last-child {
       padding-right: 0;
       display: inline-flex;
-      .btn{
+
+      .btn {
         padding: 3px;
       }
     }
-    td:first-child{
+
+    td:first-child {
       padding-left: 0;
     }
   }
-  .table-full-width{
+
+  .table-full-width {
     padding-bottom: 0 !important;
   }
-  .card-footer{
+
+  .card-footer {
     padding-top: 0;
   }
-  .table{
+
+  .table {
     margin-bottom: 0 !important;
   }
 }
 
-.table-full-width{
+.table-full-width {
   margin-left: -15px;
   margin-right: -15px;
   padding: 15px !important;

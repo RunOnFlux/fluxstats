@@ -59,7 +59,7 @@
   -webkit-transition: 0.25s ease-out;
   transition: 0.25s ease-out;
 
-  i{
+  i {
     font-size: 12px;
     line-height: 14px;
   }
@@ -75,7 +75,7 @@
 }
 
 
-.bootstrap-switch .bootstrap-switch-handle-off{
+.bootstrap-switch .bootstrap-switch-handle-off {
   background-color: $medium-gray;
 }
 
@@ -114,25 +114,25 @@
   z-index: -1;
 }
 
-.bootstrap-switch.bootstrap-switch-off{
-  .bootstrap-switch-handle-on{
+.bootstrap-switch.bootstrap-switch-off {
+  .bootstrap-switch-handle-on {
     background-color: $medium-gray;
   }
 }
 
-.bootstrap-switch.bootstrap-switch-on{
-  .bootstrap-switch-handle-off{
+.bootstrap-switch.bootstrap-switch-on {
+  .bootstrap-switch-handle-off {
     background-color: $info-color;
   }
 }
 
-@include bootstrap-switch-color('blue', $color-blue)
-@include bootstrap-switch-color('azure', $color-azure)
-@include bootstrap-switch-color('orange', $color-orange)
-@include bootstrap-switch-color('green', $color-green)
-@include bootstrap-switch-color('red', $color-red)
-@include bootstrap-switch-color('purple', $color-purple)
-@include bootstrap-switch-color('black', $color-black)
+@include bootstrap-switch-color('blue', $color-blue);
+@include bootstrap-switch-color('azure', $color-azure);
+@include bootstrap-switch-color('orange', $color-orange);
+@include bootstrap-switch-color('green', $color-green);
+@include bootstrap-switch-color('red', $color-red);
+@include bootstrap-switch-color('purple', $color-purple);
+@include bootstrap-switch-color('black', $color-black);
 
 
 .bootstrap-switch.bootstrap-switch-animate .bootstrap-switch-container {

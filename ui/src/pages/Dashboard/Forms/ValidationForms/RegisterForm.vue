@@ -9,84 +9,94 @@
         </div>
         <div>
           <ValidationProvider
+            v-slot="{ passed, failed }"
             name="email"
             rules="required|email"
-            v-slot="{ passed, failed }"
           >
-            <fg-input  type="email"
-                       :error="failed ? 'The Email field is required': null"
-                       :hasSuccess="passed"
-                       name="email"
-                       v-model="email">
-            </fg-input>
+            <fg-input
+              v-model="email"
+              type="email"
+              :error="failed ? 'The Email field is required': null"
+              :has-success="passed"
+              name="email"
+            />
           </ValidationProvider>
 
           <ValidationProvider
+            v-slot="{ passed, failed }"
             vid="confirmation"
             rules="required"
-            v-slot="{ passed, failed }"
           >
-            <fg-input  type="password"
-                       :error="failed ? 'The Password field is required': null"
-                       :hasSuccess="passed"
-                       name="password"
-                       v-model="password">
-            </fg-input>
+            <fg-input
+              v-model="password"
+              type="password"
+              :error="failed ? 'The Password field is required': null"
+              :has-success="passed"
+              name="password"
+            />
           </ValidationProvider>
 
           <ValidationProvider
-            rules="required|confirmed:confirmation"
             v-slot="{ passed, failed }"
+            rules="required|confirmed:confirmation"
           >
-            <fg-input  type="password"
-                       :error="failed ? 'The Confirm field is required': null"
-                       :hasSuccess="passed"
-                       name="confirm"
-                       v-model="confirmPassword">
-            </fg-input>
+            <fg-input
+              v-model="confirmPassword"
+              type="password"
+              :error="failed ? 'The Confirm field is required': null"
+              :has-success="passed"
+              name="confirm"
+            />
           </ValidationProvider>
 
           <fg-input>
-            <checkbox v-model="subscribe"
-                      name="subscribe">Subscribe to newsletter
+            <checkbox
+              v-model="subscribe"
+              name="subscribe"
+            >
+              Subscribe to newsletter
             </checkbox>
           </fg-input>
         </div>
         <div class="card-footer text-right">
-          <button type="submit" class="btn btn-fill btn-info btn-wd">Register</button>
+          <button
+            type="submit"
+            class="btn btn-fill btn-info btn-wd"
+          >
+            Register
+          </button>
         </div>
-
       </card>
     </form>
   </ValidationObserver>
 </template>
 <script>
-import { extend } from "vee-validate";
-import { required, email, confirmed } from "vee-validate/dist/rules";
-  import {Checkbox} from 'src/components/index'
+import { extend } from 'vee-validate';
+import { required, email, confirmed } from 'vee-validate/dist/rules';
+import { Checkbox } from 'src/components/index';
 
-extend("email", email);
-extend("required", required);
-extend("confirmed", confirmed);
+extend('email', email);
+extend('required', required);
+extend('confirmed', confirmed);
 
 export default {
   components: {
-    Checkbox
+    Checkbox,
   },
   data() {
     return {
-      email: "",
-      password: "",
-      confirmPassword: "",
-      subscribe: false
+      email: '',
+      password: '',
+      confirmPassword: '',
+      subscribe: false,
     };
   },
   methods: {
     submit() {
-      alert("Form has been submitted!");
-    }
-  }
-}
+      alert('Form has been submitted!');
+    },
+  },
+};
 </script>
 <style>
 </style>

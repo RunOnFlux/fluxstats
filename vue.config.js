@@ -1,24 +1,11 @@
 const path = require('path');
-const CopyPlugin = require('copy-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 function resolveSrc(_path) {
   return path.join(__dirname, _path);
 }
 
-const plugins = [
-  new CopyPlugin({
-    patterns: [
-      { from: path.resolve(__dirname, 'ui', 'public') },
-    ],
-  }),
-];
-
 module.exports = {
-  pages: {
-    index: {
-      entry: 'ui/src/main.js',
-    }
-  },
   configureWebpack: {
     // Set up all the aliases we use in our app.
     resolve: {
@@ -28,21 +15,28 @@ module.exports = {
         assets: resolveSrc('ui/src/assets'),
       },
     },
-    plugins,
+    plugins: [
+      new CopyWebpackPlugin({
+        patterns: [{
+          from: './ui/public/static',
+          to: 'static',
+        }],
+      }),
+    ],
     watchOptions: {
       ignored: /node_modules/,
     },
   },
-  css: {
-    // Enable CSS source maps.
-    loaderOptions: {
-      sass: {
-        sassOptions: {
-          includePaths: ['./node_modules', './ui/src/assets'],
-        },
-      },
-    },
-  },
+  // css: {
+  //   // Enable CSS source maps.
+  //   loaderOptions: {
+  //     sass: {
+  //       sassOptions: {
+  //         includePaths: ['./node_modules', './ui/src/assets'],
+  //       },
+  //     },
+  //   },
+  // },
   pages: {
     index: {
       // entry for the page
@@ -53,5 +47,7 @@ module.exports = {
       filename: 'index.html',
     },
   },
-  outputDir: resolveSrc('./ui/dist')
+  outputDir: resolveSrc('./ui/dist'),
+  filenameHashing: false,
+  productionSourceMap: false,
 };

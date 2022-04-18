@@ -1,16 +1,17 @@
 <template>
-  <nav aria-label="breadcrumb" role="navigation">
+  <nav
+    aria-label="breadcrumb"
+    role="navigation"
+  >
     <ol class="breadcrumb">
-      <slot>
-
-      </slot>
+      <slot />
     </ol>
   </nav>
 </template>
 <script>
-  export default {
-    name: 'breadcrumb'
-  }
+export default {
+  name: 'Breadcrumb',
+};
 </script>
 <style>
 </style>

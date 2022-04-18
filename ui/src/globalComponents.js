@@ -10,9 +10,9 @@ import Button from './components/Button.vue';
 
 const GlobalComponents = {
   install(Vue) {
-    Vue.component('fg-input', fgInput);
-    Vue.component('drop-down', DropDown);
-    Vue.component('card', Card);
+    Vue.component('FgInput', fgInput);
+    Vue.component('DropDown', DropDown);
+    Vue.component('Card', Card);
     Vue.component(Button.name, Button);
     Vue.component(Input.name, Input);
     Vue.component(InputNumber.name, InputNumber);

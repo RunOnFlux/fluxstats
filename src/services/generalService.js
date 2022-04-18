@@ -141,7 +141,7 @@ function verifyPublicKey(pubKey) {
   }
 }
 
-function verifyMessage(message, address, signature, pubKeyHash = '00', strMessageMagic, checkSegwitAlways) {
+function verifyMessage(message, address, signature, strMessageMagic, checkSegwitAlways, pubKeyHash = '00') {
   let signingAddress = address;
   try {
     if (!address || !message || !signature) {
