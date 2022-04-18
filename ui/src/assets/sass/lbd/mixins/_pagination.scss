@@ -1,0 +1,16 @@
+@mixin pagination-color($name, $color) {
+  .pagination.pagination-#{$name} .page-item {
+    &.active .page-link {
+      background-color: $color;
+    }
+
+    .page-link {
+
+      &:focus,
+      &:hover {
+        background-color: $color;
+        color: white;
+      }
+    }
+  }
+}
