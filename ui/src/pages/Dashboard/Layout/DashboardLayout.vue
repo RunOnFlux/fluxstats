@@ -37,8 +37,6 @@ import PerfectScrollbar from 'perfect-scrollbar';
 import TopNavbar from './TopNavbar.vue';
 import ContentFooter from './ContentFooter.vue';
 import DashboardContent from './Content.vue';
-import MobileMenu from './Extra/MobileMenu.vue';
-import UserMenu from './Extra/UserMenu.vue';
 import 'perfect-scrollbar/css/perfect-scrollbar.css';
 
 function hasElement(className) {
@@ -60,9 +58,7 @@ export default {
   components: {
     TopNavbar,
     ContentFooter,
-    DashboardContent,
-    MobileMenu,
-    UserMenu,
+    DashboardContent
   },
   mounted() {
     this.initScrollbar();

@@ -85,11 +85,6 @@ const routes = [
         path: 'overview',
         name: 'Overview',
         component: Overview,
-      },
-      {
-        path: 'stats',
-        name: 'Stats',
-        component: Stats,
       }
     ],
   },

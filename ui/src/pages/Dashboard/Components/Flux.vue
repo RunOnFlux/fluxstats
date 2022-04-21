@@ -3,7 +3,7 @@
 </template>
 <script>
 export default {
-  name: 'NotificationSample',
+  name: 'Flux',
 };
 </script>
 <style>
