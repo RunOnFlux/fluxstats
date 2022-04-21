@@ -18,6 +18,7 @@ module.exports = {
         ignoreTrailingComments: true,
       },
     ],
+    'no-new': 'off',
     'no-console': 'off',
     'linebreak-style': 'off',
     'vue/multi-word-component-names': 'off',
