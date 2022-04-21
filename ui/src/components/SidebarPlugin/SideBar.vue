@@ -35,8 +35,8 @@
             :link="link"
           >
             <sidebar-item
-              v-for="(subLink, index) in link.children"
-              :key="subLink.name + index"
+              v-for="(subLink, subindex) in link.children"
+              :key="subLink.name + subindex"
               :link="subLink"
             />
           </sidebar-item>
