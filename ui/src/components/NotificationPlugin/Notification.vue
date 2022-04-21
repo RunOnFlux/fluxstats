@@ -12,6 +12,7 @@
     :style="customPosition"
     data-notify-position="top-center"
     @click="tryClose"
+    @keydown="pressed"
   >
     <button
       v-if="showClose"
