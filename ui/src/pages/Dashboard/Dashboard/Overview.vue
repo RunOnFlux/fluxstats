@@ -457,11 +457,11 @@ export default {
               });
             }
             const statsLength = Object.keys(response.data.data).length;
-            const item1 = new Date(parseInt(this.tableData1[statsLength - 1].roundTime));
-            const item2 = new Date(parseInt(this.tableData1[statsLength - 2].roundTime));
-            const item3 = new Date(parseInt(this.tableData1[statsLength - 3].roundTime));
-            const item4 = new Date(parseInt(this.tableData1[statsLength - 4].roundTime));
-            const item5 = new Date(parseInt(this.tableData1[statsLength - 5].roundTime));
+            const item1 = new Date(parseInt(this.tableData1[statsLength - 1].roundTime, 10));
+            const item2 = new Date(parseInt(this.tableData1[statsLength - 2].roundTime, 10));
+            const item3 = new Date(parseInt(this.tableData1[statsLength - 3].roundTime, 10));
+            const item4 = new Date(parseInt(this.tableData1[statsLength - 4].roundTime, 10));
+            const item5 = new Date(parseInt(this.tableData1[statsLength - 5].roundTime, 10));
 
             this.lineChart.data.series = [
               [

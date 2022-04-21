@@ -189,7 +189,7 @@ export default {
         for (const [key, value] of Object.entries(response.data.data)) {
           this.tableData.push({
             roundTime: key,
-            roundTimeConverted: `${new Date(parseInt(key)).toLocaleDateString()} ${new Date(parseInt(key)).toLocaleTimeString()}`,
+            roundTimeConverted: `${new Date(parseInt(key, 10)).toLocaleDateString()} ${new Date(parseInt(key, 10)).toLocaleTimeString()}`,
             cumulus: value.cumulus,
             nimbus: value.nimbus,
             stratus: value.stratus,

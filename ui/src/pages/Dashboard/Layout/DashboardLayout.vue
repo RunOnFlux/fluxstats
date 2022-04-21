@@ -58,7 +58,7 @@ export default {
   components: {
     TopNavbar,
     ContentFooter,
-    DashboardContent
+    DashboardContent,
   },
   mounted() {
     this.initScrollbar();
