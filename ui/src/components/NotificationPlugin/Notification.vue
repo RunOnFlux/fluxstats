@@ -34,10 +34,8 @@
         v-if="title"
         class="title"
       ><b>{{ title }}<br></b></span>
-      <span
-        v-if="message"
-        v-html="message"
-      />
+      <div>{{ message }}</div>
+      <span />
       <content-render
         v-if="!message && component"
         :component="component"
