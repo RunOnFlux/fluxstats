@@ -162,7 +162,8 @@ export default {
     collapseMenu() {
       this.collapsed = !this.collapsed;
     },
-    collapseSubMenu(link) {
+    collapseSubMenu(linkVar) {
+      const link = linkVar;
       link.collapsed = !link.collapsed;
     },
   },
