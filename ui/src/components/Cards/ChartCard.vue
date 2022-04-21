@@ -43,7 +43,7 @@ export default {
     responsiveOptions: {
       type: [Object, Array],
       default() {
-        return '';
+        return [];
       },
     },
   },

@@ -36,13 +36,13 @@ export default {
     columns: {
       type: Array,
       default() {
-        return '';
+        return [];
       },
     },
     data: {
       type: Array,
       default() {
-        return '';
+        return [];
       },
     },
   },
