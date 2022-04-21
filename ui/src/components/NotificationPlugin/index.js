@@ -45,8 +45,7 @@ const NotificationStore = {
 
 const NotificationsPlugin = {
   install(Vue, options) {
-    const VueVal = Vue;
-    const app = new VueVal({
+    const app = new Vue({
       data: {
         notificationStore: NotificationStore,
       },
@@ -56,9 +55,11 @@ const NotificationsPlugin = {
         },
       },
     });
-    VueVal.prototype.$notify = app.notify;
-    VueVal.prototype.$notifications = app.notificationStore;
-    VueVal.component('Notifications', Notifications);
+    // eslint-disable-next-line no-param-reassign
+    Vue.prototype.$notify = app.notify;
+    // eslint-disable-next-line no-param-reassign
+    Vue.prototype.$notifications = app.notificationStore;
+    Vue.component('Notifications', Notifications);
     if (options) {
       NotificationStore.setOptions(options);
     }

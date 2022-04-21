@@ -6,9 +6,10 @@
   "scripts": {
     "start": "nodemon --ignore './src/fluxHashes' index.js",
     "test": "echo 'No tests have been implemented' && exit 1",
-    "lint": "eslint --ext .js,.vue ./ --fix",
-    "serve": "vue-cli-service serve --skip-plugins @vue/cli-plugin-eslint",
-    "build": "vue-cli-service build --skip-plugins @vue/cli-plugin-eslint"
+    "lint": "eslint --ext .js,.vue ./",
+    "lint:fix": "eslint --ext .js,.vue ./ --fix",
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
   },
   "author": "Tadeas Kmenta",
   "contributors": [
