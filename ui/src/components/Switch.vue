@@ -32,7 +32,7 @@ export default {
     value: {
       type: [Array, Boolean],
       default() {
-        return [];
+        return false;
       },
     },
     onText: {

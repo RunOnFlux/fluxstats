@@ -115,7 +115,7 @@ export default {
     component: {
       type: [Object, Function],
       default() {
-        return [];
+        return '';
       },
     },
     showClose: {

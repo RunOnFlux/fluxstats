@@ -5,8 +5,6 @@
   >
     <notifications />
     <side-bar>
-      <user-menu />
-      <mobile-menu />
       <template slot="links">
         <sidebar-item :link="{name: 'Dashboard', icon: 'nc-icon nc-chart-pie-35', path: '/flux/dashboard/overview'}" />
         <sidebar-item :link="{name: 'Node Info', icon: 'nc-icon nc-app'}">
