@@ -19,6 +19,7 @@ module.exports = {
       },
     ],
     'no-new': 'off',
+    'no-restricted-syntax': 'off',
     'no-console': 'off',
     'linebreak-style': 'off',
     'vue/multi-word-component-names': 'off',
