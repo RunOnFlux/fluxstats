@@ -49,8 +49,14 @@ export default {
     Card,
   },
   props: {
-    title: String,
-    subTitle: String,
+    title: {
+      type: String,
+      default: '',
+    },
+    subTitle: {
+      type: String,
+      default: '',
+    },
   },
 };
 

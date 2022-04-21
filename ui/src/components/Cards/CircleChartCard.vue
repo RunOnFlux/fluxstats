@@ -34,8 +34,14 @@ export default {
       type: Number,
       default: 0,
     },
-    title: String,
-    description: String,
+    title: {
+      type: String,
+      default: '',
+    },
+    description: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {

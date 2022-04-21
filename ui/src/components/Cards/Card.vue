@@ -35,8 +35,14 @@
 export default {
   name: 'Card',
   props: {
-    title: String,
-    subTitle: String,
+    title: {
+      type: String,
+      default: '',
+    },
+    subTitle: {
+      type: String,
+      default: '',
+    },
   },
 };
 </script>

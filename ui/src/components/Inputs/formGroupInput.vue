@@ -65,13 +65,31 @@ export default {
   inheritAttrs: false,
   props: {
     required: Boolean,
-    label: String,
-    error: String,
-    labelClasses: String,
-    inputClasses: String,
+    label: {
+      type: String,
+      default: '',
+    },
+    error: {
+      type: String,
+      default: '',
+    },
+    labelClasses: {
+      type: String,
+      default: '',
+    },
+    inputClasses: {
+      type: String,
+      default: '',
+    },
     value: [String, Number],
-    addonRightIcon: String,
-    addonLeftIcon: String,
+    addonRightIcon: {
+      type: String,
+      default: '',
+    },
+    addonLeftIcon: {
+      type: String,
+      default: '',
+    },
   },
   data() {
     return {

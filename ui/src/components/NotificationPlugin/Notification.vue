@@ -62,9 +62,18 @@ export default {
     },
   },
   props: {
-    message: String,
-    title: String,
-    icon: String,
+    message: {
+      type: String,
+      default: '',
+    },
+    title: {
+      type: String,
+      default: '',
+    },
+    icon: {
+      type: String,
+      default: '',
+    },
     verticalAlign: {
       type: String,
       default: 'top',
