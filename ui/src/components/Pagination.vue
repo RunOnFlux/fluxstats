@@ -112,10 +112,10 @@ export default {
     },
   },
   watch: {
-    perPage(value) {
+    perPage() {
       this.$emit('input', 1);
     },
-    total(value) {
+    total() {
       this.$emit('input', 1);
     },
   },

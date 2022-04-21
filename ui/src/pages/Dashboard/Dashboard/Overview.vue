@@ -230,7 +230,7 @@
 </template>
 <script>
 import {
-  ChartCard, StatsCard, Card, Table as LTable, Checkbox,
+  ChartCard, StatsCard, Card, Table as LTable,
 } from 'src/components/index';
 import axios from 'axios';
 import Loading from 'vue-loading-overlay';
