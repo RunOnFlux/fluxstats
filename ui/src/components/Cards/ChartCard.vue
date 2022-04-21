@@ -40,7 +40,10 @@ export default {
         series: [],
       }),
     },
-    responsiveOptions: [Object, Array],
+    responsiveOptions: {
+      type: [Object, Array],
+      default: [],
+    },
   },
   data() {
     return {

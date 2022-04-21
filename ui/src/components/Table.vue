@@ -33,8 +33,14 @@
 export default {
   name: 'LTable',
   props: {
-    columns: Array,
-    data: Array,
+    columns: {
+      type: Array,
+      default: [],
+    },
+    data: {
+      type: Array,
+      default: [],
+    },
   },
   methods: {
     hasValue(item, column) {

@@ -115,6 +115,7 @@ export default {
     },
     component: {
       type: [Object, Function],
+      default: []
     },
     showClose: {
       type: Boolean,
@@ -124,7 +125,10 @@ export default {
       type: Boolean,
       default: true,
     },
-    clickHandler: Function,
+    clickHandler: {
+      type: Function,
+      default: {},
+    },
   },
   data() {
     return {
