@@ -16,12 +16,6 @@ const NodeConnection = () => import('@/pages/Dashboard/NodeInfo/NodeConnection.v
 // NodeHistory pages
 const HistoryInfo = () => import('@/pages/Dashboard/NodeHistory/HistoryInfo.vue');
 
-// Calendar
-const Calendar = () => import('src/pages/Dashboard/Calendar/CalendarRoute.vue');
-
-// Charts
-const Charts = () => import('src/pages/Dashboard/Charts.vue');
-
 const nodeInfo = {
   path: '/flux/nodeinfo',
   component: DashboardLayout,
@@ -97,17 +91,7 @@ const routes = [
         path: 'stats',
         name: 'Stats',
         component: Stats,
-      },
-      {
-        path: 'calendar',
-        name: 'Calendar',
-        component: Calendar,
-      },
-      {
-        path: 'charts',
-        name: 'Charts',
-        component: Charts,
-      },
+      }
     ],
   },
   { path: '*', redirect: '/flux/dashboard/overview' },
