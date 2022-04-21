@@ -388,9 +388,9 @@ export default {
 
         let idx = 0;
         let ent = [];
-        for (var entry of new Map([...map.entries()].sort((a, b) => b[1] - a[1])).entries()) {
-          var key = entry[0];
-          var value = entry[1];
+        for (const entry of new Map([...map.entries()].sort((a, b) => b[1] - a[1])).entries()) {
+          const key = entry[0];
+          const value = entry[1];
 
           ent.push({
             name: key,
@@ -419,9 +419,9 @@ export default {
 
         idx = 0;
         ent = [];
-        for (var entry of new Map([...mapOrganizations.entries()].sort((a, b) => b[1] - a[1])).entries()) {
-          var key = entry[0];
-          var value = entry[1];
+        for (const entry of new Map([...mapOrganizations.entries()].sort((a, b) => b[1] - a[1])).entries()) {
+          const key = entry[0];
+          const value = entry[1];
 
           if (key === '') {
             continue;
