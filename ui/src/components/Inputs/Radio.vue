@@ -27,19 +27,19 @@ export default {
     label: {
       type: [String, Number],
       default() {
-        return [];
+        return '';
       },
     },
     disabled: {
       type: [Boolean, String],
       default() {
-        return [];
+        return '';
       },
     },
     value: {
       type: [String, Boolean],
       default() {
-        return [];
+        return '';
       },
     },
     inline: Boolean,

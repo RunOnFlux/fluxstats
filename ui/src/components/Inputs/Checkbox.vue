@@ -35,7 +35,7 @@ export default {
     disabled: {
       type: [Boolean, String],
       default() {
-        return [];
+        return '';
       },
     },
     inline: Boolean,
