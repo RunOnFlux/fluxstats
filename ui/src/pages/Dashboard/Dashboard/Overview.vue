@@ -423,20 +423,19 @@ export default {
           const key = entry[0];
           const value = entry[1];
 
-          if (key === '') {
-            continue;
+          if (key !== '') {
+            ent.push({
+              name: key,
+              total: value,
+            });
+
+            if (idx < 9) {
+              idx += 1;
+            } else {
+              break;
+            }
           }
 
-          ent.push({
-            name: key,
-            total: value,
-          });
-
-          if (idx < 9) {
-            idx += 1;
-          } else {
-            break;
-          }
         }
 
         this.tableData2.data.push({ title: `1. ${ent[0].name} - ${ent[0].total} Nodes` });
