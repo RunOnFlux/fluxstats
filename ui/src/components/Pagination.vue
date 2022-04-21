@@ -122,7 +122,7 @@ export default {
   methods: {
     range(min, max) {
       const arr = [];
-      for (let i = min; i <= max; i++) {
+      for (let i = min; i <= max; i += 1) {
         arr.push(i);
       }
       return arr;

@@ -97,7 +97,7 @@ export default {
             },
           });
         } else if (data.type === 'point') {
-          seq++;
+          seq += 1;
           data.element.animate({
             opacity: {
               begin: seq * delays,
@@ -117,7 +117,7 @@ export default {
       const delays = 80;
       this.chart.on('draw', (data) => {
         if (data.type === 'bar') {
-          seq++;
+          seq += 1;
           data.element.animate({
             opacity: {
               begin: seq * delays,

@@ -342,11 +342,11 @@ export default {
         this.tableData = response.data.data;
         this.tableData.forEach((data) => {
           if (data.tier === 'CUMULUS') {
-            this.totalNumberOfCumulus++;
+            this.totalNumberOfCumulus += 1;
           } else if (data.tier === 'NIMBUS') {
-            this.totalNumberOfNimbus++;
+            this.totalNumberOfNimbus += 1;
           } else if (data.tier === 'STRATUS') {
-            this.totalNumberOfStratus++;
+            this.totalNumberOfStratus += 1;
           }
 
           this.totalVCores += data.benchmark.bench.cores;
@@ -398,7 +398,7 @@ export default {
           });
 
           if (idx < 9) {
-            idx++;
+            idx += 1;
           } else {
             break;
           }
@@ -433,7 +433,7 @@ export default {
           });
 
           if (idx < 9) {
-            idx++;
+            idx += 1;
           } else {
             break;
           }
