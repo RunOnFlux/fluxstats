@@ -423,8 +423,8 @@ export default {
           var key = entry[0];
           var value = entry[1];
 
-          if (key === "") {
-            continue
+          if (key === '') {
+            continue;
           }
 
           ent.push({

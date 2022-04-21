@@ -85,7 +85,7 @@ const routes = [
         path: 'overview',
         name: 'Overview',
         component: Overview,
-      }
+      },
     ],
   },
   { path: '*', redirect: '/flux/dashboard/overview' },
