@@ -22,6 +22,7 @@ module.exports = {
     'no-restricted-syntax': 'off',
     'no-console': 'off',
     'linebreak-style': 'off',
+    'vuejs-accessibility/label-has-for': 'off',
     'vue/multi-word-component-names': 'off',
     'prefer-destructuring': ['error',
       {
