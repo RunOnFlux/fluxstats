@@ -83,7 +83,9 @@ export default {
     },
     value: {
       type: [String, Number],
-      default: [],
+      default() {
+        return [];
+      },
     },
     addonRightIcon: {
       type: String,

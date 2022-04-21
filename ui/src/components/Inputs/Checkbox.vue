@@ -28,11 +28,15 @@ export default {
   props: {
     checked: {
       type: [Array, Boolean],
-      default: [],
+      default() {
+        return [];
+      },
     },
     disabled: {
       type: [Boolean, String],
-      default: [],
+      default() {
+        return [];
+      },
     },
     inline: Boolean,
   },

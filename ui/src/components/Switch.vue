@@ -28,9 +28,20 @@
 export default {
   name: 'LSwitch',
   props: {
-    value: [Array, Boolean],
-    onText: String,
-    offText: String,
+    value: {
+      type: [Array, Boolean],
+      default() {
+        return [];
+      },
+    },
+    onText: {
+      type: String,
+      default: '',
+    },
+    offText: {
+      type: String,
+      default: '',
+    },
     color: {
       type: String,
       default: '',

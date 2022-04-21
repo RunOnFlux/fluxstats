@@ -26,15 +26,21 @@ export default {
   props: {
     label: {
       type: [String, Number],
-      default: [],
+      default() {
+        return [];
+      },
     },
     disabled: {
       type: [Boolean, String],
-      default: [],
+      default() {
+        return [];
+      },
     },
     value: {
       type: [String, Boolean],
-      default: [],
+      default() {
+        return [];
+      },
     },
     inline: Boolean,
   },
