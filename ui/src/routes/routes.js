@@ -2,7 +2,6 @@ import DashboardLayout from 'src/pages/Dashboard/Layout/DashboardLayout.vue';
 
 // Dashboard pages
 import Overview from 'src/pages/Dashboard/Dashboard/Overview.vue';
-import Stats from 'src/pages/Dashboard/Dashboard/Stats.vue';
 
 // NodeInfo pages
 const Node = () => import('@/pages/Dashboard/NodeInfo/Node.vue');

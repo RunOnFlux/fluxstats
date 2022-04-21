@@ -377,8 +377,8 @@ export default {
           }
         });
 
-        this.totalTBSSD = Number(this.totalTBSSD / 100).toFixed(2);
-        this.totalTBRAM = Number(this.totalTBRAM / 100).toFixed(2);
+        this.totalTBSSD = Number(this.totalTBSSD / 1000).toFixed(2);
+        this.totalTBRAM = Number(this.totalTBRAM / 1000).toFixed(2);
 
         const pieChartPercentageCumulus = ((this.totalNumberOfCumulus / this.totalNumberOfNodes) * 100).toFixed(2);
         const pieChartPercentageNimbus = ((this.totalNumberOfNimbus / this.totalNumberOfNodes) * 100).toFixed(2);
@@ -422,6 +422,10 @@ export default {
         for (var entry of new Map([...mapOrganizations.entries()].sort((a, b) => b[1] - a[1])).entries()) {
           var key = entry[0];
           var value = entry[1];
+
+          if (key === '') {
+            continue;
+          }
 
           ent.push({
             name: key,
