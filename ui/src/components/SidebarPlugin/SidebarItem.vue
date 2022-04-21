@@ -12,6 +12,7 @@
       :aria-expanded="!collapsed"
       data-toggle="collapse"
       @click="collapseMenu"
+      @keypress="collapseMenu"
     >
       <i :class="link.icon" />
       <p>

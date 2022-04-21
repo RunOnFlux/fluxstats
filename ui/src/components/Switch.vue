@@ -6,6 +6,7 @@
     <div
       class="bootstrap-switch-container"
       @click="triggerToggle()"
+      @keypress="triggerToggle()"
     >
       <span
         class="bootstrap-switch-handle-on "

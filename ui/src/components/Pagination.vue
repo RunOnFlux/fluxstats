@@ -11,6 +11,7 @@
         class="page-link"
         aria-label="Previous"
         @click="prevPage"
+        @keypress="prevPage"
       >
         <span>«</span>
       </a>
@@ -24,6 +25,7 @@
       <a
         class="page-link"
         @click="changePage(item)"
+        @keypress="changePage(item)"
       >{{ item }}</a>
     </li>
     <li
@@ -34,6 +36,7 @@
         class="page-link"
         aria-label="Next"
         @click="nextPage"
+        @keypress="nextPage"
       >
         <span>»</span>
       </a>
