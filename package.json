@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon --ignore './src/fluxHashes' index.js",
     "test": "echo 'No tests have been implemented' && exit 1",
-    "lint": "eslint --ext .js,.vue ./ --fix",
+    "lint": "eslint --ext .js,.vue ./",
     "serve": "vue-cli-service serve --skip-plugins @vue/cli-plugin-eslint",
     "build": "vue-cli-service build --skip-plugins @vue/cli-plugin-eslint"
   },
