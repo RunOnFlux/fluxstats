@@ -435,7 +435,6 @@ export default {
               break;
             }
           }
-
         }
 
         this.tableData2.data.push({ title: `1. ${ent[0].name} - ${ent[0].total} Nodes` });
