@@ -12,8 +12,8 @@
     </thead>
     <tbody>
       <tr
-        v-for="item in data"
-        :key="item"
+        v-for="(item, i) in data"
+        :key="i"
       >
         <slot :row="item">
           <template v-for="column in columns">
