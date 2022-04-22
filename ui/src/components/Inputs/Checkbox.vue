@@ -26,8 +26,18 @@ export default {
     prop: 'checked',
   },
   props: {
-    checked: [Array, Boolean],
-    disabled: [Boolean, String],
+    checked: {
+      type: [Array, Boolean],
+      default() {
+        return false;
+      },
+    },
+    disabled: {
+      type: [Boolean, String],
+      default() {
+        return '';
+      },
+    },
     inline: Boolean,
   },
   data() {

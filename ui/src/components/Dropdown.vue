@@ -31,9 +31,18 @@
 export default {
   name: 'DropDown',
   props: {
-    title: String,
-    icon: String,
-    position: String,
+    title: {
+      type: String,
+      default: '',
+    },
+    icon: {
+      type: String,
+      default: '',
+    },
+    position: {
+      type: String,
+      default: '',
+    },
     hideArrow: Boolean,
     tag: {
       type: String,

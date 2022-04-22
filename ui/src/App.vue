@@ -3,13 +3,13 @@
 </template>
 
 <script>
-import NotificationSample from './pages/Dashboard/Components/NotificationSample.vue';
+import Flux from './pages/Dashboard/Components/Flux.vue';
 
 export default {
   mounted() {
     this.$notify(
       {
-        component: NotificationSample,
+        component: Flux,
         icon: 'nc-icon nc-app',
       },
     );

@@ -24,9 +24,24 @@
 export default {
   name: 'LRadio',
   props: {
-    label: [String, Number],
-    disabled: [Boolean, String],
-    value: [String, Boolean],
+    label: {
+      type: [String, Number],
+      default() {
+        return '';
+      },
+    },
+    disabled: {
+      type: [Boolean, String],
+      default() {
+        return '';
+      },
+    },
+    value: {
+      type: [String, Boolean],
+      default() {
+        return '';
+      },
+    },
     inline: Boolean,
   },
   data() {

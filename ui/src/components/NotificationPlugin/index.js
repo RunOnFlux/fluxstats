@@ -20,7 +20,8 @@ const NotificationStore = {
       this.state.splice(indexToDelete, 1);
     }
   },
-  addNotification(notification) {
+  addNotification(notif) {
+    let notification = notif;
     if (typeof notification === 'string' || notification instanceof String) {
       notification = { message: notification };
     }
@@ -54,7 +55,9 @@ const NotificationsPlugin = {
         },
       },
     });
+    // eslint-disable-next-line no-param-reassign
     Vue.prototype.$notify = app.notify;
+    // eslint-disable-next-line no-param-reassign
     Vue.prototype.$notifications = app.notificationStore;
     Vue.component('Notifications', Notifications);
     if (options) {

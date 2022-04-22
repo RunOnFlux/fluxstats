@@ -156,7 +156,7 @@ export default {
       if (this.searchQuery !== '') {
         const temp = [];
         result = this.fuseSearch.search(`=${this.searchQuery}`);
-        for (let i = 0; i < Object.keys(result).length; i++) {
+        for (let i = 0; i < Object.keys(result).length; i += 1) {
           temp.push(result[i].item);
         }
         result = temp;

@@ -154,7 +154,7 @@ export default {
       if (this.searchQuery !== '') {
         const temp = [];
         result = this.fuseSearch.search(`=${this.searchQuery}`);
-        for (let i = 0; i < Object.keys(result).length; i++) {
+        for (let i = 0; i < Object.keys(result).length; i += 1) {
           temp.push(result[i].item);
         }
         result = temp;
@@ -191,9 +191,9 @@ export default {
           this.tableData.push({
             ip: value.ip,
             activeSince: value.activeSince,
-            activeSinceConverted: `${new Date(parseInt(value.activeSince * 1000)).toLocaleDateString()} ${new Date(parseInt(value.activeSince * 1000)).toLocaleTimeString()}`,
+            activeSinceConverted: `${new Date(parseInt(value.activeSince * 1000, 10)).toLocaleDateString()} ${new Date(parseInt(value.activeSince * 1000, 10)).toLocaleTimeString()}`,
             dataCollectedAt: value.dataCollectedAt,
-            dataCollectedAtConverted: `${new Date(parseInt(value.dataCollectedAt)).toLocaleDateString()} ${new Date(parseInt(value.dataCollectedAt)).toLocaleTimeString()}`,
+            dataCollectedAtConverted: `${new Date(parseInt(value.dataCollectedAt, 10)).toLocaleDateString()} ${new Date(parseInt(value.dataCollectedAt, 10)).toLocaleTimeString()}`,
           });
         });
         this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });

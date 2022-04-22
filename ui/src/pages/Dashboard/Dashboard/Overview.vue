@@ -230,7 +230,7 @@
 </template>
 <script>
 import {
-  ChartCard, StatsCard, Card, Table as LTable, Checkbox,
+  ChartCard, StatsCard, Card, Table as LTable,
 } from 'src/components/index';
 import axios from 'axios';
 import Loading from 'vue-loading-overlay';
@@ -342,11 +342,11 @@ export default {
         this.tableData = response.data.data;
         this.tableData.forEach((data) => {
           if (data.tier === 'CUMULUS') {
-            this.totalNumberOfCumulus++;
+            this.totalNumberOfCumulus += 1;
           } else if (data.tier === 'NIMBUS') {
-            this.totalNumberOfNimbus++;
+            this.totalNumberOfNimbus += 1;
           } else if (data.tier === 'STRATUS') {
-            this.totalNumberOfStratus++;
+            this.totalNumberOfStratus += 1;
           }
 
           this.totalVCores += data.benchmark.bench.cores;
@@ -377,8 +377,8 @@ export default {
           }
         });
 
-        this.totalTBSSD = Number(this.totalTBSSD / 100).toFixed(2);
-        this.totalTBRAM = Number(this.totalTBRAM / 100).toFixed(2);
+        this.totalTBSSD = Number(this.totalTBSSD / 1000).toFixed(2);
+        this.totalTBRAM = Number(this.totalTBRAM / 1000).toFixed(2);
 
         const pieChartPercentageCumulus = ((this.totalNumberOfCumulus / this.totalNumberOfNodes) * 100).toFixed(2);
         const pieChartPercentageNimbus = ((this.totalNumberOfNimbus / this.totalNumberOfNodes) * 100).toFixed(2);
@@ -388,9 +388,9 @@ export default {
 
         let idx = 0;
         let ent = [];
-        for (var entry of new Map([...map.entries()].sort((a, b) => b[1] - a[1])).entries()) {
-          var key = entry[0];
-          var value = entry[1];
+        for (const entry of new Map([...map.entries()].sort((a, b) => b[1] - a[1])).entries()) {
+          const key = entry[0];
+          const value = entry[1];
 
           ent.push({
             name: key,
@@ -398,7 +398,7 @@ export default {
           });
 
           if (idx < 9) {
-            idx++;
+            idx += 1;
           } else {
             break;
           }
@@ -419,19 +419,21 @@ export default {
 
         idx = 0;
         ent = [];
-        for (var entry of new Map([...mapOrganizations.entries()].sort((a, b) => b[1] - a[1])).entries()) {
-          var key = entry[0];
-          var value = entry[1];
+        for (const entry of new Map([...mapOrganizations.entries()].sort((a, b) => b[1] - a[1])).entries()) {
+          const key = entry[0];
+          const value = entry[1];
 
-          ent.push({
-            name: key,
-            total: value,
-          });
+          if (key !== '') {
+            ent.push({
+              name: key,
+              total: value,
+            });
 
-          if (idx < 9) {
-            idx++;
-          } else {
-            break;
+            if (idx < 9) {
+              idx += 1;
+            } else {
+              break;
+            }
           }
         }
 
@@ -453,11 +455,11 @@ export default {
               });
             }
             const statsLength = Object.keys(response.data.data).length;
-            const item1 = new Date(parseInt(this.tableData1[statsLength - 1].roundTime));
-            const item2 = new Date(parseInt(this.tableData1[statsLength - 2].roundTime));
-            const item3 = new Date(parseInt(this.tableData1[statsLength - 3].roundTime));
-            const item4 = new Date(parseInt(this.tableData1[statsLength - 4].roundTime));
-            const item5 = new Date(parseInt(this.tableData1[statsLength - 5].roundTime));
+            const item1 = new Date(parseInt(this.tableData1[statsLength - 1].roundTime, 10));
+            const item2 = new Date(parseInt(this.tableData1[statsLength - 2].roundTime, 10));
+            const item3 = new Date(parseInt(this.tableData1[statsLength - 3].roundTime, 10));
+            const item4 = new Date(parseInt(this.tableData1[statsLength - 4].roundTime, 10));
+            const item5 = new Date(parseInt(this.tableData1[statsLength - 5].roundTime, 10));
 
             this.lineChart.data.series = [
               [

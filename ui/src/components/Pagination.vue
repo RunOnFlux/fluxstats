@@ -11,6 +11,7 @@
         class="page-link"
         aria-label="Previous"
         @click="prevPage"
+        @keypress="prevPage"
       >
         <span>«</span>
       </a>
@@ -24,6 +25,7 @@
       <a
         class="page-link"
         @click="changePage(item)"
+        @keypress="changePage(item)"
       >{{ item }}</a>
     </li>
     <li
@@ -34,6 +36,7 @@
         class="page-link"
         aria-label="Next"
         @click="nextPage"
+        @keypress="nextPage"
       >
         <span>»</span>
       </a>
@@ -112,17 +115,17 @@ export default {
     },
   },
   watch: {
-    perPage(value) {
+    perPage() {
       this.$emit('input', 1);
     },
-    total(value) {
+    total() {
       this.$emit('input', 1);
     },
   },
   methods: {
     range(min, max) {
       const arr = [];
-      for (let i = min; i <= max; i++) {
+      for (let i = min; i <= max; i += 1) {
         arr.push(i);
       }
       return arr;

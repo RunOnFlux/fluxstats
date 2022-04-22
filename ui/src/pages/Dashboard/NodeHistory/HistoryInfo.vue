@@ -154,7 +154,7 @@ export default {
       if (this.searchQuery !== '') {
         const temp = [];
         result = this.fuseSearch.search(`=${this.searchQuery}`);
-        for (let i = 0; i < Object.keys(result).length; i++) {
+        for (let i = 0; i < Object.keys(result).length; i += 1) {
           temp.push(result[i].item);
         }
         result = temp;
@@ -189,7 +189,7 @@ export default {
         for (const [key, value] of Object.entries(response.data.data)) {
           this.tableData.push({
             roundTime: key,
-            roundTimeConverted: `${new Date(parseInt(key)).toLocaleDateString()} ${new Date(parseInt(key)).toLocaleTimeString()}`,
+            roundTimeConverted: `${new Date(parseInt(key, 10)).toLocaleDateString()} ${new Date(parseInt(key, 10)).toLocaleTimeString()}`,
             cumulus: value.cumulus,
             nimbus: value.nimbus,
             stratus: value.stratus,

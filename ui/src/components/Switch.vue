@@ -6,6 +6,7 @@
     <div
       class="bootstrap-switch-container"
       @click="triggerToggle()"
+      @keypress="triggerToggle()"
     >
       <span
         class="bootstrap-switch-handle-on "
@@ -28,9 +29,20 @@
 export default {
   name: 'LSwitch',
   props: {
-    value: [Array, Boolean],
-    onText: String,
-    offText: String,
+    value: {
+      type: [Array, Boolean],
+      default() {
+        return false;
+      },
+    },
+    onText: {
+      type: String,
+      default: '',
+    },
+    offText: {
+      type: String,
+      default: '',
+    },
     color: {
       type: String,
       default: '',

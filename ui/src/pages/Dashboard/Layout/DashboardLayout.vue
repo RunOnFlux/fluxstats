@@ -5,8 +5,6 @@
   >
     <notifications />
     <side-bar>
-      <user-menu />
-      <mobile-menu />
       <template slot="links">
         <sidebar-item :link="{name: 'Dashboard', icon: 'nc-icon nc-chart-pie-35', path: '/flux/dashboard/overview'}" />
         <sidebar-item :link="{name: 'Node Info', icon: 'nc-icon nc-app'}">
@@ -37,8 +35,6 @@ import PerfectScrollbar from 'perfect-scrollbar';
 import TopNavbar from './TopNavbar.vue';
 import ContentFooter from './ContentFooter.vue';
 import DashboardContent from './Content.vue';
-import MobileMenu from './Extra/MobileMenu.vue';
-import UserMenu from './Extra/UserMenu.vue';
 import 'perfect-scrollbar/css/perfect-scrollbar.css';
 
 function hasElement(className) {
@@ -61,8 +57,6 @@ export default {
     TopNavbar,
     ContentFooter,
     DashboardContent,
-    MobileMenu,
-    UserMenu,
   },
   mounted() {
     this.initScrollbar();

@@ -12,8 +12,8 @@
     </thead>
     <tbody>
       <tr
-        v-for="item in data"
-        :key="item"
+        v-for="(item, i) in data"
+        :key="i"
       >
         <slot :row="item">
           <template v-for="column in columns">
@@ -33,8 +33,18 @@
 export default {
   name: 'LTable',
   props: {
-    columns: Array,
-    data: Array,
+    columns: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
+    data: {
+      type: Array,
+      default() {
+        return [];
+      },
+    },
   },
   methods: {
     hasValue(item, column) {

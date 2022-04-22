@@ -12,6 +12,7 @@
       :aria-expanded="!collapsed"
       data-toggle="collapse"
       @click="collapseMenu"
+      @keypress="collapseMenu"
     >
       <i :class="link.icon" />
       <p>
@@ -161,7 +162,8 @@ export default {
     collapseMenu() {
       this.collapsed = !this.collapsed;
     },
-    collapseSubMenu(link) {
+    collapseSubMenu(linkVar) {
+      const link = linkVar;
       link.collapsed = !link.collapsed;
     },
   },
