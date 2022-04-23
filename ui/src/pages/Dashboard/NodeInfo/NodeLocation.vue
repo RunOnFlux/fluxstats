@@ -9,7 +9,7 @@
     <div>
       <loading
         :active.sync="isLoading"
-        :can-cancel="false"
+        :can-cancel="true"
       />
     </div>
     <div class="col-12">
@@ -99,7 +99,7 @@ export default {
   data() {
     return {
       pagination: {
-        perPage: 5,
+        perPage: 100,
         currentPage: 1,
         perPageOptions: [5, 10, 25, 50, 100, 200, 500, 1000, 2000, 5000, 10000],
         total: 0,
@@ -154,21 +154,11 @@ export default {
      * @returns {computed.pagedData}
      */
     queriedData() {
-      let result;
-
+      let result = this.tableData;
       if (this.searchQuery !== '') {
-        const temp = [];
-        result = this.fuseSearch.search(`=${this.searchQuery}`);
-        for (let i = 0; i < Object.keys(result).length; i += 1) {
-          temp.push(result[i].item);
-        }
-        result = temp;
+        result = this.fuseSearch.search(this.searchQuery);
         this.paginationTotal(result.length);
-      } else {
-        this.paginationTotal(this.tableData.length);
-        result = this.tableData;
       }
-
       return result.slice(this.from, this.to);
     },
     to() {
