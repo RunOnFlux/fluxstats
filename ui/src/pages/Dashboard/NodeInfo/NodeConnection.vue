@@ -134,8 +134,19 @@ export default {
           label: 'IP Address',
           minWidth: 200,
         },
+        {
+          prop: 'in',
+          label: 'Total Incoming',
+          minWidth: 200,
+        },
+        {
+          prop: 'out',
+          label: 'Total Outgoing',
+          minWidth: 200,
+        },
       ],
       tableData: [],
+      values: [],
       fuseSearch: null,
       isLoading: false,
     };
@@ -178,7 +189,19 @@ export default {
     axios
       .get('https://stats.runonflux.io/fluxinfo?projection=ip,connectionsOut,connectionsIn')
       .then((response) => {
-        this.tableData = response.data.data;
+        this.values = response.data.data;
+        for (let i = 0; i < this.values.length; i += 1) {
+          try {
+            this.values[i].out = this.values[i].connectionsOut.length;
+            this.values[i].in = this.values[i].connectionsIn.length;
+          } catch (ex) {
+            // Continue to next data
+            this.values[i].out = 0;
+            this.values[i].in = 0;
+          }
+        }
+      }).then(() => {
+        this.tableData = this.values;
         this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
         this.isLoading = false;
       });

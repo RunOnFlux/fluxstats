@@ -3,7 +3,7 @@
     <div>
       <loading
         :active.sync="isLoading"
-        :can-cancel="false"
+        :can-cancel="true"
       />
     </div>
 

@@ -145,6 +145,7 @@ export default {
         },
       ],
       tableData: [],
+      values: [],
       fuseSearch: null,
       isLoading: false,
     };
@@ -187,7 +188,12 @@ export default {
     axios
       .get('https://stats.runonflux.io/fluxinfo?projection=node')
       .then((response) => {
-        this.tableData = response.data.data;
+        this.values = response.data.data;
+        for (let i = 0; i < this.values.length; i += 1) {
+          this.values[i].node.status.network = 'ipv4';
+        }
+      }).then(() => {
+        this.tableData = this.values;
         this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['node.status.ip'] });
         this.isLoading = false;
       });
