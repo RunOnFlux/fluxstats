@@ -195,7 +195,6 @@ export default {
             this.values[i].out = this.values[i].connectionsOut.length;
             this.values[i].in = this.values[i].connectionsIn.length;
           } catch (ex) {
-            // Continue to next data
             this.values[i].out = 0;
             this.values[i].in = 0;
           }

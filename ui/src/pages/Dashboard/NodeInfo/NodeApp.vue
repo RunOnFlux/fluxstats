@@ -132,6 +132,16 @@ export default {
           minWidth: 200,
         },
         {
+          prop: 'apps.count',
+          label: 'Total Application Running',
+          minWidth: 250,
+        },
+        {
+          prop: 'apps.fluxtower',
+          label: 'Flux Watch Tower Installed',
+          minWidth: 250,
+        },
+        {
           prop: 'apps.fluxusage',
           label: 'Flux Usage',
           minWidth: 250,
@@ -153,6 +163,7 @@ export default {
         },
       ],
       tableData: [],
+      values: [],
       fuseSearch: null,
       isLoading: false,
     };
@@ -195,7 +206,25 @@ export default {
     axios
       .get('https://stats.runonflux.io/fluxinfo?projection=ip,apps')
       .then((response) => {
-        this.tableData = response.data.data;
+        this.values = response.data.data;
+        for (let i = 0, k = 0; i < this.values.length; i += 1) {
+          for (let j = 0; j < this.values[i].apps.runningapps.length; j += 1) {
+            if (this.values[i].apps.runningapps[j].Image === 'containrrr/watchtower') {
+              this.values[i].apps.fluxtower = 'TRUE';
+              k = j;
+            } else {
+              this.values[i].apps.fluxtower = 'FALSE';
+            }
+          }
+          this.values[i].apps.runningapps.splice(k, 1);
+          try {
+            this.values[i].apps.count = this.values[i].apps.runningapps.length;
+          } catch (ex) {
+            this.values[i].apps.count = 0;
+          }
+        }
+      }).then(() => {
+        this.tableData = this.values;
         this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
         this.isLoading = false;
       });
