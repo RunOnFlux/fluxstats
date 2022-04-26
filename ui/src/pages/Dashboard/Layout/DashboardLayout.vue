@@ -11,9 +11,10 @@
           <sidebar-item :link="{name: 'Node', path: '/flux/nodeinfo/node'}" />
           <sidebar-item :link="{name: 'Application', path: '/flux/nodeinfo/app'}" />
           <sidebar-item :link="{name: 'Hashes', path: '/flux/nodeinfo/hashes'}" />
+          <sidebar-item :link="{name: 'Address Info', path: '/flux/nodeinfo/address'}" />
           <sidebar-item :link="{name: 'Location', path: '/flux/nodeinfo/location'}" />
           <sidebar-item :link="{name: 'Connection', path: '/flux/nodeinfo/connection'}" />
-          <sidebar-item :link="{name: 'UpTime', path: '/flux/nodeinfo/uptime'}" />
+          <sidebar-item :link="{name: 'Up Time', path: '/flux/nodeinfo/uptime'}" />
           <sidebar-item :link="{name: 'Version', path: '/flux/nodeinfo/version'}" />
         </sidebar-item>
         <sidebar-item :link="{name: 'History', icon: 'nc-icon nc-notes'}">

@@ -454,61 +454,63 @@ export default {
                 stratus: value.stratus,
               });
             }
-            const statsLength = Object.keys(response.data.data).length;
+            this.statsLength = Object.keys(response.data.data).length;
+          }).then(() => {
             let item1 = '';
             let item2 = '';
             let item3 = '';
             let item4 = '';
             let item5 = '';
             try {
-              item1 = new Date(parseInt(this.tableData1[statsLength - 1].roundTime, 10));
+              item1 = new Date(parseInt(this.tableData1[this.statsLength - 1].roundTime, 10));
             } catch (ex) {
               item1 = new Date(parseInt(0, 10));
             }
             try {
-              item2 = new Date(parseInt(this.tableData1[statsLength - 2].roundTime, 10));
+              item2 = new Date(parseInt(this.tableData1[this.statsLength - 2].roundTime, 10));
             } catch (ex) {
               item2 = new Date(parseInt(0, 10));
             }
             try {
-              item3 = new Date(parseInt(this.tableData1[statsLength - 3].roundTime, 10));
+              item3 = new Date(parseInt(this.tableData1[this.statsLength - 3].roundTime, 10));
             } catch (ex) {
               item3 = new Date(parseInt(0, 10));
             }
             try {
-              item4 = new Date(parseInt(this.tableData1[statsLength - 4].roundTime, 10));
+              item4 = new Date(parseInt(this.tableData1[this.statsLength - 4].roundTime, 10));
             } catch (ex) {
               item4 = new Date(parseInt(0, 10));
             }
             try {
-              item5 = new Date(parseInt(this.tableData1[statsLength - 5].roundTime, 10));
+              item5 = new Date(parseInt(this.tableData1[this.statsLength - 5].roundTime, 10));
             } catch (ex) {
               item5 = new Date(parseInt(0, 10));
             }
+
             this.lineChart.data.series = [
               [
-                this.tableData1[statsLength - 1].cumulus,
-                this.tableData1[statsLength - 2].cumulus,
-                this.tableData1[statsLength - 3].cumulus,
-                this.tableData1[statsLength - 4].cumulus,
-                this.tableData1[statsLength - 5].cumulus,
-                this.tableData1[statsLength - 6].cumulus,
+                this.tableData1[this.statsLength - 1].cumulus,
+                this.tableData1[this.statsLength - 2].cumulus,
+                this.tableData1[this.statsLength - 3].cumulus,
+                this.tableData1[this.statsLength - 4].cumulus,
+                this.tableData1[this.statsLength - 5].cumulus,
+                this.tableData1[this.statsLength - 6].cumulus,
               ],
               [
-                this.tableData1[statsLength - 1].nimbus,
-                this.tableData1[statsLength - 2].nimbus,
-                this.tableData1[statsLength - 3].nimbus,
-                this.tableData1[statsLength - 4].nimbus,
-                this.tableData1[statsLength - 5].nimbus,
-                this.tableData1[statsLength - 6].nimbus,
+                this.tableData1[this.statsLength - 1].nimbus,
+                this.tableData1[this.statsLength - 2].nimbus,
+                this.tableData1[this.statsLength - 3].nimbus,
+                this.tableData1[this.statsLength - 4].nimbus,
+                this.tableData1[this.statsLength - 5].nimbus,
+                this.tableData1[this.statsLength - 6].nimbus,
               ],
               [
-                this.tableData1[statsLength - 1].stratus,
-                this.tableData1[statsLength - 2].stratus,
-                this.tableData1[statsLength - 3].stratus,
-                this.tableData1[statsLength - 4].stratus,
-                this.tableData1[statsLength - 5].stratus,
-                this.tableData1[statsLength - 6].stratus,
+                this.tableData1[this.statsLength - 1].stratus,
+                this.tableData1[this.statsLength - 2].stratus,
+                this.tableData1[this.statsLength - 3].stratus,
+                this.tableData1[this.statsLength - 4].stratus,
+                this.tableData1[this.statsLength - 5].stratus,
+                this.tableData1[this.statsLength - 6].stratus,
               ],
             ];
 

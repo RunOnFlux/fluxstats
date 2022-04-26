@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-12">
       <h2 class="title">
-        Node
+        Address Info
       </h2>
     </div>
     <p class="category" />
@@ -46,23 +46,6 @@
               :data="queriedData"
               border
             >
-              <el-table-column type="expand">
-                <template slot-scope="props">
-                  <p><b>Collateral:</b> {{ props.row.node.status.collateral }} </p>
-                  <p><b>Txn Hash:</b> {{ props.row.node.status.txhash }}</p>
-                  <p><b>Added Height:</b> {{ props.row.node.status.added_height }}</p>
-                  <p><b>Confirmed Height:</b> {{ props.row.node.status.confirmed_height }}</p>
-                  <p><b>Last Confirmed Height:</b> {{ props.row.node.status.last_confirmed_height }}</p>
-                  <p><b>Last Paid Height:</b> {{ props.row.node.status.last_paid_height }}</p>
-                  <p><b>Payment Address:</b> {{ props.row.node.status.payment_address }}</p>
-                  <p><b>Zel ID:</b> {{ props.row.flux.zelid }}</p>
-                  <p><b>Active Since:</b> {{ props.row.node.status.activesince }}</p>
-                  <p><b>Active Since Converted:</b> {{ new Date(parseInt(props.row.node.status.activesince * 1000)).toLocaleDateString() }} {{ new Date(parseInt(props.row.node.status.activesince * 1000)).toLocaleTimeString() }}</p>
-                  <p><b>Last Paid:</b> {{ props.row.node.status.lastpaid }}</p>
-                  <p><b>Last Paid Converted:</b> {{ new Date(parseInt(props.row.node.status.lastpaid * 1000)).toLocaleDateString() }} {{ new Date(parseInt(props.row.node.status.lastpaid * 1000)).toLocaleTimeString() }}</p>
-                  <p><b>Amount:</b> {{ props.row.node.status.amount }}</p>
-                </template>
-              </el-table-column>
               <el-table-column
                 v-for="column in tableColumns"
                 :key="column.label"
@@ -122,33 +105,37 @@ export default {
         total: 0,
       },
       searchQuery: '',
-      propsToSearch: ['node.status.ip'],
+      propsToSearch: ['zelId'],
       tableColumns: [
         {
-          prop: 'node.status.ip',
-          label: 'IP Address',
+          prop: 'zelId',
+          label: 'Zel ID',
           minWidth: 70,
         },
         {
-          prop: 'node.status.network',
-          label: 'Network Protocol',
+          prop: 'paymentId',
+          label: 'Payment ID',
           minWidth: 40,
         },
         {
-          prop: 'node.status.tier',
-          label: 'Tier',
-          minWidth: 90,
+          prop: 'org',
+          label: 'Organization',
+          minWidth: 40,
         },
         {
-          prop: 'node.status.status',
-          label: 'Status',
-          minWidth: 50,
+          prop: 'totalNodes',
+          label: 'Total Nodes',
+          minWidth: 90,
         },
       ],
       tableData: [],
       values: [],
       fuseSearch: null,
       isLoading: false,
+      paymentAddress: null,
+      organization: null,
+      totalNodes: null,
+      zelids: [],
     };
   },
   computed: {
@@ -186,16 +173,37 @@ export default {
   },
   mounted() {
     this.isLoading = true;
+    this.paymentAddress = new Map();
+    this.totalNodes = new Map();
+    this.organization = new Map();
     axios
-      .get('https://stats.runonflux.io/fluxinfo?projection=node,flux')
+      .get('https://stats.runonflux.io/fluxinfo?projection=node,flux,geolocation')
       .then((response) => {
         this.values = response.data.data;
         for (let i = 0; i < this.values.length; i += 1) {
-          this.values[i].node.status.network = 'ipv4';
+          if (this.paymentAddress.get(this.values[i].flux.zelid) !== undefined) {
+            let temp = this.totalNodes.get(this.values[i].flux.zelid);
+            this.totalNodes.set(this.values[i].flux.zelid, temp += 1);
+          } else {
+            this.paymentAddress.set(this.values[i].flux.zelid, this.values[i].node.status.payment_address);
+            this.organization.set(this.values[i].flux.zelid, this.values[i].geolocation.org);
+            this.totalNodes.set(this.values[i].flux.zelid, 1);
+          }
         }
       }).then(() => {
-        this.tableData = this.values;
-        this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['node.status.ip'] });
+        for (const entry of this.paymentAddress.entries()) {
+          this.zelids.push(
+            {
+              zelId: `${entry[0]}`,
+              paymentId: `${entry[1]}`,
+              totalNodes: `${this.totalNodes.get(entry[0])}`,
+              org: `${this.organization.get(entry[0])}`,
+            },
+          );
+        }
+      }).then(() => {
+        this.tableData = this.zelids;
+        this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['zelId'] });
         this.isLoading = false;
       });
   },
