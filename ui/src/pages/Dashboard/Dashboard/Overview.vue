@@ -229,7 +229,7 @@
         <card
           class="card-tasks"
           title="Top 5 Node Operator"
-          sub-title="ZelId's With Highest Node Count"
+          sub-title="Zel ID's With Highest Node Count"
         >
           <l-table :data="tableData3.data">
             <template slot-scope="{row}">
@@ -536,11 +536,11 @@ export default {
           }
         }
 
-        this.tableData3.data.push({ title: `1. ZelId: ${ent[0].zelId} - Cumulus: ${this.totalCumulus.get(ent[0].zelId)} Nimbus: ${this.totalNimbus.get(ent[0].zelId)} Stratus: ${this.totalStratus.get(ent[0].zelId)}` });
-        this.tableData3.data.push({ title: `2. ZelId: ${ent[1].zelId} - Cumulus: ${this.totalCumulus.get(ent[1].zelId)} Nimbus: ${this.totalNimbus.get(ent[1].zelId)} Stratus: ${this.totalStratus.get(ent[1].zelId)}` });
-        this.tableData3.data.push({ title: `3. ZelId: ${ent[2].zelId} - Cumulus: ${this.totalCumulus.get(ent[2].zelId)} Nimbus: ${this.totalNimbus.get(ent[2].zelId)} Stratus: ${this.totalStratus.get(ent[2].zelId)}` });
-        this.tableData3.data.push({ title: `4. ZelId: ${ent[3].zelId} - Cumulus: ${this.totalCumulus.get(ent[3].zelId)} Nimbus: ${this.totalNimbus.get(ent[3].zelId)} Stratus: ${this.totalStratus.get(ent[3].zelId)}` });
-        this.tableData3.data.push({ title: `5. ZelId: ${ent[4].zelId} - Cumulus: ${this.totalCumulus.get(ent[4].zelId)} Nimbus: ${this.totalNimbus.get(ent[4].zelId)} Stratus: ${this.totalStratus.get(ent[4].zelId)}` });
+        this.tableData3.data.push({ title: `1. Zel ID: ${ent[0].zelId} - Cumulus: ${this.totalCumulus.get(ent[0].zelId)} Nimbus: ${this.totalNimbus.get(ent[0].zelId)} Stratus: ${this.totalStratus.get(ent[0].zelId)}` });
+        this.tableData3.data.push({ title: `2. Zel ID: ${ent[1].zelId} - Cumulus: ${this.totalCumulus.get(ent[1].zelId)} Nimbus: ${this.totalNimbus.get(ent[1].zelId)} Stratus: ${this.totalStratus.get(ent[1].zelId)}` });
+        this.tableData3.data.push({ title: `3. Zel ID: ${ent[2].zelId} - Cumulus: ${this.totalCumulus.get(ent[2].zelId)} Nimbus: ${this.totalNimbus.get(ent[2].zelId)} Stratus: ${this.totalStratus.get(ent[2].zelId)}` });
+        this.tableData3.data.push({ title: `4. Zel ID: ${ent[3].zelId} - Cumulus: ${this.totalCumulus.get(ent[3].zelId)} Nimbus: ${this.totalNimbus.get(ent[3].zelId)} Stratus: ${this.totalStratus.get(ent[3].zelId)}` });
+        this.tableData3.data.push({ title: `5. Zel ID: ${ent[4].zelId} - Cumulus: ${this.totalCumulus.get(ent[4].zelId)} Nimbus: ${this.totalNimbus.get(ent[4].zelId)} Stratus: ${this.totalStratus.get(ent[4].zelId)}` });
       }).then(() => {
         axios
           .get('https://stats.runonflux.io/fluxhistorystats')

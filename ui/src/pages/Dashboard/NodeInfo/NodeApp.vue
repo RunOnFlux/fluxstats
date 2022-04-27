@@ -179,10 +179,18 @@ export default {
      * @returns {computed.pagedData}
      */
     queriedData() {
-      let result = this.tableData;
+      let result;
       if (this.searchQuery !== '') {
-        result = this.fuseSearch.search(this.searchQuery);
+        const temp = [];
+        result = this.fuseSearch.search(`=${this.searchQuery}`);
+        for (let i = 0; i < Object.keys(result).length; i += 1) {
+          temp.push(result[i].item);
+        }
+        result = temp;
         this.paginationTotal(result.length);
+      } else {
+        this.paginationTotal(this.tableData.length);
+        result = this.tableData;
       }
       return result.slice(this.from, this.to);
     },
