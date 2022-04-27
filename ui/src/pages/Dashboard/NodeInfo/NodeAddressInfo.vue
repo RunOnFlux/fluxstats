@@ -46,6 +46,13 @@
               :data="queriedData"
               border
             >
+              <el-table-column type="expand">
+                <template slot-scope="props">
+                  <p><b>Total Cumulus:</b> {{ props.row.totalCumulus }} </p>
+                  <p><b>Total Nimbus:</b> {{ props.row.totalNimbus }}</p>
+                  <p><b>Total Stratus:</b> {{ props.row.totalStratus }}</p>
+                </template>
+              </el-table-column>
               <el-table-column
                 v-for="column in tableColumns"
                 :key="column.label"
@@ -135,6 +142,9 @@ export default {
       paymentAddress: null,
       organization: null,
       totalNodes: null,
+      totalCumulus: null,
+      totalStratus: null,
+      totalNimbus: null,
       zelids: [],
     };
   },
@@ -175,19 +185,45 @@ export default {
     this.isLoading = true;
     this.paymentAddress = new Map();
     this.totalNodes = new Map();
+    this.totalCumulus = new Map();
+    this.totalStratus = new Map();
+    this.totalNimbus = new Map();
     this.organization = new Map();
     axios
-      .get('https://stats.runonflux.io/fluxinfo?projection=node,flux,geolocation')
+      .get('https://stats.runonflux.io/fluxinfo?projection=node,flux,geolocation,tier')
       .then((response) => {
         this.values = response.data.data;
         for (let i = 0; i < this.values.length; i += 1) {
           if (this.paymentAddress.get(this.values[i].flux.zelid) !== undefined) {
             let temp = this.totalNodes.get(this.values[i].flux.zelid);
             this.totalNodes.set(this.values[i].flux.zelid, temp += 1);
+            if (this.values[i].tier === 'CUMULUS') {
+              let t1 = this.totalCumulus.get(this.values[i].flux.zelid);
+              this.totalCumulus.set(this.values[i].flux.zelid, t1 += 1);
+            } else if (this.values[i].tier === 'NIMBUS') {
+              let t2 = this.totalNimbus.get(this.values[i].flux.zelid);
+              this.totalNimbus.set(this.values[i].flux.zelid, t2 += 1);
+            } else if (this.values[i].tier === 'STRATUS') {
+              let t3 = this.totalStratus.get(this.values[i].flux.zelid);
+              this.totalStratus.set(this.values[i].flux.zelid, t3 += 1);
+            }
           } else {
             this.paymentAddress.set(this.values[i].flux.zelid, this.values[i].node.status.payment_address);
             this.organization.set(this.values[i].flux.zelid, this.values[i].geolocation.org);
             this.totalNodes.set(this.values[i].flux.zelid, 1);
+            if (this.values[i].tier === 'CUMULUS') {
+              this.totalCumulus.set(this.values[i].flux.zelid, 1);
+              this.totalStratus.set(this.values[i].flux.zelid, 0);
+              this.totalNimbus.set(this.values[i].flux.zelid, 0);
+            } else if (this.values[i].tier === 'NIMBUS') {
+              this.totalCumulus.set(this.values[i].flux.zelid, 0);
+              this.totalStratus.set(this.values[i].flux.zelid, 0);
+              this.totalNimbus.set(this.values[i].flux.zelid, 1);
+            } else if (this.values[i].tier === 'STRATUS') {
+              this.totalCumulus.set(this.values[i].flux.zelid, 0);
+              this.totalStratus.set(this.values[i].flux.zelid, 1);
+              this.totalNimbus.set(this.values[i].flux.zelid, 0);
+            }
           }
         }
       }).then(() => {
@@ -197,6 +233,9 @@ export default {
               zelId: `${entry[0]}`,
               paymentId: `${entry[1]}`,
               totalNodes: `${this.totalNodes.get(entry[0])}`,
+              totalCumulus: `${this.totalCumulus.get(entry[0])}`,
+              totalNimbus: `${this.totalNimbus.get(entry[0])}`,
+              totalStratus: `${this.totalStratus.get(entry[0])}`,
               org: `${this.organization.get(entry[0])}`,
             },
           );
