@@ -225,6 +225,24 @@
           />
         </card>
       </div>
+      <div class="col-md-6">
+        <card
+          class="card-tasks"
+          title="Top 5 Node Operator"
+          sub-title="ZelId's With Highest Node Count"
+        >
+          <l-table :data="tableData3.data">
+            <template slot-scope="{row}">
+              <td>{{ row.title }}</td>
+              <td class="td-actions d-flex justify-content-end" />
+            </template>
+          </l-table>
+          <div
+            slot="footer"
+            class="stats"
+          />
+        </card>
+      </div>
     </div>
   </div>
 </template>
@@ -312,6 +330,10 @@ export default {
         data: [
         ],
       },
+      tableData3: {
+        data: [
+        ],
+      },
       totalNumberOfNodes: 0,
       totalNumberOfCumulus: 0,
       totalNumberOfNimbus: 0,
@@ -322,6 +344,14 @@ export default {
       isLoading: true,
       statsLength: 0,
       isFetching: true,
+      values: [],
+      paymentAddress: null,
+      organization: null,
+      totalNodes: null,
+      totalCumulus: null,
+      totalStratus: null,
+      totalNimbus: null,
+      zelids: [],
     };
   },
   async created() {
@@ -333,7 +363,7 @@ export default {
     const mapOrganizations = new Map();
 
     axios
-      .get('https://stats.runonflux.io/fluxinfo?projection=ip,tier,geolocation,benchmark')
+      .get('https://stats.runonflux.io/fluxinfo?projection=ip,tier,geolocation,benchmark,node,flux')
       .then((response) => {
         this.totalNumberOfNodes = Object.keys(response.data.data).length;
         this.totalNumberOfCumulus = 0;
@@ -442,6 +472,75 @@ export default {
         this.tableData2.data.push({ title: `3. ${ent[2].name} - ${ent[2].total} Nodes` });
         this.tableData2.data.push({ title: `4. ${ent[3].name} - ${ent[3].total} Nodes` });
         this.tableData2.data.push({ title: `5. ${ent[4].name} - ${ent[4].total} Nodes` });
+
+        this.paymentAddress = new Map();
+        this.totalNodes = new Map();
+        this.totalCumulus = new Map();
+        this.totalStratus = new Map();
+        this.totalNimbus = new Map();
+        this.organization = new Map();
+
+        this.values = response.data.data;
+
+        for (let i = 0; i < this.values.length; i += 1) {
+          if (this.paymentAddress.get(this.values[i].flux.zelid) !== undefined) {
+            let temp = this.totalNodes.get(this.values[i].flux.zelid);
+            this.totalNodes.set(this.values[i].flux.zelid, temp += 1);
+            if (this.values[i].tier === 'CUMULUS') {
+              let t1 = this.totalCumulus.get(this.values[i].flux.zelid);
+              this.totalCumulus.set(this.values[i].flux.zelid, t1 += 1);
+            } else if (this.values[i].tier === 'NIMBUS') {
+              let t2 = this.totalNimbus.get(this.values[i].flux.zelid);
+              this.totalNimbus.set(this.values[i].flux.zelid, t2 += 1);
+            } else if (this.values[i].tier === 'STRATUS') {
+              let t3 = this.totalStratus.get(this.values[i].flux.zelid);
+              this.totalStratus.set(this.values[i].flux.zelid, t3 += 1);
+            }
+          } else {
+            this.paymentAddress.set(this.values[i].flux.zelid, this.values[i].node.status.payment_address);
+            this.organization.set(this.values[i].flux.zelid, this.values[i].geolocation.org);
+            this.totalNodes.set(this.values[i].flux.zelid, 1);
+            if (this.values[i].tier === 'CUMULUS') {
+              this.totalCumulus.set(this.values[i].flux.zelid, 1);
+              this.totalStratus.set(this.values[i].flux.zelid, 0);
+              this.totalNimbus.set(this.values[i].flux.zelid, 0);
+            } else if (this.values[i].tier === 'NIMBUS') {
+              this.totalCumulus.set(this.values[i].flux.zelid, 0);
+              this.totalStratus.set(this.values[i].flux.zelid, 0);
+              this.totalNimbus.set(this.values[i].flux.zelid, 1);
+            } else if (this.values[i].tier === 'STRATUS') {
+              this.totalCumulus.set(this.values[i].flux.zelid, 0);
+              this.totalStratus.set(this.values[i].flux.zelid, 1);
+              this.totalNimbus.set(this.values[i].flux.zelid, 0);
+            }
+          }
+        }
+
+        idx = 0;
+        ent = [];
+        for (const entry of new Map([...this.totalNodes.entries()].sort((a, b) => b[1] - a[1])).entries()) {
+          const key = entry[0];
+          const value = entry[1];
+
+          if (key !== '') {
+            ent.push({
+              zelId: key,
+              paymentId: value,
+            });
+
+            if (idx < 9) {
+              idx += 1;
+            } else {
+              break;
+            }
+          }
+        }
+
+        this.tableData3.data.push({ title: `1. ZelId: ${ent[0].zelId} - Cumulus: ${this.totalCumulus.get(ent[0].zelId)} Nimbus: ${this.totalNimbus.get(ent[0].zelId)} Stratus: ${this.totalStratus.get(ent[0].zelId)}` });
+        this.tableData3.data.push({ title: `2. ZelId: ${ent[1].zelId} - Cumulus: ${this.totalCumulus.get(ent[1].zelId)} Nimbus: ${this.totalNimbus.get(ent[1].zelId)} Stratus: ${this.totalStratus.get(ent[1].zelId)}` });
+        this.tableData3.data.push({ title: `3. ZelId: ${ent[2].zelId} - Cumulus: ${this.totalCumulus.get(ent[2].zelId)} Nimbus: ${this.totalNimbus.get(ent[2].zelId)} Stratus: ${this.totalStratus.get(ent[2].zelId)}` });
+        this.tableData3.data.push({ title: `4. ZelId: ${ent[3].zelId} - Cumulus: ${this.totalCumulus.get(ent[3].zelId)} Nimbus: ${this.totalNimbus.get(ent[3].zelId)} Stratus: ${this.totalStratus.get(ent[3].zelId)}` });
+        this.tableData3.data.push({ title: `5. ZelId: ${ent[4].zelId} - Cumulus: ${this.totalCumulus.get(ent[4].zelId)} Nimbus: ${this.totalNimbus.get(ent[4].zelId)} Stratus: ${this.totalStratus.get(ent[4].zelId)}` });
       }).then(() => {
         axios
           .get('https://stats.runonflux.io/fluxhistorystats')
