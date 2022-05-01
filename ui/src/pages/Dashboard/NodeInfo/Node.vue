@@ -30,6 +30,20 @@
                 :value="item"
               />
             </el-select>
+            <el-select
+              v-model="filters.default"
+              class="select-default mb-3"
+              style="width: 200px"
+              placeholder="Filters"
+            >
+              <el-option
+                v-for="item in filters.others"
+                :key="item"
+                class="select-default"
+                :label="item"
+                :value="item"
+              />
+            </el-select>
             <el-input
               v-model="searchQuery"
               type="search"
@@ -121,6 +135,10 @@ export default {
         perPageOptions: [5, 10, 25, 50, 100, 200, 500, 1000, 2000, 5000, 10000],
         total: 0,
       },
+      filters: {
+        default: 'filter off',
+        others: ['node version >= 3.14.0', 'nodes hashes < 2400', 'filter off'],
+      },
       searchQuery: '',
       propsToSearch: ['node.status.ip'],
       tableColumns: [
@@ -149,6 +167,8 @@ export default {
       values: [],
       fuseSearch: null,
       isLoading: false,
+      filter1: [],
+      filter2: [],
     };
   },
   computed: {
@@ -170,11 +190,14 @@ export default {
           temp.push(result[i].item);
         }
         result = temp;
-        this.paginationTotal(result.length);
+      } else if (this.filters.default === 'node version >= 3.14.0') {
+        result = this.filter1;
+      } else if (this.filters.default === 'nodes hashes < 2400') {
+        result = this.filter2;
       } else {
-        this.paginationTotal(this.tableData.length);
         result = this.tableData;
       }
+      this.paginationTotal(result.length);
       return result.slice(this.from, this.to);
     },
     to() {
@@ -188,18 +211,39 @@ export default {
       return this.pagination.perPage * (this.pagination.currentPage - 1);
     },
     total() {
-      this.paginationTotal(this.tableData.length);
-      return this.tableData.length;
+      let result;
+      if (this.searchQuery !== '') {
+        const temp = [];
+        result = this.fuseSearch.search(`=${this.searchQuery}`);
+        for (let i = 0; i < Object.keys(result).length; i += 1) {
+          temp.push(result[i].item);
+        }
+        result = temp;
+      } else if (this.filters.default === 'node version >= 3.14.0') {
+        result = this.filter1;
+      } else if (this.filters.default === 'nodes hashes < 2400') {
+        result = this.filter2;
+      } else {
+        result = this.tableData;
+      }
+      this.paginationTotal(result.length);
+      return result.length;
     },
   },
   mounted() {
     this.isLoading = true;
     axios
-      .get('https://stats.runonflux.io/fluxinfo?projection=node,flux')
+      .get('https://stats.runonflux.io/fluxinfo?projection=node,flux,appsHashesTotal')
       .then((response) => {
         this.values = response.data.data;
         for (let i = 0; i < this.values.length; i += 1) {
           this.values[i].node.status.network = 'ipv4';
+          if (parseInt(this.values[i].flux.version.split('.')[0], 10) >= 3 && parseInt(this.values[i].flux.version.split('.')[1], 10) >= 14) {
+            this.filter1.push(this.values[i]);
+          }
+          if (parseInt(this.values[i].appsHashesTotal, 10) < 2400) {
+            this.filter2.push(this.values[i]);
+          }
         }
       }).then(() => {
         this.tableData = this.values;

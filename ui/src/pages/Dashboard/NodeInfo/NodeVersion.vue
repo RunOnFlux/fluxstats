@@ -193,11 +193,10 @@ export default {
           temp.push(result[i].item);
         }
         result = temp;
-        this.paginationTotal(result.length);
       } else {
-        this.paginationTotal(this.tableData.length);
         result = this.tableData;
       }
+      this.paginationTotal(result.length);
       return result.slice(this.from, this.to);
     },
     to() {
@@ -211,8 +210,19 @@ export default {
       return this.pagination.perPage * (this.pagination.currentPage - 1);
     },
     total() {
-      this.paginationTotal(this.tableData.length);
-      return this.tableData.length;
+      let result;
+      if (this.searchQuery !== '') {
+        const temp = [];
+        result = this.fuseSearch.search(`=${this.searchQuery}`);
+        for (let i = 0; i < Object.keys(result).length; i += 1) {
+          temp.push(result[i].item);
+        }
+        result = temp;
+      } else {
+        result = this.tableData;
+      }
+      this.paginationTotal(result.length);
+      return result.length;
     },
   },
   mounted() {
