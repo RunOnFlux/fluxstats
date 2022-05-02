@@ -1,6 +1,5 @@
 const request = require('supertest');
 const config = require('config');
-const chai = require('chai');
 const app = require('../src/lib/server');
 const log = require('../src/lib/log');
 
