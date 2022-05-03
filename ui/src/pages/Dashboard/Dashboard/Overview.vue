@@ -536,11 +536,107 @@ export default {
           }
         }
 
-        this.tableData3.data.push({ title: `1. Zel ID: ${ent[0].zelId} - Cumulus: ${this.totalCumulus.get(ent[0].zelId)} Nimbus: ${this.totalNimbus.get(ent[0].zelId)} Stratus: ${this.totalStratus.get(ent[0].zelId)}` });
-        this.tableData3.data.push({ title: `2. Zel ID: ${ent[1].zelId} - Cumulus: ${this.totalCumulus.get(ent[1].zelId)} Nimbus: ${this.totalNimbus.get(ent[1].zelId)} Stratus: ${this.totalStratus.get(ent[1].zelId)}` });
-        this.tableData3.data.push({ title: `3. Zel ID: ${ent[2].zelId} - Cumulus: ${this.totalCumulus.get(ent[2].zelId)} Nimbus: ${this.totalNimbus.get(ent[2].zelId)} Stratus: ${this.totalStratus.get(ent[2].zelId)}` });
-        this.tableData3.data.push({ title: `4. Zel ID: ${ent[3].zelId} - Cumulus: ${this.totalCumulus.get(ent[3].zelId)} Nimbus: ${this.totalNimbus.get(ent[3].zelId)} Stratus: ${this.totalStratus.get(ent[3].zelId)}` });
-        this.tableData3.data.push({ title: `5. Zel ID: ${ent[4].zelId} - Cumulus: ${this.totalCumulus.get(ent[4].zelId)} Nimbus: ${this.totalNimbus.get(ent[4].zelId)} Stratus: ${this.totalStratus.get(ent[4].zelId)}` });
+        let totalCumulus1;
+        let totalCumulus2;
+        let totalCumulus3;
+        let totalCumulus4;
+        let totalCumulus5;
+
+        try {
+          totalCumulus1 = this.totalCumulus.get(ent[0].zelId);
+        } catch (ex) {
+          totalCumulus1 = 0;
+        }
+        try {
+          totalCumulus1 = this.totalCumulus.get(ent[1].zelId);
+        } catch (ex) {
+          totalCumulus2 = 0;
+        }
+        try {
+          totalCumulus1 = this.totalCumulus.get(ent[2].zelId);
+        } catch (ex) {
+          totalCumulus3 = 0;
+        }
+        try {
+          totalCumulus1 = this.totalCumulus.get(ent[3].zelId);
+        } catch (ex) {
+          totalCumulus4 = 0;
+        }
+        try {
+          totalCumulus1 = this.totalCumulus.get(ent[4].zelId);
+        } catch (ex) {
+          totalCumulus5 = 0;
+        }
+
+        let totalNimbus1;
+        let totalNimbus2;
+        let totalNimbus3;
+        let totalNimbus4;
+        let totalNimbus5;
+
+        try {
+          totalNimbus1 = this.totalNimbus.get(ent[0].zelId);
+        } catch (ex) {
+          totalNimbus1 = 0;
+        }
+        try {
+          totalNimbus2 = this.totalNimbus.get(ent[1].zelId);
+        } catch (ex) {
+          totalNimbus2 = 0;
+        }
+        try {
+          totalNimbus3 = this.totalNimbus.get(ent[2].zelId);
+        } catch (ex) {
+          totalNimbus3 = 0;
+        }
+        try {
+          totalNimbus4 = this.totalNimbus.get(ent[3].zelId);
+        } catch (ex) {
+          totalNimbus4 = 0;
+        }
+        try {
+          totalNimbus5 = this.totalNimbus.get(ent[4].zelId);
+        } catch (ex) {
+          totalNimbus5 = 0;
+        }
+
+        let totalStratus1;
+        let totalStratus2;
+        let totalStratus3;
+        let totalStratus4;
+        let totalStratus5;
+
+        try {
+          totalStratus1 = this.totalStratus.get(ent[0].zelId);
+        } catch (ex) {
+          totalStratus1 = 0;
+        }
+        try {
+          totalStratus2 = this.totalStratus.get(ent[1].zelId);
+        } catch (ex) {
+          totalStratus2 = 0;
+        }
+        try {
+          totalStratus3 = this.totalStratus.get(ent[2].zelId);
+        } catch (ex) {
+          totalStratus3 = 0;
+        }
+        try {
+          totalStratus4 = this.totalStratus.get(ent[3].zelId);
+        } catch (ex) {
+          totalStratus4 = 0;
+        }
+        try {
+          totalStratus5 = this.totalStratus.get(ent[4].zelId);
+        } catch (ex) {
+          totalStratus5 = 0;
+        }
+
+        this.tableData3.data.push({ title: `1. Zel ID: ${ent[0].zelId} - Cumulus: ${totalCumulus1} Nimbus: ${totalNimbus1} Stratus: ${totalStratus1}` });
+        this.tableData3.data.push({ title: `2. Zel ID: ${ent[1].zelId} - Cumulus: ${totalCumulus2} Nimbus: ${totalNimbus2} Stratus: ${totalStratus2}` });
+        this.tableData3.data.push({ title: `3. Zel ID: ${ent[2].zelId} - Cumulus: ${totalCumulus3} Nimbus: ${totalNimbus3} Stratus: ${totalStratus3}` });
+        this.tableData3.data.push({ title: `4. Zel ID: ${ent[3].zelId} - Cumulus: ${totalCumulus4} Nimbus: ${totalNimbus4} Stratus: ${totalStratus4}` });
+        this.tableData3.data.push({ title: `5. Zel ID: ${ent[4].zelId} - Cumulus: ${totalCumulus5} Nimbus: ${totalNimbus5} Stratus: ${totalStratus5}` });
       }).then(() => {
         axios
           .get('https://stats.runonflux.io/fluxhistorystats')
