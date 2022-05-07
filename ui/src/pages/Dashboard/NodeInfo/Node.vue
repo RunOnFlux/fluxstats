@@ -209,6 +209,8 @@ export default {
       isLoading: false,
       filter1: [],
       filter2: [],
+      filter3: [],
+      filter4: [],
     };
   },
   computed: {
@@ -230,18 +232,30 @@ export default {
           temp.push(result[i].item);
         }
         result = temp;
-      } else if (this.filters.default === 'node version') {
+      } else if (this.filters.default === 'node version' && (this.filterssign.default === '>=' || this.filterssign.default === 'none')) {
         this.filtersval.default = '3.14.0';
         this.filtersval.others = ['3.14.0'];
         this.filterssign.default = '>=';
-        this.filterssign.others = ['>='];
+        this.filterssign.others = ['>=', '<'];
         result = this.filter1;
-      } else if (this.filters.default === 'nodes hashes') {
+      } else if (this.filters.default === 'node version' && this.filterssign.default === '<') {
+        this.filtersval.default = '3.14.0';
+        this.filtersval.others = ['3.14.0'];
+        this.filterssign.default = '<';
+        this.filterssign.others = ['>=', '<'];
+        result = this.filter3;
+      } else if (this.filters.default === 'nodes hashes' && (this.filterssign.default === '>=' || this.filterssign.default === 'none')) {
+        this.filtersval.default = '2400';
+        this.filtersval.others = ['2400'];
+        this.filterssign.default = '>=';
+        this.filterssign.others = ['>=', '<'];
+        result = this.filter2;
+      } else if (this.filters.default === 'nodes hashes' && this.filterssign.default === '<') {
         this.filtersval.default = '2400';
         this.filtersval.others = ['2400'];
         this.filterssign.default = '<';
-        this.filterssign.others = ['<'];
-        result = this.filter2;
+        this.filterssign.others = ['>=', '<'];
+        result = this.filter4;
       } else {
         result = this.tableData;
         this.filtersval.default = 'none';
@@ -271,10 +285,14 @@ export default {
           temp.push(result[i].item);
         }
         result = temp;
-      } else if (this.filters.default === 'node version') {
+      } else if (this.filters.default === 'node version' && this.filterssign.default === '>=') {
         result = this.filter1;
-      } else if (this.filters.default === 'nodes hashes') {
+      } else if (this.filters.default === 'node version' && this.filterssign.default === '<') {
+        result = this.filter3;
+      } else if (this.filters.default === 'nodes hashes' && this.filterssign.default === '>=') {
         result = this.filter2;
+      } else if (this.filters.default === 'nodes hashes' && this.filterssign.default === '<') {
+        result = this.filter4;
       } else {
         result = this.tableData;
       }
@@ -288,13 +306,22 @@ export default {
       .get('https://stats.runonflux.io/fluxinfo?projection=node,flux,appsHashesTotal')
       .then((response) => {
         this.values = response.data.data;
+      }).then(() => {
         for (let i = 0; i < this.values.length; i += 1) {
-          this.values[i].node.status.network = 'ipv4';
+          try {
+            this.values[i].node.status.network = 'ipv4';
+          } catch (ex) {
+            // do nothing
+          }
           if (parseInt(this.values[i].flux.version.split('.')[0], 10) >= 3 && parseInt(this.values[i].flux.version.split('.')[1], 10) >= 14) {
             this.filter1.push(this.values[i]);
+          } else {
+            this.filter3.push(this.values[i]);
           }
-          if (parseInt(this.values[i].appsHashesTotal, 10) < 2400) {
+          if (parseInt(this.values[i].appsHashesTotal, 10) >= 2400) {
             this.filter2.push(this.values[i]);
+          } else {
+            this.filter4.push(this.values[i]);
           }
         }
       }).then(() => {

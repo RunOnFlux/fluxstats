@@ -226,8 +226,16 @@ export default {
               this.totalStratus.set(this.values[i].flux.zelid, t3 += 1);
             }
           } else {
-            this.paymentAddress.set(this.values[i].flux.zelid, this.values[i].node.status.payment_address);
-            this.organization.set(this.values[i].flux.zelid, this.values[i].geolocation.org);
+            try {
+              this.paymentAddress.set(this.values[i].flux.zelid, this.values[i].node.status.payment_address);
+            } catch (ex) {
+              this.paymentAddress.set(this.values[i].flux.zelid, '');
+            }
+            try {
+              this.organization.set(this.values[i].flux.zelid, this.values[i].geolocation.org);
+            } catch (ex) {
+              this.organization.set(this.values[i].flux.zelid, '');
+            }
             this.totalNodes.set(this.values[i].flux.zelid, 1);
             if (this.values[i].tier === 'CUMULUS') {
               this.totalCumulus.set(this.values[i].flux.zelid, 1);
