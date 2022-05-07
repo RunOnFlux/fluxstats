@@ -30,28 +30,60 @@
                 :value="item"
               />
             </el-select>
-            <el-select
-              v-model="filters.default"
-              class="select-default mb-3"
-              style="width: 200px"
-              placeholder="Filters"
-            >
-              <el-option
-                v-for="item in filters.others"
-                :key="item"
-                class="select-default"
-                :label="item"
-                :value="item"
+            <div col-md-6 offset-md-3>
+              <el-select
+                v-model="filters.default"
+                class="select-default mb-3"
+                style="width: 200px"
+                placeholder="Filters"
+              >
+                <el-option
+                  v-for="item in filters.others"
+                  :key="item"
+                  class="select-default"
+                  :label="item"
+                  :value="item"
+                />
+              </el-select>
+              <el-select
+                v-model="filterssign.default"
+                class="select-default mb-3"
+                style="width: 200px"
+                placeholder="Filters"
+              >
+                <el-option
+                  v-for="item in filterssign.others"
+                  :key="item"
+                  class="select-default"
+                  :label="item"
+                  :value="item"
+                />
+              </el-select>
+              <el-select
+                v-model="filtersval.default"
+                class="select-default mb-3"
+                style="width: 200px"
+                placeholder="Filters"
+              >
+                <el-option
+                  v-for="item in filtersval.others"
+                  :key="item"
+                  class="select-default"
+                  :label="item"
+                  :value="item"
+                />
+              </el-select>
+            </div>
+            <div col-md-3 offset-md-6>
+              <el-input
+                v-model="searchQuery"
+                type="search"
+                class="mb-3"
+                style="width: 200px"
+                placeholder="Search IP"
+                aria-controls="datatables"
               />
-            </el-select>
-            <el-input
-              v-model="searchQuery"
-              type="search"
-              class="mb-3"
-              style="width: 200px"
-              placeholder="Search IP"
-              aria-controls="datatables"
-            />
+            </div>
           </div>
           <div class="col-sm-12">
             <el-table
@@ -137,7 +169,15 @@ export default {
       },
       filters: {
         default: 'filter off',
-        others: ['node version >= 3.14.0', 'nodes hashes < 2400', 'filter off'],
+        others: ['node version', 'nodes hashes', 'filter off'],
+      },
+      filterssign: {
+        default: 'none',
+        others: ['none'],
+      },
+      filtersval: {
+        default: 'none',
+        others: ['none'],
       },
       searchQuery: '',
       propsToSearch: ['node.status.ip'],
@@ -190,12 +230,24 @@ export default {
           temp.push(result[i].item);
         }
         result = temp;
-      } else if (this.filters.default === 'node version >= 3.14.0') {
+      } else if (this.filters.default === 'node version') {
+        this.filtersval.default = '3.14.0';
+        this.filtersval.others = ['3.14.0'];
+        this.filterssign.default = '>=';
+        this.filterssign.others = ['>='];
         result = this.filter1;
-      } else if (this.filters.default === 'nodes hashes < 2400') {
+      } else if (this.filters.default === 'nodes hashes') {
+        this.filtersval.default = '2400';
+        this.filtersval.others = ['2400'];
+        this.filterssign.default = '<';
+        this.filterssign.others = ['<'];
         result = this.filter2;
       } else {
         result = this.tableData;
+        this.filtersval.default = 'none';
+        this.filtersval.others = ['none'];
+        this.filterssign.default = 'none';
+        this.filterssign.others = ['none'];
       }
       this.paginationTotal(result.length);
       return result.slice(this.from, this.to);
@@ -219,9 +271,9 @@ export default {
           temp.push(result[i].item);
         }
         result = temp;
-      } else if (this.filters.default === 'node version >= 3.14.0') {
+      } else if (this.filters.default === 'node version') {
         result = this.filter1;
-      } else if (this.filters.default === 'nodes hashes < 2400') {
+      } else if (this.filters.default === 'nodes hashes') {
         result = this.filter2;
       } else {
         result = this.tableData;
