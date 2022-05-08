@@ -1,4 +1,10 @@
 .DS_Store
 node_modules/
+ui/dist/
 
 package-lock.json
+
+logs/error.log
+logs/info.log
+logs/warn.log
+logs/debug.log

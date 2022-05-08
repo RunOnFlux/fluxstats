@@ -126,6 +126,25 @@ async function insertOneToDatabase(database, collection, value) {
   return result;
 }
 
+/**
+ * Inserts array of documents into the database.
+ *
+ * @param {string} database
+ * @param {string} collection
+ * @param {array} values
+ * @param {object} [options]
+ *
+ * @returns object
+ */
+async function insertManyToDatabase(database, collection, values, options = {}) {
+  const result = await database.collection(collection).insertMany(values, options).catch((error) => {
+    if (!(error.message && error.message.includes('duplicate key'))) {
+      throw error;
+    }
+  });
+  return result;
+}
+
 async function updateOneInDatabase(database, collection, query, update, options) {
   const passedOptions = options || {};
   const result = await database.collection(collection).updateOne(query, update, passedOptions);
@@ -153,6 +172,11 @@ async function dropCollection(database, collection) {
   return result;
 }
 
+async function createCollection(database, collection) {
+  const result = await database.createCollection(collection).catch((error) => { throw error; });
+  return result;
+}
+
 async function collectionStats(database, collection) {
   // to remove all documents from collection, the query is just {}
   const result = await database.collection(collection).stats().catch((error) => { throw error; });
@@ -171,11 +195,13 @@ module.exports = {
   findOneInDatabase,
   findOneAndUpdateInDatabase,
   insertOneToDatabase,
+  insertManyToDatabase,
   updateInDatabase,
   updateOneInDatabase,
   findOneAndDeleteInDatabase,
   removeDocumentsFromCollection,
   dropCollection,
+  createCollection,
   collectionStats,
   createDataMessage,
   createSuccessMessage,

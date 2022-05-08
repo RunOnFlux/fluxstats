@@ -6,7 +6,8 @@ module.exports = {
     mocha: true,
   },
   extends: [
-    'airbnb-base',
+    'plugin:vue/recommended',
+    '@vue/airbnb',
   ],
   rules: {
     'max-len': [
@@ -17,19 +18,46 @@ module.exports = {
         ignoreTrailingComments: true,
       },
     ],
+    'no-new': 'off',
+    'no-restricted-syntax': 'off',
     'no-console': 'off',
-    'default-param-last': 'off',
-    'import/extensions': [
-      'error',
-      'never',
+    'linebreak-style': 'off',
+    'vuejs-accessibility/label-has-for': 'off',
+    'vue/multi-word-component-names': 'off',
+    'prefer-destructuring': ['error',
+      {
+        object: true, array: false,
+      },
     ],
-    'linebreak-style': [
-      'error',
-      'unix',
+    'import/no-extraneous-dependencies': ['error',
+      {
+        devDependencies: true, optionalDependencies: true, peerDependencies: false,
+      },
+    ],
+    camelcase: ['error',
+      {
+        properties: 'never', ignoreDestructuring: true, ignoreImports: true,
+      },
+    ],
+    'import/extensions': ['error', 'ignorePackages',
+      {
+        vue: 'always', js: 'never',
+      },
     ],
   },
   parserOptions: {
-    parser: 'babel-eslint',
+    parser: '@babel/eslint-parser',
+  },
+  settings: {
+    'import/resolver': {
+      node: {
+        extensions: [
+          '.js',
+          '.jsx',
+          '.vue',
+        ],
+      },
+    },
   },
   overrides: [
     {
@@ -38,6 +66,12 @@ module.exports = {
       ],
       env: {
         mocha: true,
+      },
+    },
+    {
+      files: ['*.html'],
+      rules: {
+        'vue/comment-directive': 'off',
       },
     },
   ],
