@@ -24,7 +24,6 @@ module.exports = {
     'linebreak-style': 'off',
     'vuejs-accessibility/label-has-for': 'off',
     'vue/multi-word-component-names': 'off',
-    'vue/no-side-effects-in-computed-properties': 'off',
     'prefer-destructuring': ['error',
       {
         object: true, array: false,

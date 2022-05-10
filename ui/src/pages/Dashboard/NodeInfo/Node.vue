@@ -225,6 +225,10 @@ export default {
      */
     queriedData() {
       let result;
+      let defaultValues;
+      let othersValues;
+      let defaultSignValues;
+      let othersSignValues;
       if (this.searchQuery !== '') {
         const temp = [];
         result = this.fuseSearch.search(`=${this.searchQuery}`);
@@ -233,37 +237,39 @@ export default {
         }
         result = temp;
       } else if (this.filters.default === 'node version' && (this.filterssign.default === '>=' || this.filterssign.default === 'none')) {
-        this.filtersval.default = '3.14.0';
-        this.filtersval.others = ['3.14.0'];
-        this.filterssign.default = '>=';
-        this.filterssign.others = ['>=', '<'];
+        defaultValues = '3.14.0';
+        othersValues = ['3.14.0'];
+        defaultSignValues = '>=';
+        othersSignValues = ['>=', '<'];
         result = this.filter1;
       } else if (this.filters.default === 'node version' && this.filterssign.default === '<') {
-        this.filtersval.default = '3.14.0';
-        this.filtersval.others = ['3.14.0'];
-        this.filterssign.default = '<';
-        this.filterssign.others = ['>=', '<'];
+        defaultValues = '3.14.0';
+        othersValues = ['3.14.0'];
+        defaultSignValues = '<';
+        othersSignValues = ['>=', '<'];
         result = this.filter3;
       } else if (this.filters.default === 'nodes hashes' && (this.filterssign.default === '>=' || this.filterssign.default === 'none')) {
-        this.filtersval.default = '2400';
-        this.filtersval.others = ['2400'];
-        this.filterssign.default = '>=';
-        this.filterssign.others = ['>=', '<'];
+        defaultValues = '2400';
+        othersValues = ['2400'];
+        defaultSignValues = '>=';
+        othersSignValues = ['>=', '<'];
         result = this.filter2;
       } else if (this.filters.default === 'nodes hashes' && this.filterssign.default === '<') {
-        this.filtersval.default = '2400';
-        this.filtersval.others = ['2400'];
-        this.filterssign.default = '<';
-        this.filterssign.others = ['>=', '<'];
+        defaultValues = '2400';
+        othersValues = ['2400'];
+        defaultSignValues = '<';
+        othersSignValues = ['>=', '<'];
         result = this.filter4;
       } else {
         result = this.tableData;
-        this.filtersval.default = 'none';
-        this.filtersval.others = ['none'];
-        this.filterssign.default = 'none';
-        this.filterssign.others = ['none'];
+        defaultValues = 'none';
+        othersValues = ['none'];
+        defaultSignValues = 'none';
+        othersSignValues = ['none'];
       }
       this.paginationTotal(result.length);
+      this.setFilterValues(defaultValues, othersValues);
+      this.setFilterSignValues(defaultSignValues, othersSignValues);
       return result.slice(this.from, this.to);
     },
     to() {
@@ -333,6 +339,14 @@ export default {
   methods: {
     paginationTotal(value) {
       this.pagination.total = value;
+    },
+    setFilterValues(defaultValues, othersValues) {
+      this.filters.default = defaultValues;
+      this.filters.others = othersValues;
+    },
+    setFilterSignValues(defaultSignValues, othersSignValues) {
+      this.filterssign.default = defaultSignValues;
+      this.filterssign.others = othersSignValues;
     },
   },
 };
