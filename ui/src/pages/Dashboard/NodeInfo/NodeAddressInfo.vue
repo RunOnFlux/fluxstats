@@ -211,47 +211,27 @@ export default {
       .get('https://stats.runonflux.io/fluxinfo?projection=node,flux,geolocation,tier')
       .then((response) => {
         this.values = response.data.data;
-        for (let i = 0; i < this.values.length; i += 1) {
-          if (this.paymentAddress.get(this.values[i].flux.zelid) !== undefined) {
-            let temp = this.totalNodes.get(this.values[i].flux.zelid);
-            this.totalNodes.set(this.values[i].flux.zelid, temp += 1);
-            if (this.values[i].tier === 'CUMULUS') {
-              let t1 = this.totalCumulus.get(this.values[i].flux.zelid);
-              this.totalCumulus.set(this.values[i].flux.zelid, t1 += 1);
-            } else if (this.values[i].tier === 'NIMBUS') {
-              let t2 = this.totalNimbus.get(this.values[i].flux.zelid);
-              this.totalNimbus.set(this.values[i].flux.zelid, t2 += 1);
-            } else if (this.values[i].tier === 'STRATUS') {
-              let t3 = this.totalStratus.get(this.values[i].flux.zelid);
-              this.totalStratus.set(this.values[i].flux.zelid, t3 += 1);
-            }
-          } else {
-            try {
-              this.paymentAddress.set(this.values[i].flux.zelid, this.values[i].node.status.payment_address);
-            } catch (ex) {
-              this.paymentAddress.set(this.values[i].flux.zelid, '');
-            }
-            try {
-              this.organization.set(this.values[i].flux.zelid, this.values[i].geolocation.org);
-            } catch (ex) {
-              this.organization.set(this.values[i].flux.zelid, '');
-            }
-            this.totalNodes.set(this.values[i].flux.zelid, 1);
-            if (this.values[i].tier === 'CUMULUS') {
-              this.totalCumulus.set(this.values[i].flux.zelid, 1);
-              this.totalStratus.set(this.values[i].flux.zelid, 0);
-              this.totalNimbus.set(this.values[i].flux.zelid, 0);
-            } else if (this.values[i].tier === 'NIMBUS') {
-              this.totalCumulus.set(this.values[i].flux.zelid, 0);
-              this.totalStratus.set(this.values[i].flux.zelid, 0);
-              this.totalNimbus.set(this.values[i].flux.zelid, 1);
-            } else if (this.values[i].tier === 'STRATUS') {
-              this.totalCumulus.set(this.values[i].flux.zelid, 0);
-              this.totalStratus.set(this.values[i].flux.zelid, 1);
-              this.totalNimbus.set(this.values[i].flux.zelid, 0);
-            }
+        this.values.map((value) => {
+          let temp1 = this.totalNodes.get(value.flux.zelid) === undefined ? 0 : this.totalNodes.get(value.flux.zelid);
+          const temp2 = this.totalCumulus.get(value.flux.zelid) === undefined ? 0 : this.totalCumulus.get(value.flux.zelid);
+          const temp3 = this.totalNimbus.get(value.flux.zelid) === undefined ? 0 : this.totalNimbus.get(value.flux.zelid);
+          const temp4 = this.totalStratus.get(value.flux.zelid) === undefined ? 0 : this.totalStratus.get(value.flux.zelid);
+          this.totalNodes.set(value.flux.zelid, temp1 += 1);
+          this.totalCumulus.set(value.flux.zelid, value.tier === 'CUMULUS' ? temp2 + 1 : temp2);
+          this.totalNimbus.set(value.flux.zelid, value.tier === 'NIMBUS' ? temp3 + 1 : temp3);
+          this.totalStratus.set(value.flux.zelid, value.tier === 'STRATUS' ? temp4 + 1 : temp4);
+          try {
+            this.paymentAddress.set(value.flux.zelid, value.node.status.payment_address);
+          } catch (ex) {
+            this.paymentAddress.set(value.flux.zelid, '');
           }
-        }
+          try {
+            this.organization.set(value.flux.zelid, value.geolocation.org);
+          } catch (ex) {
+            this.organization.set(value.flux.zelid, '');
+          }
+          return value;
+        });
       }).then(() => {
         for (const entry of this.paymentAddress.entries()) {
           this.zelids.push(

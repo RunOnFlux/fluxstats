@@ -225,10 +225,6 @@ export default {
      */
     queriedData() {
       let result;
-      let defaultValues;
-      let othersValues;
-      let defaultSignValues;
-      let othersSignValues;
       if (this.searchQuery !== '') {
         const temp = [];
         result = this.fuseSearch.search(`=${this.searchQuery}`);
@@ -237,39 +233,27 @@ export default {
         }
         result = temp;
       } else if (this.filters.default === 'node version' && (this.filterssign.default === '>=' || this.filterssign.default === 'none')) {
-        defaultValues = '3.14.0';
-        othersValues = ['3.14.0'];
-        defaultSignValues = '>=';
-        othersSignValues = ['>=', '<'];
         result = this.filter1;
+        this.setFilterSignValues('>=', ['>=', '<']);
+        this.setFilterFieldValues('3.14.0', ['3.14.0']);
       } else if (this.filters.default === 'node version' && this.filterssign.default === '<') {
-        defaultValues = '3.14.0';
-        othersValues = ['3.14.0'];
-        defaultSignValues = '<';
-        othersSignValues = ['>=', '<'];
         result = this.filter3;
+        this.setFilterSignValues('<', ['>=', '<']);
+        this.setFilterFieldValues('3.14.0', ['3.14.0']);
       } else if (this.filters.default === 'nodes hashes' && (this.filterssign.default === '>=' || this.filterssign.default === 'none')) {
-        defaultValues = '2400';
-        othersValues = ['2400'];
-        defaultSignValues = '>=';
-        othersSignValues = ['>=', '<'];
         result = this.filter2;
+        this.setFilterSignValues('>=', ['>=', '<']);
+        this.setFilterFieldValues('2400', ['2400']);
       } else if (this.filters.default === 'nodes hashes' && this.filterssign.default === '<') {
-        defaultValues = '2400';
-        othersValues = ['2400'];
-        defaultSignValues = '<';
-        othersSignValues = ['>=', '<'];
         result = this.filter4;
+        this.setFilterSignValues('<', ['>=', '<']);
+        this.setFilterFieldValues('2400', ['2400']);
       } else {
         result = this.tableData;
-        defaultValues = 'none';
-        othersValues = ['none'];
-        defaultSignValues = 'none';
-        othersSignValues = ['none'];
+        this.setFilterSignValues('none', ['>=', '<']);
+        this.setFilterValues('none', ['none', 'node version', 'nodes hashes']);
       }
       this.paginationTotal(result.length);
-      this.setFilterValues(defaultValues, othersValues);
-      this.setFilterSignValues(defaultSignValues, othersSignValues);
       return result.slice(this.from, this.to);
     },
     to() {
@@ -313,23 +297,15 @@ export default {
       .then((response) => {
         this.values = response.data.data;
       }).then(() => {
-        for (let i = 0; i < this.values.length; i += 1) {
-          try {
-            this.values[i].node.status.network = 'ipv4';
-          } catch (ex) {
-            // do nothing
-          }
-          if (parseInt(this.values[i].flux.version.split('.')[0], 10) >= 3 && parseInt(this.values[i].flux.version.split('.')[1], 10) >= 14) {
-            this.filter1.push(this.values[i]);
-          } else {
-            this.filter3.push(this.values[i]);
-          }
-          if (parseInt(this.values[i].appsHashesTotal, 10) >= 2400) {
-            this.filter2.push(this.values[i]);
-          } else {
-            this.filter4.push(this.values[i]);
-          }
-        }
+        this.values.map((el) => {
+          const values = el;
+          values.node.status.network = 'ipv4';
+          return values;
+        });
+        this.filter1 = this.values.filter((value) => parseInt(value.flux.version.split('.')[0], 10) >= 3 && parseInt(value.flux.version.split('.')[1], 10) >= 14);
+        this.filter3 = this.values.filter((value) => parseInt(value.flux.version.split('.')[0], 10) < 3 || parseInt(value.flux.version.split('.')[1], 10) < 14);
+        this.filter2 = this.values.filter((value) => parseInt(value.appsHashesTotal, 10) >= 2400);
+        this.filter4 = this.values.filter((value) => parseInt(value.appsHashesTotal, 10) < 2400);
       }).then(() => {
         this.tableData = this.values;
         this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['node.status.ip'] });
@@ -347,6 +323,10 @@ export default {
     setFilterSignValues(defaultSignValues, othersSignValues) {
       this.filterssign.default = defaultSignValues;
       this.filterssign.others = othersSignValues;
+    },
+    setFilterFieldValues(defaultFieldValues, othersFieldValues) {
+      this.filtersval.default = defaultFieldValues;
+      this.filtersval.others = othersFieldValues;
     },
   },
 };

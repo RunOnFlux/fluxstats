@@ -225,22 +225,19 @@ export default {
       .get('https://stats.runonflux.io/fluxinfo?projection=ip,apps')
       .then((response) => {
         this.values = response.data.data;
-        for (let i = 0, k = 0; i < this.values.length; i += 1) {
-          for (let j = 0; j < this.values[i].apps.runningapps.length; j += 1) {
-            if (this.values[i].apps.runningapps[j].Image === 'containrrr/watchtower') {
-              this.values[i].apps.fluxtower = 'TRUE';
-              k = j;
-            } else {
-              this.values[i].apps.fluxtower = 'FALSE';
-            }
+        this.values.map((value) => {
+          const returnValue = value;
+          const filtered = returnValue.apps.runningapps.filter((item) => item.Image !== 'containrrr/watchtower');
+          returnValue.apps.runningapps = filtered;
+          if (filtered.length !== undefined || filtered.length !== 0) {
+            returnValue.apps.fluxtower = 'TRUE';
+            returnValue.apps.count = filtered.length;
+          } else {
+            returnValue.apps.fluxtower = 'FALSE';
+            returnValue.apps.count = 0;
           }
-          this.values[i].apps.runningapps.splice(k, 1);
-          try {
-            this.values[i].apps.count = this.values[i].apps.runningapps.length;
-          } catch (ex) {
-            this.values[i].apps.count = 0;
-          }
-        }
+          return returnValue;
+        });
       }).then(() => {
         this.tableData = this.values;
         this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
