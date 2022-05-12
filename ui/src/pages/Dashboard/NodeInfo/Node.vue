@@ -290,27 +290,12 @@ export default {
       return result.length;
     },
   },
-  mounted() {
-    this.isLoading = true;
-    axios
-      .get('https://stats.runonflux.io/fluxinfo?projection=node,flux,appsHashesTotal')
-      .then((response) => {
-        this.values = response.data.data;
-      }).then(() => {
-        this.values.map((el) => {
-          const values = el;
-          values.node.status.network = 'ipv4';
-          return values;
-        });
-        this.filter1 = this.values.filter((value) => parseInt(value.flux.version.split('.')[0], 10) >= 3 && parseInt(value.flux.version.split('.')[1], 10) >= 14);
-        this.filter3 = this.values.filter((value) => parseInt(value.flux.version.split('.')[0], 10) < 3 || parseInt(value.flux.version.split('.')[1], 10) < 14);
-        this.filter2 = this.values.filter((value) => parseInt(value.appsHashesTotal, 10) >= 2400);
-        this.filter4 = this.values.filter((value) => parseInt(value.appsHashesTotal, 10) < 2400);
-      }).then(() => {
-        this.tableData = this.values;
-        this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['node.status.ip'] });
-        this.isLoading = false;
-      });
+  async mounted() {
+    this.setLoading(true);
+    await this.getFluxInfo();
+    await this.processFluxInfo();
+    this.setSearch();
+    this.setLoading(false);
   },
   methods: {
     paginationTotal(value) {
@@ -327,6 +312,28 @@ export default {
     setFilterFieldValues(defaultFieldValues, othersFieldValues) {
       this.filtersval.default = defaultFieldValues;
       this.filtersval.others = othersFieldValues;
+    },
+    async getFluxInfo() {
+      const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=node,flux,appsHashesTotal');
+      this.values = response.data.data;
+    },
+    async processFluxInfo() {
+      this.values.map((el) => {
+        const values = el;
+        values.node.status.network = 'ipv4';
+        return values;
+      });
+      this.filter1 = this.values.filter((value) => parseInt(value.flux.version.split('.')[0], 10) >= 3 && parseInt(value.flux.version.split('.')[1], 10) >= 14);
+      this.filter3 = this.values.filter((value) => parseInt(value.flux.version.split('.')[0], 10) < 3 || parseInt(value.flux.version.split('.')[1], 10) < 14);
+      this.filter2 = this.values.filter((value) => parseInt(value.appsHashesTotal, 10) >= 2400);
+      this.filter4 = this.values.filter((value) => parseInt(value.appsHashesTotal, 10) < 2400);
+      this.tableData = this.values;
+    },
+    setSearch() {
+      this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['node.status.ip'] });
+    },
+    setLoading(value) {
+      this.isLoading = value;
     },
   },
 };

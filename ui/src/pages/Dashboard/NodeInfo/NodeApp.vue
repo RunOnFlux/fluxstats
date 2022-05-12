@@ -219,34 +219,42 @@ export default {
       return result.length;
     },
   },
-  mounted() {
-    this.isLoading = true;
-    axios
-      .get('https://stats.runonflux.io/fluxinfo?projection=ip,apps')
-      .then((response) => {
-        this.values = response.data.data;
-        this.values.map((value) => {
-          const returnValue = value;
-          const filtered = returnValue.apps.runningapps.filter((item) => item.Image !== 'containrrr/watchtower');
-          returnValue.apps.runningapps = filtered;
-          if (filtered.length !== undefined || filtered.length !== 0) {
-            returnValue.apps.fluxtower = 'TRUE';
-            returnValue.apps.count = filtered.length;
-          } else {
-            returnValue.apps.fluxtower = 'FALSE';
-            returnValue.apps.count = 0;
-          }
-          return returnValue;
-        });
-      }).then(() => {
-        this.tableData = this.values;
-        this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
-        this.isLoading = false;
-      });
+  async mounted() {
+    this.setLoading(true);
+    await this.getFluxInfo();
+    await this.processFluxInfo();
+    this.setSearch();
+    this.setLoading(false);
   },
   methods: {
     paginationTotal(value) {
       this.pagination.total = value;
+    },
+    async getFluxInfo() {
+      const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=ip,apps');
+      this.values = response.data.data;
+    },
+    async processFluxInfo() {
+      this.values.map((value) => {
+        const returnValue = value;
+        const filtered = returnValue.apps.runningapps.filter((item) => item.Image !== 'containrrr/watchtower');
+        returnValue.apps.runningapps = filtered;
+        if (filtered.length !== undefined || filtered.length !== 0) {
+          returnValue.apps.fluxtower = 'TRUE';
+          returnValue.apps.count = filtered.length;
+        } else {
+          returnValue.apps.fluxtower = 'FALSE';
+          returnValue.apps.count = 0;
+        }
+        return returnValue;
+      });
+      this.tableData = this.values;
+    },
+    setSearch() {
+      this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
+    },
+    setLoading(value) {
+      this.isLoading = value;
     },
   },
 };

@@ -134,6 +134,7 @@ export default {
         },
       ],
       tableData: [],
+      responseData: [],
       fuseSearch: null,
       isLoading: false,
     };
@@ -189,28 +190,38 @@ export default {
       return result.length;
     },
   },
-  mounted() {
-    this.isLoading = true;
-    axios
-      .get('https://stats.runonflux.io/fluxinfo?projection=ip,activeSince,dataCollectedAt')
-      .then((response) => {
-        const temp = response.data.data;
-        temp.forEach((value) => {
-          this.tableData.push({
-            ip: value.ip,
-            activeSince: value.activeSince,
-            activeSinceConverted: `${new Date(parseInt(value.activeSince * 1000, 10)).toLocaleDateString()} ${new Date(parseInt(value.activeSince * 1000, 10)).toLocaleTimeString()}`,
-            dataCollectedAt: value.dataCollectedAt,
-            dataCollectedAtConverted: `${new Date(parseInt(value.dataCollectedAt, 10)).toLocaleDateString()} ${new Date(parseInt(value.dataCollectedAt, 10)).toLocaleTimeString()}`,
-          });
-        });
-        this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
-        this.isLoading = false;
-      });
+  async mounted() {
+    this.setLoading(true);
+    await this.getFluxInfo();
+    await this.processFluxInfo();
+    this.setSearch();
+    this.setLoading(false);
   },
   methods: {
     paginationTotal(value) {
       this.pagination.total = value;
+    },
+    async getFluxInfo() {
+      const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=ip,activeSince,dataCollectedAt');
+      this.responseData = response.data.data;
+    },
+    async processFluxInfo() {
+      this.responseData.map((value) => {
+        this.tableData.push({
+          ip: value.ip,
+          activeSince: value.activeSince,
+          activeSinceConverted: `${new Date(parseInt(value.activeSince * 1000, 10)).toLocaleDateString()} ${new Date(parseInt(value.activeSince * 1000, 10)).toLocaleTimeString()}`,
+          dataCollectedAt: value.dataCollectedAt,
+          dataCollectedAtConverted: `${new Date(parseInt(value.dataCollectedAt, 10)).toLocaleDateString()} ${new Date(parseInt(value.dataCollectedAt, 10)).toLocaleTimeString()}`,
+        });
+        return value;
+      });
+    },
+    setSearch() {
+      this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
+    },
+    async setLoading(value) {
+      this.isLoading = value;
     },
   },
 };

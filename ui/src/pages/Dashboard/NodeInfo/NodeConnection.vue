@@ -202,30 +202,40 @@ export default {
       return result.length;
     },
   },
-  mounted() {
-    this.isLoading = true;
-    axios
-      .get('https://stats.runonflux.io/fluxinfo?projection=ip,connectionsOut,connectionsIn')
-      .then((response) => {
-        this.values = response.data.data;
-        for (let i = 0; i < this.values.length; i += 1) {
-          try {
-            this.values[i].out = this.values[i].connectionsOut.length;
-            this.values[i].in = this.values[i].connectionsIn.length;
-          } catch (ex) {
-            this.values[i].out = 0;
-            this.values[i].in = 0;
-          }
-        }
-      }).then(() => {
-        this.tableData = this.values;
-        this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
-        this.isLoading = false;
-      });
+  async mounted() {
+    this.setLoading(true);
+    await this.getFluxInfo();
+    await this.processFluxInfo();
+    this.setSearch();
+    this.setLoading(false);
   },
   methods: {
     paginationTotal(value) {
       this.pagination.total = value;
+    },
+    async getFluxInfo() {
+      const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=ip,connectionsOut,connectionsIn');
+      this.values = response.data.data;
+    },
+    async processFluxInfo() {
+      this.values.map((value) => {
+        const temp = value;
+        try {
+          temp.out = value.connectionsOut.length;
+          temp.in = value.connectionsIn.length;
+        } catch (ex) {
+          temp.out = 0;
+          temp.in = 0;
+        }
+        return temp;
+      });
+      this.tableData = this.values;
+    },
+    setSearch() {
+      this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
+    },
+    setLoading(value) {
+      this.isLoading = value;
     },
   },
 };

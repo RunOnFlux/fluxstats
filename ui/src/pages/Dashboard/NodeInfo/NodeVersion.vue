@@ -225,19 +225,25 @@ export default {
       return result.length;
     },
   },
-  mounted() {
-    this.isLoading = true;
-    axios
-      .get('https://stats.runonflux.io/fluxinfo?projection=ip,daemon,benchmark,flux')
-      .then((response) => {
-        this.tableData = response.data.data;
-        this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
-        this.isLoading = false;
-      });
+  async mounted() {
+    this.setLoading(true);
+    await this.getFluxInfo();
+    this.setSearch();
+    this.setLoading(false);
   },
   methods: {
     paginationTotal(value) {
       this.pagination.total = value;
+    },
+    async getFluxInfo() {
+      const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=ip,daemon,benchmark,flux');
+      this.tableData = response.data.data;
+    },
+    setSearch() {
+      this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
+    },
+    setLoading(value) {
+      this.isLoading = value;
     },
   },
 };

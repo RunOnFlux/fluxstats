@@ -134,6 +134,7 @@ export default {
         },
       ],
       tableData: [],
+      values: [],
       fuseSearch: null,
       isLoading: false,
     };
@@ -189,27 +190,37 @@ export default {
       return result.length;
     },
   },
-  mounted() {
-    this.isLoading = true;
-    axios
-      .get('https://stats.runonflux.io/fluxhistorystats')
-      .then((response) => {
-        for (const [key, value] of Object.entries(response.data.data)) {
-          this.tableData.push({
-            roundTime: key,
-            roundTimeConverted: `${new Date(parseInt(key, 10)).toLocaleDateString()} ${new Date(parseInt(key, 10)).toLocaleTimeString()}`,
-            cumulus: value.cumulus,
-            nimbus: value.nimbus,
-            stratus: value.stratus,
-          });
-        }
-        this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['roundTime'] });
-        this.isLoading = false;
-      });
+  async mounted() {
+    this.setLoading(true);
+    await this.getFluxStats();
+    await this.processFluxStats();
+    this.setSearch();
+    this.setLoading(false);
   },
   methods: {
     paginationTotal(value) {
       this.pagination.total = value;
+    },
+    async getFluxStats() {
+      const response = await axios.get('https://stats.runonflux.io/fluxhistorystats');
+      this.values = response.data.data;
+    },
+    async processFluxStats() {
+      for (const [key, value] of Object.entries(this.values)) {
+        this.tableData.push({
+          roundTime: key,
+          roundTimeConverted: `${new Date(parseInt(key, 10)).toLocaleDateString()} ${new Date(parseInt(key, 10)).toLocaleTimeString()}`,
+          cumulus: value.cumulus,
+          nimbus: value.nimbus,
+          stratus: value.stratus,
+        });
+      }
+    },
+    setSearch() {
+      this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['roundTime'] });
+    },
+    setLoading(value) {
+      this.isLoading = value;
     },
   },
 };

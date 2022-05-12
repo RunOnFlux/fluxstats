@@ -357,199 +357,181 @@ export default {
       mapStratus: new Map(),
       mapOrganizations: new Map(),
       zelids: [],
+      statsValues: [],
     };
   },
   async created() {
-    this.isLoading = true;
-
-    axios
-      .get('https://stats.runonflux.io/fluxinfo?projection=ip,tier,geolocation,benchmark,node,flux')
-      .then((response) => {
-        this.values = response.data.data;
-        this.totalNumberOfNodes = Object.keys(response.data.data).length;
-        this.tableData = response.data.data;
-
-        this.tableData.map((data) => {
-          this.totalNumberOfCumulus = data.tier === 'CUMULUS' ? this.totalNumberOfCumulus + 1 : this.totalNumberOfCumulus;
-          this.totalNumberOfNimbus = data.tier === 'NIMBUS' ? this.totalNumberOfNimbus + 1 : this.totalNumberOfNimbus;
-          this.totalNumberOfStratus = data.tier === 'STRATUS' ? this.totalNumberOfStratus + 1 : this.totalNumberOfStratus;
-
-          this.totalVCores += data.benchmark.bench.cores;
-          this.totalTBSSD += data.benchmark.bench.ssd;
-          this.totalTBRAM += data.benchmark.bench.ram;
-
-          if (!this.map.has(data.geolocation.country)) {
-            this.mapCumulus.set(data.geolocation.country, 0);
-            this.mapNimbus.set(data.geolocation.country, 0);
-            this.mapStratus.set(data.geolocation.country, 0);
-          }
-
-          this.mapOrganizations.set(data.geolocation.org, this.mapOrganizations.has(data.geolocation.org) ? this.mapOrganizations.get(data.geolocation.org) + 1 : 1);
-          this.map.set(data.geolocation.country, this.map.has(data.geolocation.country) ? this.map.get(data.geolocation.country) + 1 : 1);
-
-          this.mapCumulus.set(data.geolocation.country, data.tier === 'CUMULUS' ? this.mapCumulus.get(data.geolocation.country) + 1 : this.mapCumulus.get(data.geolocation.country));
-          this.mapNimbus.set(data.geolocation.country, data.tier === 'NIMBUS' ? this.mapNimbus.get(data.geolocation.country) + 1 : this.mapNimbus.get(data.geolocation.country));
-          this.mapStratus.set(data.geolocation.country, data.tier === 'STRATUS' ? this.mapStratus.get(data.geolocation.country) + 1 : this.mapStratus.get(data.geolocation.country));
-
-          return data;
+    this.setLoading(true);
+    await this.getFluxInfo();
+    await this.processFluxInfo();
+    await this.getFluxStats();
+    await this.processFluxStats();
+    this.setLoading(false);
+    this.setFetching(false);
+  },
+  methods: {
+    async getFluxInfo() {
+      const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=ip,tier,geolocation,benchmark,node,flux');
+      this.values = response.data.data;
+      this.totalNumberOfNodes = Object.keys(response.data.data).length;
+      this.tableData = response.data.data;
+    },
+    async processFluxInfo() {
+      this.tableData.map((data) => {
+        this.totalNumberOfCumulus = data.tier === 'CUMULUS' ? this.totalNumberOfCumulus + 1 : this.totalNumberOfCumulus;
+        this.totalNumberOfNimbus = data.tier === 'NIMBUS' ? this.totalNumberOfNimbus + 1 : this.totalNumberOfNimbus;
+        this.totalNumberOfStratus = data.tier === 'STRATUS' ? this.totalNumberOfStratus + 1 : this.totalNumberOfStratus;
+        this.totalVCores += data.benchmark.bench.cores;
+        this.totalTBSSD += data.benchmark.bench.ssd;
+        this.totalTBRAM += data.benchmark.bench.ram;
+        if (!this.map.has(data.geolocation.country)) {
+          this.mapCumulus.set(data.geolocation.country, 0);
+          this.mapNimbus.set(data.geolocation.country, 0);
+          this.mapStratus.set(data.geolocation.country, 0);
+        }
+        this.mapOrganizations.set(data.geolocation.org, this.mapOrganizations.has(data.geolocation.org) ? this.mapOrganizations.get(data.geolocation.org) + 1 : 1);
+        this.map.set(data.geolocation.country, this.map.has(data.geolocation.country) ? this.map.get(data.geolocation.country) + 1 : 1);
+        this.mapCumulus.set(data.geolocation.country, data.tier === 'CUMULUS' ? this.mapCumulus.get(data.geolocation.country) + 1 : this.mapCumulus.get(data.geolocation.country));
+        this.mapNimbus.set(data.geolocation.country, data.tier === 'NIMBUS' ? this.mapNimbus.get(data.geolocation.country) + 1 : this.mapNimbus.get(data.geolocation.country));
+        this.mapStratus.set(data.geolocation.country, data.tier === 'STRATUS' ? this.mapStratus.get(data.geolocation.country) + 1 : this.mapStratus.get(data.geolocation.country));
+        return data;
+      });
+      this.totalTBSSD = Number(this.totalTBSSD / 1000).toFixed(2);
+      this.totalTBRAM = Number(this.totalTBRAM / 1000).toFixed(2);
+      const pieChartPercentageCumulus = ((this.totalNumberOfCumulus / this.totalNumberOfNodes) * 100).toFixed(2);
+      const pieChartPercentageNimbus = ((this.totalNumberOfNimbus / this.totalNumberOfNodes) * 100).toFixed(2);
+      const pieChartPercentageStratus = ((this.totalNumberOfStratus / this.totalNumberOfNodes) * 100).toFixed(2);
+      this.pieChart.data.labels = [`${pieChartPercentageCumulus} %`, `${pieChartPercentageNimbus} %`, `${pieChartPercentageStratus} %`];
+      this.pieChart.data.series = [pieChartPercentageCumulus, pieChartPercentageNimbus, pieChartPercentageStratus];
+      let idx = 0;
+      let ent = [];
+      for (const entry of new Map([...this.map.entries()].sort((a, b) => b[1] - a[1])).entries()) {
+        const key = entry[0];
+        const value = entry[1];
+        ent.push({
+          name: key,
+          total: value,
         });
-
-        this.totalTBSSD = Number(this.totalTBSSD / 1000).toFixed(2);
-        this.totalTBRAM = Number(this.totalTBRAM / 1000).toFixed(2);
-
-        const pieChartPercentageCumulus = ((this.totalNumberOfCumulus / this.totalNumberOfNodes) * 100).toFixed(2);
-        const pieChartPercentageNimbus = ((this.totalNumberOfNimbus / this.totalNumberOfNodes) * 100).toFixed(2);
-        const pieChartPercentageStratus = ((this.totalNumberOfStratus / this.totalNumberOfNodes) * 100).toFixed(2);
-        this.pieChart.data.labels = [`${pieChartPercentageCumulus} %`, `${pieChartPercentageNimbus} %`, `${pieChartPercentageStratus} %`];
-        this.pieChart.data.series = [pieChartPercentageCumulus, pieChartPercentageNimbus, pieChartPercentageStratus];
-
-        let idx = 0;
-        let ent = [];
-        for (const entry of new Map([...this.map.entries()].sort((a, b) => b[1] - a[1])).entries()) {
-          const key = entry[0];
-          const value = entry[1];
-
+        if (idx < 9) {
+          idx += 1;
+        } else {
+          break;
+        }
+      }
+      const temp1 = [];
+      const temp2 = [];
+      const temp3 = [];
+      const temp4 = [];
+      for (let i = 0; i < 10; i += 1) {
+        this.barChart.data.labels.push(ent[i].name);
+        temp1.push(this.mapCumulus.get(ent[i].name));
+        temp2.push(this.mapNimbus.get(ent[i].name));
+        temp3.push(this.mapStratus.get(ent[i].name));
+        temp4.push(ent[i].total);
+      }
+      this.barChart.data.series = [temp1, temp2, temp3, temp4];
+      idx = 0;
+      ent = [];
+      for (const entry of new Map([...this.mapOrganizations.entries()].sort((a, b) => b[1] - a[1])).entries()) {
+        const key = entry[0];
+        const value = entry[1];
+        if (key !== '') {
           ent.push({
             name: key,
             total: value,
           });
-
           if (idx < 9) {
             idx += 1;
           } else {
             break;
           }
         }
-
-        const temp1 = [];
-        const temp2 = [];
-        const temp3 = [];
-        const temp4 = [];
-        for (let i = 0; i < 10; i += 1) {
-          this.barChart.data.labels.push(ent[i].name);
-          temp1.push(this.mapCumulus.get(ent[i].name));
-          temp2.push(this.mapNimbus.get(ent[i].name));
-          temp3.push(this.mapStratus.get(ent[i].name));
-          temp4.push(ent[i].total);
-        }
-
-        console.log(temp1);
-        console.log(temp2);
-        console.log(temp3);
-        this.barChart.data.series = [temp1, temp2, temp3, temp4];
-
-        idx = 0;
-        ent = [];
-        for (const entry of new Map([...this.mapOrganizations.entries()].sort((a, b) => b[1] - a[1])).entries()) {
-          const key = entry[0];
-          const value = entry[1];
-
-          if (key !== '') {
-            ent.push({
-              name: key,
-              total: value,
-            });
-
-            if (idx < 9) {
-              idx += 1;
-            } else {
-              break;
-            }
+      }
+      for (let i = 0; i < 5; i += 1) {
+        this.tableData2.data.push({ title: `1. ${ent[i].name} - ${ent[i].total} Nodes` });
+      }
+      this.values.map((data) => {
+        if (this.paymentAddress.get(data.flux.zelid) !== undefined) {
+          this.totalNodes.set(data.flux.zelid, this.totalNodes.get(data.flux.zelid + 1));
+          this.totalCumulus.set(data.flux.zelid, data.tier === 'CUMULUS' ? this.totalCumulus.get(data.flux.zelid) + 1 : this.totalCumulus.get(data.flux.zelid));
+          this.totalNimbus.set(data.flux.zelid, data.tier === 'NIMBUS' ? this.totalNimbus.get(data.flux.zelid) + 1 : this.totalNimbus.get(data.flux.zelid));
+          this.totalStratus.set(data.flux.zelid, data.tier === 'STRATUS' ? this.totalStratus.get(data.flux.zelid) + 1 : this.totalStratus.get(data.flux.zelid));
+        } else {
+          this.totalNodes.set(data.flux.zelid, 1);
+          this.totalCumulus.set(data.flux.zelid, data.tier === 'CUMULUS' ? 1 : 0);
+          this.totalNimbus.set(data.flux.zelid, data.tier === 'NIMBUS' ? 1 : 0);
+          this.totalStratus.set(data.flux.zelid, data.tier === 'STRATUS' ? 1 : 0);
+          try {
+            this.paymentAddress.set(data.flux.zelid, data.node.status.payment_address);
+          } catch (ex) {
+            this.paymentAddress.set(data.flux.zelid, '');
+          }
+          try {
+            this.organization.set(data.flux.zelid, data.geolocation.org);
+          } catch (ex) {
+            this.organization.set(data.flux.zelid, '');
           }
         }
-
-        for (let i = 0; i < 5; i += 1) {
-          this.tableData2.data.push({ title: `1. ${ent[i].name} - ${ent[i].total} Nodes` });
-        }
-
-        this.values.map((data) => {
-          if (this.paymentAddress.get(data.flux.zelid) !== undefined) {
-            this.totalNodes.set(data.flux.zelid, this.totalNodes.get(data.flux.zelid + 1));
-            this.totalCumulus.set(data.flux.zelid, data.tier === 'CUMULUS' ? this.totalCumulus.get(data.flux.zelid) + 1 : this.totalCumulus.get(data.flux.zelid));
-            this.totalNimbus.set(data.flux.zelid, data.tier === 'NIMBUS' ? this.totalNimbus.get(data.flux.zelid) + 1 : this.totalNimbus.get(data.flux.zelid));
-            this.totalStratus.set(data.flux.zelid, data.tier === 'STRATUS' ? this.totalStratus.get(data.flux.zelid) + 1 : this.totalStratus.get(data.flux.zelid));
-          } else {
-            this.totalNodes.set(data.flux.zelid, 1);
-            this.totalCumulus.set(data.flux.zelid, data.tier === 'CUMULUS' ? 1 : 0);
-            this.totalNimbus.set(data.flux.zelid, data.tier === 'NIMBUS' ? 1 : 0);
-            this.totalStratus.set(data.flux.zelid, data.tier === 'STRATUS' ? 1 : 0);
-            try {
-              this.paymentAddress.set(data.flux.zelid, data.node.status.payment_address);
-            } catch (ex) {
-              this.paymentAddress.set(data.flux.zelid, '');
-            }
-            try {
-              this.organization.set(data.flux.zelid, data.geolocation.org);
-            } catch (ex) {
-              this.organization.set(data.flux.zelid, '');
-            }
-          }
-          return data;
-        });
-
-        idx = 0;
-        ent = [];
-        for (const entry of new Map([...this.totalNodes.entries()].sort((a, b) => b[1] - a[1])).entries()) {
-          const key = entry[0];
-          const value = entry[1];
-
-          if (key !== '') {
-            ent.push({
-              zelId: key,
-              paymentId: value,
-            });
-
-            if (idx < 9) {
-              idx += 1;
-            } else {
-              break;
-            }
-          }
-        }
-
-        for (let i = 0; i < 5; i += 1) {
-          this.tableData3.data.push({ title: `${i + 1}. Zel ID: ${ent[i].zelId} - Cumulus: ${this.totalCumulus.get(ent[i].zelId)} Nimbus: ${this.totalNimbus.get(ent[i].zelId)} Stratus: ${this.totalStratus.get(ent[i].zelId)}` });
-        }
-      }).then(() => {
-        axios
-          .get('https://stats.runonflux.io/fluxhistorystats')
-          .then((response) => {
-            for (const [key, value] of Object.entries(response.data.data)) {
-              this.tableData1.push({
-                roundTime: key,
-                cumulus: value.cumulus,
-                nimbus: value.nimbus,
-                stratus: value.stratus,
-              });
-            }
-            this.statsLength = Object.keys(response.data.data).length;
-          }).then(() => {
-            const items = [];
-
-            for (let i = 0; i < 5; i += 1) {
-              items.push(new Date(parseInt(this.tableData1[this.statsLength - (i + 1)].roundTime, 10)));
-            }
-
-            const temp1 = [];
-            const temp2 = [];
-            const temp3 = [];
-
-            for (let i = 0; i < 6; i += 1) {
-              temp1.push(this.tableData1[this.statsLength - (i + 1)].cumulus);
-              temp2.push(this.tableData1[this.statsLength - (i + 1)].nimbus);
-              temp3.push(this.tableData1[this.statsLength - (i + 1)].stratus);
-            }
-
-            this.lineChart.data.series = [temp1, temp2, temp3];
-
-            for (let i = 0; i < 5; i += 1) {
-              this.lineChart.data.labels.push(`${items[i].toLocaleDateString()} ${items[i].toLocaleTimeString()}`);
-            }
-          }).then(() => {
-            this.isLoading = false;
-            this.isFetching = false;
-          });
+        return data;
       });
+      idx = 0;
+      ent = [];
+      for (const entry of new Map([...this.totalNodes.entries()].sort((a, b) => b[1] - a[1])).entries()) {
+        const key = entry[0];
+        const value = entry[1];
+        if (key !== '') {
+          ent.push({
+            zelId: key,
+            paymentId: value,
+          });
+          if (idx < 9) {
+            idx += 1;
+          } else {
+            break;
+          }
+        }
+      }
+      for (let i = 0; i < 5; i += 1) {
+        this.tableData3.data.push({ title: `${i + 1}. Zel ID: ${ent[i].zelId} - Cumulus: ${this.totalCumulus.get(ent[i].zelId)} Nimbus: ${this.totalNimbus.get(ent[i].zelId)} Stratus: ${this.totalStratus.get(ent[i].zelId)}` });
+      }
+    },
+    async getFluxStats() {
+      const response = await axios.get('https://stats.runonflux.io/fluxhistorystats');
+      this.statsValues = response.data.data;
+    },
+    async processFluxStats() {
+      for (const [key, value] of Object.entries(this.statsValues)) {
+        this.tableData1.push({
+          roundTime: key,
+          cumulus: value.cumulus,
+          nimbus: value.nimbus,
+          stratus: value.stratus,
+        });
+      }
+      this.statsLength = Object.keys(this.statsValues).length;
+      const items = [];
+      for (let i = 0; i < 5; i += 1) {
+        items.push(new Date(parseInt(this.tableData1[this.statsLength - (i + 1)].roundTime, 10)));
+      }
+      const temp1 = [];
+      const temp2 = [];
+      const temp3 = [];
+      for (let i = 0; i < 6; i += 1) {
+        temp1.push(this.tableData1[this.statsLength - (i + 1)].cumulus);
+        temp2.push(this.tableData1[this.statsLength - (i + 1)].nimbus);
+        temp3.push(this.tableData1[this.statsLength - (i + 1)].stratus);
+      }
+      this.lineChart.data.series = [temp1, temp2, temp3];
+      for (let i = 0; i < 5; i += 1) {
+        this.lineChart.data.labels.push(`${items[i].toLocaleDateString()} ${items[i].toLocaleTimeString()}`);
+      }
+    },
+    setLoading(value) {
+      this.isLoading = value;
+    },
+    setFetching(value) {
+      this.isFetching = value;
+    },
   },
 };
 </script>

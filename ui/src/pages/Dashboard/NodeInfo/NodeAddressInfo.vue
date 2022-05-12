@@ -139,12 +139,12 @@ export default {
       values: [],
       fuseSearch: null,
       isLoading: false,
-      paymentAddress: null,
-      organization: null,
-      totalNodes: null,
-      totalCumulus: null,
-      totalStratus: null,
-      totalNimbus: null,
+      paymentAddress: new Map(),
+      organization: new Map(),
+      totalNodes: new Map(),
+      totalCumulus: new Map(),
+      totalStratus: new Map(),
+      totalNimbus: new Map(),
       zelids: [],
     };
   },
@@ -199,62 +199,63 @@ export default {
       return result.length;
     },
   },
-  mounted() {
-    this.isLoading = true;
-    this.paymentAddress = new Map();
-    this.totalNodes = new Map();
-    this.totalCumulus = new Map();
-    this.totalStratus = new Map();
-    this.totalNimbus = new Map();
-    this.organization = new Map();
-    axios
-      .get('https://stats.runonflux.io/fluxinfo?projection=node,flux,geolocation,tier')
-      .then((response) => {
-        this.values = response.data.data;
-        this.values.map((value) => {
-          let temp1 = this.totalNodes.get(value.flux.zelid) === undefined ? 0 : this.totalNodes.get(value.flux.zelid);
-          const temp2 = this.totalCumulus.get(value.flux.zelid) === undefined ? 0 : this.totalCumulus.get(value.flux.zelid);
-          const temp3 = this.totalNimbus.get(value.flux.zelid) === undefined ? 0 : this.totalNimbus.get(value.flux.zelid);
-          const temp4 = this.totalStratus.get(value.flux.zelid) === undefined ? 0 : this.totalStratus.get(value.flux.zelid);
-          this.totalNodes.set(value.flux.zelid, temp1 += 1);
-          this.totalCumulus.set(value.flux.zelid, value.tier === 'CUMULUS' ? temp2 + 1 : temp2);
-          this.totalNimbus.set(value.flux.zelid, value.tier === 'NIMBUS' ? temp3 + 1 : temp3);
-          this.totalStratus.set(value.flux.zelid, value.tier === 'STRATUS' ? temp4 + 1 : temp4);
-          try {
-            this.paymentAddress.set(value.flux.zelid, value.node.status.payment_address);
-          } catch (ex) {
-            this.paymentAddress.set(value.flux.zelid, '');
-          }
-          try {
-            this.organization.set(value.flux.zelid, value.geolocation.org);
-          } catch (ex) {
-            this.organization.set(value.flux.zelid, '');
-          }
-          return value;
-        });
-      }).then(() => {
-        for (const entry of this.paymentAddress.entries()) {
-          this.zelids.push(
-            {
-              zelId: `${entry[0]}`,
-              paymentId: `${entry[1]}`,
-              totalNodes: `${this.totalNodes.get(entry[0])}`,
-              totalCumulus: `${this.totalCumulus.get(entry[0])}`,
-              totalNimbus: `${this.totalNimbus.get(entry[0])}`,
-              totalStratus: `${this.totalStratus.get(entry[0])}`,
-              org: `${this.organization.get(entry[0])}`,
-            },
-          );
-        }
-      }).then(() => {
-        this.tableData = this.zelids;
-        this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['zelId'] });
-        this.isLoading = false;
-      });
+  async mounted() {
+    this.setLoading(true);
+    await this.getFluxInfo();
+    await this.processFluxInfo();
+    this.setSearch();
+    this.setLoading(false);
   },
   methods: {
     paginationTotal(value) {
       this.pagination.total = value;
+    },
+    async getFluxInfo() {
+      const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=node,flux,geolocation,tier');
+      this.values = response.data.data;
+    },
+    async processFluxInfo() {
+      this.values.map((value) => {
+        let temp1 = this.totalNodes.get(value.flux.zelid) === undefined ? 0 : this.totalNodes.get(value.flux.zelid);
+        const temp2 = this.totalCumulus.get(value.flux.zelid) === undefined ? 0 : this.totalCumulus.get(value.flux.zelid);
+        const temp3 = this.totalNimbus.get(value.flux.zelid) === undefined ? 0 : this.totalNimbus.get(value.flux.zelid);
+        const temp4 = this.totalStratus.get(value.flux.zelid) === undefined ? 0 : this.totalStratus.get(value.flux.zelid);
+        this.totalNodes.set(value.flux.zelid, temp1 += 1);
+        this.totalCumulus.set(value.flux.zelid, value.tier === 'CUMULUS' ? temp2 + 1 : temp2);
+        this.totalNimbus.set(value.flux.zelid, value.tier === 'NIMBUS' ? temp3 + 1 : temp3);
+        this.totalStratus.set(value.flux.zelid, value.tier === 'STRATUS' ? temp4 + 1 : temp4);
+        try {
+          this.paymentAddress.set(value.flux.zelid, value.node.status.payment_address);
+        } catch (ex) {
+          this.paymentAddress.set(value.flux.zelid, '');
+        }
+        try {
+          this.organization.set(value.flux.zelid, value.geolocation.org);
+        } catch (ex) {
+          this.organization.set(value.flux.zelid, '');
+        }
+        return value;
+      });
+      for (const entry of this.paymentAddress.entries()) {
+        this.zelids.push(
+          {
+            zelId: `${entry[0]}`,
+            paymentId: `${entry[1]}`,
+            totalNodes: `${this.totalNodes.get(entry[0])}`,
+            totalCumulus: `${this.totalCumulus.get(entry[0])}`,
+            totalNimbus: `${this.totalNimbus.get(entry[0])}`,
+            totalStratus: `${this.totalStratus.get(entry[0])}`,
+            org: `${this.organization.get(entry[0])}`,
+          },
+        );
+      }
+      this.tableData = this.zelids;
+    },
+    setSearch() {
+      this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['zelId'] });
+    },
+    setLoading(value) {
+      this.isLoading = value;
     },
   },
 };
