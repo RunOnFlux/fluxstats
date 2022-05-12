@@ -9,7 +9,7 @@
     <div>
       <loading
         :active.sync="isLoading"
-        :can-cancel="false"
+        :can-cancel="true"
       />
     </div>
     <div class="col-12">
@@ -99,7 +99,7 @@ export default {
   data() {
     return {
       pagination: {
-        perPage: 5,
+        perPage: 100,
         currentPage: 1,
         perPageOptions: [5, 10, 25, 50, 100, 200, 500, 1000, 2000, 5000, 10000],
         total: 0,
@@ -134,6 +134,7 @@ export default {
         },
       ],
       tableData: [],
+      responseData: [],
       fuseSearch: null,
       isLoading: false,
     };
@@ -150,7 +151,6 @@ export default {
      */
     queriedData() {
       let result;
-
       if (this.searchQuery !== '') {
         const temp = [];
         result = this.fuseSearch.search(`=${this.searchQuery}`);
@@ -158,12 +158,10 @@ export default {
           temp.push(result[i].item);
         }
         result = temp;
-        this.paginationTotal(result.length);
       } else {
-        this.paginationTotal(this.tableData.length);
         result = this.tableData;
       }
-
+      this.paginationTotal(result.length);
       return result.slice(this.from, this.to);
     },
     to() {
@@ -177,32 +175,53 @@ export default {
       return this.pagination.perPage * (this.pagination.currentPage - 1);
     },
     total() {
-      this.paginationTotal(this.tableData.length);
-      return this.tableData.length;
+      let result;
+      if (this.searchQuery !== '') {
+        const temp = [];
+        result = this.fuseSearch.search(`=${this.searchQuery}`);
+        for (let i = 0; i < Object.keys(result).length; i += 1) {
+          temp.push(result[i].item);
+        }
+        result = temp;
+      } else {
+        result = this.tableData;
+      }
+      this.paginationTotal(result.length);
+      return result.length;
     },
   },
-  mounted() {
-    this.isLoading = true;
-    axios
-      .get('https://stats.runonflux.io/fluxinfo?projection=ip,activeSince,dataCollectedAt')
-      .then((response) => {
-        const temp = response.data.data;
-        temp.forEach((value) => {
-          this.tableData.push({
-            ip: value.ip,
-            activeSince: value.activeSince,
-            activeSinceConverted: `${new Date(parseInt(value.activeSince * 1000, 10)).toLocaleDateString()} ${new Date(parseInt(value.activeSince * 1000, 10)).toLocaleTimeString()}`,
-            dataCollectedAt: value.dataCollectedAt,
-            dataCollectedAtConverted: `${new Date(parseInt(value.dataCollectedAt, 10)).toLocaleDateString()} ${new Date(parseInt(value.dataCollectedAt, 10)).toLocaleTimeString()}`,
-          });
-        });
-        this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
-        this.isLoading = false;
-      });
+  async mounted() {
+    this.setLoading(true);
+    await this.getFluxInfo();
+    await this.processFluxInfo();
+    this.setSearch();
+    this.setLoading(false);
   },
   methods: {
     paginationTotal(value) {
       this.pagination.total = value;
+    },
+    async getFluxInfo() {
+      const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=ip,activeSince,dataCollectedAt');
+      this.responseData = response.data.data;
+    },
+    async processFluxInfo() {
+      this.responseData.map((value) => {
+        this.tableData.push({
+          ip: value.ip,
+          activeSince: value.activeSince,
+          activeSinceConverted: `${new Date(parseInt(value.activeSince * 1000, 10)).toLocaleDateString()} ${new Date(parseInt(value.activeSince * 1000, 10)).toLocaleTimeString()}`,
+          dataCollectedAt: value.dataCollectedAt,
+          dataCollectedAtConverted: `${new Date(parseInt(value.dataCollectedAt, 10)).toLocaleDateString()} ${new Date(parseInt(value.dataCollectedAt, 10)).toLocaleTimeString()}`,
+        });
+        return value;
+      });
+    },
+    setSearch() {
+      this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
+    },
+    async setLoading(value) {
+      this.isLoading = value;
     },
   },
 };

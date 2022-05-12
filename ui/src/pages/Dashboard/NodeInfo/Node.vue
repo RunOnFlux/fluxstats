@@ -9,7 +9,7 @@
     <div>
       <loading
         :active.sync="isLoading"
-        :can-cancel="false"
+        :can-cancel="true"
       />
     </div>
     <div class="col-12">
@@ -30,14 +30,60 @@
                 :value="item"
               />
             </el-select>
-            <el-input
-              v-model="searchQuery"
-              type="search"
-              class="mb-3"
-              style="width: 200px"
-              placeholder="Search IP"
-              aria-controls="datatables"
-            />
+            <div col-md-6 offset-md-3>
+              <el-select
+                v-model="filters.default"
+                class="select-default mb-3"
+                style="width: 200px"
+                placeholder="Filters"
+              >
+                <el-option
+                  v-for="item in filters.others"
+                  :key="item"
+                  class="select-default"
+                  :label="item"
+                  :value="item"
+                />
+              </el-select>
+              <el-select
+                v-model="filterssign.default"
+                class="select-default mb-3"
+                style="width: 200px"
+                placeholder="Filters"
+              >
+                <el-option
+                  v-for="item in filterssign.others"
+                  :key="item"
+                  class="select-default"
+                  :label="item"
+                  :value="item"
+                />
+              </el-select>
+              <el-select
+                v-model="filtersval.default"
+                class="select-default mb-3"
+                style="width: 200px"
+                placeholder="Filters"
+              >
+                <el-option
+                  v-for="item in filtersval.others"
+                  :key="item"
+                  class="select-default"
+                  :label="item"
+                  :value="item"
+                />
+              </el-select>
+            </div>
+            <div col-md-3 offset-md-6>
+              <el-input
+                v-model="searchQuery"
+                type="search"
+                class="mb-3"
+                style="width: 200px"
+                placeholder="Search IP"
+                aria-controls="datatables"
+              />
+            </div>
           </div>
           <div class="col-sm-12">
             <el-table
@@ -55,6 +101,7 @@
                   <p><b>Last Confirmed Height:</b> {{ props.row.node.status.last_confirmed_height }}</p>
                   <p><b>Last Paid Height:</b> {{ props.row.node.status.last_paid_height }}</p>
                   <p><b>Payment Address:</b> {{ props.row.node.status.payment_address }}</p>
+                  <p><b>Zel ID:</b> {{ props.row.flux.zelid }}</p>
                   <p><b>Active Since:</b> {{ props.row.node.status.activesince }}</p>
                   <p><b>Active Since Converted:</b> {{ new Date(parseInt(props.row.node.status.activesince * 1000)).toLocaleDateString() }} {{ new Date(parseInt(props.row.node.status.activesince * 1000)).toLocaleTimeString() }}</p>
                   <p><b>Last Paid:</b> {{ props.row.node.status.lastpaid }}</p>
@@ -115,10 +162,22 @@ export default {
   data() {
     return {
       pagination: {
-        perPage: 5,
+        perPage: 100,
         currentPage: 1,
         perPageOptions: [5, 10, 25, 50, 100, 200, 500, 1000, 2000, 5000, 10000],
         total: 0,
+      },
+      filters: {
+        default: 'filter off',
+        others: ['node version', 'nodes hashes', 'filter off'],
+      },
+      filterssign: {
+        default: 'none',
+        others: ['none'],
+      },
+      filtersval: {
+        default: 'none',
+        others: ['none'],
       },
       searchQuery: '',
       propsToSearch: ['node.status.ip'],
@@ -145,8 +204,13 @@ export default {
         },
       ],
       tableData: [],
+      values: [],
       fuseSearch: null,
       isLoading: false,
+      filter1: [],
+      filter2: [],
+      filter3: [],
+      filter4: [],
     };
   },
   computed: {
@@ -161,7 +225,6 @@ export default {
      */
     queriedData() {
       let result;
-
       if (this.searchQuery !== '') {
         const temp = [];
         result = this.fuseSearch.search(`=${this.searchQuery}`);
@@ -169,12 +232,28 @@ export default {
           temp.push(result[i].item);
         }
         result = temp;
-        this.paginationTotal(result.length);
+      } else if (this.filters.default === 'node version' && (this.filterssign.default === '>=' || this.filterssign.default === 'none')) {
+        result = this.filter1;
+        this.setFilterSignValues('>=', ['>=', '<']);
+        this.setFilterFieldValues('3.14.0', ['3.14.0']);
+      } else if (this.filters.default === 'node version' && this.filterssign.default === '<') {
+        result = this.filter3;
+        this.setFilterSignValues('<', ['>=', '<']);
+        this.setFilterFieldValues('3.14.0', ['3.14.0']);
+      } else if (this.filters.default === 'nodes hashes' && (this.filterssign.default === '>=' || this.filterssign.default === 'none')) {
+        result = this.filter2;
+        this.setFilterSignValues('>=', ['>=', '<']);
+        this.setFilterFieldValues('2400', ['2400']);
+      } else if (this.filters.default === 'nodes hashes' && this.filterssign.default === '<') {
+        result = this.filter4;
+        this.setFilterSignValues('<', ['>=', '<']);
+        this.setFilterFieldValues('2400', ['2400']);
       } else {
-        this.paginationTotal(this.tableData.length);
         result = this.tableData;
+        this.setFilterSignValues('none', ['>=', '<']);
+        this.setFilterValues('none', ['none', 'node version', 'nodes hashes']);
       }
-
+      this.paginationTotal(result.length);
       return result.slice(this.from, this.to);
     },
     to() {
@@ -188,23 +267,73 @@ export default {
       return this.pagination.perPage * (this.pagination.currentPage - 1);
     },
     total() {
-      this.paginationTotal(this.tableData.length);
-      return this.tableData.length;
+      let result;
+      if (this.searchQuery !== '') {
+        const temp = [];
+        result = this.fuseSearch.search(`=${this.searchQuery}`);
+        for (let i = 0; i < Object.keys(result).length; i += 1) {
+          temp.push(result[i].item);
+        }
+        result = temp;
+      } else if (this.filters.default === 'node version' && this.filterssign.default === '>=') {
+        result = this.filter1;
+      } else if (this.filters.default === 'node version' && this.filterssign.default === '<') {
+        result = this.filter3;
+      } else if (this.filters.default === 'nodes hashes' && this.filterssign.default === '>=') {
+        result = this.filter2;
+      } else if (this.filters.default === 'nodes hashes' && this.filterssign.default === '<') {
+        result = this.filter4;
+      } else {
+        result = this.tableData;
+      }
+      this.paginationTotal(result.length);
+      return result.length;
     },
   },
-  mounted() {
-    this.isLoading = true;
-    axios
-      .get('https://stats.runonflux.io/fluxinfo?projection=node')
-      .then((response) => {
-        this.tableData = response.data.data;
-        this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['node.status.ip'] });
-        this.isLoading = false;
-      });
+  async mounted() {
+    this.setLoading(true);
+    await this.getFluxInfo();
+    await this.processFluxInfo();
+    this.setSearch();
+    this.setLoading(false);
   },
   methods: {
     paginationTotal(value) {
       this.pagination.total = value;
+    },
+    setFilterValues(defaultValues, othersValues) {
+      this.filters.default = defaultValues;
+      this.filters.others = othersValues;
+    },
+    setFilterSignValues(defaultSignValues, othersSignValues) {
+      this.filterssign.default = defaultSignValues;
+      this.filterssign.others = othersSignValues;
+    },
+    setFilterFieldValues(defaultFieldValues, othersFieldValues) {
+      this.filtersval.default = defaultFieldValues;
+      this.filtersval.others = othersFieldValues;
+    },
+    async getFluxInfo() {
+      const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=node,flux,appsHashesTotal');
+      this.values = response.data.data;
+    },
+    async processFluxInfo() {
+      this.values.map((el) => {
+        const values = el;
+        values.node.status.network = 'ipv4';
+        return values;
+      });
+      this.filter1 = this.values.filter((value) => parseInt(value.flux.version.split('.')[0], 10) >= 3 && parseInt(value.flux.version.split('.')[1], 10) >= 14);
+      this.filter3 = this.values.filter((value) => parseInt(value.flux.version.split('.')[0], 10) < 3 || parseInt(value.flux.version.split('.')[1], 10) < 14);
+      this.filter2 = this.values.filter((value) => parseInt(value.appsHashesTotal, 10) >= 2400);
+      this.filter4 = this.values.filter((value) => parseInt(value.appsHashesTotal, 10) < 2400);
+      this.tableData = this.values;
+    },
+    setSearch() {
+      this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['node.status.ip'] });
+    },
+    setLoading(value) {
+      this.isLoading = value;
     },
   },
 };

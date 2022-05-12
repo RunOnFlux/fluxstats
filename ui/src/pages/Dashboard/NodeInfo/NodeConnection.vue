@@ -9,7 +9,7 @@
     <div>
       <loading
         :active.sync="isLoading"
-        :can-cancel="false"
+        :can-cancel="true"
       />
     </div>
     <div class="col-12">
@@ -121,7 +121,7 @@ export default {
   data() {
     return {
       pagination: {
-        perPage: 5,
+        perPage: 100,
         currentPage: 1,
         perPageOptions: [5, 10, 25, 50, 100, 200, 500, 1000, 2000, 5000, 10000],
         total: 0,
@@ -134,8 +134,19 @@ export default {
           label: 'IP Address',
           minWidth: 200,
         },
+        {
+          prop: 'in',
+          label: 'Total Incoming',
+          minWidth: 200,
+        },
+        {
+          prop: 'out',
+          label: 'Total Outgoing',
+          minWidth: 200,
+        },
       ],
       tableData: [],
+      values: [],
       fuseSearch: null,
       isLoading: false,
     };
@@ -152,7 +163,6 @@ export default {
      */
     queriedData() {
       let result;
-
       if (this.searchQuery !== '') {
         const temp = [];
         result = this.fuseSearch.search(`=${this.searchQuery}`);
@@ -160,12 +170,10 @@ export default {
           temp.push(result[i].item);
         }
         result = temp;
-        this.paginationTotal(result.length);
       } else {
-        this.paginationTotal(this.tableData.length);
         result = this.tableData;
       }
-
+      this.paginationTotal(result.length);
       return result.slice(this.from, this.to);
     },
     to() {
@@ -179,23 +187,55 @@ export default {
       return this.pagination.perPage * (this.pagination.currentPage - 1);
     },
     total() {
-      this.paginationTotal(this.tableData.length);
-      return this.tableData.length;
+      let result;
+      if (this.searchQuery !== '') {
+        const temp = [];
+        result = this.fuseSearch.search(`=${this.searchQuery}`);
+        for (let i = 0; i < Object.keys(result).length; i += 1) {
+          temp.push(result[i].item);
+        }
+        result = temp;
+      } else {
+        result = this.tableData;
+      }
+      this.paginationTotal(result.length);
+      return result.length;
     },
   },
-  mounted() {
-    this.isLoading = true;
-    axios
-      .get('https://stats.runonflux.io/fluxinfo?projection=ip,connectionsOut,connectionsIn')
-      .then((response) => {
-        this.tableData = response.data.data;
-        this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
-        this.isLoading = false;
-      });
+  async mounted() {
+    this.setLoading(true);
+    await this.getFluxInfo();
+    await this.processFluxInfo();
+    this.setSearch();
+    this.setLoading(false);
   },
   methods: {
     paginationTotal(value) {
       this.pagination.total = value;
+    },
+    async getFluxInfo() {
+      const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=ip,connectionsOut,connectionsIn');
+      this.values = response.data.data;
+    },
+    async processFluxInfo() {
+      this.values.map((value) => {
+        const temp = value;
+        try {
+          temp.out = value.connectionsOut.length;
+          temp.in = value.connectionsIn.length;
+        } catch (ex) {
+          temp.out = 0;
+          temp.in = 0;
+        }
+        return temp;
+      });
+      this.tableData = this.values;
+    },
+    setSearch() {
+      this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
+    },
+    setLoading(value) {
+      this.isLoading = value;
     },
   },
 };

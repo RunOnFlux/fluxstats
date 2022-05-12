@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-12">
       <h2 class="title">
-        Hashes
+        Address Info
       </h2>
     </div>
     <p class="category" />
@@ -35,7 +35,7 @@
               type="search"
               class="mb-3"
               style="width: 200px"
-              placeholder="Search IP"
+              placeholder="Search Zel ID"
               aria-controls="datatables"
             />
           </div>
@@ -46,6 +46,13 @@
               :data="queriedData"
               border
             >
+              <el-table-column type="expand">
+                <template slot-scope="props">
+                  <p><b>Total Cumulus:</b> {{ props.row.totalCumulus }} </p>
+                  <p><b>Total Nimbus:</b> {{ props.row.totalNimbus }}</p>
+                  <p><b>Total Stratus:</b> {{ props.row.totalStratus }}</p>
+                </template>
+              </el-table-column>
               <el-table-column
                 v-for="column in tableColumns"
                 :key="column.label"
@@ -105,32 +112,40 @@ export default {
         total: 0,
       },
       searchQuery: '',
-      propsToSearch: ['ip'],
+      propsToSearch: ['zelId'],
       tableColumns: [
         {
-          prop: 'ip',
-          label: 'IP Address',
-          minWidth: 200,
+          prop: 'zelId',
+          label: 'Zel ID',
+          minWidth: 70,
         },
         {
-          prop: 'scannedHeight',
-          label: 'Scanned Height',
-          minWidth: 250,
+          prop: 'paymentId',
+          label: 'Payment ID',
+          minWidth: 40,
         },
         {
-          prop: 'hashesPresent',
-          label: 'Hashes Present',
-          minWidth: 250,
+          prop: 'org',
+          label: 'Organization',
+          minWidth: 40,
         },
         {
-          prop: 'appsHashesTotal',
-          label: 'App Hashes Total',
-          minWidth: 250,
+          prop: 'totalNodes',
+          label: 'Total Nodes',
+          minWidth: 90,
         },
       ],
       tableData: [],
+      values: [],
       fuseSearch: null,
       isLoading: false,
+      paymentAddress: new Map(),
+      organization: new Map(),
+      totalNodes: new Map(),
+      totalCumulus: new Map(),
+      totalStratus: new Map(),
+      totalNimbus: new Map(),
+      zelids: [],
     };
   },
   computed: {
@@ -187,6 +202,7 @@ export default {
   async mounted() {
     this.setLoading(true);
     await this.getFluxInfo();
+    await this.processFluxInfo();
     this.setSearch();
     this.setLoading(false);
   },
@@ -195,11 +211,48 @@ export default {
       this.pagination.total = value;
     },
     async getFluxInfo() {
-      const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=ip,appsHashesTotal,hashesPresent,scannedHeight');
-      this.tableData = response.data.data;
+      const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=node,flux,geolocation,tier');
+      this.values = response.data.data;
+    },
+    async processFluxInfo() {
+      this.values.map((value) => {
+        let temp1 = this.totalNodes.get(value.flux.zelid) === undefined ? 0 : this.totalNodes.get(value.flux.zelid);
+        const temp2 = this.totalCumulus.get(value.flux.zelid) === undefined ? 0 : this.totalCumulus.get(value.flux.zelid);
+        const temp3 = this.totalNimbus.get(value.flux.zelid) === undefined ? 0 : this.totalNimbus.get(value.flux.zelid);
+        const temp4 = this.totalStratus.get(value.flux.zelid) === undefined ? 0 : this.totalStratus.get(value.flux.zelid);
+        this.totalNodes.set(value.flux.zelid, temp1 += 1);
+        this.totalCumulus.set(value.flux.zelid, value.tier === 'CUMULUS' ? temp2 + 1 : temp2);
+        this.totalNimbus.set(value.flux.zelid, value.tier === 'NIMBUS' ? temp3 + 1 : temp3);
+        this.totalStratus.set(value.flux.zelid, value.tier === 'STRATUS' ? temp4 + 1 : temp4);
+        try {
+          this.paymentAddress.set(value.flux.zelid, value.node.status.payment_address);
+        } catch (ex) {
+          this.paymentAddress.set(value.flux.zelid, '');
+        }
+        try {
+          this.organization.set(value.flux.zelid, value.geolocation.org);
+        } catch (ex) {
+          this.organization.set(value.flux.zelid, '');
+        }
+        return value;
+      });
+      for (const entry of this.paymentAddress.entries()) {
+        this.zelids.push(
+          {
+            zelId: `${entry[0]}`,
+            paymentId: `${entry[1]}`,
+            totalNodes: `${this.totalNodes.get(entry[0])}`,
+            totalCumulus: `${this.totalCumulus.get(entry[0])}`,
+            totalNimbus: `${this.totalNimbus.get(entry[0])}`,
+            totalStratus: `${this.totalStratus.get(entry[0])}`,
+            org: `${this.organization.get(entry[0])}`,
+          },
+        );
+      }
+      this.tableData = this.zelids;
     },
     setSearch() {
-      this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
+      this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['zelId'] });
     },
     setLoading(value) {
       this.isLoading = value;

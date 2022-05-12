@@ -11,6 +11,7 @@ const NodeUptime = () => import('@/pages/Dashboard/NodeInfo/NodeUptime.vue');
 const NodeApp = () => import('@/pages/Dashboard/NodeInfo/NodeApp.vue');
 const NodeAppHash = () => import('@/pages/Dashboard/NodeInfo/NodeAppHash.vue');
 const NodeConnection = () => import('@/pages/Dashboard/NodeInfo/NodeConnection.vue');
+const AddressInfo = () => import('@/pages/Dashboard/NodeInfo/NodeAddressInfo.vue');
 
 // NodeHistory pages
 const HistoryInfo = () => import('@/pages/Dashboard/NodeHistory/HistoryInfo.vue');
@@ -54,6 +55,11 @@ const nodeInfo = {
       path: 'location',
       name: 'Location',
       component: NodeLocation,
+    },
+    {
+      path: 'address',
+      name: 'AddressInfo',
+      component: AddressInfo,
     }],
 };
 
