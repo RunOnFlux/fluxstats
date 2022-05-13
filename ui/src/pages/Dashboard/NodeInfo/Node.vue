@@ -46,20 +46,6 @@
                 />
               </el-select>
               <el-select
-                v-model="filterssign.default"
-                class="select-default mb-3"
-                style="width: 200px"
-                placeholder="Filters"
-              >
-                <el-option
-                  v-for="item in filterssign.others"
-                  :key="item"
-                  class="select-default"
-                  :label="item"
-                  :value="item"
-                />
-              </el-select>
-              <el-select
                 v-model="filtersval.default"
                 class="select-default mb-3"
                 style="width: 200px"
@@ -171,10 +157,6 @@ export default {
         default: 'filter off',
         others: ['node version', 'nodes hashes', 'filter off'],
       },
-      filterssign: {
-        default: 'none',
-        others: ['none'],
-      },
       filtersval: {
         default: 'none',
         others: ['none'],
@@ -207,10 +189,10 @@ export default {
       values: [],
       fuseSearch: null,
       isLoading: false,
-      filter1: [],
-      filter2: [],
-      filter3: [],
-      filter4: [],
+      filter1: new Map(),
+      filter2: new Map(),
+      filterValue1: [],
+      filterValue2: [],
     };
   },
   computed: {
@@ -225,6 +207,8 @@ export default {
      */
     queriedData() {
       let result;
+      let val1 = this.filterValue1[0];
+      let val2 = this.filterValue2[0];
       if (this.searchQuery !== '') {
         const temp = [];
         result = this.fuseSearch.search(`=${this.searchQuery}`);
@@ -232,26 +216,18 @@ export default {
           temp.push(result[i].item);
         }
         result = temp;
-      } else if (this.filters.default === 'node version' && (this.filterssign.default === '>=' || this.filterssign.default === 'none')) {
-        result = this.filter1;
-        this.setFilterSignValues('>=', ['>=', '<']);
-        this.setFilterFieldValues('3.14.0', ['3.14.0']);
-      } else if (this.filters.default === 'node version' && this.filterssign.default === '<') {
-        result = this.filter3;
-        this.setFilterSignValues('<', ['>=', '<']);
-        this.setFilterFieldValues('3.14.0', ['3.14.0']);
-      } else if (this.filters.default === 'nodes hashes' && (this.filterssign.default === '>=' || this.filterssign.default === 'none')) {
-        result = this.filter2;
-        this.setFilterSignValues('>=', ['>=', '<']);
-        this.setFilterFieldValues('2400', ['2400']);
-      } else if (this.filters.default === 'nodes hashes' && this.filterssign.default === '<') {
-        result = this.filter4;
-        this.setFilterSignValues('<', ['>=', '<']);
-        this.setFilterFieldValues('2400', ['2400']);
+      } else if (this.filters.default === 'node version') {
+        val1 = this.filtersval.default === 'none' || !this.filter1.has(this.filtersval.default) ? val1 : this.filtersval.default;
+        this.setFilterFieldValues(val1, this.filterValue1);
+        result = this.filter1.get(this.filtersval.default);
+      } else if (this.filters.default === 'node hashes') {
+        val2 = this.filtersval.default === 'none' || !this.filter2.has(this.filtersval.default) ? val2 : this.filtersval.default;
+        this.setFilterFieldValues(val2, this.filterValue2);
+        result = this.filter2.get(this.filtersval.default);
       } else {
         result = this.tableData;
-        this.setFilterSignValues('none', ['>=', '<']);
-        this.setFilterValues('none', ['none', 'node version', 'nodes hashes']);
+        this.setFilterValues('filter off', ['filter off', 'node version', 'node hashes']);
+        this.setFilterFieldValues('none');
       }
       this.paginationTotal(result.length);
       return result.slice(this.from, this.to);
@@ -275,14 +251,10 @@ export default {
           temp.push(result[i].item);
         }
         result = temp;
-      } else if (this.filters.default === 'node version' && this.filterssign.default === '>=') {
-        result = this.filter1;
-      } else if (this.filters.default === 'node version' && this.filterssign.default === '<') {
-        result = this.filter3;
-      } else if (this.filters.default === 'nodes hashes' && this.filterssign.default === '>=') {
-        result = this.filter2;
-      } else if (this.filters.default === 'nodes hashes' && this.filterssign.default === '<') {
-        result = this.filter4;
+      } else if (this.filters.default === 'node version') {
+        result = this.filter1.get(this.filtersval.default);
+      } else if (this.filters.default === 'node hashes') {
+        result = this.filter2.get(this.filtersval.default);
       } else {
         result = this.tableData;
       }
@@ -305,10 +277,6 @@ export default {
       this.filters.default = defaultValues;
       this.filters.others = othersValues;
     },
-    setFilterSignValues(defaultSignValues, othersSignValues) {
-      this.filterssign.default = defaultSignValues;
-      this.filterssign.others = othersSignValues;
-    },
     setFilterFieldValues(defaultFieldValues, othersFieldValues) {
       this.filtersval.default = defaultFieldValues;
       this.filtersval.others = othersFieldValues;
@@ -320,13 +288,22 @@ export default {
     async processFluxInfo() {
       this.values.map((el) => {
         const values = el;
+        let temp;
         values.node.status.network = 'ipv4';
+        temp = this.filter1.has(values.flux.version) ? this.filter1.get(values.flux.version) : [];
+        if (!this.filter1.has(values.flux.version)) {
+          this.filterValue1.push(values.flux.version);
+        }
+        temp.push(values);
+        this.filter1.set(values.flux.version, temp);
+        temp = this.filter2.has(values.appsHashesTotal) ? this.filter2.get(values.appsHashesTotal) : [];
+        if (!this.filter2.has(values.appsHashesTotal)) {
+          this.filterValue2.push(values.appsHashesTotal);
+        }
+        temp.push(values);
+        this.filter2.set(values.appsHashesTotal, temp);
         return values;
       });
-      this.filter1 = this.values.filter((value) => parseInt(value.flux.version.split('.')[0], 10) >= 3 && parseInt(value.flux.version.split('.')[1], 10) >= 14);
-      this.filter3 = this.values.filter((value) => parseInt(value.flux.version.split('.')[0], 10) < 3 || parseInt(value.flux.version.split('.')[1], 10) < 14);
-      this.filter2 = this.values.filter((value) => parseInt(value.appsHashesTotal, 10) >= 2400);
-      this.filter4 = this.values.filter((value) => parseInt(value.appsHashesTotal, 10) < 2400);
       this.tableData = this.values;
     },
     setSearch() {
