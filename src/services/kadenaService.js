@@ -14,7 +14,7 @@ let processedKDAnodes = [];
 let processingStatus = 0;
 
 async function kadenaAppLocationsNode() { // chainwebnode only
-  const apps = ['nonExistingApp'];
+  const apps = ['KadenaNode', 'KadenaNode2', 'KadenaNode3', 'KadenaNode4', 'KadenaNode5'];
   let locations = [];
   try {
     // eslint-disable-next-line no-restricted-syntax
