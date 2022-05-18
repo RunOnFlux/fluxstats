@@ -135,6 +135,7 @@ import Fuse from 'fuse.js';
 import axios from 'axios';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
+import { MemoryStorage } from 'ttl-localstorage';
 
 export default {
   components: {
@@ -282,8 +283,14 @@ export default {
       this.filtersval.others = othersFieldValues;
     },
     async getFluxInfo() {
-      const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=node,flux,appsHashesTotal');
-      this.values = response.data.data;
+      const lsdata = MemoryStorage.get('fluxinfo?projection=node,flux,appsHashesTotal');
+      if (lsdata === null) {
+        const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=node,flux,appsHashesTotal');
+        MemoryStorage.put('fluxinfo?projection=node,flux,appsHashesTotal', response.data.data, 600);
+        this.values = response.data.data;
+      } else {
+        this.values = lsdata;
+      }
     },
     async processFluxInfo() {
       this.values.map((el) => {

@@ -127,6 +127,7 @@ import Fuse from 'fuse.js';
 import axios from 'axios';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
+import { MemoryStorage } from 'ttl-localstorage';
 
 export default {
   components: {
@@ -236,8 +237,14 @@ export default {
       this.pagination.total = value;
     },
     async getFluxInfo() {
-      const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=ip,daemon,benchmark,flux');
-      this.tableData = response.data.data;
+      const lsdata = MemoryStorage.get('fluxinfo?projection=ip,daemon,benchmark,flux');
+      if (lsdata === null) {
+        const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=ip,daemon,benchmark,flux');
+        MemoryStorage.put('fluxinfo?projection=ip,daemon,benchmark,flux', response.data.data, 600);
+        this.tableData = response.data.data;
+      } else {
+        this.tableData = lsdata;
+      }
     },
     setSearch() {
       this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
