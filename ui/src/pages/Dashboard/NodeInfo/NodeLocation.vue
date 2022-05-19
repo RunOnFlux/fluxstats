@@ -207,7 +207,7 @@ export default {
     },
     async getFluxInfo() {
       const lsdata = MemoryStorage.get('fluxinfo?projection=ip,geolocation');
-      if (lsdata === null) {
+      if (!lsdata) {
         const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=ip,geolocation');
         MemoryStorage.put('fluxinfo?projection=ip,geolocation', response.data.data, 600);
         this.tableData = response.data.data;

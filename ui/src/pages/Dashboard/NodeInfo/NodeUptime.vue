@@ -204,7 +204,7 @@ export default {
     },
     async getFluxInfo() {
       const lsdata = MemoryStorage.get('fluxinfo?projection=ip,activeSince,dataCollectedAt');
-      if (lsdata === null) {
+      if (!lsdata) {
         const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=ip,activeSince,dataCollectedAt');
         MemoryStorage.put('fluxinfo?projection=ip,activeSince,dataCollectedAt', response.data.data, 600);
         this.responseData = response.data.data;

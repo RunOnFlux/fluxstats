@@ -284,7 +284,7 @@ export default {
     },
     async getFluxInfo() {
       const lsdata = MemoryStorage.get('fluxinfo?projection=node,flux,appsHashesTotal');
-      if (lsdata === null) {
+      if (!lsdata) {
         const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=node,flux,appsHashesTotal');
         MemoryStorage.put('fluxinfo?projection=node,flux,appsHashesTotal', response.data.data, 600);
         this.values = response.data.data;

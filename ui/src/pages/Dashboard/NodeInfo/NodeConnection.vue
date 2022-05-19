@@ -216,7 +216,7 @@ export default {
     },
     async getFluxInfo() {
       const lsdata = MemoryStorage.get('fluxinfo?projection=ip,connectionsOut,connectionsIn');
-      if (lsdata === null) {
+      if (!lsdata) {
         const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=ip,connectionsOut,connectionsIn');
         MemoryStorage.put('fluxinfo?projection=ip,connectionsOut,connectionsIn', response.data.data, 600);
         this.values = response.data.data;

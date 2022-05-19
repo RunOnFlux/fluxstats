@@ -373,7 +373,7 @@ export default {
   methods: {
     async getFluxInfo() {
       const lsdata = MemoryStorage.get('fluxinfo?projection=ip,tier,geolocation,benchmark,node,flux');
-      if (lsdata === null) {
+      if (!lsdata) {
         const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=ip,tier,geolocation,benchmark,node,flux');
         MemoryStorage.put('fluxinfo?projection=ip,tier,geolocation,benchmark,node,flux', response.data.data, 600);
         this.values = response.data.data;
@@ -506,7 +506,7 @@ export default {
     },
     async getFluxStats() {
       const lsdata = MemoryStorage.get('fluxhistorystats');
-      if (lsdata === null) {
+      if (!lsdata) {
         const response = await axios.get('https://stats.runonflux.io/fluxhistorystats');
         MemoryStorage.put('fluxhistorystats', response.data.data, 600);
         this.statsValues = response.data.data;
