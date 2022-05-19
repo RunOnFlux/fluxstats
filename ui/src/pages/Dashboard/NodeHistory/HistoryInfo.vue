@@ -86,6 +86,7 @@ import Fuse from 'fuse.js';
 import axios from 'axios';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
+import { MemoryStorage } from 'ttl-localstorage';
 
 export default {
   components: {
@@ -202,8 +203,14 @@ export default {
       this.pagination.total = value;
     },
     async getFluxStats() {
-      const response = await axios.get('https://stats.runonflux.io/fluxhistorystats');
-      this.values = response.data.data;
+      const lsdata = MemoryStorage.get('fluxhistorystats');
+      if (!lsdata) {
+        const response = await axios.get('https://stats.runonflux.io/fluxhistorystats');
+        MemoryStorage.put('fluxhistorystats', response.data.data, 600);
+        this.values = response.data.data;
+      } else {
+        this.values = lsdata;
+      }
     },
     async processFluxStats() {
       for (const [key, value] of Object.entries(this.values)) {

@@ -86,6 +86,7 @@ import Fuse from 'fuse.js';
 import axios from 'axios';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
+import { MemoryStorage } from 'ttl-localstorage';
 
 export default {
   components: {
@@ -202,8 +203,14 @@ export default {
       this.pagination.total = value;
     },
     async getFluxInfo() {
-      const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=ip,activeSince,dataCollectedAt');
-      this.responseData = response.data.data;
+      const lsdata = MemoryStorage.get('fluxinfo?projection=ip,activeSince,dataCollectedAt');
+      if (!lsdata) {
+        const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=ip,activeSince,dataCollectedAt');
+        MemoryStorage.put('fluxinfo?projection=ip,activeSince,dataCollectedAt', response.data.data, 600);
+        this.responseData = response.data.data;
+      } else {
+        this.responseData = lsdata;
+      }
     },
     async processFluxInfo() {
       this.responseData.map((value) => {

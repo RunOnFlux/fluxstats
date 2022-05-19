@@ -253,6 +253,7 @@ import {
 import axios from 'axios';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
+import { MemoryStorage } from 'ttl-localstorage';
 
 export default {
   components: {
@@ -371,10 +372,18 @@ export default {
   },
   methods: {
     async getFluxInfo() {
-      const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=ip,tier,geolocation,benchmark,node,flux');
-      this.values = response.data.data;
-      this.totalNumberOfNodes = Object.keys(response.data.data).length;
-      this.tableData = response.data.data;
+      const lsdata = MemoryStorage.get('fluxinfo?projection=ip,tier,geolocation,benchmark,node,flux');
+      if (!lsdata) {
+        const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=ip,tier,geolocation,benchmark,node,flux');
+        MemoryStorage.put('fluxinfo?projection=ip,tier,geolocation,benchmark,node,flux', response.data.data, 600);
+        this.values = response.data.data;
+        this.totalNumberOfNodes = Object.keys(response.data.data).length;
+        this.tableData = response.data.data;
+      } else {
+        this.values = lsdata;
+        this.totalNumberOfNodes = Object.keys(lsdata).length;
+        this.tableData = lsdata;
+      }
     },
     async processFluxInfo() {
       this.tableData.map((data) => {
@@ -496,8 +505,14 @@ export default {
       }
     },
     async getFluxStats() {
-      const response = await axios.get('https://stats.runonflux.io/fluxhistorystats');
-      this.statsValues = response.data.data;
+      const lsdata = MemoryStorage.get('fluxhistorystats');
+      if (!lsdata) {
+        const response = await axios.get('https://stats.runonflux.io/fluxhistorystats');
+        MemoryStorage.put('fluxhistorystats', response.data.data, 600);
+        this.statsValues = response.data.data;
+      } else {
+        this.statsValues = lsdata;
+      }
     },
     async processFluxStats() {
       for (const [key, value] of Object.entries(this.statsValues)) {
