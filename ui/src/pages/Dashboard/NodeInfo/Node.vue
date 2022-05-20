@@ -185,15 +185,22 @@ export default {
           label: 'Status',
           minWidth: 50,
         },
+        {
+          prop: 'node.status.rank',
+          label: 'Payment Rank',
+          minWidth: 70,
+        },
       ],
       tableData: [],
       values: [],
+      daemon: [],
       fuseSearch: null,
       isLoading: false,
       filter1: new Map(),
       filter2: new Map(),
       filterValue1: [],
       filterValue2: [],
+      ranks: new Map(),
     };
   },
   computed: {
@@ -266,6 +273,8 @@ export default {
   async mounted() {
     this.setLoading(true);
     await this.getFluxInfo();
+    await this.getDaemonInfo();
+    await this.processDaemonInfo();
     await this.processFluxInfo();
     this.setSearch();
     this.setLoading(false);
@@ -292,11 +301,31 @@ export default {
         this.values = lsdata;
       }
     },
+    async getDaemonInfo() {
+      const lsdata = MemoryStorage.get('daemon/viewdeterministiczelnodelist');
+      if (!lsdata) {
+        const response = await axios.get('https://api.runonflux.io/daemon/viewdeterministiczelnodelist');
+        MemoryStorage.put('daemon/viewdeterministiczelnodelist', response.data.data, 600);
+        this.daemon = response.data.data;
+        console.log(this.daemon);
+      } else {
+        this.daemon = lsdata;
+      }
+    },
+    async processDaemonInfo() {
+      this.daemon.map((el) => {
+        if (!this.ranks.has(el.ip)) {
+          this.ranks.set(el.ip, el.rank);
+        }
+        return el;
+      });
+    },
     async processFluxInfo() {
       this.values.map((el) => {
         const values = el;
         let temp;
         values.node.status.network = 'ipv4';
+        values.node.status.rank = this.ranks.get(el.node.status.ip) === undefined ? 0 : this.ranks.get(el.node.status.ip);
         temp = this.filter1.has(values.flux.version) ? this.filter1.get(values.flux.version) : [];
         if (!this.filter1.has(values.flux.version)) {
           this.filterValue1.push(values.flux.version);
