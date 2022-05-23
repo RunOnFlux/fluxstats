@@ -44,6 +44,7 @@
               stripe
               style="width: 100%;"
               :data="queriedData"
+              @sort-change="sortChange"
               border
             >
               <el-table-column type="expand">
@@ -137,6 +138,7 @@ export default {
         },
       ],
       tableData: [],
+      originalData: null,
       values: [],
       fuseSearch: null,
       isLoading: false,
@@ -259,10 +261,112 @@ export default {
       this.tableData = this.zelids;
     },
     setSearch() {
+      this.originalData = JSON.stringify(this.tableData);
       this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['zelId'] });
     },
     setLoading(value) {
       this.isLoading = value;
+    },
+    sortChange(sortProps) {
+      if (sortProps.column.label === 'Zel ID' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.zelId > b.zelId)) {
+            val = 1;
+          } else if (a.zelId < b.zelId) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Zel ID' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.zelId < b.zelId)) {
+            val = 1;
+          } else if (a.zelId > b.zelId) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Payment ID' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.paymentId > b.paymentId)) {
+            val = 1;
+          } else if (a.paymentId < b.paymentId) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Payment ID' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.paymentId < b.paymentId)) {
+            val = 1;
+          } else if (a.paymentId > b.paymentId) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Organization' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.org > b.org)) {
+            val = 1;
+          } else if (a.org < b.org) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Organization' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.org < b.org)) {
+            val = 1;
+          } else if (a.org > b.org) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Total Nodes' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.totalNodes > b.totalNodes)) {
+            val = 1;
+          } else if (a.totalNodes < b.totalNodes) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Total Nodes' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.totalNodes < b.totalNodes)) {
+            val = 1;
+          } else if (a.totalNodes > b.totalNodes) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else {
+        this.tableData = JSON.parse(this.originalData);
+      }
     },
   },
 };

@@ -76,6 +76,7 @@
               stripe
               style="width: 100%;"
               :data="queriedData"
+              @sort-change="sortChange"
               border
             >
               <el-table-column type="expand">
@@ -192,6 +193,7 @@ export default {
         },
       ],
       tableData: [],
+      originalData: null,
       values: [],
       daemon: [],
       fuseSearch: null,
@@ -307,7 +309,6 @@ export default {
         const response = await axios.get('https://api.runonflux.io/daemon/viewdeterministiczelnodelist');
         MemoryStorage.put('daemon/viewdeterministiczelnodelist', response.data.data, 600);
         this.daemon = response.data.data;
-        console.log(this.daemon);
       } else {
         this.daemon = lsdata;
       }
@@ -343,10 +344,136 @@ export default {
       this.tableData = this.values;
     },
     setSearch() {
+      this.originalData = JSON.stringify(this.tableData);
       this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['node.status.ip'] });
     },
     setLoading(value) {
       this.isLoading = value;
+    },
+    sortChange(sortProps) {
+      if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.node.status.ip > b.node.status.ip)) {
+            val = 1;
+          } else if (a.node.status.ip < b.node.status.ip) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.node.status.ip < b.node.status.ip)) {
+            val = 1;
+          } else if (a.node.status.ip > b.node.status.ip) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Network Protocol' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.node.status.network > b.node.status.network)) {
+            val = 1;
+          } else if (a.node.status.network < b.node.status.network) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Network Protocol' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.node.status.network < b.node.status.network)) {
+            val = 1;
+          } else if (a.node.status.network > b.node.status.network) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Tier' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.node.status.tier > b.node.status.tier)) {
+            val = 1;
+          } else if (a.node.status.tier < b.node.status.tier) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Tier' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.node.status.tier < b.node.status.tier)) {
+            val = 1;
+          } else if (a.node.status.tier > b.node.status.tier) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Status' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.node.status.status > b.node.status.status)) {
+            val = 1;
+          } else if (a.node.status.status < b.node.status.status) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Status' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.node.status.status < b.node.status.status)) {
+            val = 1;
+          } else if (a.node.status.status > b.node.status.status) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Payment Rank' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.node.status.rank > b.node.status.rank)) {
+            val = 1;
+          } else if (a.node.status.rank < b.node.status.rank) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Payment Rank' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.node.status.rank < b.node.status.rank)) {
+            val = 1;
+          } else if (a.node.status.rank > b.node.status.rank) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else {
+        this.tableData = JSON.parse(this.originalData);
+      }
     },
   },
 };

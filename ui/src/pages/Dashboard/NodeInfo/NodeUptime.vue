@@ -44,6 +44,7 @@
               stripe
               style="width: 100%;"
               :data="queriedData"
+              @sort-change="sortChange"
               border
             >
               <el-table-column
@@ -135,6 +136,7 @@ export default {
         },
       ],
       tableData: [],
+      originalData: null,
       responseData: [],
       fuseSearch: null,
       isLoading: false,
@@ -225,10 +227,136 @@ export default {
       });
     },
     setSearch() {
+      this.originalData = JSON.stringify(this.tableData);
       this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
     },
-    async setLoading(value) {
+    setLoading(value) {
       this.isLoading = value;
+    },
+    sortChange(sortProps) {
+      if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.ip > b.ip)) {
+            val = 1;
+          } else if (a.ip < b.ip) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.ip < b.ip)) {
+            val = 1;
+          } else if (a.ip > b.ip) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Active Since' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.activeSince > b.activeSince)) {
+            val = 1;
+          } else if (a.activeSince < b.activeSince) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Active Since' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.activeSince < b.activeSince)) {
+            val = 1;
+          } else if (a.activeSince > b.activeSince) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Active Since Converted' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.activeSinceConverted > b.activeSinceConverted)) {
+            val = 1;
+          } else if (a.activeSinceConverted < b.activeSinceConverted) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Active Since Converted' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.activeSinceConverted < b.activeSinceConverted)) {
+            val = 1;
+          } else if (a.activeSinceConverted > b.activeSinceConverted) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Data Collected At' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.dataCollectedAt > b.dataCollectedAt)) {
+            val = 1;
+          } else if (a.dataCollectedAt < b.dataCollectedAt) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Data Collected At' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.dataCollectedAt < b.dataCollectedAt)) {
+            val = 1;
+          } else if (a.dataCollectedAt > b.dataCollectedAt) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Data Collected At Converted' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.dataCollectedAtConverted > b.dataCollectedAtConverted)) {
+            val = 1;
+          } else if (a.dataCollectedAtConverted < b.dataCollectedAtConverted) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Data Collected At Converted' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.dataCollectedAtConverted < b.dataCollectedAtConverted)) {
+            val = 1;
+          } else if (a.dataCollectedAtConverted > b.dataCollectedAtConverted) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else {
+        this.tableData = JSON.parse(this.originalData);
+      }
     },
   },
 };

@@ -44,6 +44,7 @@
               stripe
               style="width: 100%;"
               :data="queriedData"
+              @sort-change="sortChange"
               border
             >
               <el-table-column type="expand">
@@ -171,6 +172,7 @@ export default {
         },
       ],
       tableData: [],
+      originalData: null,
       fuseSearch: null,
       isLoading: false,
     };
@@ -247,10 +249,112 @@ export default {
       }
     },
     setSearch() {
+      this.originalData = JSON.stringify(this.tableData);
       this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
     },
     setLoading(value) {
       this.isLoading = value;
+    },
+    sortChange(sortProps) {
+      if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.ip > b.ip)) {
+            val = 1;
+          } else if (a.ip < b.ip) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.ip < b.ip)) {
+            val = 1;
+          } else if (a.ip > b.ip) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Daemon Version' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.daemon.info.version > b.daemon.info.version)) {
+            val = 1;
+          } else if (a.daemon.info.version < b.daemon.info.version) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Daemon Version' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.daemon.info.version < b.daemon.info.version)) {
+            val = 1;
+          } else if (a.daemon.info.version > b.daemon.info.version) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Benchmark Version' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.benchmark.info.version > b.benchmark.info.version)) {
+            val = 1;
+          } else if (a.benchmark.info.version < b.benchmark.info.version) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Benchmark Version' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.benchmark.info.version < b.benchmark.info.version)) {
+            val = 1;
+          } else if (a.benchmark.info.version > b.benchmark.info.version) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Flux Version' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.flux.version > b.flux.version)) {
+            val = 1;
+          } else if (a.flux.version < b.flux.version) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Flux Version' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if ((a.flux.version < b.flux.version)) {
+            val = 1;
+          } else if (a.flux.version > b.flux.version) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else {
+        this.tableData = JSON.parse(this.originalData);
+      }
     },
   },
 };
