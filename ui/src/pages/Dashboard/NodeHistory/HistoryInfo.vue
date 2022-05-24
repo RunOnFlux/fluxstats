@@ -218,7 +218,7 @@ export default {
       for (const [key, value] of Object.entries(this.values)) {
         this.tableData.push({
           roundTime: key,
-          roundTimeConverted: `${new Date(parseInt(key, 10)).toLocaleString()}`,
+          roundTimeConverted: new Date(parseInt(key, 10)).toLocaleString(),
           cumulus: value.cumulus,
           nimbus: value.nimbus,
           stratus: value.stratus,
@@ -256,9 +256,9 @@ export default {
       } else if (sortProps.column.label === 'Round Time Converted' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val = 0;
-          if (new Date(a.roundTimeConverted).getTime() > new Date(b.roundTimeConverted).getTime()) {
+          if (a.roundTime > b.roundTime) {
             val = 1;
-          } else if (new Date(a.roundTimeConverted).getTime() < new Date(b.roundTimeConverted).getTime()) {
+          } else if (a.roundTime < b.roundTime) {
             val = -1;
           }
           return val;
@@ -266,9 +266,9 @@ export default {
       } else if (sortProps.column.label === 'Round Time Converted' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val = 0;
-          if (new Date(a.roundTimeConverted).getTime() < new Date(b.roundTimeConverted).getTime()) {
+          if (a.roundTime < b.roundTime) {
             val = 1;
-          } else if (new Date(a.roundTimeConverted).getTime() > new Date(b.roundTimeConverted).getTime()) {
+          } else if (a.roundTime > b.roundTime) {
             val = -1;
           }
           return val;
