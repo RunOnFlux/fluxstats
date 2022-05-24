@@ -90,9 +90,9 @@
                   <p><b>Payment Address:</b> {{ props.row.node.status.payment_address }}</p>
                   <p><b>Zel ID:</b> {{ props.row.flux.zelid }}</p>
                   <p><b>Active Since:</b> {{ props.row.node.status.activesince }}</p>
-                  <p><b>Active Since Converted:</b> {{ new Date(parseInt(props.row.node.status.activesince * 1000)).toLocaleDateString() }} {{ new Date(parseInt(props.row.node.status.activesince * 1000)).toLocaleTimeString() }}</p>
+                  <p><b>Active Since Converted:</b> {{ new Date(parseInt(props.row.node.status.activesince * 1000)).toLocaleString() }}</p>
                   <p><b>Last Paid:</b> {{ props.row.node.status.lastpaid }}</p>
-                  <p><b>Last Paid Converted:</b> {{ new Date(parseInt(props.row.node.status.lastpaid * 1000)).toLocaleDateString() }} {{ new Date(parseInt(props.row.node.status.lastpaid * 1000)).toLocaleTimeString() }}</p>
+                  <p><b>Last Paid Converted:</b> {{ new Date(parseInt(props.row.node.status.lastpaid * 1000)).toLocaleString() }}</p>
                   <p><b>Amount:</b> {{ props.row.node.status.amount }}</p>
                 </template>
               </el-table-column>

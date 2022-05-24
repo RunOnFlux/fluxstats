@@ -75,7 +75,7 @@
                   <p><b>Architecture:</b> {{ props.row.benchmark.bench.architecture }}</p>
                   <p><b>Arm Board:</b> {{ props.row.benchmark.bench.armboard }}</p>
                   <p><b>Time:</b> {{ props.row.benchmark.bench.time }}</p>
-                  <p><b>Converted Time:</b> {{ `${new Date(parseInt(props.row.benchmark.bench.time) * 1000).toLocaleDateString()} ${new Date(parseInt(props.row.benchmark.bench.time) * 1000).toLocaleTimeString()}` }}</p>
+                  <p><b>Converted Time:</b> {{ `${new Date(parseInt(props.row.benchmark.bench.time) * 1000).toLocaleString()}` }}</p>
                   <p><b>Real Cores:</b> {{ props.row.benchmark.bench.real_cores }}</p>
                   <p><b>Cores:</b> {{ props.row.benchmark.bench.cores }}</p>
                   <p><b>RAM:</b> {{ props.row.benchmark.bench.ram }}</p>

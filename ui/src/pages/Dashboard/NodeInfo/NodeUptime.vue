@@ -219,9 +219,9 @@ export default {
         this.tableData.push({
           ip: value.ip,
           activeSince: value.activeSince,
-          activeSinceConverted: `${new Date(parseInt(value.activeSince * 1000, 10)).toLocaleDateString()} ${new Date(parseInt(value.activeSince * 1000, 10)).toLocaleTimeString()}`,
+          activeSinceConverted: `${new Date(parseInt(value.activeSince * 1000, 10)).toLocaleString()}`,
           dataCollectedAt: value.dataCollectedAt,
-          dataCollectedAtConverted: `${new Date(parseInt(value.dataCollectedAt, 10)).toLocaleDateString()} ${new Date(parseInt(value.dataCollectedAt, 10)).toLocaleTimeString()}`,
+          dataCollectedAtConverted: `${new Date(parseInt(value.dataCollectedAt, 10)).toLocaleString()}`,
         });
         return value;
       });
