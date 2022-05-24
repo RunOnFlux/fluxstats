@@ -354,7 +354,7 @@ export default {
       if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.node.status.ip > b.node.status.ip)) {
+          if (a.node.status.ip > b.node.status.ip) {
             val = 1;
           } else if (a.node.status.ip < b.node.status.ip) {
             val = -1;
@@ -366,7 +366,7 @@ export default {
       } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.node.status.ip < b.node.status.ip)) {
+          if (a.node.status.ip < b.node.status.ip) {
             val = 1;
           } else if (a.node.status.ip > b.node.status.ip) {
             val = -1;
@@ -378,7 +378,7 @@ export default {
       } else if (sortProps.column.label === 'Network Protocol' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.node.status.network > b.node.status.network)) {
+          if (a.node.status.network > b.node.status.network) {
             val = 1;
           } else if (a.node.status.network < b.node.status.network) {
             val = -1;
@@ -390,7 +390,7 @@ export default {
       } else if (sortProps.column.label === 'Network Protocol' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.node.status.network < b.node.status.network)) {
+          if (a.node.status.network < b.node.status.network) {
             val = 1;
           } else if (a.node.status.network > b.node.status.network) {
             val = -1;
@@ -402,7 +402,7 @@ export default {
       } else if (sortProps.column.label === 'Tier' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.node.status.tier > b.node.status.tier)) {
+          if (a.node.status.tier > b.node.status.tier) {
             val = 1;
           } else if (a.node.status.tier < b.node.status.tier) {
             val = -1;
@@ -414,7 +414,7 @@ export default {
       } else if (sortProps.column.label === 'Tier' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.node.status.tier < b.node.status.tier)) {
+          if (a.node.status.tier < b.node.status.tier) {
             val = 1;
           } else if (a.node.status.tier > b.node.status.tier) {
             val = -1;
@@ -426,7 +426,7 @@ export default {
       } else if (sortProps.column.label === 'Status' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.node.status.status > b.node.status.status)) {
+          if (a.node.status.status > b.node.status.status) {
             val = 1;
           } else if (a.node.status.status < b.node.status.status) {
             val = -1;
@@ -438,7 +438,7 @@ export default {
       } else if (sortProps.column.label === 'Status' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.node.status.status < b.node.status.status)) {
+          if (a.node.status.status < b.node.status.status) {
             val = 1;
           } else if (a.node.status.status > b.node.status.status) {
             val = -1;
@@ -450,7 +450,7 @@ export default {
       } else if (sortProps.column.label === 'Payment Rank' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.node.status.rank > b.node.status.rank)) {
+          if (a.node.status.rank > b.node.status.rank) {
             val = 1;
           } else if (a.node.status.rank < b.node.status.rank) {
             val = -1;
@@ -462,7 +462,7 @@ export default {
       } else if (sortProps.column.label === 'Payment Rank' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.node.status.rank < b.node.status.rank)) {
+          if (a.node.status.rank < b.node.status.rank) {
             val = 1;
           } else if (a.node.status.rank > b.node.status.rank) {
             val = -1;

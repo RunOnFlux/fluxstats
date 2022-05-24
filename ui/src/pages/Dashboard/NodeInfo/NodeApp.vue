@@ -270,7 +270,7 @@ export default {
       if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.ip > b.ip)) {
+          if (a.ip > b.ip) {
             val = 1;
           } else if (a.ip < b.ip) {
             val = -1;
@@ -282,7 +282,7 @@ export default {
       } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.ip < b.ip)) {
+          if (a.ip < b.ip) {
             val = 1;
           } else if (a.ip > b.ip) {
             val = -1;
@@ -294,7 +294,7 @@ export default {
       } else if (sortProps.column.label === 'Total Application Running' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.apps.count > b.apps.count)) {
+          if (a.apps.count > b.apps.count) {
             val = 1;
           } else if (a.apps.count < b.apps.count) {
             val = -1;
@@ -306,7 +306,7 @@ export default {
       } else if (sortProps.column.label === 'Total Application Running' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.apps.count < b.apps.count)) {
+          if (a.apps.count < b.apps.count) {
             val = 1;
           } else if (a.apps.count > b.apps.count) {
             val = -1;
@@ -318,7 +318,7 @@ export default {
       } else if (sortProps.column.label === 'Flux Watch Tower Installed' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.apps.fluxtower > b.apps.fluxtower)) {
+          if (a.apps.fluxtower > b.apps.fluxtower) {
             val = 1;
           } else if (a.apps.fluxtower < b.apps.fluxtower) {
             val = -1;
@@ -330,7 +330,7 @@ export default {
       } else if (sortProps.column.label === 'Flux Watch Tower Installed' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.apps.fluxtower < b.apps.fluxtower)) {
+          if (a.apps.fluxtower < b.apps.fluxtower) {
             val = 1;
           } else if (a.apps.fluxtower > b.apps.fluxtower) {
             val = -1;
@@ -342,7 +342,7 @@ export default {
       } else if (sortProps.column.label === 'Flux Usage' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.apps.fluxusage > b.apps.fluxusage)) {
+          if (a.apps.fluxusage > b.apps.fluxusage) {
             val = 1;
           } else if (a.apps.fluxusage < b.apps.fluxusage) {
             val = -1;
@@ -354,7 +354,7 @@ export default {
       } else if (sortProps.column.label === 'Flux Usage' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.apps.fluxusage < b.apps.fluxusage)) {
+          if (a.apps.fluxusage < b.apps.fluxusage) {
             val = 1;
           } else if (a.apps.fluxusage > b.apps.fluxusage) {
             val = -1;
@@ -366,7 +366,7 @@ export default {
       } else if (sortProps.column.label === 'CPU Locked' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.apps.resources.appsCpusLocked > b.apps.resources.appsCpusLocked)) {
+          if (a.apps.resources.appsCpusLocked > b.apps.resources.appsCpusLocked) {
             val = 1;
           } else if (a.apps.resources.appsCpusLocked < b.apps.resources.appsCpusLocked) {
             val = -1;
@@ -378,7 +378,7 @@ export default {
       } else if (sortProps.column.label === 'CPU Locked' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.apps.resources.appsCpusLocked < b.apps.resources.appsCpusLocked)) {
+          if (a.apps.resources.appsCpusLocked < b.apps.resources.appsCpusLocked) {
             val = 1;
           } else if (a.apps.resources.appsCpusLocked > b.apps.resources.appsCpusLocked) {
             val = -1;
@@ -390,7 +390,7 @@ export default {
       } else if (sortProps.column.label === 'RAM Locked' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.apps.resources.appsRamLocked > b.apps.resources.appsRamLocked)) {
+          if (a.apps.resources.appsRamLocked > b.apps.resources.appsRamLocked) {
             val = 1;
           } else if (a.apps.resources.appsRamLocked < b.apps.resources.appsRamLocked) {
             val = -1;
@@ -402,7 +402,7 @@ export default {
       } else if (sortProps.column.label === 'RAM Locked' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.apps.resources.appsRamLocked < b.apps.resources.appsRamLocked)) {
+          if (a.apps.resources.appsRamLocked < b.apps.resources.appsRamLocked) {
             val = 1;
           } else if (a.apps.resources.appsRamLocked > b.apps.resources.appsRamLocked) {
             val = -1;
@@ -414,7 +414,7 @@ export default {
       } else if (sortProps.column.label === 'HDD Locked' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.apps.resources.appsHddLocked > b.apps.resources.appsHddLocked)) {
+          if (a.apps.resources.appsHddLocked > b.apps.resources.appsHddLocked) {
             val = 1;
           } else if (a.apps.resources.appsHddLocked < b.apps.resources.appsHddLocked) {
             val = -1;
@@ -426,7 +426,7 @@ export default {
       } else if (sortProps.column.label === 'HDD Locked' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.apps.resources.appsHddLocked < b.apps.resources.appsHddLocked)) {
+          if (a.apps.resources.appsHddLocked < b.apps.resources.appsHddLocked) {
             val = 1;
           } else if (a.apps.resources.appsHddLocked > b.apps.resources.appsHddLocked) {
             val = -1;

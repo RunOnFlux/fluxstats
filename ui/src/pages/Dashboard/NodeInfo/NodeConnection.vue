@@ -251,7 +251,7 @@ export default {
       if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.ip > b.ip)) {
+          if (a.ip > b.ip) {
             val = 1;
           } else if (a.ip < b.ip) {
             val = -1;
@@ -263,7 +263,7 @@ export default {
       } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.ip < b.ip)) {
+          if (a.ip < b.ip) {
             val = 1;
           } else if (a.ip > b.ip) {
             val = -1;
@@ -275,7 +275,7 @@ export default {
       } else if (sortProps.column.label === 'Total Incoming' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.in > b.in)) {
+          if (a.in > b.in) {
             val = 1;
           } else if (a.in < b.in) {
             val = -1;
@@ -287,7 +287,7 @@ export default {
       } else if (sortProps.column.label === 'Total Incoming' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.in < b.in)) {
+          if (a.in < b.in) {
             val = 1;
           } else if (a.in > b.in) {
             val = -1;
@@ -299,7 +299,7 @@ export default {
       } else if (sortProps.column.label === 'Total Outgoing' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.out > b.out)) {
+          if (a.out > b.out) {
             val = 1;
           } else if (a.out < b.out) {
             val = -1;
@@ -311,7 +311,7 @@ export default {
       } else if (sortProps.column.label === 'Total Outgoing' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.out < b.out)) {
+          if (a.out < b.out) {
             val = 1;
           } else if (a.out > b.out) {
             val = -1;

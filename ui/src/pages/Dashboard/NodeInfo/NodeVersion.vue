@@ -259,7 +259,7 @@ export default {
       if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.ip > b.ip)) {
+          if (a.ip > b.ip) {
             val = 1;
           } else if (a.ip < b.ip) {
             val = -1;
@@ -271,7 +271,7 @@ export default {
       } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.ip < b.ip)) {
+          if (a.ip < b.ip) {
             val = 1;
           } else if (a.ip > b.ip) {
             val = -1;
@@ -283,7 +283,7 @@ export default {
       } else if (sortProps.column.label === 'Daemon Version' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.daemon.info.version > b.daemon.info.version)) {
+          if (a.daemon.info.version > b.daemon.info.version) {
             val = 1;
           } else if (a.daemon.info.version < b.daemon.info.version) {
             val = -1;
@@ -295,7 +295,7 @@ export default {
       } else if (sortProps.column.label === 'Daemon Version' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.daemon.info.version < b.daemon.info.version)) {
+          if (a.daemon.info.version < b.daemon.info.version) {
             val = 1;
           } else if (a.daemon.info.version > b.daemon.info.version) {
             val = -1;
@@ -307,7 +307,7 @@ export default {
       } else if (sortProps.column.label === 'Benchmark Version' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.benchmark.info.version > b.benchmark.info.version)) {
+          if (a.benchmark.info.version > b.benchmark.info.version) {
             val = 1;
           } else if (a.benchmark.info.version < b.benchmark.info.version) {
             val = -1;
@@ -319,7 +319,7 @@ export default {
       } else if (sortProps.column.label === 'Benchmark Version' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.benchmark.info.version < b.benchmark.info.version)) {
+          if (a.benchmark.info.version < b.benchmark.info.version) {
             val = 1;
           } else if (a.benchmark.info.version > b.benchmark.info.version) {
             val = -1;
@@ -331,7 +331,7 @@ export default {
       } else if (sortProps.column.label === 'Flux Version' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.flux.version > b.flux.version)) {
+          if (a.flux.version > b.flux.version) {
             val = 1;
           } else if (a.flux.version < b.flux.version) {
             val = -1;
@@ -343,7 +343,7 @@ export default {
       } else if (sortProps.column.label === 'Flux Version' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.flux.version < b.flux.version)) {
+          if (a.flux.version < b.flux.version) {
             val = 1;
           } else if (a.flux.version > b.flux.version) {
             val = -1;

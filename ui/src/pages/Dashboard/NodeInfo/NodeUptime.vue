@@ -237,7 +237,7 @@ export default {
       if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.ip > b.ip)) {
+          if (a.ip > b.ip) {
             val = 1;
           } else if (a.ip < b.ip) {
             val = -1;
@@ -249,7 +249,7 @@ export default {
       } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.ip < b.ip)) {
+          if (a.ip < b.ip) {
             val = 1;
           } else if (a.ip > b.ip) {
             val = -1;
@@ -261,7 +261,7 @@ export default {
       } else if (sortProps.column.label === 'Active Since' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.activeSince > b.activeSince)) {
+          if (a.activeSince > b.activeSince) {
             val = 1;
           } else if (a.activeSince < b.activeSince) {
             val = -1;
@@ -273,7 +273,7 @@ export default {
       } else if (sortProps.column.label === 'Active Since' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.activeSince < b.activeSince)) {
+          if (a.activeSince < b.activeSince) {
             val = 1;
           } else if (a.activeSince > b.activeSince) {
             val = -1;
@@ -285,7 +285,7 @@ export default {
       } else if (sortProps.column.label === 'Active Since Converted' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.activeSinceConverted > b.activeSinceConverted)) {
+          if (a.activeSinceConverted > b.activeSinceConverted) {
             val = 1;
           } else if (a.activeSinceConverted < b.activeSinceConverted) {
             val = -1;
@@ -297,7 +297,7 @@ export default {
       } else if (sortProps.column.label === 'Active Since Converted' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.activeSinceConverted < b.activeSinceConverted)) {
+          if (a.activeSinceConverted < b.activeSinceConverted) {
             val = 1;
           } else if (a.activeSinceConverted > b.activeSinceConverted) {
             val = -1;
@@ -309,7 +309,7 @@ export default {
       } else if (sortProps.column.label === 'Data Collected At' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.dataCollectedAt > b.dataCollectedAt)) {
+          if (a.dataCollectedAt > b.dataCollectedAt) {
             val = 1;
           } else if (a.dataCollectedAt < b.dataCollectedAt) {
             val = -1;
@@ -321,7 +321,7 @@ export default {
       } else if (sortProps.column.label === 'Data Collected At' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.dataCollectedAt < b.dataCollectedAt)) {
+          if (a.dataCollectedAt < b.dataCollectedAt) {
             val = 1;
           } else if (a.dataCollectedAt > b.dataCollectedAt) {
             val = -1;
@@ -333,7 +333,7 @@ export default {
       } else if (sortProps.column.label === 'Data Collected At Converted' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.dataCollectedAtConverted > b.dataCollectedAtConverted)) {
+          if (a.dataCollectedAtConverted > b.dataCollectedAtConverted) {
             val = 1;
           } else if (a.dataCollectedAtConverted < b.dataCollectedAtConverted) {
             val = -1;
@@ -345,7 +345,7 @@ export default {
       } else if (sortProps.column.label === 'Data Collected At Converted' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.dataCollectedAtConverted < b.dataCollectedAtConverted)) {
+          if (a.dataCollectedAtConverted < b.dataCollectedAtConverted) {
             val = 1;
           } else if (a.dataCollectedAtConverted > b.dataCollectedAtConverted) {
             val = -1;

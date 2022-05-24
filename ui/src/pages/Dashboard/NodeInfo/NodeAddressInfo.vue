@@ -271,7 +271,7 @@ export default {
       if (sortProps.column.label === 'Zel ID' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.zelId > b.zelId)) {
+          if (a.zelId > b.zelId) {
             val = 1;
           } else if (a.zelId < b.zelId) {
             val = -1;
@@ -283,7 +283,7 @@ export default {
       } else if (sortProps.column.label === 'Zel ID' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.zelId < b.zelId)) {
+          if (a.zelId < b.zelId) {
             val = 1;
           } else if (a.zelId > b.zelId) {
             val = -1;
@@ -295,7 +295,7 @@ export default {
       } else if (sortProps.column.label === 'Payment ID' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.paymentId > b.paymentId)) {
+          if (a.paymentId > b.paymentId) {
             val = 1;
           } else if (a.paymentId < b.paymentId) {
             val = -1;
@@ -307,7 +307,7 @@ export default {
       } else if (sortProps.column.label === 'Payment ID' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.paymentId < b.paymentId)) {
+          if (a.paymentId < b.paymentId) {
             val = 1;
           } else if (a.paymentId > b.paymentId) {
             val = -1;
@@ -319,7 +319,7 @@ export default {
       } else if (sortProps.column.label === 'Organization' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.org > b.org)) {
+          if (a.org > b.org) {
             val = 1;
           } else if (a.org < b.org) {
             val = -1;
@@ -331,7 +331,7 @@ export default {
       } else if (sortProps.column.label === 'Organization' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.org < b.org)) {
+          if (a.org < b.org) {
             val = 1;
           } else if (a.org > b.org) {
             val = -1;
@@ -343,7 +343,7 @@ export default {
       } else if (sortProps.column.label === 'Total Nodes' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.totalNodes > b.totalNodes)) {
+          if (a.totalNodes > b.totalNodes) {
             val = 1;
           } else if (a.totalNodes < b.totalNodes) {
             val = -1;
@@ -355,7 +355,7 @@ export default {
       } else if (sortProps.column.label === 'Total Nodes' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.totalNodes < b.totalNodes)) {
+          if (a.totalNodes < b.totalNodes) {
             val = 1;
           } else if (a.totalNodes > b.totalNodes) {
             val = -1;

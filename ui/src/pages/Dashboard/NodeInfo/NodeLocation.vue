@@ -228,7 +228,7 @@ export default {
       if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.geolocation.ip > b.geolocation.ip)) {
+          if (a.geolocation.ip > b.geolocation.ip) {
             val = 1;
           } else if (a.geolocation.ip < b.geolocation.ip) {
             val = -1;
@@ -240,7 +240,7 @@ export default {
       } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.geolocation.ip < b.geolocation.ip)) {
+          if (a.geolocation.ip < b.geolocation.ip) {
             val = 1;
           } else if (a.geolocation.ip > b.geolocation.ip) {
             val = -1;
@@ -252,7 +252,7 @@ export default {
       } else if (sortProps.column.label === 'Country' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.geolocation.country > b.geolocation.country)) {
+          if (a.geolocation.country > b.geolocation.country) {
             val = 1;
           } else if (a.geolocation.country < b.geolocation.country) {
             val = -1;
@@ -264,7 +264,7 @@ export default {
       } else if (sortProps.column.label === 'Country' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.geolocation.country < b.geolocation.country)) {
+          if (a.geolocation.country < b.geolocation.country) {
             val = 1;
           } else if (a.geolocation.country > b.geolocation.country) {
             val = -1;
@@ -276,7 +276,7 @@ export default {
       } else if (sortProps.column.label === 'Country Code' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.geolocation.countryCode > b.geolocation.countryCode)) {
+          if (a.geolocation.countryCode > b.geolocation.countryCode) {
             val = 1;
           } else if (a.geolocation.countryCode < b.geolocation.countryCode) {
             val = -1;
@@ -288,7 +288,7 @@ export default {
       } else if (sortProps.column.label === 'Country Code' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.geolocation.countryCode < b.geolocation.countryCode)) {
+          if (a.geolocation.countryCode < b.geolocation.countryCode) {
             val = 1;
           } else if (a.geolocation.countryCode > b.geolocation.countryCode) {
             val = -1;
@@ -300,7 +300,7 @@ export default {
       } else if (sortProps.column.label === 'Latitude' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.geolocation.lat > b.geolocation.lat)) {
+          if (a.geolocation.lat > b.geolocation.lat) {
             val = 1;
           } else if (a.geolocation.lat < b.geolocation.lat) {
             val = -1;
@@ -312,7 +312,7 @@ export default {
       } else if (sortProps.column.label === 'Latitude' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.geolocation.lat < b.geolocation.lat)) {
+          if (a.geolocation.lat < b.geolocation.lat) {
             val = 1;
           } else if (a.geolocation.lat > b.geolocation.lat) {
             val = -1;
@@ -324,7 +324,7 @@ export default {
       } else if (sortProps.column.label === 'Longtitude' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.geolocation.lon > b.geolocation.lon)) {
+          if (a.geolocation.lon > b.geolocation.lon) {
             val = 1;
           } else if (a.geolocation.lon < b.geolocation.lon) {
             val = -1;
@@ -336,7 +336,7 @@ export default {
       } else if (sortProps.column.label === 'Longtitude' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.geolocation.lon < b.geolocation.lon)) {
+          if (a.geolocation.lon < b.geolocation.lon) {
             val = 1;
           } else if (a.geolocation.lon > b.geolocation.lon) {
             val = -1;
@@ -348,7 +348,7 @@ export default {
       } else if (sortProps.column.label === 'Organization' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.geolocation.org > b.geolocation.org)) {
+          if (a.geolocation.org > b.geolocation.org) {
             val = 1;
           } else if (a.geolocation.org < b.geolocation.org) {
             val = -1;
@@ -360,7 +360,7 @@ export default {
       } else if (sortProps.column.label === 'Organization' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.geolocation.org < b.geolocation.org)) {
+          if (a.geolocation.org < b.geolocation.org) {
             val = 1;
           } else if (a.geolocation.org > b.geolocation.org) {
             val = -1;

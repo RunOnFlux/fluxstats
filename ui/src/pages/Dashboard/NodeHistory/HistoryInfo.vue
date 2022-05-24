@@ -236,7 +236,7 @@ export default {
       if (sortProps.column.label === 'Round Time' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.roundTime > b.roundTime)) {
+          if (a.roundTime > b.roundTime) {
             val = 1;
           } else if (a.roundTime < b.roundTime) {
             val = -1;
@@ -248,7 +248,7 @@ export default {
       } else if (sortProps.column.label === 'Round Time' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.roundTime < b.roundTime)) {
+          if (a.roundTime < b.roundTime) {
             val = 1;
           } else if (a.roundTime > b.roundTime) {
             val = -1;
@@ -260,7 +260,7 @@ export default {
       } else if (sortProps.column.label === 'Round Time Converted' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.roundTimeConverted > b.roundTimeConverted)) {
+          if (a.roundTimeConverted > b.roundTimeConverted) {
             val = 1;
           } else if (a.roundTimeConverted < b.roundTimeConverted) {
             val = -1;
@@ -272,7 +272,7 @@ export default {
       } else if (sortProps.column.label === 'Round Time Converted' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.roundTimeConverted < b.roundTimeConverted)) {
+          if (a.roundTimeConverted < b.roundTimeConverted) {
             val = 1;
           } else if (a.roundTimeConverted > b.roundTimeConverted) {
             val = -1;
@@ -284,7 +284,7 @@ export default {
       } else if (sortProps.column.label === 'Cumulus' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.cumulus > b.cumulus)) {
+          if (a.cumulus > b.cumulus) {
             val = 1;
           } else if (a.cumulus < b.cumulus) {
             val = -1;
@@ -296,7 +296,7 @@ export default {
       } else if (sortProps.column.label === 'Cumulus' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.cumulus < b.cumulus)) {
+          if (a.cumulus < b.cumulus) {
             val = 1;
           } else if (a.cumulus > b.cumulus) {
             val = -1;
@@ -308,7 +308,7 @@ export default {
       } else if (sortProps.column.label === 'Nimbus' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.nimbus > b.nimbus)) {
+          if (a.nimbus > b.nimbus) {
             val = 1;
           } else if (a.nimbus < b.nimbus) {
             val = -1;
@@ -320,7 +320,7 @@ export default {
       } else if (sortProps.column.label === 'Nimbus' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.nimbus < b.nimbus)) {
+          if (a.nimbus < b.nimbus) {
             val = 1;
           } else if (a.nimbus > b.nimbus) {
             val = -1;
@@ -332,7 +332,7 @@ export default {
       } else if (sortProps.column.label === 'Stratus' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.stratus > b.stratus)) {
+          if (a.stratus > b.stratus) {
             val = 1;
           } else if (a.stratus < b.stratus) {
             val = -1;
@@ -344,7 +344,7 @@ export default {
       } else if (sortProps.column.label === 'Stratus' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if ((a.stratus < b.stratus)) {
+          if (a.stratus < b.stratus) {
             val = 1;
           } else if (a.stratus > b.stratus) {
             val = -1;
