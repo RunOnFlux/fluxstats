@@ -53,7 +53,7 @@
                 :min-width="column.minWidth"
                 :prop="column.prop"
                 :label="column.label"
-                sortable
+                sortable="@exclude('Round Time Converted')"
               />
             </el-table>
           </div>
