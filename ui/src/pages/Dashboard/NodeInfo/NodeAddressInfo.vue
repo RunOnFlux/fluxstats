@@ -343,9 +343,9 @@ export default {
       } else if (sortProps.column.label === 'Total Nodes' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if (a.totalNodes > b.totalNodes) {
+          if (parseInt(a.totalNodes, 10) > parseInt(b.totalNodes, 10)) {
             val = 1;
-          } else if (a.totalNodes < b.totalNodes) {
+          } else if (parseInt(a.totalNodes, 10) < parseInt(b.totalNodes, 10)) {
             val = -1;
           } else {
             val = 0;
@@ -355,9 +355,9 @@ export default {
       } else if (sortProps.column.label === 'Total Nodes' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if (a.totalNodes < b.totalNodes) {
+          if (parseInt(a.totalNodes, 10) < parseInt(b.totalNodes, 10)) {
             val = 1;
-          } else if (a.totalNodes > b.totalNodes) {
+          } else if (parseInt(a.totalNodes, 10) > parseInt(b.totalNodes, 10)) {
             val = -1;
           } else {
             val = 0;

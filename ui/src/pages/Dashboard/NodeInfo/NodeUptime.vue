@@ -285,9 +285,9 @@ export default {
       } else if (sortProps.column.label === 'Active Since Converted' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if (a.activeSinceConverted > b.activeSinceConverted) {
+          if (new Date(a.activeSinceConverted).getTime() > new Date(b.activeSinceConverted).getTime()) {
             val = 1;
-          } else if (a.activeSinceConverted < b.activeSinceConverted) {
+          } else if (new Date(a.activeSinceConverted).getTime() < new Date(b.activeSinceConverted).getTime()) {
             val = -1;
           } else {
             val = 0;
@@ -297,9 +297,9 @@ export default {
       } else if (sortProps.column.label === 'Active Since Converted' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if (a.activeSinceConverted < b.activeSinceConverted) {
+          if (new Date(a.activeSinceConverted).getTime() < new Date(b.activeSinceConverted).getTime()) {
             val = 1;
-          } else if (a.activeSinceConverted > b.activeSinceConverted) {
+          } else if (new Date(a.activeSinceConverted).getTime() > new Date(b.activeSinceConverted).getTime()) {
             val = -1;
           } else {
             val = 0;

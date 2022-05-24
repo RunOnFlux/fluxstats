@@ -136,17 +136,17 @@ export default {
         {
           prop: 'apps.count',
           label: 'Total Application Running',
-          minWidth: 250,
+          minWidth: 100,
         },
         {
           prop: 'apps.fluxtower',
           label: 'Flux Watch Tower Installed',
-          minWidth: 250,
+          minWidth: 100,
         },
         {
           prop: 'apps.fluxusage',
           label: 'Flux Usage',
-          minWidth: 250,
+          minWidth: 100,
         },
         {
           prop: 'apps.resources.appsCpusLocked',

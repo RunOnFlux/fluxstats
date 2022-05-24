@@ -260,9 +260,9 @@ export default {
       } else if (sortProps.column.label === 'Round Time Converted' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val;
-          if (a.roundTimeConverted > b.roundTimeConverted) {
+          if (new Date(a.roundTimeConverted).getTime() > new Date(b.roundTimeConverted).getTime()) {
             val = 1;
-          } else if (a.roundTimeConverted < b.roundTimeConverted) {
+          } else if (new Date(a.roundTimeConverted).getTime() < new Date(b.roundTimeConverted).getTime()) {
             val = -1;
           } else {
             val = 0;
@@ -272,9 +272,9 @@ export default {
       } else if (sortProps.column.label === 'Round Time Converted' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val;
-          if (a.roundTimeConverted < b.roundTimeConverted) {
+          if (new Date(a.roundTimeConverted).getTime() < new Date(b.roundTimeConverted).getTime()) {
             val = 1;
-          } else if (a.roundTimeConverted > b.roundTimeConverted) {
+          } else if (new Date(a.roundTimeConverted).getTime() > new Date(b.roundTimeConverted).getTime()) {
             val = -1;
           } else {
             val = 0;
