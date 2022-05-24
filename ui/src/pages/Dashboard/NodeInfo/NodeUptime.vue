@@ -236,121 +236,101 @@ export default {
     sortChange(sortProps) {
       if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.ip > b.ip) {
             val = 1;
           } else if (a.ip < b.ip) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.ip < b.ip) {
             val = 1;
           } else if (a.ip > b.ip) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Active Since' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.activeSince > b.activeSince) {
             val = 1;
           } else if (a.activeSince < b.activeSince) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Active Since' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.activeSince < b.activeSince) {
             val = 1;
           } else if (a.activeSince > b.activeSince) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Active Since Converted' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (new Date(a.activeSinceConverted).getTime() > new Date(b.activeSinceConverted).getTime()) {
             val = 1;
           } else if (new Date(a.activeSinceConverted).getTime() < new Date(b.activeSinceConverted).getTime()) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Active Since Converted' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (new Date(a.activeSinceConverted).getTime() < new Date(b.activeSinceConverted).getTime()) {
             val = 1;
           } else if (new Date(a.activeSinceConverted).getTime() > new Date(b.activeSinceConverted).getTime()) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Data Collected At' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.dataCollectedAt > b.dataCollectedAt) {
             val = 1;
           } else if (a.dataCollectedAt < b.dataCollectedAt) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Data Collected At' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.dataCollectedAt < b.dataCollectedAt) {
             val = 1;
           } else if (a.dataCollectedAt > b.dataCollectedAt) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Data Collected At Converted' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
-          let val;
-          if (a.dataCollectedAtConverted > b.dataCollectedAtConverted) {
+          let val = 0;
+          if (new Date(a.dataCollectedAtConverted).getTime() > new Date(b.dataCollectedAtConverted).getTime()) {
             val = 1;
-          } else if (a.dataCollectedAtConverted < b.dataCollectedAtConverted) {
+          } else if (new Date(a.dataCollectedAtConverted).getTime() < new Date(b.dataCollectedAtConverted).getTime()) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Data Collected At Converted' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
-          let val;
-          if (a.dataCollectedAtConverted < b.dataCollectedAtConverted) {
+          let val = 0;
+          if (new Date(a.dataCollectedAtConverted).getTime() < new Date(b.dataCollectedAtConverted).getTime()) {
             val = 1;
-          } else if (a.dataCollectedAtConverted > b.dataCollectedAtConverted) {
+          } else if (new Date(a.dataCollectedAtConverted).getTime() > new Date(b.dataCollectedAtConverted).getTime()) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });

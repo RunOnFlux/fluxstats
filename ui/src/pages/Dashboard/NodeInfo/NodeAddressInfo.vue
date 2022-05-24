@@ -270,97 +270,81 @@ export default {
     sortChange(sortProps) {
       if (sortProps.column.label === 'Zel ID' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.zelId > b.zelId) {
             val = 1;
           } else if (a.zelId < b.zelId) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Zel ID' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.zelId < b.zelId) {
             val = 1;
           } else if (a.zelId > b.zelId) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Payment ID' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.paymentId > b.paymentId) {
             val = 1;
           } else if (a.paymentId < b.paymentId) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Payment ID' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.paymentId < b.paymentId) {
             val = 1;
           } else if (a.paymentId > b.paymentId) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Organization' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.org > b.org) {
             val = 1;
           } else if (a.org < b.org) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Organization' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.org < b.org) {
             val = 1;
           } else if (a.org > b.org) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Total Nodes' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (parseInt(a.totalNodes, 10) > parseInt(b.totalNodes, 10)) {
             val = 1;
           } else if (parseInt(a.totalNodes, 10) < parseInt(b.totalNodes, 10)) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Total Nodes' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (parseInt(a.totalNodes, 10) < parseInt(b.totalNodes, 10)) {
             val = 1;
           } else if (parseInt(a.totalNodes, 10) > parseInt(b.totalNodes, 10)) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });

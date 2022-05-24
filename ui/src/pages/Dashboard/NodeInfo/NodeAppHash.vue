@@ -217,97 +217,81 @@ export default {
     sortChange(sortProps) {
       if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.ip > b.ip) {
             val = 1;
           } else if (a.ip < b.ip) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.ip < b.ip) {
             val = 1;
           } else if (a.ip > b.ip) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Scanned Height' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.scannedHeight > b.scannedHeight) {
             val = 1;
           } else if (a.scannedHeight < b.scannedHeight) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Scanned Height' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.scannedHeight < b.scannedHeight) {
             val = 1;
           } else if (a.scannedHeight > b.scannedHeight) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Hashes Present' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.hashesPresent > b.hashesPresent) {
             val = 1;
           } else if (a.hashesPresent < b.hashesPresent) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Hashes Present' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.hashesPresent < b.hashesPresent) {
             val = 1;
           } else if (a.hashesPresent > b.hashesPresent) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'App Hashes Total' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.appsHashesTotal > b.appsHashesTotal) {
             val = 1;
           } else if (a.appsHashesTotal < b.appsHashesTotal) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'App Hashes Total' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.appsHashesTotal < b.appsHashesTotal) {
             val = 1;
           } else if (a.appsHashesTotal > b.appsHashesTotal) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });

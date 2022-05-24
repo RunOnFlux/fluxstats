@@ -235,121 +235,101 @@ export default {
     sortChange(sortProps) {
       if (sortProps.column.label === 'Round Time' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.roundTime > b.roundTime) {
             val = 1;
           } else if (a.roundTime < b.roundTime) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Round Time' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.roundTime < b.roundTime) {
             val = 1;
           } else if (a.roundTime > b.roundTime) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Round Time Converted' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (new Date(a.roundTimeConverted).getTime() > new Date(b.roundTimeConverted).getTime()) {
             val = 1;
           } else if (new Date(a.roundTimeConverted).getTime() < new Date(b.roundTimeConverted).getTime()) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Round Time Converted' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (new Date(a.roundTimeConverted).getTime() < new Date(b.roundTimeConverted).getTime()) {
             val = 1;
           } else if (new Date(a.roundTimeConverted).getTime() > new Date(b.roundTimeConverted).getTime()) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Cumulus' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.cumulus > b.cumulus) {
             val = 1;
           } else if (a.cumulus < b.cumulus) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Cumulus' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.cumulus < b.cumulus) {
             val = 1;
           } else if (a.cumulus > b.cumulus) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Nimbus' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.nimbus > b.nimbus) {
             val = 1;
           } else if (a.nimbus < b.nimbus) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Nimbus' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.nimbus < b.nimbus) {
             val = 1;
           } else if (a.nimbus > b.nimbus) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Stratus' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.stratus > b.stratus) {
             val = 1;
           } else if (a.stratus < b.stratus) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Stratus' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.stratus < b.stratus) {
             val = 1;
           } else if (a.stratus > b.stratus) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });

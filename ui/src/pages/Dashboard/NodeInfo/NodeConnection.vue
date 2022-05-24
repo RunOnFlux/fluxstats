@@ -250,73 +250,61 @@ export default {
     sortChange(sortProps) {
       if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.ip > b.ip) {
             val = 1;
           } else if (a.ip < b.ip) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.ip < b.ip) {
             val = 1;
           } else if (a.ip > b.ip) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Total Incoming' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.in > b.in) {
             val = 1;
           } else if (a.in < b.in) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Total Incoming' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.in < b.in) {
             val = 1;
           } else if (a.in > b.in) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Total Outgoing' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.out > b.out) {
             val = 1;
           } else if (a.out < b.out) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
       } else if (sortProps.column.label === 'Total Outgoing' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
-          let val;
+          let val = 0;
           if (a.out < b.out) {
             val = 1;
           } else if (a.out > b.out) {
             val = -1;
-          } else {
-            val = 0;
           }
           return val;
         });
