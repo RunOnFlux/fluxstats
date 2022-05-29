@@ -4,6 +4,7 @@ const log = require('../src/lib/log');
 
 const fluxEndpointsTest = require('./services/fluxEndpointsTest');
 const serviceHelperTest = require('./services/serviceHelperTest');
+const marketplaceServiceTest = require('./services/marketplaceServiceTest');
 
 const uiFluxEndpointsTest = require('./ui/fluxUIEndpointsTest');
 
@@ -26,6 +27,7 @@ describe('Main Test', () => {
         });
         await fluxEndpointsTest(server);
         await uiFluxEndpointsTest(server);
-        await serviceHelperTest(server);
+        await serviceHelperTest();
+        await marketplaceServiceTest();
     });
 });

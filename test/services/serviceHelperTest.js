@@ -5,7 +5,7 @@ const service = require('../../src/services/serviceHelper');
 
 chai.use(require('chai-json-schema'));
 
-module.exports = (server) => {
+module.exports = () => {
     describe('Service Helper Test', () => {
         it('19. should set timeout', (done) => {
             chai.expect(service.timeout(200));
