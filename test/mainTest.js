@@ -2,8 +2,10 @@ const config = require('config');
 const app = require('../src/lib/server');
 const log = require('../src/lib/log');
 
-const fluxEndpointsTest = require('./fluxEndpointsTest');
-const uiFluxEndpointsTest = require('./fluxUIEndpointsTest');
+const fluxEndpointsTest = require('./services/fluxEndpointsTest');
+const serviceHelperTest = require('./services/serviceHelperTest');
+
+const uiFluxEndpointsTest = require('./ui/fluxUIEndpointsTest');
 
 const fluxServices = require('../src/services/fluxService');
 
@@ -24,5 +26,6 @@ describe('Main Test', () => {
         });
         await fluxEndpointsTest(server);
         await uiFluxEndpointsTest(server);
+        await serviceHelperTest(server);
     });
 });

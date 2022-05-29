@@ -3,16 +3,16 @@ const chai = require('chai');
 
 chai.use(require('chai-json-schema'));
 
-const fluxHistoryStats = require('./schemas/fluxUIEndpointsTest/fluxHistoryStats');
-const fluxInfoProjection1 = require('./schemas/fluxUIEndpointsTest/fluxInfoProjection1');
-const fluxInfoProjection2 = require('./schemas/fluxUIEndpointsTest/fluxInfoProjection2');
-const fluxInfoProjection3 = require('./schemas/fluxUIEndpointsTest/fluxInfoProjection3');
-const fluxInfoProjection4 = require('./schemas/fluxUIEndpointsTest/fluxInfoProjection4');
-const fluxInfoProjection5 = require('./schemas/fluxUIEndpointsTest/fluxInfoProjection5');
-const fluxInfoProjection6 = require('./schemas/fluxUIEndpointsTest/fluxInfoProjection6');
-const fluxInfoProjection7 = require('./schemas/fluxUIEndpointsTest/fluxInfoProjection7');
-const fluxInfoProjection8 = require('./schemas/fluxUIEndpointsTest/fluxInfoProjection8');
-const fluxInfoProjection9 = require('./schemas/fluxUIEndpointsTest/fluxInfoProjection9');
+const fluxHistoryStats = require('./schemas/fluxHistoryStats');
+const fluxInfoProjection1 = require('./schemas/fluxInfoProjection1');
+const fluxInfoProjection2 = require('./schemas/fluxInfoProjection2');
+const fluxInfoProjection3 = require('./schemas/fluxInfoProjection3');
+const fluxInfoProjection4 = require('./schemas/fluxInfoProjection4');
+const fluxInfoProjection5 = require('./schemas/fluxInfoProjection5');
+const fluxInfoProjection6 = require('./schemas/fluxInfoProjection6');
+const fluxInfoProjection7 = require('./schemas/fluxInfoProjection7');
+const fluxInfoProjection8 = require('./schemas/fluxInfoProjection8');
+const fluxInfoProjection9 = require('./schemas/fluxInfoProjection9');
 
 module.exports = (server) => {
     describe('Flux UI Endpoints Test', () => {
