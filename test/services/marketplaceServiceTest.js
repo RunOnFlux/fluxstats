@@ -6,7 +6,7 @@ chai.use(require('chai-json-schema'));
 
 module.exports = () => {
     describe('Marketplace Service Test', () => {
-        it('29. should return data of application', async () => {
+        it('41. should return data of application', async () => {
             const req = {};
             const res = {
                 json: (data) => JSON.stringify(data),
