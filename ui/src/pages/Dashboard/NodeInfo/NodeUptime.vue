@@ -44,6 +44,7 @@
               stripe
               style="width: 100%;"
               :data="queriedData"
+              @sort-change="sortChange"
               border
             >
               <el-table-column
@@ -135,6 +136,7 @@ export default {
         },
       ],
       tableData: [],
+      originalData: null,
       responseData: [],
       fuseSearch: null,
       isLoading: false,
@@ -217,18 +219,124 @@ export default {
         this.tableData.push({
           ip: value.ip,
           activeSince: value.activeSince,
-          activeSinceConverted: `${new Date(parseInt(value.activeSince * 1000, 10)).toLocaleDateString()} ${new Date(parseInt(value.activeSince * 1000, 10)).toLocaleTimeString()}`,
+          activeSinceConverted: new Date(parseInt(value.activeSince * 1000, 10)).toLocaleString(),
           dataCollectedAt: value.dataCollectedAt,
-          dataCollectedAtConverted: `${new Date(parseInt(value.dataCollectedAt, 10)).toLocaleDateString()} ${new Date(parseInt(value.dataCollectedAt, 10)).toLocaleTimeString()}`,
+          dataCollectedAtConverted: new Date(parseInt(value.dataCollectedAt, 10)).toLocaleString(),
         });
         return value;
       });
     },
     setSearch() {
+      this.originalData = JSON.stringify(this.tableData);
       this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
     },
-    async setLoading(value) {
+    setLoading(value) {
       this.isLoading = value;
+    },
+    sortChange(sortProps) {
+      if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.ip > b.ip) {
+            val = 1;
+          } else if (a.ip < b.ip) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.ip < b.ip) {
+            val = 1;
+          } else if (a.ip > b.ip) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Active Since' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.activeSince > b.activeSince) {
+            val = 1;
+          } else if (a.activeSince < b.activeSince) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Active Since' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.activeSince < b.activeSince) {
+            val = 1;
+          } else if (a.activeSince > b.activeSince) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Active Since Converted' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (new Date(a.activeSinceConverted).getTime() > new Date(b.activeSinceConverted).getTime()) {
+            val = 1;
+          } else if (new Date(a.activeSinceConverted).getTime() < new Date(b.activeSinceConverted).getTime()) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Active Since Converted' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (new Date(a.activeSinceConverted).getTime() < new Date(b.activeSinceConverted).getTime()) {
+            val = 1;
+          } else if (new Date(a.activeSinceConverted).getTime() > new Date(b.activeSinceConverted).getTime()) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Data Collected At' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.dataCollectedAt > b.dataCollectedAt) {
+            val = 1;
+          } else if (a.dataCollectedAt < b.dataCollectedAt) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Data Collected At' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.dataCollectedAt < b.dataCollectedAt) {
+            val = 1;
+          } else if (a.dataCollectedAt > b.dataCollectedAt) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Data Collected At Converted' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (new Date(a.dataCollectedAtConverted).getTime() > new Date(b.dataCollectedAtConverted).getTime()) {
+            val = 1;
+          } else if (new Date(a.dataCollectedAtConverted).getTime() < new Date(b.dataCollectedAtConverted).getTime()) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Data Collected At Converted' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (new Date(a.dataCollectedAtConverted).getTime() < new Date(b.dataCollectedAtConverted).getTime()) {
+            val = 1;
+          } else if (new Date(a.dataCollectedAtConverted).getTime() > new Date(b.dataCollectedAtConverted).getTime()) {
+            val = -1;
+          }
+          return val;
+        });
+      } else {
+        this.tableData = JSON.parse(this.originalData);
+      }
     },
   },
 };

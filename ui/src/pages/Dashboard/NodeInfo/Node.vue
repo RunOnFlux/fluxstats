@@ -76,6 +76,7 @@
               stripe
               style="width: 100%;"
               :data="queriedData"
+              @sort-change="sortChange"
               border
             >
               <el-table-column type="expand">
@@ -89,9 +90,9 @@
                   <p><b>Payment Address:</b> {{ props.row.node.status.payment_address }}</p>
                   <p><b>Zel ID:</b> {{ props.row.flux.zelid }}</p>
                   <p><b>Active Since:</b> {{ props.row.node.status.activesince }}</p>
-                  <p><b>Active Since Converted:</b> {{ new Date(parseInt(props.row.node.status.activesince * 1000)).toLocaleDateString() }} {{ new Date(parseInt(props.row.node.status.activesince * 1000)).toLocaleTimeString() }}</p>
+                  <p><b>Active Since Converted:</b> {{ new Date(parseInt(props.row.node.status.activesince * 1000)).toLocaleString() }}</p>
                   <p><b>Last Paid:</b> {{ props.row.node.status.lastpaid }}</p>
-                  <p><b>Last Paid Converted:</b> {{ new Date(parseInt(props.row.node.status.lastpaid * 1000)).toLocaleDateString() }} {{ new Date(parseInt(props.row.node.status.lastpaid * 1000)).toLocaleTimeString() }}</p>
+                  <p><b>Last Paid Converted:</b> {{ new Date(parseInt(props.row.node.status.lastpaid * 1000)).toLocaleString() }}</p>
                   <p><b>Amount:</b> {{ props.row.node.status.amount }}</p>
                 </template>
               </el-table-column>
@@ -185,15 +186,23 @@ export default {
           label: 'Status',
           minWidth: 50,
         },
+        {
+          prop: 'node.status.rank',
+          label: 'Payment Rank',
+          minWidth: 70,
+        },
       ],
       tableData: [],
+      originalData: null,
       values: [],
+      daemon: [],
       fuseSearch: null,
       isLoading: false,
       filter1: new Map(),
       filter2: new Map(),
       filterValue1: [],
       filterValue2: [],
+      ranks: new Map(),
     };
   },
   computed: {
@@ -266,6 +275,8 @@ export default {
   async mounted() {
     this.setLoading(true);
     await this.getFluxInfo();
+    await this.getDaemonInfo();
+    await this.processDaemonInfo();
     await this.processFluxInfo();
     this.setSearch();
     this.setLoading(false);
@@ -292,11 +303,30 @@ export default {
         this.values = lsdata;
       }
     },
+    async getDaemonInfo() {
+      const lsdata = MemoryStorage.get('daemon/viewdeterministiczelnodelist');
+      if (!lsdata) {
+        const response = await axios.get('https://api.runonflux.io/daemon/viewdeterministiczelnodelist');
+        MemoryStorage.put('daemon/viewdeterministiczelnodelist', response.data.data, 600);
+        this.daemon = response.data.data;
+      } else {
+        this.daemon = lsdata;
+      }
+    },
+    async processDaemonInfo() {
+      this.daemon.map((el) => {
+        if (!this.ranks.has(el.ip)) {
+          this.ranks.set(el.ip, el.rank);
+        }
+        return el;
+      });
+    },
     async processFluxInfo() {
       this.values.map((el) => {
         const values = el;
         let temp;
         values.node.status.network = 'ipv4';
+        values.node.status.rank = this.ranks.get(el.node.status.ip) === undefined ? 0 : this.ranks.get(el.node.status.ip);
         temp = this.filter1.has(values.flux.version) ? this.filter1.get(values.flux.version) : [];
         if (!this.filter1.has(values.flux.version)) {
           this.filterValue1.push(values.flux.version);
@@ -314,10 +344,116 @@ export default {
       this.tableData = this.values;
     },
     setSearch() {
+      this.originalData = JSON.stringify(this.tableData);
       this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['node.status.ip'] });
     },
     setLoading(value) {
       this.isLoading = value;
+    },
+    sortChange(sortProps) {
+      if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.node.status.ip > b.node.status.ip) {
+            val = 1;
+          } else if (a.node.status.ip < b.node.status.ip) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.node.status.ip < b.node.status.ip) {
+            val = 1;
+          } else if (a.node.status.ip > b.node.status.ip) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Network Protocol' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.node.status.network > b.node.status.network) {
+            val = 1;
+          } else if (a.node.status.network < b.node.status.network) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Network Protocol' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.node.status.network < b.node.status.network) {
+            val = 1;
+          } else if (a.node.status.network > b.node.status.network) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Tier' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.node.status.tier > b.node.status.tier) {
+            val = 1;
+          } else if (a.node.status.tier < b.node.status.tier) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Tier' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.node.status.tier < b.node.status.tier) {
+            val = 1;
+          } else if (a.node.status.tier > b.node.status.tier) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Status' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.node.status.status > b.node.status.status) {
+            val = 1;
+          } else if (a.node.status.status < b.node.status.status) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Status' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.node.status.status < b.node.status.status) {
+            val = 1;
+          } else if (a.node.status.status > b.node.status.status) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Payment Rank' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.node.status.rank > b.node.status.rank) {
+            val = 1;
+          } else if (a.node.status.rank < b.node.status.rank) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Payment Rank' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.node.status.rank < b.node.status.rank) {
+            val = 1;
+          } else if (a.node.status.rank > b.node.status.rank) {
+            val = -1;
+          }
+          return val;
+        });
+      } else {
+        this.tableData = JSON.parse(this.originalData);
+      }
     },
   },
 };

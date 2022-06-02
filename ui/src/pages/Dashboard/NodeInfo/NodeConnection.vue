@@ -44,6 +44,7 @@
               stripe
               style="width: 100%;"
               :data="queriedData"
+              @sort-change="sortChange"
               border
             >
               <el-table-column type="expand">
@@ -147,6 +148,7 @@ export default {
         },
       ],
       tableData: [],
+      originalData: null,
       values: [],
       fuseSearch: null,
       isLoading: false,
@@ -239,10 +241,76 @@ export default {
       this.tableData = this.values;
     },
     setSearch() {
+      this.originalData = JSON.stringify(this.tableData);
       this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
     },
     setLoading(value) {
       this.isLoading = value;
+    },
+    sortChange(sortProps) {
+      if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.ip > b.ip) {
+            val = 1;
+          } else if (a.ip < b.ip) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.ip < b.ip) {
+            val = 1;
+          } else if (a.ip > b.ip) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Total Incoming' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.in > b.in) {
+            val = 1;
+          } else if (a.in < b.in) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Total Incoming' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.in < b.in) {
+            val = 1;
+          } else if (a.in > b.in) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Total Outgoing' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.out > b.out) {
+            val = 1;
+          } else if (a.out < b.out) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Total Outgoing' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.out < b.out) {
+            val = 1;
+          } else if (a.out > b.out) {
+            val = -1;
+          }
+          return val;
+        });
+      } else {
+        this.tableData = JSON.parse(this.originalData);
+      }
     },
   },
 };

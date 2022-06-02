@@ -169,4 +169,7 @@ async function getKadenaNodes(req, res) {
 module.exports = {
   processKDA,
   getKadenaNodes,
+  getNodes,
+  kadenaAppLocations,
+  kadenaAppLocationsNode
 };

@@ -3,14 +3,14 @@ const chai = require('chai');
 
 chai.use(require('chai-json-schema'));
 
-const storedLocations = require('./schemas/fluxEndpointsTest/storedLocations');
-const fluxInfo = require('./schemas/fluxEndpointsTest/fluxInfo');
-const fluxHistory = require('./schemas/fluxEndpointsTest/fluxHistory');
-const fluxVersions = require('./schemas/fluxEndpointsTest/fluxVersions');
-const fluxLocations = require('./schemas/fluxEndpointsTest/fluxLocations');
-const availableTimes = require('./schemas/fluxEndpointsTest/availableTimes');
-const fluxLocationsNow = require('./schemas/fluxEndpointsTest/fluxLocationsNow');
-const fluxHistoryStats = require('./schemas/fluxEndpointsTest/fluxHistoryStats');
+const storedLocations = require('./schemas/storedLocations');
+const fluxInfo = require('./schemas/fluxInfo');
+const fluxHistory = require('./schemas/fluxHistory');
+const fluxVersions = require('./schemas/fluxVersions');
+const fluxLocations = require('./schemas/fluxLocations');
+const availableTimes = require('./schemas/availableTimes');
+const fluxLocationsNow = require('./schemas/fluxLocationsNow');
+const fluxHistoryStats = require('./schemas/fluxHistoryStats');
 
 module.exports = (server) => {
     describe('Flux Endpoints Test', () => {

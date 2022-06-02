@@ -44,6 +44,7 @@
               stripe
               style="width: 100%;"
               :data="queriedData"
+              @sort-change="sortChange"
               border
             >
               <el-table-column type="expand">
@@ -74,7 +75,7 @@
                   <p><b>Architecture:</b> {{ props.row.benchmark.bench.architecture }}</p>
                   <p><b>Arm Board:</b> {{ props.row.benchmark.bench.armboard }}</p>
                   <p><b>Time:</b> {{ props.row.benchmark.bench.time }}</p>
-                  <p><b>Converted Time:</b> {{ `${new Date(parseInt(props.row.benchmark.bench.time) * 1000).toLocaleDateString()} ${new Date(parseInt(props.row.benchmark.bench.time) * 1000).toLocaleTimeString()}` }}</p>
+                  <p><b>Converted Time:</b> {{ `${new Date(parseInt(props.row.benchmark.bench.time) * 1000).toLocaleString()}` }}</p>
                   <p><b>Real Cores:</b> {{ props.row.benchmark.bench.real_cores }}</p>
                   <p><b>Cores:</b> {{ props.row.benchmark.bench.cores }}</p>
                   <p><b>RAM:</b> {{ props.row.benchmark.bench.ram }}</p>
@@ -171,6 +172,7 @@ export default {
         },
       ],
       tableData: [],
+      originalData: null,
       fuseSearch: null,
       isLoading: false,
     };
@@ -247,10 +249,98 @@ export default {
       }
     },
     setSearch() {
+      this.originalData = JSON.stringify(this.tableData);
       this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
     },
     setLoading(value) {
       this.isLoading = value;
+    },
+    sortChange(sortProps) {
+      if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val;
+          if (a.ip > b.ip) {
+            val = 1;
+          } else if (a.ip < b.ip) {
+            val = -1;
+          } else {
+            val = 0;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.ip < b.ip) {
+            val = 1;
+          } else if (a.ip > b.ip) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Daemon Version' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.daemon.info.version > b.daemon.info.version) {
+            val = 1;
+          } else if (a.daemon.info.version < b.daemon.info.version) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Daemon Version' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.daemon.info.version < b.daemon.info.version) {
+            val = 1;
+          } else if (a.daemon.info.version > b.daemon.info.version) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Benchmark Version' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.benchmark.info.version > b.benchmark.info.version) {
+            val = 1;
+          } else if (a.benchmark.info.version < b.benchmark.info.version) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Benchmark Version' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.benchmark.info.version < b.benchmark.info.version) {
+            val = 1;
+          } else if (a.benchmark.info.version > b.benchmark.info.version) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Flux Version' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.flux.version > b.flux.version) {
+            val = 1;
+          } else if (a.flux.version < b.flux.version) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Flux Version' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.flux.version < b.flux.version) {
+            val = 1;
+          } else if (a.flux.version > b.flux.version) {
+            val = -1;
+          }
+          return val;
+        });
+      } else {
+        this.tableData = JSON.parse(this.originalData);
+      }
     },
   },
 };

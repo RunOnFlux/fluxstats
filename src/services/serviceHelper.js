@@ -3,7 +3,6 @@ const config = require('config');
 const qs = require('qs');
 
 const { MongoClient } = mongodb;
-const mongoUrl = `mongodb://${config.database.url}:${config.database.port}/`;
 
 function timeout(ms) {
   return new Promise((resolve) => {
@@ -89,7 +88,7 @@ function ensureString(parameter) {
 
 // MongoDB functions
 async function connectMongoDb(url) {
-  const connectUrl = url || mongoUrl;
+  const connectUrl = url || `mongodb://${config.database.url}:${config.database.port}/`;
   const mongoSettings = {
     useNewUrlParser: true,
     useUnifiedTopology: true,

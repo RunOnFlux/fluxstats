@@ -44,6 +44,7 @@
               stripe
               style="width: 100%;"
               :data="queriedData"
+              @sort-change="sortChange"
               border
             >
               <el-table-column
@@ -140,6 +141,7 @@ export default {
         },
       ],
       tableData: [],
+      originalData: null,
       fuseSearch: null,
       isLoading: false,
     };
@@ -216,10 +218,136 @@ export default {
       }
     },
     setSearch() {
+      this.originalData = JSON.stringify(this.tableData);
       this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
     },
     setLoading(value) {
       this.isLoading = value;
+    },
+    sortChange(sortProps) {
+      if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.geolocation.ip > b.geolocation.ip) {
+            val = 1;
+          } else if (a.geolocation.ip < b.geolocation.ip) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.geolocation.ip < b.geolocation.ip) {
+            val = 1;
+          } else if (a.geolocation.ip > b.geolocation.ip) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Country' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.geolocation.country > b.geolocation.country) {
+            val = 1;
+          } else if (a.geolocation.country < b.geolocation.country) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Country' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.geolocation.country < b.geolocation.country) {
+            val = 1;
+          } else if (a.geolocation.country > b.geolocation.country) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Country Code' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.geolocation.countryCode > b.geolocation.countryCode) {
+            val = 1;
+          } else if (a.geolocation.countryCode < b.geolocation.countryCode) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Country Code' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.geolocation.countryCode < b.geolocation.countryCode) {
+            val = 1;
+          } else if (a.geolocation.countryCode > b.geolocation.countryCode) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Latitude' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.geolocation.lat > b.geolocation.lat) {
+            val = 1;
+          } else if (a.geolocation.lat < b.geolocation.lat) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Latitude' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.geolocation.lat < b.geolocation.lat) {
+            val = 1;
+          } else if (a.geolocation.lat > b.geolocation.lat) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Longtitude' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.geolocation.lon > b.geolocation.lon) {
+            val = 1;
+          } else if (a.geolocation.lon < b.geolocation.lon) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Longtitude' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.geolocation.lon < b.geolocation.lon) {
+            val = 1;
+          } else if (a.geolocation.lon > b.geolocation.lon) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Organization' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.geolocation.org > b.geolocation.org) {
+            val = 1;
+          } else if (a.geolocation.org < b.geolocation.org) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Organization' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.geolocation.org < b.geolocation.org) {
+            val = 1;
+          } else if (a.geolocation.org > b.geolocation.org) {
+            val = -1;
+          }
+          return val;
+        });
+      } else {
+        this.tableData = JSON.parse(this.originalData);
+      }
     },
   },
 };
