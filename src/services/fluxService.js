@@ -47,6 +47,8 @@ let fluxNodesWithError = [];
 let firstExecution = true;
 let processedFluxNodes = [];
 
+let myCacheProcessingIp = new Map();
+
 let runninggetFluxNodeList = false;
 async function getFluxNodeList(i = 0) {
   try {
@@ -128,10 +130,12 @@ async function getFluxInformation(ip, timeout) {
   try {
     const { CancelToken } = axios;
     const source = CancelToken.source();
-    let isResolved = false;
+    myCacheProcessingIp.set(ip, source);
     setTimeout(() => {
-      if (!isResolved) {
-        source.cancel('Operation canceled by the user.');
+      const sourceCached = myCacheProcessingIp.get(ip);
+      if (sourceCached) {
+        sourceCached.cancel('Operation canceled by the user.');
+        myCacheProcessingIp.delete(ip);
       }
     }, timeout * 2);
     const port = ip.split(':')[1] || 16127;
@@ -140,13 +144,14 @@ async function getFluxInformation(ip, timeout) {
       cancelToken: source.token,
       timeout,
     });
-    isResolved = true;
+    myCacheProcessingIp.delete(ip);
     if (fluxRes.data.status === 'success') {
       return fluxRes.data.data;
     }
     log.warn(`Flux information of IP ${ip} is bad`);
     return false;
   } catch (e) {
+    myCacheProcessingIp.delete(ip);
     log.error(`Flux information of IP ${ip} error: ${e}`);
     return false;
   }
@@ -377,10 +382,35 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
         return;
       }
     }
-    const appsHashes = await getFluxAppsHashes(fluxnode.ip, timeout * 3);
-    const scannedHeightInfo = await getFluxSyncedHeight(fluxnode.ip, timeout);
-    const conOut = await getConnectionsOut(fluxnode.ip, timeout);
-    const conIn = await getConnectionsIn(fluxnode.ip, timeout);
+    let appsHashes = fluxInfo.apps.hashes;
+    if(!appsHashes){
+      appsHashes = await getFluxAppsHashes(fluxnode.ip, timeout * 3);
+    }
+    let scannedHeightInfo = fluxInfo.flux.explorerScannedHeigth;
+    if(!scannedHeightInfo){
+      scannedHeightInfo = await getFluxSyncedHeight(fluxnode.ip, timeout);
+    }
+    let conOut = fluxInfo.flux.connectionsOut;
+    if(!conOut){
+      conOut = await getConnectionsOut(fluxnode.ip, timeout);
+    } else {
+      const conOutOk = [];
+      conOut.forEach((con) => {
+        conOutOk.push(con.ip);
+      });
+      conOut = conOutOk;
+    }
+    let conIn = fluxInfo.flux.connectionsIn;
+    if(!conIn){
+      await getConnectionsIn(fluxnode.ip, timeout);
+    }
+    else {
+      const conInOk = [];
+      conInOk.forEach((con) => {
+        conInOk.push(con.ip);
+      });
+      conIn = conInOk;
+    }
     const auxIp = fluxnode.ip.includes(':') ? fluxnode.ip.split(':')[0] : fluxnode.ip;
     const query = { ip: auxIp };
     const projection = {
@@ -405,16 +435,20 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
     if (result) {
       fluxInfo.geolocation = result;
     } else {
-      log.info(`Geolocation not found in db for the ip ${auxIp} let's call api.`);
-      // we do not have info about that ip yet. Get it and Store it.
-      const geoRes = await getFluxNodeGeolocation(fluxnode.ip);
-      if (geoRes) {
+      if(!fluxInfo.geolocation){
+        log.info(`Geolocation not found in db or fluxinfo returned for the ip ${auxIp} let's call api.`);
+        // we do not have info about that ip yet. Get it and Store it.
+        const geoRes = await getFluxNodeGeolocation(fluxnode.ip);
+        if (geoRes) {
+          fluxInfo.geolocation = geoRes;
+        }
+      } else {
         // geo ok, store it and update fluxInfo.
-        await serviceHelper.insertOneToDatabase(database, geocollection, geoRes).catch((error) => {
+        await serviceHelper.insertOneToDatabase(database, geocollection, fluxInfo.geolocation).catch((error) => {
           log.error(error);
         });
-        fluxInfo.geolocation = geoRes;
       }
+      
     }
     fluxInfo.ip = fluxnode.ip;
     fluxInfo.addedHeight = fluxnode.added_height;
@@ -600,15 +634,25 @@ async function processFluxNodes() {
       // eslint-disable-next-line no-restricted-syntax
       for (const [i, fluxnode] of fluxnodes.entries()) {
         promiseArray.push(processFluxNode(fluxnode, currentRoundTime, defaultTimeout));
-        if ((i + 1) % 30 === 0) {
+        if ((i + 1) % 75 === 0) {
           await Promise.allSettled(promiseArray);
           promiseArray = [];
+          myCacheProcessingIp.clear();
+          await serviceHelper.insertManyToDatabase(database, fluxcollection, processedFluxNodes).catch((error) => {
+            log.error(`Error inserting in fluxcollection db: ${error}`);
+          });
+          processedFluxNodes = [];
           log.info(`Flux Nodes Processed: ${i + 1}`);
         }
       }
       if (promiseArray.length > 0) {
         await Promise.allSettled(promiseArray);
         promiseArray = [];
+        myCacheProcessingIp.clear();
+        await serviceHelper.insertManyToDatabase(database, fluxcollection, processedFluxNodes).catch((error) => {
+          log.error(`Error inserting in fluxcollection db: ${error}`);
+        });
+        processedFluxNodes = [];
       }
       let fluxNodesWithErrorAux = [];
 
@@ -623,19 +667,25 @@ async function processFluxNodes() {
         if ((i + 1) % 20 === 0) {
           await Promise.allSettled(promiseArray);
           promiseArray = [];
+          myCacheProcessingIp.clear();
           log.info(`Flux Nodes With Error Processed: ${i + 1}`);
           log.info(`Found ${fluxNodesWithError.length} FluxNodes with errors.`);
+          await serviceHelper.insertManyToDatabase(database, fluxcollection, processedFluxNodes).catch((error) => {
+            log.error(`Error inserting in fluxcollection db: ${error}`);
+          });
+          processedFluxNodes = [];
         }
       }
       if (promiseArray.length > 0) {
         await Promise.allSettled(promiseArray);
         promiseArray = [];
+        myCacheProcessingIp.clear();
+        await serviceHelper.insertManyToDatabase(database, fluxcollection, processedFluxNodes).catch((error) => {
+          log.error(`Error inserting in fluxcollection db: ${error}`);
+        });
+        processedFluxNodes = [];
       }
       log.info(`Finalized with ${fluxNodesWithError.length} FluxNodes with errors.`);
-
-      await serviceHelper.insertManyToDatabase(database, fluxcollection, processedFluxNodes).catch((error) => {
-        log.error(`Error inserting in fluxcollection db: ${error}`);
-      });
       log.info(`Processing of ${currentRoundTime} finished.`);
       log.info(`Total Nodes with errors: ${fluxNodesWithError.length}`);
       fluxNodesWithErrorAux = [];
