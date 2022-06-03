@@ -2,7 +2,7 @@ module.exports = {
   server: {
     port: 8123,
   },
-  explorer: 'https://explorer.runonflux.io',
+  explorer: 'https://explorer.flux.zelcore.io',
   database: {
     url: '127.0.0.1',
     port: 27017,
