@@ -44,8 +44,8 @@
               stripe
               style="width: 100%;"
               :data="queriedData"
-              @sort-change="sortChange"
               border
+              @sort-change="sortChange"
             >
               <el-table-column type="expand">
                 <template slot-scope="props">

@@ -11,24 +11,24 @@ const kadenaServiceTest = require('./services/kadenaServiceTest');
 const fluxServices = require('../src/services/fluxService');
 
 const server = app.listen(config.server.port, () => {
-    log.info(`Flux API listening on port ${config.server.port}!`);
+  log.info(`Flux API listening on port ${config.server.port}!`);
 });
 
 describe('Main Test', () => {
-    describe('Executing Test Cases', async () => {
-        before(async () => {
-            await fluxServices.start();
-        });
-        after((done) => {
-            server.close(done);
-            setTimeout(() => {
-                process.exit();
-            }, 10000);
-        });
-        // await fluxEndpointsTest(server);
-        // await uiFluxEndpointsTest(server);
-        // await serviceHelperTest();
-        // await marketplaceServiceTest();
-        await kadenaServiceTest();
+  describe('Executing Test Cases', async () => {
+    before(async () => {
+      await fluxServices.start();
     });
+    after((done) => {
+      server.close(done);
+      setTimeout(() => {
+        process.exit();
+      }, 10000);
+    });
+    // await fluxEndpointsTest(server);
+    // await uiFluxEndpointsTest(server);
+    // await serviceHelperTest();
+    // await marketplaceServiceTest();
+    await kadenaServiceTest();
+  });
 });

@@ -30,7 +30,10 @@
                 :value="item"
               />
             </el-select>
-            <div col-md-6 offset-md-3>
+            <div
+              col-md-6
+              offset-md-3
+            >
               <el-select
                 v-model="filters.default"
                 class="select-default mb-3"
@@ -60,7 +63,10 @@
                 />
               </el-select>
             </div>
-            <div col-md-3 offset-md-6>
+            <div
+              col-md-3
+              offset-md-6
+            >
               <el-input
                 v-model="searchQuery"
                 type="search"
@@ -76,8 +82,8 @@
               stripe
               style="width: 100%;"
               :data="queriedData"
-              @sort-change="sortChange"
               border
+              @sort-change="sortChange"
             >
               <el-table-column type="expand">
                 <template slot-scope="props">

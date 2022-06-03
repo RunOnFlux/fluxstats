@@ -1,14 +1,14 @@
 module.exports = {
-    type: 'object',
-    properties: {
-        status: {
-            type: 'string',
-        },
-        data: {
-            type: 'array',
-            properties: {
-                type: 'number',
-            }
-        }
-    }
+  type: 'object',
+  properties: {
+    status: {
+      type: 'string',
+    },
+    data: {
+      type: 'array',
+      properties: {
+        type: 'number',
+      },
+    },
+  },
 };
