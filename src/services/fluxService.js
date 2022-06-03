@@ -18,19 +18,19 @@ const httpGeoBatch = rateLimit(axios.create(), { maxRequests: 1, perMilliseconds
 
 // default cache
 const LRUoptions = {
-  max: 500, // store 500 values, we shall not have more values at any period
+  max: 50, // store 50 values, we shall not have more values at any period
   ttl: 1000 * 60 * 60, // 1 hour
 };
 const myCache = new LRU(LRUoptions);
 
 const LRUoptionsMid = {
-  max: 500, // store 500 values, we shall not have more values at any period
+  max: 20, // store 50 values, we shall not have more values at any period
   ttl: 1000 * 60 * 20, // 20 mins
 };
 const myCacheMid = new LRU(LRUoptionsMid);
 
 const LRUoptionsShort = {
-  max: 500, // store 500 values, we shall not have more values at any period
+  max: 20, // store 50 values, we shall not have more values at any period
   ttl: 1000 * 60 * 5, // 5 mins
 };
 
@@ -275,6 +275,30 @@ function getCollateralInfo(collateralOutpoint) {
   const txhash = b[0].slice(10);
   const txindex = serviceHelper.ensureNumber(b[1].split(')')[0]);
   return { txhash, txindex };
+}
+
+async function bootstrapFluxCollection(timestamp) {
+  const database = db.db(config.database.local.database);
+  let collectionName = fluxcollection;
+  if (timestamp) {
+    collectionName = `fluxes${timestamp}`;
+  }
+  await database.collection(collectionName).createIndex({ ip: 1 }, { name: 'query for getting list of Flux data associated to IP address' });
+  await database.collection(collectionName).createIndex({ ip: 1, roundTime: 1 }, { name: 'query for getting list of Flux data associated to IP address since some roundTime' });
+  await database.collection(collectionName).createIndex({ addedHeight: 1 }, { name: 'query for getting list of Flux data tied to addedHeight' });
+  await database.collection(collectionName).createIndex({ lastPaidHeight: 1 }, { name: 'query for getting list of Flux data tied to lastPaidHeight' });
+  await database.collection(collectionName).createIndex({ tier: 1 }, { name: 'query for getting list of Flux data tied to tier' });
+  await database.collection(collectionName).createIndex({ paymentAddress: 1 }, { name: 'query for getting list of Flux data tied to paymentAddress' });
+  await database.collection(collectionName).createIndex({ activeSince: 1 }, { name: 'query for getting list of Flux data tied to activeSince' });
+  await database.collection(collectionName).createIndex({ confirmedHeight: 1 }, { name: 'query for getting list of Flux data that were confirmed on specific height' });
+  await database.collection(collectionName).createIndex({ lastConfirmedHeight: 1 }, { name: 'query for getting list of Flux data that were lastlyconfirmed on specific height' });
+  await database.collection(collectionName).createIndex({ collateralHash: 1, collateralIndex: 1 }, { name: 'query for getting list of list of Flux data associated to specific collateral' });
+  await database.collection(collectionName).createIndex({ roundTime: 1 }, { name: 'query for getting list of Flux data that were added in specific roundTime' });
+  await database.collection(collectionName).createIndex({ appsHashesTotal: 1 }, { name: 'query for getting app hashes' });
+  await database.collection(collectionName).createIndex({ hashesPresent: 1 }, { name: 'query for getting app hashes present' });
+  await database.collection(collectionName).createIndex({ scannedHeight: 1 }, { name: 'query for getting scanned height' });
+  await database.collection(collectionName).createIndex({ connectionsOut: 1 }, { name: 'query for getting connections out' });
+  await database.collection(collectionName).createIndex({ connectionsIn: 1 }, { name: 'query for getting connections in' });
 }
 
 async function createHistoryStats() {
@@ -627,6 +651,7 @@ async function processFluxNodes() {
     processedFluxNodes = [];
     const database = db.db(config.database.local.database);
     const currentRoundTime = new Date().getTime();
+    const currentCollectionName = `fluxes${currentRoundTime}`;
     log.info(`Beginning processing processFluxNodes of ${currentRoundTime}.`);
     const fluxnodes = await getFluxNodeList();
     // const fluxnodes = [{ ip: '78.216.167.78' }]; // fluxnode that was causing the hang.
@@ -646,8 +671,12 @@ async function processFluxNodes() {
           await Promise.allSettled(promiseArray);
           promiseArray = [];
           myCacheProcessingIp.clear();
+          // currently inserting to BOTH databases. TODO change to new scheme after a month
           await serviceHelper.insertManyToDatabase(database, fluxcollection, processedFluxNodes).catch((error) => {
             log.error(`Error inserting in fluxcollection db: ${error}`);
+          });
+          await serviceHelper.insertManyToDatabase(database, currentCollectionName, processedFluxNodes).catch((error) => {
+            log.error(`Error inserting in ${currentCollectionName} db: ${error}`);
           });
           processedFluxNodes = [];
           log.info(`Flux Nodes Processed: ${i + 1}`);
@@ -659,6 +688,9 @@ async function processFluxNodes() {
         myCacheProcessingIp.clear();
         await serviceHelper.insertManyToDatabase(database, fluxcollection, processedFluxNodes).catch((error) => {
           log.error(`Error inserting in fluxcollection db: ${error}`);
+        });
+        await serviceHelper.insertManyToDatabase(database, currentCollectionName, processedFluxNodes).catch((error) => {
+          log.error(`Error inserting in ${currentCollectionName} db: ${error}`);
         });
         processedFluxNodes = [];
       }
@@ -677,6 +709,9 @@ async function processFluxNodes() {
           await serviceHelper.insertManyToDatabase(database, fluxcollection, processedFluxNodes).catch((error) => {
             log.error(`Error inserting in fluxcollection db: ${error}`);
           });
+          await serviceHelper.insertManyToDatabase(database, currentCollectionName, processedFluxNodes).catch((error) => {
+            log.error(`Error inserting in ${currentCollectionName} db: ${error}`);
+          });
           processedFluxNodes = [];
         }
       }
@@ -686,6 +721,9 @@ async function processFluxNodes() {
         myCacheProcessingIp.clear();
         await serviceHelper.insertManyToDatabase(database, fluxcollection, processedFluxNodes).catch((error) => {
           log.error(`Error inserting in fluxcollection db: ${error}`);
+        });
+        await serviceHelper.insertManyToDatabase(database, currentCollectionName, processedFluxNodes).catch((error) => {
+          log.error(`Error inserting in ${currentCollectionName} db: ${error}`);
         });
         processedFluxNodes = [];
       }
@@ -787,9 +825,8 @@ async function getAllFluxInformation(req, res, i = 0) {
     const database = db.db(config.database.local.database);
     const lastRound = await getLastRound();
     const lastCompletedRound = lastRound ? lastRound.timestamp : 0;
-    const query = {
-      roundTime: lastCompletedRound,
-    };
+    const collectionName = `fluxes${lastCompletedRound}`;
+    const query = {};
     // const queryForIps = []; // disable
     // currentFluxNodeIps.forEach((ip) => {
     //   const singlequery = {
@@ -843,7 +880,7 @@ async function getAllFluxInformation(req, res, i = 0) {
         },
       };
     }
-    const cacheKey = `fluxinfo${JSON.stringify(query)}${JSON.stringify(projection)}`;
+    const cacheKey = `fluxinfo${JSON.stringify(projection)}`;
     let results = myCacheMid.get(cacheKey);
     if (!results) {
       if (fluxInformationRunning) {
@@ -855,7 +892,7 @@ async function getAllFluxInformation(req, res, i = 0) {
       }
       fluxInformationRunning = true;
       // return latest fluxnode round
-      results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection);
+      results = await serviceHelper.findInDatabase(database, collectionName, query, projection);
       myCacheMid.set(cacheKey, results);
       fluxInformationRunning = false;
     }
@@ -886,10 +923,9 @@ async function getAllFluxVersions(req, res, i = 0) {
       const database = db.db(config.database.local.database);
       const lastRound = await getLastRound();
       const lastCompletedRound = lastRound ? lastRound.timestamp : 0;
+      const collectionName = `fluxes${lastCompletedRound}`;
 
-      const query = {
-        roundTime: lastCompletedRound,
-      };
+      const query = {};
       // const queryForIps = [];
       // currentFluxNodeIps.forEach((ip) => {
       //   const singlequery = {
@@ -909,7 +945,7 @@ async function getAllFluxVersions(req, res, i = 0) {
         },
       };
       // return latest fluxnode round
-      const response = await serviceHelper.findInDatabase(database, fluxcollection, query, projection);
+      const response = await serviceHelper.findInDatabase(database, collectionName, query, projection);
       const allData = [];
       response.forEach((flux) => {
         if (flux.daemon) {
@@ -960,9 +996,8 @@ async function getAllFluxGeolocation(req, res, i = 0) {
       const database = db.db(config.database.local.database);
       const lastRound = await getLastRound();
       const lastCompletedRound = lastRound ? lastRound.timestamp : 0;
-      const query = {
-        roundTime: lastCompletedRound,
-      };
+      const collectionName = `fluxes${lastCompletedRound}`;
+      const query = {};
       // const queryForIps = [];
       // currentFluxNodeIps.forEach((ip) => {
       //   const singlequery = {
@@ -980,7 +1015,7 @@ async function getAllFluxGeolocation(req, res, i = 0) {
         },
       };
       // return latest fluxnode round
-      results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection);
+      results = await serviceHelper.findInDatabase(database, collectionName, query, projection);
       results = results.filter((node) => node.geolocation);
       const bresults = results.map((x) => x.geolocation);
       myCache.set('geolocation', bresults);
@@ -1065,56 +1100,6 @@ async function getCompletedRoundsTimestamps(req, res) {
   }
 }
 
-let runninggetAllFluxGeolocationNow = false;
-async function getAllFluxGeolocationNow(req, res, i = 0) {
-  try {
-    let results = myCacheShort.get('getAllFluxGeolocationNow');
-    if (!results) {
-      if (runninggetAllFluxGeolocationNow) {
-        await serviceHelper.timeout(1000);
-        if (i < 300) {
-          getAllFluxGeolocationNow(req, res, i + 1);
-        }
-        throw new Error('Internal error. Try again later');
-      }
-      runninggetAllFluxGeolocationNow = true;
-      const database = db.db(config.database.local.database);
-      const queryForIps = [];
-      const fluxnodeIpsNow = await getFluxNodeIPs();
-      fluxnodeIpsNow.forEach((ip) => {
-        const singlequery = {
-          ip,
-        };
-        queryForIps.push(singlequery);
-      });
-      const query = {};
-      if (queryForIps.length > 0) {
-        query.$or = queryForIps;
-      }
-      const projection = {
-        projection: {
-          _id: 0,
-          geolocation: 1,
-        },
-      };
-      // return latest fluxnode round
-      let resultsA = await serviceHelper.findInDatabase(database, fluxcollection, query, projection);
-      resultsA = resultsA.filter((node) => node.geolocation);
-      const bresults = resultsA.map((x) => x.geolocation);
-      results = [...new Set(bresults)];
-      myCacheShort.set('getAllFluxGeolocationNow', results);
-      runninggetAllFluxGeolocationNow = false;
-    }
-    const resMessage = serviceHelper.createDataMessage(results);
-    res.json(resMessage);
-  } catch (error) {
-    runninggetAllFluxGeolocationNow = false;
-    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
-    res.json(errMessage);
-    log.error(error);
-  }
-}
-
 let fluxNodeHistoryStatsRunning = false;
 async function fluxNodesHistoryStats(req, res, i = 0) {
   try {
@@ -1148,23 +1133,7 @@ async function start() {
       log.error(error);
       throw error;
     });
-    const database = db.db(config.database.local.database);
-    database.collection(fluxcollection).createIndex({ ip: 1 }, { name: 'query for getting list of Flux data associated to IP address' });
-    database.collection(fluxcollection).createIndex({ ip: 1, roundTime: 1 }, { name: 'query for getting list of Flux data associated to IP address since some roundTime' });
-    database.collection(fluxcollection).createIndex({ addedHeight: 1 }, { name: 'query for getting list of Flux data tied to addedHeight' });
-    database.collection(fluxcollection).createIndex({ lastPaidHeight: 1 }, { name: 'query for getting list of Flux data tied to lastPaidHeight' });
-    database.collection(fluxcollection).createIndex({ tier: 1 }, { name: 'query for getting list of Flux data tied to tier' });
-    database.collection(fluxcollection).createIndex({ paymentAddress: 1 }, { name: 'query for getting list of Flux data tied to paymentAddress' });
-    database.collection(fluxcollection).createIndex({ activeSince: 1 }, { name: 'query for getting list of Flux data tied to activeSince' });
-    database.collection(fluxcollection).createIndex({ confirmedHeight: 1 }, { name: 'query for getting list of Flux data that were confirmed on specific height' });
-    database.collection(fluxcollection).createIndex({ lastConfirmedHeight: 1 }, { name: 'query for getting list of Flux data that were lastlyconfirmed on specific height' });
-    database.collection(fluxcollection).createIndex({ collateralHash: 1, collateralIndex: 1 }, { name: 'query for getting list of list of Flux data associated to specific collateral' });
-    database.collection(fluxcollection).createIndex({ roundTime: 1 }, { name: 'query for getting list of Flux data that were added in specific roundTime' });
-    database.collection(fluxcollection).createIndex({ appsHashesTotal: 1 }, { name: 'query for getting app hashes' });
-    database.collection(fluxcollection).createIndex({ hashesPresent: 1 }, { name: 'query for getting app hashes present' });
-    database.collection(fluxcollection).createIndex({ scannedHeight: 1 }, { name: 'query for getting scanned height' });
-    database.collection(fluxcollection).createIndex({ connectionsOut: 1 }, { name: 'query for getting connections out' });
-    database.collection(fluxcollection).createIndex({ connectionsIn: 1 }, { name: 'query for getting connections in' });
+    await bootstrapFluxCollection();
     log.info('Initiating Flux API services...');
     // begin fluxnodes processing;
     await createHistoryStats();
@@ -1186,6 +1155,5 @@ module.exports = {
   getAllFluxGeolocation,
   getAllFluxVersions,
   getCompletedRoundsTimestamps,
-  getAllFluxGeolocationNow,
   fluxNodesHistoryStats,
 };
