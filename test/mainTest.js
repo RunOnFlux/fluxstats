@@ -25,10 +25,10 @@ describe('Main Test', () => {
         process.exit();
       }, 10000);
     });
-    // await fluxEndpointsTest(server);
-    // await uiFluxEndpointsTest(server);
-    // await serviceHelperTest();
-    // await marketplaceServiceTest();
+    await fluxEndpointsTest(server);
+    await uiFluxEndpointsTest(server);
+    await serviceHelperTest();
+    await marketplaceServiceTest();
     await kadenaServiceTest();
   });
 });
