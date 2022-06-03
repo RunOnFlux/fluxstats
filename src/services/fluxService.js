@@ -64,7 +64,7 @@ async function getFluxNodeList(i = 0) {
       throw new Error('Internal error. Try again later');
     }
     runninggetFluxNodeList = true;
-    const fluxnodeList = await axios.get(`${config.explorer}/api/fluxnode/listfluxnodes`, { timeout: explorerTimeout });
+    const fluxnodeList = await axios.get(`${config.explorer}/api/fluxnode/listfluxnodes`, { timeout: 40000 });
     if (fluxnodeList.data.result.length) {
       myCacheShort.set('fluxnodelist', fluxnodeList.data.result);
     }
