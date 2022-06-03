@@ -501,6 +501,15 @@ async function getGeolocationInBatchAndRefreshDatabase() {
   const startRefresh = new Date().getTime();
   try {
     log.info('getGeolocationInBatchAndRefreshDatabase started');
+    const database = db.db(config.database.local.database);
+    log.info('Dropping MongoDB Geolocation Collection');
+    await serviceHelper.dropCollection(database, geocollection).catch((error) => {
+      log.error(error);
+    });
+    log.info('Creating MongoDB Geolocation Collection');
+    await serviceHelper.createCollection(database, geocollection).catch((error) => {
+      log.error(error);
+    });
     const fluxNodesGeolocations = [];
     let filterGeolocation = [];
     const { CancelToken } = axios;
@@ -508,6 +517,10 @@ async function getGeolocationInBatchAndRefreshDatabase() {
     const ipApiUrl = 'http://ip-api.com/batch';
     let isResolved = false;
     let geoExecuted = false;
+    let uniqueGeolocations = [];
+    const options = {
+      ordered: false, // If false, continue with remaining inserts when one fails.
+    };
     // eslint-disable-next-line no-restricted-syntax
     for (let i = 0; i < currentFluxNodeIps.length; i += 1) {
       const ip = currentFluxNodeIps[i];
@@ -545,6 +558,11 @@ async function getGeolocationInBatchAndRefreshDatabase() {
             }
           }
           geoExecuted = true;
+          uniqueGeolocations = [...new Set(fluxNodesGeolocations)];
+          log.info('Inserting MongoDB Geolocation FluxNodesGeolocations');
+          await serviceHelper.insertManyToDatabase(database, geocollection, uniqueGeolocations, options).catch((error) => {
+            log.error(`Error inserting in geocollection db: ${error}`);
+          });
           log.info(`Flux Geolocation Batch Processed: ${i + 1}`);
         } catch (e) {
           log.error(`Flux Geolocation failed with error: ${e}`);
@@ -587,23 +605,12 @@ async function getGeolocationInBatchAndRefreshDatabase() {
         }
       }
     }
-    const uniqueGeolocations = [...new Set(fluxNodesGeolocations)];
-    const database = db.db(config.database.local.database);
-    log.info('Dropping MongoDB Geolocation Collection');
-    await serviceHelper.dropCollection(database, geocollection).catch((error) => {
-      log.error(error);
-    });
-    log.info('Creating MongoDB Geolocation Collection');
-    await serviceHelper.createCollection(database, geocollection).catch((error) => {
-      log.error(error);
-    });
-    const options = {
-      ordered: false, // If false, continue with remaining inserts when one fails.
-    };
+    uniqueGeolocations = [...new Set(fluxNodesGeolocations)];
     log.info('Inserting MongoDB Geolocation FluxNodesGeolocations');
     await serviceHelper.insertManyToDatabase(database, geocollection, uniqueGeolocations, options).catch((error) => {
       log.error(`Error inserting in geocollection db: ${error}`);
     });
+    uniqueGeolocations = [];
   } finally {
     log.info('getGeolocationInBatchAndRefreshDatabase finished');
     const endRefresh = new Date().getTime() - startRefresh;
