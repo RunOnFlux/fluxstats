@@ -1163,4 +1163,7 @@ module.exports = {
   getCompletedRoundsTimestamps,
   getAllFluxGeolocationNow,
   fluxNodesHistoryStats,
+  getFluxNodeList,
+  getFluxNodeGeolocation,
+  getFluxInformation,
 };
