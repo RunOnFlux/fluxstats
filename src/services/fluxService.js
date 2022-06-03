@@ -47,6 +47,8 @@ let fluxNodesWithError = [];
 let firstExecution = true;
 let processedFluxNodes = [];
 
+const myCacheProcessingIp = new Map();
+
 let runninggetFluxNodeList = false;
 async function getFluxNodeList(i = 0) {
   try {
@@ -377,11 +379,35 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
         return;
       }
     }
-    const appsHashes = await getFluxAppsHashes(fluxnode.ip, timeout * 3);
-    const scannedHeightInfo = await getFluxSyncedHeight(fluxnode.ip, timeout);
-    const conOut = await getConnectionsOut(fluxnode.ip, timeout);
-    const conIn = await getConnectionsIn(fluxnode.ip, timeout);
-    const auxIp = fluxnode.ip.includes(':') ? fluxnode.ip.split(':')[0] : fluxnode.ip;
+    let appsHashes = fluxInfo.apps.hashes;
+    if (!appsHashes) {
+      appsHashes = await getFluxAppsHashes(fluxnode.ip, timeout * 3);
+    }
+    let scannedHeightInfo = fluxInfo.flux.explorerScannedHeigth;
+    if (!scannedHeightInfo) {
+      scannedHeightInfo = await getFluxSyncedHeight(fluxnode.ip, timeout);
+    }
+    let conOut = fluxInfo.flux.connectionsOut;
+    if (!conOut) {
+      conOut = await getConnectionsOut(fluxnode.ip, timeout);
+    } else {
+      const conOutOk = [];
+      conOut.forEach((con) => {
+        conOutOk.push(con.ip);
+      });
+      conOut = conOutOk;
+    }
+    let conIn = fluxInfo.flux.connectionsIn;
+    if (!conIn) {
+      await getConnectionsIn(fluxnode.ip, timeout);
+    } else {
+      const conInOk = [];
+      conInOk.forEach((con) => {
+        conInOk.push(con.ip);
+      });
+      conIn = conInOk;
+    }
+    const auxIp = fluxnode.ip.split(':')[0];
     const query = { ip: auxIp };
     const projection = {
       projection: {
@@ -398,22 +424,28 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
         org: 1,
       },
     };
-    // we shall always have geolocation
     const result = await serviceHelper.findOneInDatabase(database, geocollection, query, projection).catch((error) => {
       log.error(error);
     });
-    if (result) {
-      fluxInfo.geolocation = result;
-    } else {
-      log.info(`Geolocation not found in db for the ip ${auxIp} let's call api.`);
-      // we do not have info about that ip yet. Get it and Store it.
-      const geoRes = await getFluxNodeGeolocation(fluxnode.ip);
-      if (geoRes) {
-        // geo ok, store it and update fluxInfo.
-        await serviceHelper.insertOneToDatabase(database, geocollection, geoRes).catch((error) => {
-          log.error(error);
-        });
-        fluxInfo.geolocation = geoRes;
+    if (!result && fluxInfo.geolocation) {
+      // geo ok, store it and update fluxInfo.
+      await serviceHelper.insertOneToDatabase(database, geocollection, fluxInfo.geolocation).catch((error) => {
+        log.error(error);
+      });
+    }
+    if (!fluxInfo.geolocation) {
+      // we shall always have geolocation
+      if (result) {
+        fluxInfo.geolocation = result;
+      } else {
+        const geoRes = await getFluxNodeGeolocation(fluxnode.ip);
+        if (geoRes) {
+          fluxInfo.geolocation = geoRes;
+          // geo ok, store it and update fluxInfo.
+          await serviceHelper.insertOneToDatabase(database, geocollection, fluxInfo.geolocation).catch((error) => {
+            log.error(error);
+          });
+        }
       }
     }
     fluxInfo.ip = fluxnode.ip;
@@ -600,7 +632,7 @@ async function processFluxNodes() {
       // eslint-disable-next-line no-restricted-syntax
       for (const [i, fluxnode] of fluxnodes.entries()) {
         promiseArray.push(processFluxNode(fluxnode, currentRoundTime, defaultTimeout));
-        if ((i + 1) % 30 === 0) {
+        if ((i + 1) % 25 === 0) {
           await Promise.allSettled(promiseArray);
           promiseArray = [];
           log.info(`Flux Nodes Processed: ${i + 1}`);
@@ -610,35 +642,32 @@ async function processFluxNodes() {
         await Promise.allSettled(promiseArray);
         promiseArray = [];
       }
-      let fluxNodesWithErrorAux = [];
 
       log.info(`Found ${fluxNodesWithError.length} FluxNodes with errors.`);
-      fluxNodesWithErrorAux = [...fluxNodesWithError];
       // eslint-disable-next-line no-restricted-syntax
-      for (let i = 0; i < fluxNodesWithErrorAux.length; i += 1) {
-        const fluxnode = fluxNodesWithErrorAux[i];
+      for (let i = 0; i < fluxNodesWithError.length; i += 1) {
+        const fluxnode = fluxNodesWithError[i];
         const index = fluxNodesWithError.indexOf(fluxnode);
         fluxNodesWithError.splice(index, 1);
         promiseArray.push(processFluxNode(fluxnode, currentRoundTime, explorerTimeout, true));
         if ((i + 1) % 20 === 0) {
           await Promise.allSettled(promiseArray);
           promiseArray = [];
-          log.info(`Flux Nodes With Error Processed: ${i + 1}`);
-          log.info(`Found ${fluxNodesWithError.length} FluxNodes with errors.`);
+          myCacheProcessingIp.clear();
+          await serviceHelper.insertManyToDatabase(database, fluxcollection, processedFluxNodes).catch((error) => {
+            log.error(`Error inserting in fluxcollection db: ${error}`);
+          });
+          processedFluxNodes = [];
         }
       }
       if (promiseArray.length > 0) {
         await Promise.allSettled(promiseArray);
         promiseArray = [];
       }
-      log.info(`Finalized with ${fluxNodesWithError.length} FluxNodes with errors.`);
-
-      await serviceHelper.insertManyToDatabase(database, fluxcollection, processedFluxNodes).catch((error) => {
-        log.error(`Error inserting in fluxcollection db: ${error}`);
-      });
       log.info(`Processing of ${currentRoundTime} finished.`);
-      log.info(`Total Nodes with errors: ${fluxNodesWithError.length}`);
-      fluxNodesWithErrorAux = [];
+      log.info(`Finalized with total Nodes with errors: ${fluxNodesWithError.length}`);
+      fluxNodesWithError = [];
+      processedFluxNodes = [];
       const crt = {
         timestamp: currentRoundTime,
       };
