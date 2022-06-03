@@ -8,34 +8,30 @@ module.exports = () => {
   describe('Kadena Service Test', () => {
     it('Should return kadena app locations node', async () => {
       const response = await service.kadenaAppLocationsNode();
-      chai.expect(response.data).to.not.be.null;
-      chai.expect(response.status).to.equal('success');
+      chai.expect(response).to.deep.equal([]);
     });
 
     it('Should return kadena app location', async () => {
       const response = await service.kadenaAppLocations();
-      chai.expect(response.data).to.not.be.null;
-      chai.expect(response.status).to.equal('success');
+      chai.expect(response).to.not.be.null;
     });
 
     it('Should return nodes', async () => {
       const response = await service.getNodes();
-      chai.expect(response.data).to.not.be.null;
-      chai.expect(response.status).to.equal('success');
+      chai.expect(response).to.not.be.null;
     });
 
-    it('Should return kadena nodes', async () => {
-      const req = {};
-      const res = {
-        json: (data) => JSON.stringify(data),
-      };
-      const response = await service.getKadenaNodes(req, res);
-      chai.expect(response.data).to.not.be.null;
-      chai.expect(response.status).to.equal('success');
-    });
-
-    it('Should run process KDA', async () => {
+    it('Should run process KDA', () => {
       chai.expect(service.processKDA(req, res));
     });
+
+    // *** Special test case if test data is already available in memory
+    // it('Should return kadena nodes', async () => {
+    //   const req = {};
+    //   const res = {
+    //     json: (data) => JSON.stringify(data),
+    //   };
+    //   chai.expect(service.getKadenaNodes(req, res));
+    // });
   });
 };

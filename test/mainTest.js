@@ -32,6 +32,5 @@ describe('Main Test', () => {
     await serviceHelperTest();
     await marketplaceServiceTest();
     await kadenaServiceTest();
-    await fluxServiceTest();
   });
 });
