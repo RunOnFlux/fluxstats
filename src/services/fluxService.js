@@ -514,8 +514,8 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
     processedFluxNodes.push(fluxInfo);
   } catch (error) {
     if (retry) {
-      await serviceHelper.timeout(5000);
-      await processFluxNode(fluxnode, currentRoundTime, timeout * 2);
+      await serviceHelper.timeout(4000); //cache on fluxOs is 5 seconds so lets retry litle bit before that
+      await processFluxNode(fluxnode, currentRoundTime, timeout);
     } else {
       log.error(error);
     }
@@ -667,7 +667,7 @@ async function processFluxNodes() {
       // eslint-disable-next-line no-restricted-syntax
       for (const [i, fluxnode] of fluxnodes.entries()) {
         promiseArray.push(processFluxNode(fluxnode, currentRoundTime, defaultTimeout));
-        if ((i + 1) % 25 === 0) {
+        if ((i + 1) % 75 === 0) {
           await Promise.allSettled(promiseArray);
           promiseArray = [];
           myCacheProcessingIp.clear();
@@ -702,7 +702,7 @@ async function processFluxNodes() {
         const index = fluxNodesWithError.indexOf(fluxnode);
         fluxNodesWithError.splice(index, 1);
         promiseArray.push(processFluxNode(fluxnode, currentRoundTime, explorerTimeout, true));
-        if ((i + 1) % 20 === 0) {
+        if ((i + 1) % 40 === 0) {
           await Promise.allSettled(promiseArray);
           promiseArray = [];
           myCacheProcessingIp.clear();
@@ -895,6 +895,8 @@ async function getAllFluxInformation(req, res, i = 0) {
       results = await serviceHelper.findInDatabase(database, collectionName, query, projection);
       myCacheMid.set(cacheKey, results);
       fluxInformationRunning = false;
+    } else {
+      log.info("Using getAllFluxInformation cache");
     }
     const resMessage = serviceHelper.createDataMessage(results);
     res.json(resMessage);
@@ -969,6 +971,8 @@ async function getAllFluxVersions(req, res, i = 0) {
       results = allData;
       myCacheMid.set(cacheKey, allData);
       runninggetAllFluxVersions = false;
+    } else {
+      log.info("Using getAllFluxVersions cache");
     }
     const resMessage = serviceHelper.createDataMessage(results);
     res.json(resMessage);
@@ -1020,6 +1024,8 @@ async function getAllFluxGeolocation(req, res, i = 0) {
       const bresults = results.map((x) => x.geolocation);
       myCache.set('geolocation', bresults);
       fluxLocationsRunning = false;
+    } else {
+      log.info("Using getAllFluxGeolocation cache");
     }
     const resMessage = serviceHelper.createDataMessage(results);
     res.json(resMessage);
@@ -1070,6 +1076,8 @@ async function getFluxIPHistory(req, res) {
       // return latest fluxnode round
       ipHistory = await serviceHelper.findInDatabase(database, fluxcollection, query, projection);
       myCacheShort.set(`ipHistory${ip}`, ipHistory);
+    } else {
+      log.info("Using getFluxIPHistory cache");
     }
     const resMessage = serviceHelper.createDataMessage(ipHistory);
     res.json(resMessage);
@@ -1080,20 +1088,33 @@ async function getFluxIPHistory(req, res) {
   }
 }
 
-async function getCompletedRoundsTimestamps(req, res) {
+let getCompletedRoundsTimestampsRunning = false;
+async function getCompletedRoundsTimestamps(req, res, i = 0) {
   try {
     let timestamps = myCacheShort.get('getCompletedRoundsTimestamps');
     if (!timestamps) {
-      const database = db.db(config.database.local.database);
-      const q = {};
-      const p = {};
-      const completedRounds = await serviceHelper.findInDatabase(database, completedRoundsCollection, q, p);
-      timestamps = completedRounds.map((x) => x.timestamp);
-      myCacheShort.set('getCompletedRoundsTimestamps', timestamps);
+        if (getCompletedRoundsTimestampsRunning) {
+          await serviceHelper.timeout(1000);
+          if (i < 300) {
+            getCompletedRoundsTimestamps(req, res, i + 1);
+          }
+          throw new Error('Internal error. Try again later');
+        }
+        getCompletedRoundsTimestampsRunning = true;
+        const database = db.db(config.database.local.database);
+        const q = {};
+        const p = {};
+        const completedRounds = await serviceHelper.findInDatabase(database, completedRoundsCollection, q, p);
+        timestamps = completedRounds.map((x) => x.timestamp);        
+        myCacheShort.set('getCompletedRoundsTimestamps', timestamps);
+        getCompletedRoundsTimestampsRunning = false;
+    } else {
+      log.info("Using getCompletedRoundsTimestamps cache");
     }
     const resMessage = serviceHelper.createDataMessage(timestamps);
     res.json(resMessage);
   } catch (error) {
+    getCompletedRoundsTimestampsRunning = false;
     const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
     res.json(errMessage);
     log.error(error);
@@ -1114,8 +1135,10 @@ async function fluxNodesHistoryStats(req, res, i = 0) {
       }
       fluxNodeHistoryStatsRunning = true;
       await createHistoryStats();
-      fluxNodeHistoryStatsRunning = false;
       historystats = myCache.get('historyStats');
+      fluxNodeHistoryStatsRunning = false;
+    } else {
+      log.info("Using fluxNodesHistoryStats cache");
     }
     const resMessage = serviceHelper.createDataMessage(historystats);
     res.json(resMessage);
