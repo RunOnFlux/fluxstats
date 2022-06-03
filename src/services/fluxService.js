@@ -57,7 +57,7 @@ async function getFluxNodeList(i = 0) {
       return list;
     }
     if (runninggetFluxNodeList) {
-      await serviceHelper.timeout(100);
+      await serviceHelper.timeout(1000);
       if (i < 300) {
         return getFluxNodeList(i + 1);
       }
@@ -697,7 +697,7 @@ async function getAllGeolocation(req, res, i = 0) {
     let list = myCacheShort.get('allgeolocation');
     if (!list) {
       if (runninggetAllGeolocation) {
-        await serviceHelper.timeout(100);
+        await serviceHelper.timeout(1000);
         if (i < 300) {
           getAllGeolocation(req, res, i + 1);
         }
@@ -740,7 +740,7 @@ async function getLastRound(i = 0) {
   let lastRound = myCacheShort.get('lastround');
   if (!lastRound) {
     if (runninggetLastRound) {
-      await serviceHelper.timeout(100);
+      await serviceHelper.timeout(1000);
       if (i < 300) {
         return getLastRound(i + 1);
       }
@@ -822,8 +822,8 @@ async function getAllFluxInformation(req, res, i = 0) {
     let results = myCacheMid.get(cacheKey);
     if (!results) {
       if (fluxInformationRunning) {
-        await serviceHelper.timeout(500);
-        if (i < 60) {
+        await serviceHelper.timeout(1000);
+        if (i < 300) {
           getAllFluxInformation(req, res, i + 1);
         }
         throw new Error('Internal error. Try again later');
@@ -851,8 +851,8 @@ async function getAllFluxVersions(req, res, i = 0) {
     let results = myCacheMid.get(cacheKey);
     if (!results) {
       if (runninggetAllFluxVersions) {
-        await serviceHelper.timeout(250);
-        if (i < 120) {
+        await serviceHelper.timeout(1000);
+        if (i < 300) {
           getAllFluxVersions(req, res, i + 1);
         }
         throw new Error('Internal error. Try again later');
@@ -925,7 +925,7 @@ async function getAllFluxGeolocation(req, res, i = 0) {
     let results = myCache.get('geolocation');
     if (!results) {
       if (fluxLocationsRunning) {
-        await serviceHelper.timeout(100);
+        await serviceHelper.timeout(1000);
         if (i < 300) {
           getAllFluxGeolocation(req, res, i + 1);
         }
@@ -1046,7 +1046,7 @@ async function getAllFluxGeolocationNow(req, res, i = 0) {
     let results = myCacheShort.get('getAllFluxGeolocationNow');
     if (!results) {
       if (runninggetAllFluxGeolocationNow) {
-        await serviceHelper.timeout(100);
+        await serviceHelper.timeout(1000);
         if (i < 300) {
           getAllFluxGeolocationNow(req, res, i + 1);
         }
@@ -1096,7 +1096,7 @@ async function fluxNodesHistoryStats(req, res, i = 0) {
     let historystats = myCache.get('historyStats');
     if (!historystats) {
       if (fluxNodeHistoryStatsRunning) {
-        await serviceHelper.timeout(100);
+        await serviceHelper.timeout(1000);
         if (i < 300) {
           fluxNodesHistoryStats(req, res, i + 1);
         }
