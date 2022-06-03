@@ -171,5 +171,5 @@ module.exports = {
   getKadenaNodes,
   getNodes,
   kadenaAppLocations,
-  kadenaAppLocationsNode
+  kadenaAppLocationsNode,
 };
