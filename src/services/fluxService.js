@@ -489,8 +489,9 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
     fluxInfo.collateralIndex = getCollateralInfo(fluxnode.collateral).txindex;
     fluxInfo.roundTime = currentRoundTime;
     fluxInfo.error = true;
-    processedFluxNodes.push(fluxInfo);
+    // processedFluxNodes.push(fluxInfo);
     log.error(error);
+    log.error(fluxInfo.ip);
   }
 }
 
