@@ -182,6 +182,11 @@ async function collectionStats(database, collection) {
   return result;
 }
 
+async function countInDatabase(database, collection, query) {
+  const result = await database.collection(collection).count(query).catch((error) => { throw error; });
+  return result;
+}
+
 module.exports = {
   timeout,
   ensureBoolean,
@@ -206,4 +211,5 @@ module.exports = {
   createSuccessMessage,
   createWarningMessage,
   createErrorMessage,
+  countInDatabase,
 };

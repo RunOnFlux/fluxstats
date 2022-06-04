@@ -10,8 +10,6 @@ const defaultTimeout = 5000;
 
 const explorerTimeout = 10000;
 
-let round = 0;
-
 const httpFluxInfo = rateLimit(axios.create(), { maxRequests: 20, perMilliseconds: 1000 });
 const httpGeo = rateLimit(axios.create(), { maxRequests: 1, perMilliseconds: 1500 });
 const httpGeoBatch = rateLimit(axios.create(), { maxRequests: 1, perMilliseconds: 3950 });
@@ -302,6 +300,7 @@ async function bootstrapFluxCollection(timestamp) {
 }
 
 async function createHistoryStats() {
+  log.info('Started createHistoryStats');
   const database = db.db(config.database.local.database);
   // last month
   const lastMonthTime = new Date().getTime() - 2592000000; // 30 days in ms
@@ -324,74 +323,33 @@ async function createHistoryStats() {
       okTimestamps.push(bresults[i]);
     }
   }
-  const queryForTimes = [];
-  okTimestamps.forEach((time) => {
-    const singlequery = {
-      roundTime: time,
-    };
-    queryForTimes.push(singlequery);
-  });
-  const query = {};
-  if (queryForTimes.length > 0) {
-    query.$or = queryForTimes;
-  }
-  const projection = {
-    projection: {
-      _id: 0,
-      roundTime: 1,
-      tier: 1,
-    },
-  };
-  // return latest fluxnode round
-  const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection);
-  // array of object containing tier and roundtime
   const data = {};
-  // this array can be quite large
-  results.forEach((result) => {
-    if (data[result.roundTime]) {
-      if (result.tier === 'CUMULUS') {
-        if (data[result.roundTime].cumulus) {
-          data[result.roundTime].cumulus += 1;
-        } else {
-          data[result.roundTime].cumulus = 1;
-        }
-      } else if (result.tier === 'NIMBUS') {
-        if (data[result.roundTime].nimbus) {
-          data[result.roundTime].nimbus += 1;
-        } else {
-          data[result.roundTime].nimbus = 1;
-        }
-      } else if (result.tier === 'STRATUS') {
-        if (data[result.roundTime].stratus) {
-          data[result.roundTime].stratus += 1;
-        } else {
-          data[result.roundTime].stratus = 1;
-        }
-      }
-    } else {
-      data[result.roundTime] = {};
-      if (result.tier === 'CUMULUS') {
-        if (data[result.roundTime].cumulus) {
-          data[result.roundTime].cumulus += 1;
-        } else {
-          data[result.roundTime].cumulus = 1;
-        }
-      } else if (result.tier === 'NIMBUS') {
-        if (data[result.roundTime].nimbus) {
-          data[result.roundTime].nimbus += 1;
-        } else {
-          data[result.roundTime].nimbus = 1;
-        }
-      } else if (result.tier === 'STRATUS') {
-        if (data[result.roundTime].stratus) {
-          data[result.roundTime].stratus += 1;
-        } else {
-          data[result.roundTime].stratus = 1;
-        }
-      }
-    }
-  });
+  for (let y = 0; y < okTimestamps.length; y += 1) {
+    const time = okTimestamps[y];
+    log.info(`Getting historystaty for time/round ->${time}`);
+    let query = {
+      roundTime: time,
+      tier: 'CUMULUS',
+    };
+    const cumulusCount = await serviceHelper.countInDatabase(database, fluxcollection, query);
+    query = {
+      roundTime: time,
+      tier: 'NIMBUS',
+    };
+    const nimbusCount = await serviceHelper.countInDatabase(database, fluxcollection, query);
+    query = {
+      roundTime: time,
+      tier: 'STRATUS',
+    };
+    const stratusCount = await serviceHelper.countInDatabase(database, fluxcollection, query);
+    data[time] = {};
+    data[time].cumulus = cumulusCount;
+    data[time].nimbus = nimbusCount;
+    data[time].stratus = stratusCount;
+    log.info(`Finished historystats for time/round ->${time}`);
+  }
   myCache.set('historyStats', data);
+  log.info('Finished createHistoryStats');
 }
 
 async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = false) {
@@ -646,7 +604,6 @@ async function getGeolocationInBatchAndRefreshDatabase() {
 async function processFluxNodes() {
   const startRefresh = new Date().getTime();
   try {
-    round += 1;
     fluxNodesWithError = [];
     processedFluxNodes = [];
     const database = db.db(config.database.local.database);
@@ -737,11 +694,6 @@ async function processFluxNodes() {
       await serviceHelper.insertOneToDatabase(database, completedRoundsCollection, crt).catch((error) => {
         log.error(error);
       });
-      // for every 2 runs start createHistoryStatys after 60 seconds
-      if (round % 2 === 0) {
-        await serviceHelper.timeout(60000);
-        await createHistoryStats();
-      }
     } else {
       log.error('No flux Nodes Found');
     }
