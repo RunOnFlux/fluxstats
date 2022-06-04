@@ -8,7 +8,7 @@ module.exports = () => {
   describe('Kadena Service Test', () => {
     it('Should return kadena app locations node', async () => {
       const response = await service.kadenaAppLocationsNode();
-      chai.expect(response).to.deep.equal([]);
+      chai.expect(response).to.not.be.null;
     });
 
     it('Should return kadena app location', async () => {
@@ -22,7 +22,7 @@ module.exports = () => {
     });
 
     it('Should run process KDA', () => {
-      chai.expect(service.processKDA(req, res));
+      chai.expect(service.processKDA());
     });
 
     // *** Special test case if test data is already available in memory
