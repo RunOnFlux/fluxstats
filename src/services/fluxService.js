@@ -10,8 +10,6 @@ const defaultTimeout = 5000;
 
 const explorerTimeout = 10000;
 
-let round = 0;
-
 const httpFluxInfo = rateLimit(axios.create(), { maxRequests: 20, perMilliseconds: 1000 });
 const httpGeo = rateLimit(axios.create(), { maxRequests: 1, perMilliseconds: 1500 });
 const httpGeoBatch = rateLimit(axios.create(), { maxRequests: 1, perMilliseconds: 3950 });
@@ -299,9 +297,11 @@ async function bootstrapFluxCollection(timestamp) {
   await database.collection(collectionName).createIndex({ scannedHeight: 1 }, { name: 'query for getting scanned height' });
   await database.collection(collectionName).createIndex({ connectionsOut: 1 }, { name: 'query for getting connections out' });
   await database.collection(collectionName).createIndex({ connectionsIn: 1 }, { name: 'query for getting connections in' });
+  await database.collection(collectionName).createIndex({ error: 1 }, { name: 'query for getting errored nodes' });
 }
 
 async function createHistoryStats() {
+  log.info('Started createHistoryStats');
   const database = db.db(config.database.local.database);
   // last month
   const lastMonthTime = new Date().getTime() - 2592000000; // 30 days in ms
@@ -324,74 +324,33 @@ async function createHistoryStats() {
       okTimestamps.push(bresults[i]);
     }
   }
-  const queryForTimes = [];
-  okTimestamps.forEach((time) => {
-    const singlequery = {
-      roundTime: time,
-    };
-    queryForTimes.push(singlequery);
-  });
-  const query = {};
-  if (queryForTimes.length > 0) {
-    query.$or = queryForTimes;
-  }
-  const projection = {
-    projection: {
-      _id: 0,
-      roundTime: 1,
-      tier: 1,
-    },
-  };
-  // return latest fluxnode round
-  const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection);
-  // array of object containing tier and roundtime
   const data = {};
-  // this array can be quite large
-  results.forEach((result) => {
-    if (data[result.roundTime]) {
-      if (result.tier === 'CUMULUS') {
-        if (data[result.roundTime].cumulus) {
-          data[result.roundTime].cumulus += 1;
-        } else {
-          data[result.roundTime].cumulus = 1;
-        }
-      } else if (result.tier === 'NIMBUS') {
-        if (data[result.roundTime].nimbus) {
-          data[result.roundTime].nimbus += 1;
-        } else {
-          data[result.roundTime].nimbus = 1;
-        }
-      } else if (result.tier === 'STRATUS') {
-        if (data[result.roundTime].stratus) {
-          data[result.roundTime].stratus += 1;
-        } else {
-          data[result.roundTime].stratus = 1;
-        }
-      }
-    } else {
-      data[result.roundTime] = {};
-      if (result.tier === 'CUMULUS') {
-        if (data[result.roundTime].cumulus) {
-          data[result.roundTime].cumulus += 1;
-        } else {
-          data[result.roundTime].cumulus = 1;
-        }
-      } else if (result.tier === 'NIMBUS') {
-        if (data[result.roundTime].nimbus) {
-          data[result.roundTime].nimbus += 1;
-        } else {
-          data[result.roundTime].nimbus = 1;
-        }
-      } else if (result.tier === 'STRATUS') {
-        if (data[result.roundTime].stratus) {
-          data[result.roundTime].stratus += 1;
-        } else {
-          data[result.roundTime].stratus = 1;
-        }
-      }
-    }
-  });
+  for (let y = 0; y < okTimestamps.length; y += 1) {
+    const time = okTimestamps[y];
+    log.info(`Getting historystaty for time/round ->${time}`);
+    let query = {
+      roundTime: time,
+      tier: 'CUMULUS',
+    };
+    const cumulusCount = await serviceHelper.countInDatabase(database, fluxcollection, query);
+    query = {
+      roundTime: time,
+      tier: 'NIMBUS',
+    };
+    const nimbusCount = await serviceHelper.countInDatabase(database, fluxcollection, query);
+    query = {
+      roundTime: time,
+      tier: 'STRATUS',
+    };
+    const stratusCount = await serviceHelper.countInDatabase(database, fluxcollection, query);
+    data[time] = {};
+    data[time].cumulus = cumulusCount;
+    data[time].nimbus = nimbusCount;
+    data[time].stratus = stratusCount;
+    log.info(`Finished historystats for time/round ->${time}`);
+  }
   myCache.set('historyStats', data);
+  log.info('Finished createHistoryStats');
 }
 
 async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = false) {
@@ -415,24 +374,24 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
       scannedHeightInfo = await getFluxSyncedHeight(fluxnode.ip, timeout);
     }
     let conOut = fluxInfo.flux.connectionsOut;
-    if (!conOut) {
-      conOut = await getConnectionsOut(fluxnode.ip, timeout);
-    } else {
+    if (conOut) {
       const conOutOk = [];
       conOut.forEach((con) => {
         conOutOk.push(con.ip);
       });
       conOut = conOutOk;
+    } else {
+      conOut = await getConnectionsOut(fluxnode.ip, timeout);
     }
     let conIn = fluxInfo.flux.connectionsIn;
-    if (!conIn) {
-      await getConnectionsIn(fluxnode.ip, timeout);
-    } else {
+    if (conIn) {
       const conInOk = [];
       conInOk.forEach((con) => {
         conInOk.push(con.ip);
       });
       conIn = conInOk;
+    } else {
+      conIn = await getConnectionsIn(fluxnode.ip, timeout);
     }
     const auxIp = fluxnode.ip.split(':')[0];
     const query = { ip: auxIp };
@@ -511,14 +470,27 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
 
     const curTime = new Date().getTime();
     fluxInfo.dataCollectedAt = curTime;
+    delete fluxInfo.apps.hashes;
+    delete fluxInfo.flux.connectionsIn;
+    delete fluxInfo.flux.connectionsOut;
+    delete fluxInfo.flux.explorerScannedHeigth;
     processedFluxNodes.push(fluxInfo);
   } catch (error) {
-    if (retry) {
-      await serviceHelper.timeout(4000); //cache on fluxOs is 5 seconds so lets retry litle bit before that
-      await processFluxNode(fluxnode, currentRoundTime, timeout);
-    } else {
-      log.error(error);
-    }
+    const fluxInfo = {};
+    fluxInfo.ip = fluxnode.ip;
+    fluxInfo.addedHeight = fluxnode.added_height;
+    fluxInfo.confirmedHeight = fluxnode.confirmed_height;
+    fluxInfo.lastConfirmedHeight = fluxnode.last_confirmed_height;
+    fluxInfo.lastPaidHeight = fluxnode.last_paid_height;
+    fluxInfo.tier = fluxnode.tier;
+    fluxInfo.paymentAddress = fluxnode.payment_address;
+    fluxInfo.activeSince = fluxnode.activesince;
+    fluxInfo.collateralHash = getCollateralInfo(fluxnode.collateral).txhash;
+    fluxInfo.collateralIndex = getCollateralInfo(fluxnode.collateral).txindex;
+    fluxInfo.roundTime = currentRoundTime;
+    fluxInfo.error = true;
+    processedFluxNodes.push(fluxInfo);
+    log.error(error);
   }
 }
 
@@ -646,12 +618,12 @@ async function getGeolocationInBatchAndRefreshDatabase() {
 async function processFluxNodes() {
   const startRefresh = new Date().getTime();
   try {
-    round += 1;
     fluxNodesWithError = [];
     processedFluxNodes = [];
     const database = db.db(config.database.local.database);
     const currentRoundTime = new Date().getTime();
     const currentCollectionName = `fluxes${currentRoundTime}`;
+    await bootstrapFluxCollection(currentRoundTime);
     log.info(`Beginning processing processFluxNodes of ${currentRoundTime}.`);
     const fluxnodes = await getFluxNodeList();
     // const fluxnodes = [{ ip: '78.216.167.78' }]; // fluxnode that was causing the hang.
@@ -737,11 +709,6 @@ async function processFluxNodes() {
       await serviceHelper.insertOneToDatabase(database, completedRoundsCollection, crt).catch((error) => {
         log.error(error);
       });
-      // for every 2 runs start createHistoryStatys after 60 seconds
-      if (round % 2 === 0) {
-        await serviceHelper.timeout(60000);
-        await createHistoryStats();
-      }
     } else {
       log.error('No flux Nodes Found');
     }
@@ -877,6 +844,7 @@ async function getAllFluxInformation(req, res, i = 0) {
           scannedHeight: 1,
           connectionsOut: 1,
           connectionsIn: 1,
+          error: 1,
         },
       };
     }
@@ -896,7 +864,7 @@ async function getAllFluxInformation(req, res, i = 0) {
       myCacheMid.set(cacheKey, results);
       fluxInformationRunning = false;
     } else {
-      log.info("Using getAllFluxInformation cache");
+      log.info('Using getAllFluxInformation cache');
     }
     const resMessage = serviceHelper.createDataMessage(results);
     res.json(resMessage);
@@ -972,7 +940,7 @@ async function getAllFluxVersions(req, res, i = 0) {
       myCacheMid.set(cacheKey, allData);
       runninggetAllFluxVersions = false;
     } else {
-      log.info("Using getAllFluxVersions cache");
+      log.info('Using getAllFluxVersions cache');
     }
     const resMessage = serviceHelper.createDataMessage(results);
     res.json(resMessage);
@@ -1025,7 +993,7 @@ async function getAllFluxGeolocation(req, res, i = 0) {
       myCache.set('geolocation', bresults);
       fluxLocationsRunning = false;
     } else {
-      log.info("Using getAllFluxGeolocation cache");
+      log.info('Using getAllFluxGeolocation cache');
     }
     const resMessage = serviceHelper.createDataMessage(results);
     res.json(resMessage);
@@ -1071,13 +1039,14 @@ async function getFluxIPHistory(req, res) {
           benchmark: 1,
           flux: 1,
           apps: 1,
+          error: 1,
         },
       };
       // return latest fluxnode round
       ipHistory = await serviceHelper.findInDatabase(database, fluxcollection, query, projection);
       myCacheShort.set(`ipHistory${ip}`, ipHistory);
     } else {
-      log.info("Using getFluxIPHistory cache");
+      log.info('Using getFluxIPHistory cache');
     }
     const resMessage = serviceHelper.createDataMessage(ipHistory);
     res.json(resMessage);
@@ -1093,23 +1062,23 @@ async function getCompletedRoundsTimestamps(req, res, i = 0) {
   try {
     let timestamps = myCacheShort.get('getCompletedRoundsTimestamps');
     if (!timestamps) {
-        if (getCompletedRoundsTimestampsRunning) {
-          await serviceHelper.timeout(1000);
-          if (i < 300) {
-            getCompletedRoundsTimestamps(req, res, i + 1);
-          }
-          throw new Error('Internal error. Try again later');
+      if (getCompletedRoundsTimestampsRunning) {
+        await serviceHelper.timeout(1000);
+        if (i < 300) {
+          getCompletedRoundsTimestamps(req, res, i + 1);
         }
-        getCompletedRoundsTimestampsRunning = true;
-        const database = db.db(config.database.local.database);
-        const q = {};
-        const p = {};
-        const completedRounds = await serviceHelper.findInDatabase(database, completedRoundsCollection, q, p);
-        timestamps = completedRounds.map((x) => x.timestamp);        
-        myCacheShort.set('getCompletedRoundsTimestamps', timestamps);
-        getCompletedRoundsTimestampsRunning = false;
+        throw new Error('Internal error. Try again later');
+      }
+      getCompletedRoundsTimestampsRunning = true;
+      const database = db.db(config.database.local.database);
+      const q = {};
+      const p = {};
+      const completedRounds = await serviceHelper.findInDatabase(database, completedRoundsCollection, q, p);
+      timestamps = completedRounds.map((x) => x.timestamp);
+      myCacheShort.set('getCompletedRoundsTimestamps', timestamps);
+      getCompletedRoundsTimestampsRunning = false;
     } else {
-      log.info("Using getCompletedRoundsTimestamps cache");
+      log.info('Using getCompletedRoundsTimestamps cache');
     }
     const resMessage = serviceHelper.createDataMessage(timestamps);
     res.json(resMessage);
@@ -1138,7 +1107,7 @@ async function fluxNodesHistoryStats(req, res, i = 0) {
       historystats = myCache.get('historyStats');
       fluxNodeHistoryStatsRunning = false;
     } else {
-      log.info("Using fluxNodesHistoryStats cache");
+      log.info('Using fluxNodesHistoryStats cache');
     }
     const resMessage = serviceHelper.createDataMessage(historystats);
     res.json(resMessage);
