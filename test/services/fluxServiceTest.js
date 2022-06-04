@@ -1,10 +1,17 @@
 const chai = require('chai');
+const LRU = require('lru-cache');
 
 const service = require('../../src/services/fluxService');
 const serviceHelper = require('../../src/services/serviceHelper');
 const config = require('../../config/default');
 
 chai.use(require('chai-json-schema'));
+
+const LRUoptions = {
+  max: 50, // store 50 values, we shall not have more values at any period
+  ttl: 1000 * 60 * 60, // 1 hour
+};
+const myCache = new LRU(LRUoptions);
 
 module.exports = () => {
   describe('Flux Service Test', () => {
@@ -87,7 +94,7 @@ module.exports = () => {
       });
     }
 
-    it('Should return connection in data', async () => {
+    it('Should return collateral info', async () => {
       const response = await service.getCollateralInfo('12345678901, 2)');
       chai.expect(response).to.deep.equal({ txhash: '1', txindex: 2 });
     });
@@ -99,6 +106,93 @@ module.exports = () => {
       const collection = 'fluxes1654316207606';
       const res = await serviceHelper.dropCollection(database, collection);
       chai.expect(res).to.not.be.null;
+    });
+
+    it('Should create history stats', async () => {
+      await service.createHistoryStats();
+      chai.expect(myCache.get('historyStats')).to.be.not.null;
+    });
+
+    it('Should process flux nodes', async () => {
+      chai.expect(await service.processFluxNode({ip: '38.242.236.226:16127', collateral: '12345678901, 2)'}, '1654316207606', 1000000000));
+    });
+
+    it('Should process geolocation batch refresh database', async () => {
+      service.getGeolocationInBatchAndRefreshDatabase();
+      const db = await serviceHelper.connectMongoDb(`mongodb://${config.database.url}:${config.database.port}/`);
+      const database = db.db(config.database.local.database);
+      const collection = 'geolocation';
+      const res = await serviceHelper.countInDatabase(database, collection, null);
+      chai.expect(res).to.be.at.least(0);
+    });
+
+    it('Should process flux nodes', async () => {
+      service.processFluxNodes();
+      const db = await serviceHelper.connectMongoDb(`mongodb://${config.database.url}:${config.database.port}/`);
+      const database = db.db(config.database.local.database);
+      const collection = 'fluxes';
+      const res = await serviceHelper.countInDatabase(database, collection, null);
+      chai.expect(res).to.be.at.least(0);
+    });
+
+    it('Should process geolocation', async () => {
+      const req = {};
+      const res = {
+        json: (data) => JSON.stringify(data),
+      };
+      chai.expect(service.getAllGeolocation(req, res));
+    });
+
+    it('Should process get last round', async () => {
+      chai.expect(service.getLastRound()).to.be.not.null;
+    });
+
+    it('Should process get all flux information', async () => {
+      const req = { params: 'ip,addedHeight', query: {projection: 'ip,addedHeight'} };
+      const res = {
+        json: (data) => JSON.stringify(data),
+      };
+      chai.expect(service.getAllFluxInformation(req, res));
+    });
+
+    it('Should process get all flux version', async () => {
+      const req = {};
+      const res = {
+        json: (data) => JSON.stringify(data),
+      };
+      chai.expect(service.getAllFluxVersions(req, res));
+    });
+
+    it('Should process get all flux geolocation', async () => {
+      const req = {};
+      const res = {
+        json: (data) => JSON.stringify(data),
+      };
+      chai.expect(service.getAllFluxGeolocation(req, res));
+    });
+
+    it('Should process get all flux ip history', async () => {
+      const req = {};
+      const res = {
+        json: (data) => JSON.stringify(data),
+      };
+      chai.expect(service.getFluxIPHistory(req, res));
+    });
+
+    it('Should process get completed rounds timestamp', async () => {
+      const req = {};
+      const res = {
+        json: (data) => JSON.stringify(data),
+      };
+      chai.expect(service.getCompletedRoundsTimestamps(req, res));
+    });
+
+    it('Should process flux node history stats', async () => {
+      const req = {};
+      const res = {
+        json: (data) => JSON.stringify(data),
+      };
+      chai.expect(service.fluxNodesHistoryStats(req, res));
     });
   });
 };

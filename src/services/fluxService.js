@@ -1157,4 +1157,9 @@ module.exports = {
   getFluxNodeList,
   getFluxNodeGeolocation,
   getFluxInformation,
+  createHistoryStats,
+  processFluxNode,
+  getGeolocationInBatchAndRefreshDatabase,
+  processFluxNodes,
+  getLastRound,
 };
