@@ -777,6 +777,7 @@ async function getAllFluxInformation(req, res, i = 0) {
     const database = db.db(config.database.local.database);
     const lastRound = await getLastRound();
     const lastCompletedRound = lastRound ? lastRound.timestamp : 0;
+    await bootstrapFluxCollection(lastCompletedRound);
     const collectionName = `fluxes${lastCompletedRound}`;
     const query = {};
     // const queryForIps = []; // disable
