@@ -52,7 +52,7 @@ module.exports = (app) => {
     generalService.activeMessagePhrases(req, res);
   });
 
-  app.get('/proposals/listproposals', cache('1 minute'), (req, res) => {
+  app.get('/proposals/listproposals', cache('5 minute'), (req, res) => {
     proposalService.listProposals(req, res);
   });
   app.get('/proposals/price', cache('1 minute'), (req, res) => {
