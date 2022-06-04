@@ -297,6 +297,7 @@ async function bootstrapFluxCollection(timestamp) {
   await database.collection(collectionName).createIndex({ scannedHeight: 1 }, { name: 'query for getting scanned height' });
   await database.collection(collectionName).createIndex({ connectionsOut: 1 }, { name: 'query for getting connections out' });
   await database.collection(collectionName).createIndex({ connectionsIn: 1 }, { name: 'query for getting connections in' });
+  await database.collection(collectionName).createIndex({ error: 1 }, { name: 'query for getting errored nodes' });
 }
 
 async function createHistoryStats() {
@@ -373,24 +374,24 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
       scannedHeightInfo = await getFluxSyncedHeight(fluxnode.ip, timeout);
     }
     let conOut = fluxInfo.flux.connectionsOut;
-    if (!conOut) {
-      conOut = await getConnectionsOut(fluxnode.ip, timeout);
-    } else {
+    if (conOut) {
       const conOutOk = [];
       conOut.forEach((con) => {
         conOutOk.push(con.ip);
       });
       conOut = conOutOk;
+    } else {
+      conOut = await getConnectionsOut(fluxnode.ip, timeout);
     }
     let conIn = fluxInfo.flux.connectionsIn;
-    if (!conIn) {
-      await getConnectionsIn(fluxnode.ip, timeout);
-    } else {
+    if (conIn) {
       const conInOk = [];
       conInOk.forEach((con) => {
         conInOk.push(con.ip);
       });
       conIn = conInOk;
+    } else {
+      conIn = await getConnectionsIn(fluxnode.ip, timeout);
     }
     const auxIp = fluxnode.ip.split(':')[0];
     const query = { ip: auxIp };
@@ -469,14 +470,27 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
 
     const curTime = new Date().getTime();
     fluxInfo.dataCollectedAt = curTime;
+    delete fluxInfo.apps.hashes;
+    delete fluxInfo.flux.connectionsIn;
+    delete fluxInfo.flux.connectionsOut;
+    delete fluxInfo.flux.explorerScannedHeigth;
     processedFluxNodes.push(fluxInfo);
   } catch (error) {
-    if (retry) {
-      await serviceHelper.timeout(4000); // cache on fluxOs is 5 seconds so lets retry litle bit before that
-      await processFluxNode(fluxnode, currentRoundTime, timeout);
-    } else {
-      log.error(error);
-    }
+    const fluxInfo = {};
+    fluxInfo.ip = fluxnode.ip;
+    fluxInfo.addedHeight = fluxnode.added_height;
+    fluxInfo.confirmedHeight = fluxnode.confirmed_height;
+    fluxInfo.lastConfirmedHeight = fluxnode.last_confirmed_height;
+    fluxInfo.lastPaidHeight = fluxnode.last_paid_height;
+    fluxInfo.tier = fluxnode.tier;
+    fluxInfo.paymentAddress = fluxnode.payment_address;
+    fluxInfo.activeSince = fluxnode.activesince;
+    fluxInfo.collateralHash = getCollateralInfo(fluxnode.collateral).txhash;
+    fluxInfo.collateralIndex = getCollateralInfo(fluxnode.collateral).txindex;
+    fluxInfo.roundTime = currentRoundTime;
+    fluxInfo.error = true;
+    processedFluxNodes.push(fluxInfo);
+    log.error(error);
   }
 }
 
@@ -609,6 +623,7 @@ async function processFluxNodes() {
     const database = db.db(config.database.local.database);
     const currentRoundTime = new Date().getTime();
     const currentCollectionName = `fluxes${currentRoundTime}`;
+    await bootstrapFluxCollection(currentRoundTime);
     log.info(`Beginning processing processFluxNodes of ${currentRoundTime}.`);
     const fluxnodes = await getFluxNodeList();
     // const fluxnodes = [{ ip: '78.216.167.78' }]; // fluxnode that was causing the hang.
@@ -777,7 +792,6 @@ async function getAllFluxInformation(req, res, i = 0) {
     const database = db.db(config.database.local.database);
     const lastRound = await getLastRound();
     const lastCompletedRound = lastRound ? lastRound.timestamp : 0;
-    await bootstrapFluxCollection(lastCompletedRound);
     const collectionName = `fluxes${lastCompletedRound}`;
     const query = {};
     // const queryForIps = []; // disable
@@ -830,6 +844,7 @@ async function getAllFluxInformation(req, res, i = 0) {
           scannedHeight: 1,
           connectionsOut: 1,
           connectionsIn: 1,
+          error: 1,
         },
       };
     }
@@ -1024,6 +1039,7 @@ async function getFluxIPHistory(req, res) {
           benchmark: 1,
           flux: 1,
           apps: 1,
+          error: 1,
         },
       };
       // return latest fluxnode round
