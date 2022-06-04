@@ -514,7 +514,7 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
     processedFluxNodes.push(fluxInfo);
   } catch (error) {
     if (retry) {
-      await serviceHelper.timeout(4000); //cache on fluxOs is 5 seconds so lets retry litle bit before that
+      await serviceHelper.timeout(4000); // cache on fluxOs is 5 seconds so lets retry litle bit before that
       await processFluxNode(fluxnode, currentRoundTime, timeout);
     } else {
       log.error(error);
@@ -896,7 +896,7 @@ async function getAllFluxInformation(req, res, i = 0) {
       myCacheMid.set(cacheKey, results);
       fluxInformationRunning = false;
     } else {
-      log.info("Using getAllFluxInformation cache");
+      log.info('Using getAllFluxInformation cache');
     }
     const resMessage = serviceHelper.createDataMessage(results);
     res.json(resMessage);
@@ -972,7 +972,7 @@ async function getAllFluxVersions(req, res, i = 0) {
       myCacheMid.set(cacheKey, allData);
       runninggetAllFluxVersions = false;
     } else {
-      log.info("Using getAllFluxVersions cache");
+      log.info('Using getAllFluxVersions cache');
     }
     const resMessage = serviceHelper.createDataMessage(results);
     res.json(resMessage);
@@ -1025,7 +1025,7 @@ async function getAllFluxGeolocation(req, res, i = 0) {
       myCache.set('geolocation', bresults);
       fluxLocationsRunning = false;
     } else {
-      log.info("Using getAllFluxGeolocation cache");
+      log.info('Using getAllFluxGeolocation cache');
     }
     const resMessage = serviceHelper.createDataMessage(results);
     res.json(resMessage);
@@ -1077,7 +1077,7 @@ async function getFluxIPHistory(req, res) {
       ipHistory = await serviceHelper.findInDatabase(database, fluxcollection, query, projection);
       myCacheShort.set(`ipHistory${ip}`, ipHistory);
     } else {
-      log.info("Using getFluxIPHistory cache");
+      log.info('Using getFluxIPHistory cache');
     }
     const resMessage = serviceHelper.createDataMessage(ipHistory);
     res.json(resMessage);
@@ -1093,23 +1093,23 @@ async function getCompletedRoundsTimestamps(req, res, i = 0) {
   try {
     let timestamps = myCacheShort.get('getCompletedRoundsTimestamps');
     if (!timestamps) {
-        if (getCompletedRoundsTimestampsRunning) {
-          await serviceHelper.timeout(1000);
-          if (i < 300) {
-            getCompletedRoundsTimestamps(req, res, i + 1);
-          }
-          throw new Error('Internal error. Try again later');
+      if (getCompletedRoundsTimestampsRunning) {
+        await serviceHelper.timeout(1000);
+        if (i < 300) {
+          getCompletedRoundsTimestamps(req, res, i + 1);
         }
-        getCompletedRoundsTimestampsRunning = true;
-        const database = db.db(config.database.local.database);
-        const q = {};
-        const p = {};
-        const completedRounds = await serviceHelper.findInDatabase(database, completedRoundsCollection, q, p);
-        timestamps = completedRounds.map((x) => x.timestamp);        
-        myCacheShort.set('getCompletedRoundsTimestamps', timestamps);
-        getCompletedRoundsTimestampsRunning = false;
+        throw new Error('Internal error. Try again later');
+      }
+      getCompletedRoundsTimestampsRunning = true;
+      const database = db.db(config.database.local.database);
+      const q = {};
+      const p = {};
+      const completedRounds = await serviceHelper.findInDatabase(database, completedRoundsCollection, q, p);
+      timestamps = completedRounds.map((x) => x.timestamp);
+      myCacheShort.set('getCompletedRoundsTimestamps', timestamps);
+      getCompletedRoundsTimestampsRunning = false;
     } else {
-      log.info("Using getCompletedRoundsTimestamps cache");
+      log.info('Using getCompletedRoundsTimestamps cache');
     }
     const resMessage = serviceHelper.createDataMessage(timestamps);
     res.json(resMessage);
@@ -1138,7 +1138,7 @@ async function fluxNodesHistoryStats(req, res, i = 0) {
       historystats = myCache.get('historyStats');
       fluxNodeHistoryStatsRunning = false;
     } else {
-      log.info("Using fluxNodesHistoryStats cache");
+      log.info('Using fluxNodesHistoryStats cache');
     }
     const resMessage = serviceHelper.createDataMessage(historystats);
     res.json(resMessage);
