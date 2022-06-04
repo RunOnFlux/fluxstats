@@ -670,7 +670,7 @@ async function processFluxNodes() {
         const index = fluxNodesWithError.indexOf(fluxnode);
         fluxNodesWithError.splice(index, 1);
         promiseArray.push(processFluxNode(fluxnode, currentRoundTime, explorerTimeout, true));
-        if ((i + 1) % 40 === 0) {
+        if ((i + 1) % 20 === 0) {
           await Promise.allSettled(promiseArray);
           promiseArray = [];
           myCacheProcessingIp.clear();
