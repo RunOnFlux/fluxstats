@@ -1148,4 +1148,13 @@ module.exports = {
   getAllFluxVersions,
   getCompletedRoundsTimestamps,
   fluxNodesHistoryStats,
+  getFluxAppsHashes,
+  getFluxSyncedHeight,
+  getConnectionsOut,
+  getConnectionsIn,
+  getCollateralInfo,
+  bootstrapFluxCollection,
+  getFluxNodeList,
+  getFluxNodeGeolocation,
+  getFluxInformation,
 };
