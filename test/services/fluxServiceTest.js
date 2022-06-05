@@ -15,6 +15,10 @@ const myCache = new LRU(LRUoptions);
 
 module.exports = () => {
   describe('Flux Service Test', () => {
+    it('Should start process', async () => {
+      chai.expect(service.start());
+    });
+    
     it('Should return flux node list', async () => {
       const response = await service.getFluxNodeList();
       chai.expect(response).to.not.be.null;
@@ -193,10 +197,6 @@ module.exports = () => {
         json: (data) => JSON.stringify(data),
       };
       chai.expect(service.fluxNodesHistoryStats(req, res));
-    });
-
-    it('Should start process', async () => {
-      chai.expect(service.start());
     });
   });
 };

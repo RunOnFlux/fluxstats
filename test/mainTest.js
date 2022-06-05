@@ -9,6 +9,7 @@ const serviceHelperTest = require('./services/serviceHelperTest');
 const marketplaceServiceTest = require('./services/marketplaceServiceTest');
 const kadenaServiceTest = require('./services/kadenaServiceTest');
 const fluxServiceTest = require('./services/fluxServiceTest');
+const proposalServiceTest = require('./services/proposalServiceTest');
 
 const fluxServices = require('../src/services/fluxService');
 
@@ -25,7 +26,7 @@ describe('Main Test', () => {
       server.close(done);
       setTimeout(() => {
         process.exit();
-      }, 10000);
+      }, 120000);
     });
     await fluxEndpointsTest(server);
     await uiFluxEndpointsTest(server);
@@ -33,5 +34,6 @@ describe('Main Test', () => {
     await marketplaceServiceTest();
     await kadenaServiceTest();
     await fluxServiceTest();
+    await proposalServiceTest();
   });
 });
