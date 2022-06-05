@@ -172,7 +172,7 @@ module.exports = () => {
     });
 
     it('Should process get all flux ip history', async () => {
-      const req = {};
+      const req = { params: {ip: '38.242.236.226'}, query: {ip: '38.242.236.226'} };
       const res = {
         json: (data) => JSON.stringify(data),
       };
@@ -193,6 +193,10 @@ module.exports = () => {
         json: (data) => JSON.stringify(data),
       };
       chai.expect(service.fluxNodesHistoryStats(req, res));
+    });
+
+    it('Should start process', async () => {
+      chai.expect(service.start());
     });
   });
 };
