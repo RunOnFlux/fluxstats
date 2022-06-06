@@ -10,6 +10,7 @@ const marketplaceServiceTest = require('./services/marketplaceServiceTest');
 const kadenaServiceTest = require('./services/kadenaServiceTest');
 const fluxServiceTest = require('./services/fluxServiceTest');
 const proposalServiceTest = require('./services/proposalServiceTest');
+const generalServiceTest = require('./services/generalServiceTest');
 
 const fluxServices = require('../src/services/fluxService');
 
@@ -35,5 +36,6 @@ describe('Main Test', () => {
     await kadenaServiceTest();
     await fluxServiceTest();
     await proposalServiceTest();
+    await generalServiceTest();
   });
 });
