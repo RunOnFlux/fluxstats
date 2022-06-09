@@ -166,7 +166,7 @@ export default {
       },
       filters: {
         default: 'filter off',
-        others: ['node version', 'nodes hashes', 'filter off'],
+        others: ['none'],
       },
       filtersval: {
         default: 'none',
