@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-12">
       <h2 class="title">
-        UpTime
+        Up Time
       </h2>
     </div>
     <p class="category" />
@@ -117,7 +117,7 @@ export default {
         {
           prop: 'activeSince',
           label: 'Active Since',
-          minWidth: 200,
+          minWidth: 150,
         },
         {
           prop: 'activeSinceConverted',
@@ -132,7 +132,7 @@ export default {
         {
           prop: 'dataCollectedAtConverted',
           label: 'Data Collected At Converted',
-          minWidth: 150,
+          minWidth: 200,
         },
       ],
       tableData: [],

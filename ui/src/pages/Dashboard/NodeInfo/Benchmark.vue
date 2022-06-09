@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-12">
       <h2 class="title">
-        Application
+        Benchmark
       </h2>
     </div>
     <p class="category" />
@@ -30,14 +30,52 @@
                 :value="item"
               />
             </el-select>
-            <el-input
-              v-model="searchQuery"
-              type="search"
-              class="mb-3"
-              style="width: 200px"
-              placeholder="Search IP"
-              aria-controls="datatables"
-            />
+            <div
+              col-md-6
+              offset-md-3
+            >
+              <el-select
+                v-model="filters.default"
+                class="select-default mb-3"
+                style="width: 200px"
+                placeholder="Filters"
+              >
+                <el-option
+                  v-for="item in filters.others"
+                  :key="item"
+                  class="select-default"
+                  :label="item"
+                  :value="item"
+                />
+              </el-select>
+              <el-select
+                v-model="filtersval.default"
+                class="select-default mb-3"
+                style="width: 200px"
+                placeholder="Filters"
+              >
+                <el-option
+                  v-for="item in filtersval.others"
+                  :key="item"
+                  class="select-default"
+                  :label="item"
+                  :value="item"
+                />
+              </el-select>
+            </div>
+            <div
+              col-md-3
+              offset-md-6
+            >
+              <el-input
+                v-model="searchQuery"
+                type="search"
+                class="mb-3"
+                style="width: 200px"
+                placeholder="Search IP"
+                aria-controls="datatables"
+              />
+            </div>
           </div>
           <div class="col-sm-12">
             <el-table
@@ -49,21 +87,21 @@
             >
               <el-table-column type="expand">
                 <template slot-scope="props">
-                  <p
-                    v-for="(item,index) in props.row.apps.runningapps"
-                    :key="index"
-                  >
-                    <b>Application {{ index + 1 }}:</b> <br>
-                    <b>ID:</b> {{ item.Id }} <br>
-                    <b>Names:</b> {{ item.Names }} <br>
-                    <b>Image:</b> {{ item.Image }} <br>
-                    <b>Image ID:</b> {{ item.ImageID }} <br>
-                    <b>Command:</b> {{ item.Command }} <br>
-                    <b>Ports:</b> {{ item.Ports }} <br>
-                    <b>Labels:</b> {{ item.Labels }} <br>
-                    <b>State:</b> {{ item.State }} <br>
-                    <b>Status:</b> {{ item.Status }} <br>
-                  </p>
+                  <p><b>RPC Port:</b> {{ props.row.benchmark.info.rpcport }} </p>
+                  <p><b>Architecture:</b> {{ props.row.benchmark.bench.architecture }}</p>
+                  <p><b>Arm Board:</b> {{ props.row.benchmark.bench.armboard }}</p>
+                  <p><b>Time:</b> {{ props.row.benchmark.bench.time }}</p>
+                  <p><b>Converted Time:</b> {{ `${new Date(parseInt(props.row.benchmark.bench.time) * 1000).toLocaleString()}` }}</p>
+                  <p><b>Real Cores:</b> {{ props.row.benchmark.bench.real_cores }}</p>
+                  <p><b>Cores:</b> {{ props.row.benchmark.bench.cores }}</p>
+                  <p><b>RAM:</b> {{ props.row.benchmark.bench.ram }}</p>
+                  <p><b>HDD:</b> {{ props.row.benchmark.bench.hdd }}</p>
+                  <p><b>Total Storage:</b> {{ props.row.benchmark.bench.totalstorage }}</p>
+                  <p><b>Disk:</b> {{ props.row.benchmark.bench.disksinfo.disk }}</p>
+                  <p><b>Disk Size:</b> {{ props.row.benchmark.bench.disksinfo.size }}</p>
+                  <p><b>Disk Write Speed:</b> {{ props.row.benchmark.bench.disksinfo.writespeed }}</p>
+                  <p><b>EPS:</b> {{ props.row.benchmark.bench.eps }}</p>
+                  <p><b>Errors:</b> {{ props.row.benchmark.bench.error }}</p>
                 </template>
               </el-table-column>
               <el-table-column
@@ -125,48 +163,45 @@ export default {
         perPageOptions: [5, 10, 25, 50, 100, 200, 500, 1000, 2000, 5000, 10000],
         total: 0,
       },
+      filters: {
+        default: 'filter off',
+        others: ['node version', 'nodes hashes', 'filter off'],
+      },
+      filtersval: {
+        default: 'none',
+        others: ['none'],
+      },
       searchQuery: '',
-      propsToSearch: ['ip'],
+      propsToSearch: ['benchmark.bench.ipaddress'],
       tableColumns: [
         {
-          prop: 'ip',
+          prop: 'benchmark.bench.ipaddress',
           label: 'IP Address',
           minWidth: 200,
         },
         {
-          prop: 'apps.count',
-          label: 'Total Application Running',
-          minWidth: 150,
-        },
-        {
-          prop: 'apps.fluxtower',
-          label: 'Flux Watch Tower Installed',
+          prop: 'benchmark.bench.download_speed',
+          label: 'Download Speed',
           minWidth: 100,
         },
         {
-          prop: 'apps.fluxusage',
-          label: 'Flux Usage',
+          prop: 'benchmark.bench.upload_speed',
+          label: 'Upload Speed',
           minWidth: 100,
         },
         {
-          prop: 'apps.resources.appsCpusLocked',
-          label: 'CPU Locked',
+          prop: 'benchmark.bench.ping',
+          label: 'Ping',
           minWidth: 100,
         },
         {
-          prop: 'apps.resources.appsRamLocked',
-          label: 'RAM Locked',
-          minWidth: 100,
-        },
-        {
-          prop: 'apps.resources.appsHddLocked',
-          label: 'HDD Locked',
+          prop: 'benchmark.status.status',
+          label: 'Status',
           minWidth: 100,
         },
       ],
       tableData: [],
       originalData: null,
-      values: [],
       fuseSearch: null,
       isLoading: false,
     };
@@ -225,7 +260,6 @@ export default {
   async mounted() {
     this.setLoading(true);
     await this.getFluxInfo();
-    await this.processFluxInfo();
     this.setSearch();
     this.setLoading(false);
   },
@@ -234,34 +268,18 @@ export default {
       this.pagination.total = value;
     },
     async getFluxInfo() {
-      const lsdata = MemoryStorage.get('fluxinfo?projection=ip,apps');
+      const lsdata = MemoryStorage.get('fluxinfo?projection=benchmark');
       if (!lsdata) {
-        const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=ip,apps');
-        MemoryStorage.put('fluxinfo?projection=ip,apps', response.data.data, 600);
-        this.values = response.data.data;
+        const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=benchmark');
+        MemoryStorage.put('fluxinfo?projection=benchmark', response.data.data, 600);
+        this.tableData = response.data.data;
       } else {
-        this.values = lsdata;
+        this.tableData = lsdata;
       }
-    },
-    async processFluxInfo() {
-      this.values.map((value) => {
-        const returnValue = value;
-        const filtered = returnValue.apps.runningapps.filter((item) => item.Image !== 'containrrr/watchtower');
-        returnValue.apps.runningapps = filtered;
-        if (filtered.length !== undefined || filtered.length !== 0) {
-          returnValue.apps.fluxtower = 'TRUE';
-          returnValue.apps.count = filtered.length;
-        } else {
-          returnValue.apps.fluxtower = 'FALSE';
-          returnValue.apps.count = 0;
-        }
-        return returnValue;
-      });
-      this.tableData = this.values;
     },
     setSearch() {
       this.originalData = JSON.stringify(this.tableData);
-      this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
+      this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['benchmark.bench.ipaddress'] });
     },
     setLoading(value) {
       this.isLoading = value;
@@ -270,9 +288,9 @@ export default {
       if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val = 0;
-          if (a.ip > b.ip) {
+          if (a.bechmark.bench.ipaddress > b.bechmark.bench.ipaddress) {
             val = 1;
-          } else if (a.ip < b.ip) {
+          } else if (a.bechmark.bench.ipaddress < b.bechmark.bench.ipaddress) {
             val = -1;
           }
           return val;
@@ -280,129 +298,89 @@ export default {
       } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val = 0;
-          if (a.ip < b.ip) {
+          if (a.bechmark.bench.ipaddress < b.bechmark.bench.ipaddress) {
             val = 1;
-          } else if (a.ip > b.ip) {
+          } else if (a.bechmark.bench.ipaddress > b.bechmark.bench.ipaddress) {
             val = -1;
           }
           return val;
         });
-      } else if (sortProps.column.label === 'Total Application Running' && sortProps.column.order === 'ascending') {
+      } else if (sortProps.column.label === 'Download Speed' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val = 0;
-          if (a.apps.count > b.apps.count) {
+          if (a.benchmark.bench.download_speed > b.benchmark.bench.download_speed) {
             val = 1;
-          } else if (a.apps.count < b.apps.count) {
+          } else if (a.benchmark.bench.download_speed < b.benchmark.bench.download_speed) {
             val = -1;
           }
           return val;
         });
-      } else if (sortProps.column.label === 'Total Application Running' && sortProps.column.order === 'descending') {
+      } else if (sortProps.column.label === 'Download Speed' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val = 0;
-          if (a.apps.count < b.apps.count) {
+          if (a.benchmark.bench.download_speed < b.benchmark.bench.download_speed) {
             val = 1;
-          } else if (a.apps.count > b.apps.count) {
+          } else if (a.benchmark.bench.download_speed > b.benchmark.bench.download_speed) {
             val = -1;
           }
           return val;
         });
-      } else if (sortProps.column.label === 'Flux Watch Tower Installed' && sortProps.column.order === 'ascending') {
+      } else if (sortProps.column.label === 'Upload Speed' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val = 0;
-          if (a.apps.fluxtower > b.apps.fluxtower) {
+          if (a.benchmark.bench.upload_speed > b.benchmark.bench.upload_speed) {
             val = 1;
-          } else if (a.apps.fluxtower < b.apps.fluxtower) {
+          } else if (a.benchmark.bench.upload_speed < b.benchmark.bench.upload_speed) {
             val = -1;
           }
           return val;
         });
-      } else if (sortProps.column.label === 'Flux Watch Tower Installed' && sortProps.column.order === 'descending') {
+      } else if (sortProps.column.label === 'Upload Speed' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val = 0;
-          if (a.apps.fluxtower < b.apps.fluxtower) {
+          if (a.benchmark.bench.upload_speed < b.benchmark.bench.upload_speed) {
             val = 1;
-          } else if (a.apps.fluxtower > b.apps.fluxtower) {
+          } else if (a.benchmark.bench.upload_speed > b.benchmark.bench.upload_speed) {
             val = -1;
           }
           return val;
         });
-      } else if (sortProps.column.label === 'Flux Usage' && sortProps.column.order === 'ascending') {
+      } else if (sortProps.column.label === 'Ping' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val = 0;
-          if (a.apps.fluxusage > b.apps.fluxusage) {
+          if (a.benchmark.bench.ping > b.benchmark.bench.ping) {
             val = 1;
-          } else if (a.apps.fluxusage < b.apps.fluxusage) {
+          } else if (a.benchmark.bench.ping < b.benchmark.bench.ping) {
             val = -1;
           }
           return val;
         });
-      } else if (sortProps.column.label === 'Flux Usage' && sortProps.column.order === 'descending') {
+      } else if (sortProps.column.label === 'Ping' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val = 0;
-          if (a.apps.fluxusage < b.apps.fluxusage) {
+          if (a.benchmark.bench.ping < b.benchmark.bench.ping) {
             val = 1;
-          } else if (a.apps.fluxusage > b.apps.fluxusage) {
+          } else if (a.benchmark.bench.ping > b.benchmark.bench.ping) {
             val = -1;
           }
           return val;
         });
-      } else if (sortProps.column.label === 'CPU Locked' && sortProps.column.order === 'ascending') {
+      } else if (sortProps.column.label === 'Status' && sortProps.column.order === 'ascending') {
         this.tableData.sort((a, b) => {
           let val = 0;
-          if (a.apps.resources.appsCpusLocked > b.apps.resources.appsCpusLocked) {
+          if (a.benchmark.status.status > b.benchmark.status.status) {
             val = 1;
-          } else if (a.apps.resources.appsCpusLocked < b.apps.resources.appsCpusLocked) {
+          } else if (a.benchmark.status.status < b.benchmark.status.status) {
             val = -1;
           }
           return val;
         });
-      } else if (sortProps.column.label === 'CPU Locked' && sortProps.column.order === 'descending') {
+      } else if (sortProps.column.label === 'Status' && sortProps.column.order === 'descending') {
         this.tableData.sort((a, b) => {
           let val = 0;
-          if (a.apps.resources.appsCpusLocked < b.apps.resources.appsCpusLocked) {
+          if (a.benchmark.status.status < b.benchmark.status.status) {
             val = 1;
-          } else if (a.apps.resources.appsCpusLocked > b.apps.resources.appsCpusLocked) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'RAM Locked' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
-          let val = 0;
-          if (a.apps.resources.appsRamLocked > b.apps.resources.appsRamLocked) {
-            val = 1;
-          } else if (a.apps.resources.appsRamLocked < b.apps.resources.appsRamLocked) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'RAM Locked' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
-          let val = 0;
-          if (a.apps.resources.appsRamLocked < b.apps.resources.appsRamLocked) {
-            val = 1;
-          } else if (a.apps.resources.appsRamLocked > b.apps.resources.appsRamLocked) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'HDD Locked' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
-          let val = 0;
-          if (a.apps.resources.appsHddLocked > b.apps.resources.appsHddLocked) {
-            val = 1;
-          } else if (a.apps.resources.appsHddLocked < b.apps.resources.appsHddLocked) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'HDD Locked' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
-          let val = 0;
-          if (a.apps.resources.appsHddLocked < b.apps.resources.appsHddLocked) {
-            val = 1;
-          } else if (a.apps.resources.appsHddLocked > b.apps.resources.appsHddLocked) {
+          } else if (a.benchmark.status.status > b.benchmark.status.status) {
             val = -1;
           }
           return val;

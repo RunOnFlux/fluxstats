@@ -49,12 +49,6 @@
             >
               <el-table-column type="expand">
                 <template slot-scope="props">
-                  <p><b>Flux Info:</b></p>
-                  <p><b>Zel ID:</b> {{ props.row.flux.zelid }} </p>
-                  <p><b>Crux ID:</b> {{ props.row.flux.cruxid }}</p>
-                  <p><b>DOS State:</b> {{ props.row.flux.dos.dosState }}</p>
-                  <p><b>DOS Message:</b> {{ props.row.flux.dos.dosMessage }}</p>
-                  <br>
                   <p><b>Daemon Info:</b></p>
                   <p><b>Protocol Version:</b> {{ props.row.daemon.info.protocolversion }} </p>
                   <p><b>Wallet Version:</b> {{ props.row.daemon.info.walletversion }}</p>
@@ -69,23 +63,6 @@
                   <p><b>Pay Txn Fee:</b> {{ props.row.daemon.info.paytxfee }}</p>
                   <p><b>Relay Fee:</b> {{ props.row.daemon.info.relayfee }}</p>
                   <p><b>Errors:</b> {{ props.row.daemon.info.errors }}</p>
-                  <br>
-                  <p><b>Benchmark Info:</b></p>
-                  <p><b>RPC Port:</b> {{ props.row.benchmark.info.rpcport }} </p>
-                  <p><b>Architecture:</b> {{ props.row.benchmark.bench.architecture }}</p>
-                  <p><b>Arm Board:</b> {{ props.row.benchmark.bench.armboard }}</p>
-                  <p><b>Time:</b> {{ props.row.benchmark.bench.time }}</p>
-                  <p><b>Converted Time:</b> {{ `${new Date(parseInt(props.row.benchmark.bench.time) * 1000).toLocaleString()}` }}</p>
-                  <p><b>Real Cores:</b> {{ props.row.benchmark.bench.real_cores }}</p>
-                  <p><b>Cores:</b> {{ props.row.benchmark.bench.cores }}</p>
-                  <p><b>RAM:</b> {{ props.row.benchmark.bench.ram }}</p>
-                  <p><b>HDD:</b> {{ props.row.benchmark.bench.hdd }}</p>
-                  <p><b>Total Storage:</b> {{ props.row.benchmark.bench.totalstorage }}</p>
-                  <p><b>Disk:</b> {{ props.row.benchmark.bench.disksinfo.disk }}</p>
-                  <p><b>Disk Size:</b> {{ props.row.benchmark.bench.disksinfo.size }}</p>
-                  <p><b>Disk Write Speed:</b> {{ props.row.benchmark.bench.disksinfo.writespeed }}</p>
-                  <p><b>EPS:</b> {{ props.row.benchmark.bench.eps }}</p>
-                  <p><b>Errors:</b> {{ props.row.benchmark.bench.error }}</p>
                 </template>
               </el-table-column>
               <el-table-column
@@ -156,19 +133,19 @@ export default {
           minWidth: 200,
         },
         {
+          prop: 'flux.version',
+          label: 'Flux Version',
+          minWidth: 120,
+        },
+        {
           prop: 'daemon.info.version',
           label: 'Daemon Version',
-          minWidth: 250,
+          minWidth: 100,
         },
         {
           prop: 'benchmark.info.version',
           label: 'Benchmark Version',
           minWidth: 100,
-        },
-        {
-          prop: 'flux.version',
-          label: 'Flux Version',
-          minWidth: 120,
         },
       ],
       tableData: [],

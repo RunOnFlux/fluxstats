@@ -100,6 +100,9 @@
                   <p><b>Last Paid:</b> {{ props.row.node.status.lastpaid }}</p>
                   <p><b>Last Paid Converted:</b> {{ new Date(parseInt(props.row.node.status.lastpaid * 1000)).toLocaleString() }}</p>
                   <p><b>Amount:</b> {{ props.row.node.status.amount }}</p>
+                  <p><b>Crux ID:</b> {{ props.row.flux.cruxid }}</p>
+                  <p><b>DOS State:</b> {{ props.row.flux.dos.dosState }}</p>
+                  <p><b>DOS Message:</b> {{ props.row.flux.dos.dosMessage }}</p>
                 </template>
               </el-table-column>
               <el-table-column
@@ -175,27 +178,27 @@ export default {
         {
           prop: 'node.status.ip',
           label: 'IP Address',
-          minWidth: 70,
+          minWidth: 200,
         },
         {
           prop: 'node.status.network',
           label: 'Network Protocol',
-          minWidth: 40,
+          minWidth: 100,
         },
         {
           prop: 'node.status.tier',
           label: 'Tier',
-          minWidth: 90,
+          minWidth: 100,
         },
         {
           prop: 'node.status.status',
           label: 'Status',
-          minWidth: 50,
+          minWidth: 100,
         },
         {
           prop: 'node.status.rank',
           label: 'Payment Rank',
-          minWidth: 70,
+          minWidth: 100,
         },
       ],
       tableData: [],
