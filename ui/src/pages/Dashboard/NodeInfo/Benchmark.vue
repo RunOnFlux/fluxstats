@@ -88,6 +88,8 @@
               <el-table-column type="expand">
                 <template slot-scope="props">
                   <p><b>RPC Port:</b> {{ props.row.benchmark.info.rpcport }} </p>
+                  <p><b>Benchmarking:</b> {{ props.row.benchmark.status.benchmarking }} </p>
+                  <p><b>Flux:</b> {{ props.row.benchmark.status.flux }} </p>
                   <p><b>Architecture:</b> {{ props.row.benchmark.bench.architecture }}</p>
                   <p><b>Arm Board:</b> {{ props.row.benchmark.bench.armboard }}</p>
                   <p><b>Time:</b> {{ props.row.benchmark.bench.time }}</p>

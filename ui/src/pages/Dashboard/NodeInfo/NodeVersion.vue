@@ -133,18 +133,28 @@ export default {
           minWidth: 200,
         },
         {
-          prop: 'flux.version',
-          label: 'Flux Version',
+          prop: 'daemon.info.version',
+          label: 'Daemon Version',
           minWidth: 120,
         },
         {
-          prop: 'daemon.info.version',
-          label: 'Daemon Version',
+          prop: 'flux.version',
+          label: 'Flux Version',
           minWidth: 100,
         },
         {
           prop: 'benchmark.info.version',
           label: 'Benchmark Version',
+          minWidth: 100,
+        },
+        {
+          prop: 'benchmark.bench.bench_version',
+          label: 'Bench Version',
+          minWidth: 100,
+        },
+        {
+          prop: 'benchmark.bench.speed_version',
+          label: 'Bench Speed Version',
           minWidth: 100,
         },
       ],
