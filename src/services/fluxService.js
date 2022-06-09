@@ -470,6 +470,10 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
 
     const curTime = new Date().getTime();
     fluxInfo.dataCollectedAt = curTime;
+    delete fluxInfo.apps.hashes;
+    delete fluxInfo.flux.connectionsIn;
+    delete fluxInfo.flux.connectionsOut;
+    delete fluxInfo.flux.explorerScannedHeigth;
     processedFluxNodes.push(fluxInfo);
   } catch (error) {
     const fluxInfo = {};
