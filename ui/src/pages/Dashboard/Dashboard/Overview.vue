@@ -501,7 +501,7 @@ export default {
         }
       }
       for (let i = 0; i < 5; i += 1) {
-        this.tableData3.data.push({ title: `${i + 1}. Zel ID: ${ent[i].zelId} - Cumulus: ${this.totalCumulus.get(ent[i].zelId)} Nimbus: ${this.totalNimbus.get(ent[i].zelId)} Stratus: ${this.totalStratus.get(ent[i].zelId)}` });
+        this.tableData3.data.push({ title: `${i + 1}. Zel ID: ${ent[i].zelId} - Total: ${this.totalNodes.get(ent[i].zelId)} Cumulus: ${this.totalCumulus.get(ent[i].zelId)} Nimbus: ${this.totalNimbus.get(ent[i].zelId)} Stratus: ${this.totalStratus.get(ent[i].zelId)}` });
       }
     },
     async getFluxStats() {
