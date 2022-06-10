@@ -243,6 +243,24 @@
           />
         </card>
       </div>
+      <div class="col-md-6">
+        <card
+          class="card-tasks"
+          title="Tier Speed"
+          sub-title="Average Upload And Download Speed Per Tier"
+        >
+          <l-table :data="tableData4.data">
+            <template slot-scope="{row}">
+              <td>{{ row.title }}</td>
+              <td class="td-actions d-flex justify-content-end" />
+            </template>
+          </l-table>
+          <div
+            slot="footer"
+            class="stats"
+          />
+        </card>
+      </div>
     </div>
   </div>
 </template>
@@ -335,6 +353,10 @@ export default {
         data: [
         ],
       },
+      tableData4: {
+        data: [
+        ],
+      },
       totalNumberOfNodes: 0,
       totalNumberOfCumulus: 0,
       totalNumberOfNimbus: 0,
@@ -352,6 +374,20 @@ export default {
       totalCumulus: new Map(),
       totalStratus: new Map(),
       totalNimbus: new Map(),
+      averageSpeed: {
+        cumulus: {
+          uploadSpeed: 0,
+          downloadSpeed: 0,
+        },
+        nimbus: {
+          uploadSpeed: 0,
+          downloadSpeed: 0,
+        },
+        stratus: {
+          uploadSpeed: 0,
+          downloadSpeed: 0,
+        },
+      },
       map: new Map(),
       mapCumulus: new Map(),
       mapNimbus: new Map(),
@@ -403,6 +439,14 @@ export default {
         this.mapCumulus.set(data.geolocation.country, data.tier === 'CUMULUS' ? this.mapCumulus.get(data.geolocation.country) + 1 : this.mapCumulus.get(data.geolocation.country));
         this.mapNimbus.set(data.geolocation.country, data.tier === 'NIMBUS' ? this.mapNimbus.get(data.geolocation.country) + 1 : this.mapNimbus.get(data.geolocation.country));
         this.mapStratus.set(data.geolocation.country, data.tier === 'STRATUS' ? this.mapStratus.get(data.geolocation.country) + 1 : this.mapStratus.get(data.geolocation.country));
+        const uploadSpeed = Number.isNaN(data.benchmark.bench.upload_speed) || data.benchmark.bench.upload_speed === undefined ? 0 : parseFloat(data.benchmark.bench.upload_speed).toFixed(2);
+        const downloadSpeed = Number.isNaN(data.benchmark.bench.download_speed) || data.benchmark.bench.download_speed === undefined ? 0 : parseFloat(data.benchmark.bench.download_speed).toFixed(2);
+        this.averageSpeed.cumulus.uploadSpeed = data.tier === 'CUMULUS' ? (parseFloat(this.averageSpeed.cumulus.uploadSpeed) + parseFloat(uploadSpeed)).toFixed(2) : this.averageSpeed.cumulus.uploadSpeed;
+        this.averageSpeed.nimbus.uploadSpeed = data.tier === 'NIMBUS' ? (parseFloat(this.averageSpeed.nimbus.uploadSpeed) + parseFloat(uploadSpeed)).toFixed(2) : this.averageSpeed.nimbus.uploadSpeed;
+        this.averageSpeed.stratus.uploadSpeed = data.tier === 'STRATUS' ? (parseFloat(this.averageSpeed.stratus.uploadSpeed) + parseFloat(uploadSpeed)).toFixed(2) : this.averageSpeed.stratus.uploadSpeed;
+        this.averageSpeed.cumulus.downloadSpeed = data.tier === 'CUMULUS' ? (parseFloat(this.averageSpeed.cumulus.downloadSpeed) + parseFloat(downloadSpeed)).toFixed(2) : this.averageSpeed.cumulus.downloadSpeed;
+        this.averageSpeed.nimbus.downloadSpeed = data.tier === 'NIMBUS' ? (parseFloat(this.averageSpeed.nimbus.downloadSpeed) + parseFloat(downloadSpeed)).toFixed(2) : this.averageSpeed.nimbus.downloadSpeed;
+        this.averageSpeed.stratus.downloadSpeed = data.tier === 'STRATUS' ? (parseFloat(this.averageSpeed.stratus.downloadSpeed) + parseFloat(downloadSpeed)).toFixed(2) : this.averageSpeed.stratus.downloadSpeed;
         return data;
       });
       this.totalTBSSD = Number(this.totalTBSSD / 1000).toFixed(2);
@@ -503,6 +547,9 @@ export default {
       for (let i = 0; i < 5; i += 1) {
         this.tableData3.data.push({ title: `${i + 1}. Zel ID: ${ent[i].zelId} - Total: ${this.totalNodes.get(ent[i].zelId)} Cumulus: ${this.totalCumulus.get(ent[i].zelId)} Nimbus: ${this.totalNimbus.get(ent[i].zelId)} Stratus: ${this.totalStratus.get(ent[i].zelId)}` });
       }
+      this.tableData4.data.push({ title: `Cumulus Nodes - Upload Speed: ${parseFloat(this.averageSpeed.cumulus.uploadSpeed / this.totalNumberOfCumulus).toFixed(2)} Download Speed: ${parseFloat(this.averageSpeed.cumulus.downloadSpeed / this.totalNumberOfCumulus).toFixed(2)}` });
+      this.tableData4.data.push({ title: `Nimbus Nodes - Upload Speed: ${parseFloat(this.averageSpeed.nimbus.uploadSpeed / this.totalNumberOfNimbus).toFixed(2)} Download Speed: ${parseFloat(this.averageSpeed.nimbus.downloadSpeed / this.totalNumberOfNimbus).toFixed(2)}` });
+      this.tableData4.data.push({ title: `Stratus Nodes - Upload Speed: ${parseFloat(this.averageSpeed.stratus.uploadSpeed / this.totalNumberOfStratus).toFixed(2)} Download Speed: ${parseFloat(this.averageSpeed.stratus.downloadSpeed / this.totalNumberOfStratus).toFixed(2)}` });
     },
     async getFluxStats() {
       const lsdata = MemoryStorage.get('fluxhistorystats');
