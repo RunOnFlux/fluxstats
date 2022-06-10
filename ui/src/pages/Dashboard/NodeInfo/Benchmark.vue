@@ -167,7 +167,7 @@ export default {
       },
       filters: {
         default: 'filter off',
-        others: ['none'],
+        others: ['filter off', 'download speed', 'upload speed', 'ping', 'status'],
       },
       filtersval: {
         default: 'none',

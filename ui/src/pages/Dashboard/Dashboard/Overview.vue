@@ -457,7 +457,7 @@ export default {
         }
       }
       for (let i = 0; i < 5; i += 1) {
-        this.tableData2.data.push({ title: `1. ${ent[i].name} - ${ent[i].total} Nodes` });
+        this.tableData2.data.push({ title: `${i + 1}. ${ent[i].name} - ${ent[i].total} Nodes` });
       }
       this.values.map((data) => {
         if (this.paymentAddress.get(data.flux.zelid) !== undefined) {
