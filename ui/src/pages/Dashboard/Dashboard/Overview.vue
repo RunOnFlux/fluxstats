@@ -461,7 +461,7 @@ export default {
       }
       this.values.map((data) => {
         if (this.paymentAddress.get(data.flux.zelid) !== undefined) {
-          this.totalNodes.set(data.flux.zelid, this.totalNodes.get(data.flux.zelid + 1));
+          this.totalNodes.set(data.flux.zelid, this.totalNodes.get(data.flux.zelid) + 1);
           this.totalCumulus.set(data.flux.zelid, data.tier === 'CUMULUS' ? this.totalCumulus.get(data.flux.zelid) + 1 : this.totalCumulus.get(data.flux.zelid));
           this.totalNimbus.set(data.flux.zelid, data.tier === 'NIMBUS' ? this.totalNimbus.get(data.flux.zelid) + 1 : this.totalNimbus.get(data.flux.zelid));
           this.totalStratus.set(data.flux.zelid, data.tier === 'STRATUS' ? this.totalStratus.get(data.flux.zelid) + 1 : this.totalStratus.get(data.flux.zelid));
