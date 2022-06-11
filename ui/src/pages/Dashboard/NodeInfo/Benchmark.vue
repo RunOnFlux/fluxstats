@@ -203,6 +203,12 @@ export default {
         },
       ],
       tableData: [],
+      values: [],
+      filterValue1: [],
+      filterValue2: [],
+      filterValue3: [],
+      filterValue4: [],
+      filter1: new Map(),
       originalData: null,
       fuseSearch: null,
       isLoading: false,
@@ -220,6 +226,7 @@ export default {
      */
     queriedData() {
       let result;
+      let val1 = this.filterValue1[0];
       if (this.searchQuery !== '') {
         const temp = [];
         result = this.fuseSearch.search(`=${this.searchQuery}`);
@@ -227,8 +234,14 @@ export default {
           temp.push(result[i].item);
         }
         result = temp;
+      } else if (this.filters.default === 'status') {
+        val1 = this.filtersval.default === 'none' || !this.filter1.has(this.filtersval.default) ? val1 : this.filtersval.default;
+        this.setFilterFieldValues(val1, this.filterValue1);
+        result = this.filter1.get(this.filtersval.default);
       } else {
         result = this.tableData;
+        this.setFilterValues('filter off', ['filter off', 'download speed', 'upload speed', 'ping', 'status']);
+        this.setFilterFieldValues('none');
       }
       this.paginationTotal(result.length);
       return result.slice(this.from, this.to);
@@ -252,6 +265,8 @@ export default {
           temp.push(result[i].item);
         }
         result = temp;
+      } else if (this.filters.default === 'status') {
+        result = this.filter1.get(this.filtersval.default);
       } else {
         result = this.tableData;
       }
@@ -262,6 +277,7 @@ export default {
   async mounted() {
     this.setLoading(true);
     await this.getFluxInfo();
+    await this.processFluxInfo();
     this.setSearch();
     this.setLoading(false);
   },
@@ -269,15 +285,36 @@ export default {
     paginationTotal(value) {
       this.pagination.total = value;
     },
+    setFilterValues(defaultValues, othersValues) {
+      this.filters.default = defaultValues;
+      this.filters.others = othersValues;
+    },
+    setFilterFieldValues(defaultFieldValues, othersFieldValues) {
+      this.filtersval.default = defaultFieldValues;
+      this.filtersval.others = othersFieldValues;
+    },
     async getFluxInfo() {
       const lsdata = MemoryStorage.get('fluxinfo?projection=benchmark');
       if (!lsdata) {
         const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=benchmark');
         MemoryStorage.put('fluxinfo?projection=benchmark', response.data.data, 600);
-        this.tableData = response.data.data;
+        this.values = response.data.data;
       } else {
-        this.tableData = lsdata;
+        this.values = lsdata;
       }
+    },
+    async processFluxInfo() {
+      this.values.map((el) => {
+        const values = el;
+        const temp = this.filter1.has(values.benchmark.status.status) ? this.filter1.get(values.benchmark.status.status) : [];
+        if (!this.filter1.has(values.benchmark.status.status)) {
+          this.filterValue1.push(values.benchmark.status.status);
+        }
+        temp.push(values);
+        this.filter1.set(values.benchmark.status.status, temp);
+        return values;
+      });
+      this.tableData = this.values;
     },
     setSearch() {
       this.originalData = JSON.stringify(this.tableData);
