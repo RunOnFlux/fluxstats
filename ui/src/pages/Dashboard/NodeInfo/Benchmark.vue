@@ -167,7 +167,7 @@ export default {
       },
       filters: {
         default: 'filter off',
-        others: ['filter off', 'download speed', 'upload speed', 'ping', 'status', 'tiers'],
+        others: ['filter off', 'download speed', 'upload speed', 'ping', 'status', 'tiers', 'failing nodes'],
       },
       filtersval: {
         default: 'none',
@@ -180,6 +180,11 @@ export default {
           prop: 'benchmark.bench.ipaddress',
           label: 'IP Address',
           minWidth: 200,
+        },
+        {
+          prop: 'node.status.tier',
+          label: 'Tier',
+          minWidth: 100,
         },
         {
           prop: 'benchmark.bench.download_speed',
@@ -210,6 +215,7 @@ export default {
       filterValue4: [],
       filter1: new Map(),
       filter2: new Map(),
+      filter3: new Map(),
       originalData: null,
       fuseSearch: null,
       isLoading: false,
@@ -229,6 +235,7 @@ export default {
       let result;
       let val1 = this.filterValue1[0];
       let val2 = this.filterValue2[0];
+      let val3 = this.filterValue3[0];
       if (this.searchQuery !== '') {
         const temp = [];
         result = this.fuseSearch.search(`=${this.searchQuery}`);
@@ -244,9 +251,13 @@ export default {
         val2 = this.filtersval.default === 'none' || !this.filter2.has(this.filtersval.default) ? val2 : this.filtersval.default;
         this.setFilterFieldValues(val2, this.filterValue2);
         result = this.filter2.get(this.filtersval.default);
+      } else if (this.filters.default === 'failing nodes') {
+        val3 = this.filtersval.default === 'none' || !this.filter3.has(this.filtersval.default) ? val3 : this.filtersval.default;
+        this.setFilterFieldValues(val3, this.filterValue3);
+        result = this.filter3.get(this.filtersval.default);
       } else {
         result = this.tableData;
-        this.setFilterValues('filter off', ['filter off', 'download speed', 'upload speed', 'ping', 'status', 'tiers']);
+        this.setFilterValues('filter off', ['filter off', 'download speed', 'upload speed', 'ping', 'status', 'tiers', 'failing nodes']);
         this.setFilterFieldValues('none');
       }
       this.paginationTotal(result.length);
@@ -275,6 +286,8 @@ export default {
         result = this.filter1.get(this.filtersval.default);
       } else if (this.filters.default === 'tiers') {
         result = this.filter2.get(this.filtersval.default);
+      } else if (this.filters.default === 'failing nodes') {
+        result = this.filter3.get(this.filtersval.default);
       } else {
         result = this.tableData;
       }
@@ -321,12 +334,19 @@ export default {
         }
         temp.push(values);
         this.filter1.set(values.benchmark.status.status, temp);
-        temp = this.filter2.has(values.node.status.tier) ? this.filter2.get(values.node.status.tier) : [];
-        if (!this.filter2.has(values.node.status.tier)) {
-          this.filterValue2.push(values.node.status.tier);
+        const tier = values.node.status.tier !== undefined ? values.node.status.tier.toLowerCase() : '';
+        temp = this.filter2.has(tier) ? this.filter2.get(tier) : [];
+        if (!this.filter2.has(tier)) {
+          this.filterValue2.push(tier);
         }
         temp.push(values);
-        this.filter2.set(values.node.status.tier, temp);
+        this.filter2.set(tier, temp);
+        temp = this.filter3.has(`${values.benchmark.status.benchmarking} ${tier}`) ? this.filter3.get(`${values.benchmark.status.benchmarking} ${tier}`) : [];
+        if (values.benchmark.status.benchmarking === 'failed' && !this.filter3.has(`${values.benchmark.status.benchmarking} ${tier}`)) {
+          this.filterValue3.push(`${values.benchmark.status.benchmarking} ${tier}`);
+        }
+        temp.push(values);
+        this.filter3.set(`${values.benchmark.status.benchmarking} ${tier}`, temp);
         return values;
       });
       this.tableData = this.values;
