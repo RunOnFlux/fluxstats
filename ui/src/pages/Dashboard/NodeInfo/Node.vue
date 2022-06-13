@@ -37,25 +37,13 @@
               <el-select
                 v-model="filters.default"
                 class="select-default mb-3"
-                style="width: 200px"
+                style="width: 300px"
+                multiple
+                collapse-tags
                 placeholder="Filters"
               >
                 <el-option
                   v-for="item in filters.others"
-                  :key="item"
-                  class="select-default"
-                  :label="item"
-                  :value="item"
-                />
-              </el-select>
-              <el-select
-                v-model="filtersval.default"
-                class="select-default mb-3"
-                style="width: 200px"
-                placeholder="Filters"
-              >
-                <el-option
-                  v-for="item in filtersval.others"
                   :key="item"
                   class="select-default"
                   :label="item"
@@ -165,12 +153,8 @@ export default {
         total: 0,
       },
       filters: {
-        default: 'filter off',
-        others: ['node version', 'nodes hashes', 'filter off'],
-      },
-      filtersval: {
-        default: 'none',
-        others: ['none'],
+        default: [],
+        others: [],
       },
       searchQuery: '',
       propsToSearch: ['node.status.ip'],
@@ -207,10 +191,8 @@ export default {
       daemon: [],
       fuseSearch: null,
       isLoading: false,
-      filter1: new Map(),
-      filter2: new Map(),
-      filterValue1: [],
-      filterValue2: [],
+      filter: new Map(),
+      filterValue: [],
       ranks: new Map(),
     };
   },
@@ -226,27 +208,28 @@ export default {
      */
     queriedData() {
       let result;
-      let val1 = this.filterValue1[0];
-      let val2 = this.filterValue2[0];
       if (this.searchQuery !== '') {
         const temp = [];
         result = this.fuseSearch.search(`=${this.searchQuery}`);
         for (let i = 0; i < Object.keys(result).length; i += 1) {
-          temp.push(result[i].item);
+          temp.push(this.result[i].item);
         }
         result = temp;
-      } else if (this.filters.default === 'node version') {
-        val1 = this.filtersval.default === 'none' || !this.filter1.has(this.filtersval.default) ? val1 : this.filtersval.default;
-        this.setFilterFieldValues(val1, this.filterValue1);
-        result = this.filter1.get(this.filtersval.default);
-      } else if (this.filters.default === 'node hashes') {
-        val2 = this.filtersval.default === 'none' || !this.filter2.has(this.filtersval.default) ? val2 : this.filtersval.default;
-        this.setFilterFieldValues(val2, this.filterValue2);
-        result = this.filter2.get(this.filtersval.default);
+      } else if (this.filters.default.length) {
+        const arr = [];
+        const data = [];
+        this.filters.default.forEach((item) => {
+          const objs = this.filter.get(item);
+          objs.forEach((obj) => {
+            if (!arr.includes(obj.node.status.ip)) {
+              arr.push(obj.node.status.ip);
+              data.push(obj);
+            }
+          });
+        });
+        result = data;
       } else {
         result = this.tableData;
-        this.setFilterValues('filter off', ['filter off', 'node version', 'node hashes']);
-        this.setFilterFieldValues('none');
       }
       this.paginationTotal(result.length);
       return result.slice(this.from, this.to);
@@ -262,7 +245,7 @@ export default {
       return this.pagination.perPage * (this.pagination.currentPage - 1);
     },
     total() {
-      let result;
+      let result = [];
       if (this.searchQuery !== '') {
         const temp = [];
         result = this.fuseSearch.search(`=${this.searchQuery}`);
@@ -270,10 +253,19 @@ export default {
           temp.push(result[i].item);
         }
         result = temp;
-      } else if (this.filters.default === 'node version') {
-        result = this.filter1.get(this.filtersval.default);
-      } else if (this.filters.default === 'node hashes') {
-        result = this.filter2.get(this.filtersval.default);
+      } else if (this.filters.default.length) {
+        const arr = [];
+        const data = [];
+        this.filters.default.forEach((item) => {
+          const objs = this.filter.get(item);
+          objs.forEach((obj) => {
+            if (!arr.includes(obj.node.status.ip)) {
+              arr.push(obj.node.status.ip);
+              data.push(obj);
+            }
+          });
+        });
+        result = data;
       } else {
         result = this.tableData;
       }
@@ -293,14 +285,6 @@ export default {
   methods: {
     paginationTotal(value) {
       this.pagination.total = value;
-    },
-    setFilterValues(defaultValues, othersValues) {
-      this.filters.default = defaultValues;
-      this.filters.others = othersValues;
-    },
-    setFilterFieldValues(defaultFieldValues, othersFieldValues) {
-      this.filtersval.default = defaultFieldValues;
-      this.filtersval.others = othersFieldValues;
     },
     async getFluxInfo() {
       const lsdata = MemoryStorage.get('fluxinfo?projection=node,flux,appsHashesTotal');
@@ -336,20 +320,21 @@ export default {
         let temp;
         values.node.status.network = 'ipv4';
         values.node.status.rank = this.ranks.get(el.node.status.ip) === undefined ? 0 : this.ranks.get(el.node.status.ip);
-        temp = this.filter1.has(values.flux.version) ? this.filter1.get(values.flux.version) : [];
-        if (!this.filter1.has(values.flux.version)) {
-          this.filterValue1.push(values.flux.version);
+        temp = this.filter.has(`node version - ${values.flux.version}`) ? this.filter.get(`node version - ${values.flux.version}`) : [];
+        if (!this.filter.has(`node version - ${values.flux.version}`)) {
+          this.filterValue.push(`node version - ${values.flux.version}`);
         }
         temp.push(values);
-        this.filter1.set(values.flux.version, temp);
-        temp = this.filter2.has(values.appsHashesTotal) ? this.filter2.get(values.appsHashesTotal) : [];
-        if (!this.filter2.has(values.appsHashesTotal)) {
-          this.filterValue2.push(values.appsHashesTotal);
+        this.filter.set(`node version - ${values.flux.version}`, temp);
+        temp = this.filter.has(`node hashes - ${values.appsHashesTotal}`) ? this.filter.get(`node hashes - ${values.appsHashesTotal}`) : [];
+        if (!this.filter.has(`node hashes - ${values.appsHashesTotal}`)) {
+          this.filterValue.push(`node hashes - ${values.appsHashesTotal}`);
         }
         temp.push(values);
-        this.filter2.set(values.appsHashesTotal, temp);
+        this.filter.set(`node hashes - ${values.appsHashesTotal}`, temp);
         return values;
       });
+      this.filters.others = this.filterValue.sort();
       this.tableData = this.values;
     },
     setSearch() {
