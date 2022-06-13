@@ -197,42 +197,8 @@ export default {
     };
   },
   computed: {
-    pagedData() {
-      return this.tableData.slice(this.from, this.to);
-    },
-    /** *
-     * Searches through table data and returns a paginated array.
-     * Note that this should not be used for table with a lot of data as it might be slow!
-     * Do the search and the pagination on the server and display the data retrieved from server instead.
-     * @returns {computed.pagedData}
-     */
     queriedData() {
-      let result;
-      if (this.searchQuery !== '') {
-        const temp = [];
-        result = this.fuseSearch.search(`=${this.searchQuery}`);
-        for (let i = 0; i < Object.keys(result).length; i += 1) {
-          temp.push(this.result[i].item);
-        }
-        result = temp;
-      } else if (this.filters.default.length) {
-        const arr = [];
-        const data = [];
-        this.filters.default.forEach((item) => {
-          const objs = this.filter.get(item);
-          objs.forEach((obj) => {
-            if (!arr.includes(obj.node.status.ip)) {
-              arr.push(obj.node.status.ip);
-              data.push(obj);
-            }
-          });
-        });
-        result = data;
-      } else {
-        result = this.tableData;
-      }
-      this.paginationTotal(result.length);
-      return result.slice(this.from, this.to);
+      return this.processData();
     },
     to() {
       let highBound = this.from + this.pagination.perPage;
@@ -285,6 +251,37 @@ export default {
   methods: {
     paginationTotal(value) {
       this.pagination.total = value;
+    },
+    processData(sortProps) {
+      let result;
+      if (this.searchQuery !== '') {
+        const temp = [];
+        result = this.fuseSearch.search(`=${this.searchQuery}`);
+        for (let i = 0; i < Object.keys(result).length; i += 1) {
+          temp.push(result[i].item);
+        }
+        result = temp;
+      } else if (this.filters.default.length) {
+        const arr = [];
+        const data = [];
+        this.filters.default.forEach((item) => {
+          const objs = this.filter.get(item);
+          objs.forEach((obj) => {
+            if (!arr.includes(obj.node.status.ip)) {
+              arr.push(obj.node.status.ip);
+              data.push(obj);
+            }
+          });
+        });
+        result = data;
+      } else {
+        result = this.tableData;
+      }
+      if (sortProps) {
+        result = this.sorting(sortProps, result);
+      }
+      this.paginationTotal(result.length);
+      return result.slice(this.from, this.to);
     },
     async getFluxInfo() {
       const lsdata = MemoryStorage.get('fluxinfo?projection=node,flux,appsHashesTotal');
@@ -345,8 +342,11 @@ export default {
       this.isLoading = value;
     },
     sortChange(sortProps) {
+      this.processData(sortProps);
+    },
+    sorting(sortProps, data) {
       if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.node.status.ip > b.node.status.ip) {
             val = 1;
@@ -356,7 +356,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.node.status.ip < b.node.status.ip) {
             val = 1;
@@ -366,7 +366,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Network Protocol' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.node.status.network > b.node.status.network) {
             val = 1;
@@ -376,7 +376,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Network Protocol' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.node.status.network < b.node.status.network) {
             val = 1;
@@ -386,7 +386,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Tier' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.node.status.tier > b.node.status.tier) {
             val = 1;
@@ -396,7 +396,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Tier' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.node.status.tier < b.node.status.tier) {
             val = 1;
@@ -406,7 +406,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Status' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.node.status.status > b.node.status.status) {
             val = 1;
@@ -416,7 +416,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Status' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.node.status.status < b.node.status.status) {
             val = 1;
@@ -426,7 +426,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Payment Rank' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.node.status.rank > b.node.status.rank) {
             val = 1;
@@ -436,7 +436,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Payment Rank' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.node.status.rank < b.node.status.rank) {
             val = 1;
@@ -448,6 +448,7 @@ export default {
       } else {
         this.tableData = JSON.parse(this.originalData);
       }
+      return data;
     },
   },
 };
