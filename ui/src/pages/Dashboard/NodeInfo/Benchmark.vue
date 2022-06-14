@@ -37,25 +37,13 @@
               <el-select
                 v-model="filters.default"
                 class="select-default mb-3"
-                style="width: 200px"
+                style="width: 300px"
+                multiple
+                collapse-tags
                 placeholder="Filters"
               >
                 <el-option
                   v-for="item in filters.others"
-                  :key="item"
-                  class="select-default"
-                  :label="item"
-                  :value="item"
-                />
-              </el-select>
-              <el-select
-                v-model="filtersval.default"
-                class="select-default mb-3"
-                style="width: 200px"
-                placeholder="Filters"
-              >
-                <el-option
-                  v-for="item in filtersval.others"
                   :key="item"
                   class="select-default"
                   :label="item"
@@ -166,12 +154,8 @@ export default {
         total: 0,
       },
       filters: {
-        default: 'filter off',
-        others: ['filter off', 'download speed', 'upload speed', 'ping', 'status', 'tiers', 'failing nodes'],
-      },
-      filtersval: {
-        default: 'none',
-        others: ['none'],
+        default: [],
+        others: [],
       },
       searchQuery: '',
       propsToSearch: ['benchmark.bench.ipaddress'],
@@ -209,59 +193,16 @@ export default {
       ],
       tableData: [],
       values: [],
-      filterValue1: [],
-      filterValue2: [],
-      filterValue3: [],
-      filterValue4: [],
-      filter1: new Map(),
-      filter2: new Map(),
-      filter3: new Map(),
+      filterValue: [],
+      filter: new Map(),
       originalData: null,
       fuseSearch: null,
       isLoading: false,
     };
   },
   computed: {
-    pagedData() {
-      return this.tableData.slice(this.from, this.to);
-    },
-    /** *
-     * Searches through table data and returns a paginated array.
-     * Note that this should not be used for table with a lot of data as it might be slow!
-     * Do the search and the pagination on the server and display the data retrieved from server instead.
-     * @returns {computed.pagedData}
-     */
     queriedData() {
-      let result;
-      let val1 = this.filterValue1[0];
-      let val2 = this.filterValue2[0];
-      let val3 = this.filterValue3[0];
-      if (this.searchQuery !== '') {
-        const temp = [];
-        result = this.fuseSearch.search(`=${this.searchQuery}`);
-        for (let i = 0; i < Object.keys(result).length; i += 1) {
-          temp.push(result[i].item);
-        }
-        result = temp;
-      } else if (this.filters.default === 'status') {
-        val1 = this.filtersval.default === 'none' || !this.filter1.has(this.filtersval.default) ? val1 : this.filtersval.default;
-        this.setFilterFieldValues(val1, this.filterValue1);
-        result = this.filter1.get(this.filtersval.default);
-      } else if (this.filters.default === 'tiers') {
-        val2 = this.filtersval.default === 'none' || !this.filter2.has(this.filtersval.default) ? val2 : this.filtersval.default;
-        this.setFilterFieldValues(val2, this.filterValue2);
-        result = this.filter2.get(this.filtersval.default);
-      } else if (this.filters.default === 'failing nodes') {
-        val3 = this.filtersval.default === 'none' || !this.filter3.has(this.filtersval.default) ? val3 : this.filtersval.default;
-        this.setFilterFieldValues(val3, this.filterValue3);
-        result = this.filter3.get(this.filtersval.default);
-      } else {
-        result = this.tableData;
-        this.setFilterValues('filter off', ['filter off', 'download speed', 'upload speed', 'ping', 'status', 'tiers', 'failing nodes']);
-        this.setFilterFieldValues('none');
-      }
-      this.paginationTotal(result.length);
-      return result.slice(this.from, this.to);
+      return this.processData();
     },
     to() {
       let highBound = this.from + this.pagination.perPage;
@@ -282,12 +223,19 @@ export default {
           temp.push(result[i].item);
         }
         result = temp;
-      } else if (this.filters.default === 'status') {
-        result = this.filter1.get(this.filtersval.default);
-      } else if (this.filters.default === 'tiers') {
-        result = this.filter2.get(this.filtersval.default);
-      } else if (this.filters.default === 'failing nodes') {
-        result = this.filter3.get(this.filtersval.default);
+      } else if (this.filters.default.length) {
+        const arr = [];
+        const data = [];
+        this.filters.default.forEach((item) => {
+          const objs = this.filter.get(item);
+          objs.forEach((obj) => {
+            if (!arr.includes(obj.node.status.ip)) {
+              arr.push(obj.node.status.ip);
+              data.push(obj);
+            }
+          });
+        });
+        result = data;
       } else {
         result = this.tableData;
       }
@@ -306,13 +254,36 @@ export default {
     paginationTotal(value) {
       this.pagination.total = value;
     },
-    setFilterValues(defaultValues, othersValues) {
-      this.filters.default = defaultValues;
-      this.filters.others = othersValues;
-    },
-    setFilterFieldValues(defaultFieldValues, othersFieldValues) {
-      this.filtersval.default = defaultFieldValues;
-      this.filtersval.others = othersFieldValues;
+    processData(sortProps) {
+      let result;
+      if (this.searchQuery !== '') {
+        const temp = [];
+        result = this.fuseSearch.search(`=${this.searchQuery}`);
+        for (let i = 0; i < Object.keys(result).length; i += 1) {
+          temp.push(result[i].item);
+        }
+        result = temp;
+      } else if (this.filters.default.length) {
+        const arr = [];
+        const data = [];
+        this.filters.default.forEach((item) => {
+          const objs = this.filter.get(item);
+          objs.forEach((obj) => {
+            if (!arr.includes(obj.node.status.ip)) {
+              arr.push(obj.node.status.ip);
+              data.push(obj);
+            }
+          });
+        });
+        result = data;
+      } else {
+        result = this.tableData;
+      }
+      if (sortProps) {
+        result = this.sorting(sortProps, result);
+      }
+      this.paginationTotal(result.length);
+      return result.slice(this.from, this.to);
     },
     async getFluxInfo() {
       const lsdata = MemoryStorage.get('fluxinfo?projection=benchmark');
@@ -328,27 +299,28 @@ export default {
       this.values.map((el) => {
         const values = el;
         let temp;
-        temp = this.filter1.has(values.benchmark.status.status) ? this.filter1.get(values.benchmark.status.status) : [];
-        if (!this.filter1.has(values.benchmark.status.status)) {
-          this.filterValue1.push(values.benchmark.status.status);
+        temp = this.filter.has(`status - ${values.benchmark.status.status}`) ? this.filter.get(`status - ${values.benchmark.status.status}`) : [];
+        if (!this.filter.has(`status - ${values.benchmark.status.status}`)) {
+          this.filterValue.push(`status - ${values.benchmark.status.status}`);
         }
         temp.push(values);
-        this.filter1.set(values.benchmark.status.status, temp);
+        this.filter.set(`status - ${values.benchmark.status.status}`, temp);
         const tier = values.node.status.tier !== undefined ? values.node.status.tier.toLowerCase() : '';
-        temp = this.filter2.has(tier) ? this.filter2.get(tier) : [];
-        if (!this.filter2.has(tier)) {
-          this.filterValue2.push(tier);
+        temp = this.filter.has(`node tier - ${tier}`) ? this.filter.get(`node tier - ${tier}`) : [];
+        if (!this.filter.has(`node tier - ${tier}`)) {
+          this.filterValue.push(`node tier - ${tier}`);
         }
         temp.push(values);
-        this.filter2.set(tier, temp);
-        temp = this.filter3.has(`${values.benchmark.status.benchmarking} ${tier}`) ? this.filter3.get(`${values.benchmark.status.benchmarking} ${tier}`) : [];
-        if (values.benchmark.status.benchmarking === 'failed' && !this.filter3.has(`${values.benchmark.status.benchmarking} ${tier}`)) {
-          this.filterValue3.push(`${values.benchmark.status.benchmarking} ${tier}`);
+        this.filter.set(`node tier - ${tier}`, temp);
+        temp = this.filter.has(`${values.benchmark.status.benchmarking} - ${tier}`) ? this.filter.get(`${values.benchmark.status.benchmarking} - ${tier}`) : [];
+        if (values.benchmark.status.benchmarking === 'failed' && !this.filter.has(`${values.benchmark.status.benchmarking} - ${tier}`)) {
+          this.filterValue.push(`${values.benchmark.status.benchmarking} - ${tier}`);
         }
         temp.push(values);
-        this.filter3.set(`${values.benchmark.status.benchmarking} ${tier}`, temp);
+        this.filter.set(`${values.benchmark.status.benchmarking} - ${tier}`, temp);
         return values;
       });
+      this.filters.others = this.filterValue.sort();
       this.tableData = this.values;
     },
     setSearch() {
@@ -359,8 +331,11 @@ export default {
       this.isLoading = value;
     },
     sortChange(sortProps) {
+      this.processData(sortProps);
+    },
+    sorting(sortProps, data) {
       if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.bechmark.bench.ipaddress > b.bechmark.bench.ipaddress) {
             val = 1;
@@ -370,7 +345,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.bechmark.bench.ipaddress < b.bechmark.bench.ipaddress) {
             val = 1;
@@ -380,7 +355,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Download Speed' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.benchmark.bench.download_speed > b.benchmark.bench.download_speed) {
             val = 1;
@@ -390,7 +365,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Download Speed' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.benchmark.bench.download_speed < b.benchmark.bench.download_speed) {
             val = 1;
@@ -400,7 +375,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Upload Speed' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.benchmark.bench.upload_speed > b.benchmark.bench.upload_speed) {
             val = 1;
@@ -410,7 +385,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Upload Speed' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.benchmark.bench.upload_speed < b.benchmark.bench.upload_speed) {
             val = 1;
@@ -420,7 +395,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Ping' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.benchmark.bench.ping > b.benchmark.bench.ping) {
             val = 1;
@@ -430,7 +405,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Ping' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.benchmark.bench.ping < b.benchmark.bench.ping) {
             val = 1;
@@ -440,7 +415,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Status' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.benchmark.status.status > b.benchmark.status.status) {
             val = 1;
@@ -450,7 +425,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Status' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.benchmark.status.status < b.benchmark.status.status) {
             val = 1;
@@ -462,6 +437,7 @@ export default {
       } else {
         this.tableData = JSON.parse(this.originalData);
       }
+      return data;
     },
   },
 };
