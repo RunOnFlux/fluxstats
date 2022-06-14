@@ -134,11 +134,6 @@ export default {
           label: 'Longtitude',
           minWidth: 120,
         },
-        {
-          prop: 'geolocation.org',
-          label: 'Organization',
-          minWidth: 200,
-        },
       ],
       tableData: [],
       originalData: null,
