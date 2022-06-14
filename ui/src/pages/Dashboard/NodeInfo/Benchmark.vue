@@ -37,7 +37,7 @@
               <el-select
                 v-model="filters.default"
                 class="select-default mb-3"
-                style="width: 300px"
+                style="width: 350px"
                 multiple
                 collapse-tags
                 placeholder="Filters"
@@ -323,6 +323,13 @@ export default {
         }
         temp.push(values);
         this.filter.set(`${values.benchmark.status.benchmarking} - ${tier}`, temp);
+        const org = values.geolocation.org.length > 30 ? `${values.geolocation.org.slice(0, 30)}...` : values.geolocation.org;
+        temp = this.filter.has(`organization - ${org}`) ? this.filter.get(`organization - ${org}`) : [];
+        if (!this.filter.has(`organization - ${org}`)) {
+          this.filterValue.push(`organization - ${org}`);
+        }
+        temp.push(values);
+        this.filter.set(`organization - ${org}`, temp);
         return values;
       });
       this.filters.others = this.filterValue.sort();
