@@ -163,7 +163,12 @@ export default {
         {
           prop: 'benchmark.bench.ipaddress',
           label: 'IP Address',
-          minWidth: 200,
+          minWidth: 150,
+        },
+        {
+          prop: 'geolocation.org',
+          label: 'Organization',
+          minWidth: 150,
         },
         {
           prop: 'node.status.tier',
@@ -288,8 +293,8 @@ export default {
     async getFluxInfo() {
       const lsdata = MemoryStorage.get('fluxinfo?projection=benchmark');
       if (!lsdata) {
-        const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=node,benchmark');
-        MemoryStorage.put('fluxinfo?projection=node,benchmark', response.data.data, 600);
+        const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=node,benchmark,geolocation');
+        MemoryStorage.put('fluxinfo?projection=node,benchmark,geolocation', response.data.data, 600);
         this.values = response.data.data;
       } else {
         this.values = lsdata;

@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-md-12">
       <h2 class="title">
-        Location
+        Geolocation
       </h2>
     </div>
     <p class="category" />
