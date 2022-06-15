@@ -168,17 +168,17 @@ export default {
         {
           prop: 'geolocation.org',
           label: 'Organization',
-          minWidth: 150,
+          minWidth: 140,
         },
         {
           prop: 'node.status.tier',
           label: 'Tier',
-          minWidth: 100,
+          minWidth: 60,
         },
         {
           prop: 'benchmark.bench.download_speed',
           label: 'Download Speed',
-          minWidth: 100,
+          minWidth: 110,
         },
         {
           prop: 'benchmark.bench.upload_speed',
@@ -193,7 +193,17 @@ export default {
         {
           prop: 'benchmark.status.status',
           label: 'Status',
+          minWidth: 60,
+        },
+        {
+          prop: 'benchmark.upnp',
+          label: 'UPnP Enabled',
           minWidth: 100,
+        },
+        {
+          prop: 'apps.count',
+          label: 'Total Application Running',
+          minWidth: 140,
         },
       ],
       tableData: [],
@@ -291,10 +301,10 @@ export default {
       return result.slice(this.from, this.to);
     },
     async getFluxInfo() {
-      const lsdata = MemoryStorage.get('fluxinfo?projection=benchmark');
+      const lsdata = MemoryStorage.get('fluxinfo?projection=node,benchmark,geolocation,apps');
       if (!lsdata) {
-        const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=node,benchmark,geolocation');
-        MemoryStorage.put('fluxinfo?projection=node,benchmark,geolocation', response.data.data, 600);
+        const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=node,benchmark,geolocation,apps');
+        MemoryStorage.put('fluxinfo?projection=node,benchmark,geolocation,apps', response.data.data, 600);
         this.values = response.data.data;
       } else {
         this.values = lsdata;
@@ -303,6 +313,10 @@ export default {
     async processFluxInfo() {
       this.values.map((el) => {
         const values = el;
+        const filtered = values.apps.runningapps.filter((item) => item.Image !== 'containrrr/watchtower');
+        values.apps.runningapps = filtered;
+        values.apps.count = filtered.length !== undefined || filtered.length !== 0 ? filtered.length : 0;
+        values.benchmark.upnp = values.benchmark.bench.ipaddress.includes(':') ? 'TRUE' : 'FALSE';
         let temp;
         temp = this.filter.has(`status - ${values.benchmark.status.status}`) ? this.filter.get(`status - ${values.benchmark.status.status}`) : [];
         if (!this.filter.has(`status - ${values.benchmark.status.status}`)) {
@@ -317,12 +331,12 @@ export default {
         }
         temp.push(values);
         this.filter.set(`node tier - ${tier}`, temp);
-        temp = this.filter.has(`${values.benchmark.status.benchmarking} - ${tier}`) ? this.filter.get(`${values.benchmark.status.benchmarking} - ${tier}`) : [];
-        if (values.benchmark.status.benchmarking === 'failed' && !this.filter.has(`${values.benchmark.status.benchmarking} - ${tier}`)) {
-          this.filterValue.push(`${values.benchmark.status.benchmarking} - ${tier}`);
+        temp = this.filter.has(`${values.benchmark.status.benchmarking} nodes - ${tier}`) ? this.filter.get(`${values.benchmark.status.benchmarking} nodes - ${tier}`) : [];
+        if (values.benchmark.status.benchmarking === 'failed' && !this.filter.has(`${values.benchmark.status.benchmarking} nodes - ${tier}`)) {
+          this.filterValue.push(`${values.benchmark.status.benchmarking} nodes - ${tier}`);
         }
         temp.push(values);
-        this.filter.set(`${values.benchmark.status.benchmarking} - ${tier}`, temp);
+        this.filter.set(`${values.benchmark.status.benchmarking} nodes - ${tier}`, temp);
         const org = values.geolocation.org.length > 30 ? `${values.geolocation.org.slice(0, 30)}...` : values.geolocation.org;
         temp = this.filter.has(`organization - ${org}`) ? this.filter.get(`organization - ${org}`) : [];
         if (!this.filter.has(`organization - ${org}`)) {
@@ -330,6 +344,12 @@ export default {
         }
         temp.push(values);
         this.filter.set(`organization - ${org}`, temp);
+        temp = this.filter.has(`upnp enabled - ${values.benchmark.upnp}`) ? this.filter.get(`upnp enabled - ${values.benchmark.upnp}`) : [];
+        if (!this.filter.has(`upnp enabled - ${values.benchmark.upnp}`)) {
+          this.filterValue.push(`upnp enabled - ${values.benchmark.upnp}`);
+        }
+        temp.push(values);
+        this.filter.set(`upnp enabled - ${values.benchmark.upnp}`, temp);
         return values;
       });
       this.filters.others = this.filterValue.sort();
@@ -442,6 +462,66 @@ export default {
           if (a.benchmark.status.status < b.benchmark.status.status) {
             val = 1;
           } else if (a.benchmark.status.status > b.benchmark.status.status) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Total Application Running' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.apps.count > b.apps.count) {
+            val = 1;
+          } else if (a.apps.count < b.apps.count) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Total Application Running' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.apps.count < b.apps.count) {
+            val = 1;
+          } else if (a.apps.count > b.apps.count) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Tier' && sortProps.column.order === 'ascending') {
+        data.sort((a, b) => {
+          let val = 0;
+          if (a.node.status.tier > b.node.status.tier) {
+            val = 1;
+          } else if (a.node.status.tier < b.node.status.tier) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Tier' && sortProps.column.order === 'descending') {
+        data.sort((a, b) => {
+          let val = 0;
+          if (a.node.status.tier < b.node.status.tier) {
+            val = 1;
+          } else if (a.node.status.tier > b.node.status.tier) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Organization' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.geolocation.org > b.geolocation.org) {
+            val = 1;
+          } else if (a.geolocation.org < b.geolocation.org) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Organization' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.geolocation.org < b.geolocation.org) {
+            val = 1;
+          } else if (a.geolocation.org > b.geolocation.org) {
             val = -1;
           }
           return val;

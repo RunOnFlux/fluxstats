@@ -239,13 +239,8 @@ export default {
         const returnValue = value;
         const filtered = returnValue.apps.runningapps.filter((item) => item.Image !== 'containrrr/watchtower');
         returnValue.apps.runningapps = filtered;
-        if (filtered.length !== undefined || filtered.length !== 0) {
-          returnValue.apps.fluxtower = 'TRUE';
-          returnValue.apps.count = filtered.length;
-        } else {
-          returnValue.apps.fluxtower = 'FALSE';
-          returnValue.apps.count = 0;
-        }
+        returnValue.apps.fluxtower = filtered.length !== undefined || filtered.length !== 0 ? 'TRUE' : 'FALSE';
+        returnValue.apps.count = filtered.length !== undefined || filtered.length !== 0 ? filtered.length : 0;
         return returnValue;
       });
       this.tableData = this.values;
