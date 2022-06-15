@@ -350,6 +350,13 @@ export default {
         }
         temp.push(values);
         this.filter.set(`upnp enabled - ${values.benchmark.upnp}`, temp);
+        const ip = values.benchmark.bench.ipaddress.split(':')[0];
+        temp = this.filter.has(`upnp ip address - ${ip}`) ? this.filter.get(`upnp ip address - ${ip}`) : [];
+        if (values.benchmark.upnp === 'TRUE' && !this.filter.has(`upnp ip address - ${ip}`)) {
+          this.filterValue.push(`upnp ip address - ${ip}`);
+        }
+        temp.push(values);
+        this.filter.set(`upnp ip address - ${ip}`, temp);
         return values;
       });
       this.filters.others = this.filterValue.sort();
