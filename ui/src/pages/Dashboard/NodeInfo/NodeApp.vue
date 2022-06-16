@@ -136,7 +136,7 @@ export default {
         {
           prop: 'apps.count',
           label: 'Total Application Running',
-          minWidth: 100,
+          minWidth: 150,
         },
         {
           prop: 'apps.fluxtower',
@@ -156,12 +156,12 @@ export default {
         {
           prop: 'apps.resources.appsRamLocked',
           label: 'RAM Locked',
-          minWidth: 120,
+          minWidth: 100,
         },
         {
           prop: 'apps.resources.appsHddLocked',
           label: 'HDD Locked',
-          minWidth: 120,
+          minWidth: 100,
         },
       ],
       tableData: [],
@@ -172,15 +172,6 @@ export default {
     };
   },
   computed: {
-    pagedData() {
-      return this.tableData.slice(this.from, this.to);
-    },
-    /** *
-     * Searches through table data and returns a paginated array.
-     * Note that this should not be used for table with a lot of data as it might be slow!
-     * Do the search and the pagination on the server and display the data retrieved from server instead.
-     * @returns {computed.pagedData}
-     */
     queriedData() {
       let result;
       if (this.searchQuery !== '') {
@@ -248,13 +239,8 @@ export default {
         const returnValue = value;
         const filtered = returnValue.apps.runningapps.filter((item) => item.Image !== 'containrrr/watchtower');
         returnValue.apps.runningapps = filtered;
-        if (filtered.length !== undefined || filtered.length !== 0) {
-          returnValue.apps.fluxtower = 'TRUE';
-          returnValue.apps.count = filtered.length;
-        } else {
-          returnValue.apps.fluxtower = 'FALSE';
-          returnValue.apps.count = 0;
-        }
+        returnValue.apps.fluxtower = filtered.length !== undefined || filtered.length !== 0 ? 'TRUE' : 'FALSE';
+        returnValue.apps.count = filtered.length !== undefined || filtered.length !== 0 ? filtered.length : 0;
         return returnValue;
       });
       this.tableData = this.values;

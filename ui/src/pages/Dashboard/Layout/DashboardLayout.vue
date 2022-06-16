@@ -9,10 +9,11 @@
         <sidebar-item :link="{name: 'Dashboard', icon: 'nc-icon nc-chart-pie-35', path: '/flux/dashboard/overview'}" />
         <sidebar-item :link="{name: 'Node Info', icon: 'nc-icon nc-app'}">
           <sidebar-item :link="{name: 'Node', path: '/flux/nodeinfo/node'}" />
+          <sidebar-item :link="{name: 'Benchmark', path: '/flux/nodeinfo/benchmark'}" />
           <sidebar-item :link="{name: 'Application', path: '/flux/nodeinfo/app'}" />
           <sidebar-item :link="{name: 'Hashes', path: '/flux/nodeinfo/hashes'}" />
           <sidebar-item :link="{name: 'Address Info', path: '/flux/nodeinfo/address'}" />
-          <sidebar-item :link="{name: 'Location', path: '/flux/nodeinfo/location'}" />
+          <sidebar-item :link="{name: 'Geolocation', path: '/flux/nodeinfo/location'}" />
           <sidebar-item :link="{name: 'Connection', path: '/flux/nodeinfo/connection'}" />
           <sidebar-item :link="{name: 'Up Time', path: '/flux/nodeinfo/uptime'}" />
           <sidebar-item :link="{name: 'Version', path: '/flux/nodeinfo/version'}" />

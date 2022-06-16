@@ -37,25 +37,13 @@
               <el-select
                 v-model="filters.default"
                 class="select-default mb-3"
-                style="width: 200px"
+                style="width: 300px"
+                multiple
+                collapse-tags
                 placeholder="Filters"
               >
                 <el-option
                   v-for="item in filters.others"
-                  :key="item"
-                  class="select-default"
-                  :label="item"
-                  :value="item"
-                />
-              </el-select>
-              <el-select
-                v-model="filtersval.default"
-                class="select-default mb-3"
-                style="width: 200px"
-                placeholder="Filters"
-              >
-                <el-option
-                  v-for="item in filtersval.others"
                   :key="item"
                   class="select-default"
                   :label="item"
@@ -100,6 +88,9 @@
                   <p><b>Last Paid:</b> {{ props.row.node.status.lastpaid }}</p>
                   <p><b>Last Paid Converted:</b> {{ new Date(parseInt(props.row.node.status.lastpaid * 1000)).toLocaleString() }}</p>
                   <p><b>Amount:</b> {{ props.row.node.status.amount }}</p>
+                  <p><b>Crux ID:</b> {{ props.row.flux.cruxid }}</p>
+                  <p><b>DOS State:</b> {{ props.row.flux.dos.dosState }}</p>
+                  <p><b>DOS Message:</b> {{ props.row.flux.dos.dosMessage }}</p>
                 </template>
               </el-table-column>
               <el-table-column
@@ -162,12 +153,8 @@ export default {
         total: 0,
       },
       filters: {
-        default: 'filter off',
-        others: ['node version', 'nodes hashes', 'filter off'],
-      },
-      filtersval: {
-        default: 'none',
-        others: ['none'],
+        default: [],
+        others: [],
       },
       searchQuery: '',
       propsToSearch: ['node.status.ip'],
@@ -175,27 +162,27 @@ export default {
         {
           prop: 'node.status.ip',
           label: 'IP Address',
-          minWidth: 70,
+          minWidth: 200,
         },
         {
           prop: 'node.status.network',
           label: 'Network Protocol',
-          minWidth: 40,
+          minWidth: 100,
         },
         {
           prop: 'node.status.tier',
           label: 'Tier',
-          minWidth: 90,
+          minWidth: 100,
         },
         {
           prop: 'node.status.status',
           label: 'Status',
-          minWidth: 50,
+          minWidth: 100,
         },
         {
           prop: 'node.status.rank',
           label: 'Payment Rank',
-          minWidth: 70,
+          minWidth: 100,
         },
       ],
       tableData: [],
@@ -204,49 +191,14 @@ export default {
       daemon: [],
       fuseSearch: null,
       isLoading: false,
-      filter1: new Map(),
-      filter2: new Map(),
-      filterValue1: [],
-      filterValue2: [],
+      filter: new Map(),
+      filterValue: [],
       ranks: new Map(),
     };
   },
   computed: {
-    pagedData() {
-      return this.tableData.slice(this.from, this.to);
-    },
-    /** *
-     * Searches through table data and returns a paginated array.
-     * Note that this should not be used for table with a lot of data as it might be slow!
-     * Do the search and the pagination on the server and display the data retrieved from server instead.
-     * @returns {computed.pagedData}
-     */
     queriedData() {
-      let result;
-      let val1 = this.filterValue1[0];
-      let val2 = this.filterValue2[0];
-      if (this.searchQuery !== '') {
-        const temp = [];
-        result = this.fuseSearch.search(`=${this.searchQuery}`);
-        for (let i = 0; i < Object.keys(result).length; i += 1) {
-          temp.push(result[i].item);
-        }
-        result = temp;
-      } else if (this.filters.default === 'node version') {
-        val1 = this.filtersval.default === 'none' || !this.filter1.has(this.filtersval.default) ? val1 : this.filtersval.default;
-        this.setFilterFieldValues(val1, this.filterValue1);
-        result = this.filter1.get(this.filtersval.default);
-      } else if (this.filters.default === 'node hashes') {
-        val2 = this.filtersval.default === 'none' || !this.filter2.has(this.filtersval.default) ? val2 : this.filtersval.default;
-        this.setFilterFieldValues(val2, this.filterValue2);
-        result = this.filter2.get(this.filtersval.default);
-      } else {
-        result = this.tableData;
-        this.setFilterValues('filter off', ['filter off', 'node version', 'node hashes']);
-        this.setFilterFieldValues('none');
-      }
-      this.paginationTotal(result.length);
-      return result.slice(this.from, this.to);
+      return this.processData();
     },
     to() {
       let highBound = this.from + this.pagination.perPage;
@@ -259,7 +211,7 @@ export default {
       return this.pagination.perPage * (this.pagination.currentPage - 1);
     },
     total() {
-      let result;
+      let result = [];
       if (this.searchQuery !== '') {
         const temp = [];
         result = this.fuseSearch.search(`=${this.searchQuery}`);
@@ -267,10 +219,19 @@ export default {
           temp.push(result[i].item);
         }
         result = temp;
-      } else if (this.filters.default === 'node version') {
-        result = this.filter1.get(this.filtersval.default);
-      } else if (this.filters.default === 'node hashes') {
-        result = this.filter2.get(this.filtersval.default);
+      } else if (this.filters.default.length) {
+        const arr = [];
+        const data = [];
+        this.filters.default.forEach((item) => {
+          const objs = this.filter.get(item);
+          objs.forEach((obj) => {
+            if (!arr.includes(obj.node.status.ip)) {
+              arr.push(obj.node.status.ip);
+              data.push(obj);
+            }
+          });
+        });
+        result = data;
       } else {
         result = this.tableData;
       }
@@ -291,13 +252,36 @@ export default {
     paginationTotal(value) {
       this.pagination.total = value;
     },
-    setFilterValues(defaultValues, othersValues) {
-      this.filters.default = defaultValues;
-      this.filters.others = othersValues;
-    },
-    setFilterFieldValues(defaultFieldValues, othersFieldValues) {
-      this.filtersval.default = defaultFieldValues;
-      this.filtersval.others = othersFieldValues;
+    processData(sortProps) {
+      let result;
+      if (this.searchQuery !== '') {
+        const temp = [];
+        result = this.fuseSearch.search(`=${this.searchQuery}`);
+        for (let i = 0; i < Object.keys(result).length; i += 1) {
+          temp.push(result[i].item);
+        }
+        result = temp;
+      } else if (this.filters.default.length) {
+        const arr = [];
+        const data = [];
+        this.filters.default.forEach((item) => {
+          const objs = this.filter.get(item);
+          objs.forEach((obj) => {
+            if (!arr.includes(obj.node.status.ip)) {
+              arr.push(obj.node.status.ip);
+              data.push(obj);
+            }
+          });
+        });
+        result = data;
+      } else {
+        result = this.tableData;
+      }
+      if (sortProps) {
+        result = this.sorting(sortProps, result);
+      }
+      this.paginationTotal(result.length);
+      return result.slice(this.from, this.to);
     },
     async getFluxInfo() {
       const lsdata = MemoryStorage.get('fluxinfo?projection=node,flux,appsHashesTotal');
@@ -333,20 +317,21 @@ export default {
         let temp;
         values.node.status.network = 'ipv4';
         values.node.status.rank = this.ranks.get(el.node.status.ip) === undefined ? 0 : this.ranks.get(el.node.status.ip);
-        temp = this.filter1.has(values.flux.version) ? this.filter1.get(values.flux.version) : [];
-        if (!this.filter1.has(values.flux.version)) {
-          this.filterValue1.push(values.flux.version);
+        temp = this.filter.has(`node version - ${values.flux.version}`) ? this.filter.get(`node version - ${values.flux.version}`) : [];
+        if (!this.filter.has(`node version - ${values.flux.version}`)) {
+          this.filterValue.push(`node version - ${values.flux.version}`);
         }
         temp.push(values);
-        this.filter1.set(values.flux.version, temp);
-        temp = this.filter2.has(values.appsHashesTotal) ? this.filter2.get(values.appsHashesTotal) : [];
-        if (!this.filter2.has(values.appsHashesTotal)) {
-          this.filterValue2.push(values.appsHashesTotal);
+        this.filter.set(`node version - ${values.flux.version}`, temp);
+        temp = this.filter.has(`node hashes - ${values.appsHashesTotal}`) ? this.filter.get(`node hashes - ${values.appsHashesTotal}`) : [];
+        if (!this.filter.has(`node hashes - ${values.appsHashesTotal}`)) {
+          this.filterValue.push(`node hashes - ${values.appsHashesTotal}`);
         }
         temp.push(values);
-        this.filter2.set(values.appsHashesTotal, temp);
+        this.filter.set(`node hashes - ${values.appsHashesTotal}`, temp);
         return values;
       });
+      this.filters.others = this.filterValue.sort();
       this.tableData = this.values;
     },
     setSearch() {
@@ -357,8 +342,11 @@ export default {
       this.isLoading = value;
     },
     sortChange(sortProps) {
+      this.processData(sortProps);
+    },
+    sorting(sortProps, data) {
       if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.node.status.ip > b.node.status.ip) {
             val = 1;
@@ -368,7 +356,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.node.status.ip < b.node.status.ip) {
             val = 1;
@@ -378,7 +366,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Network Protocol' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.node.status.network > b.node.status.network) {
             val = 1;
@@ -388,7 +376,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Network Protocol' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.node.status.network < b.node.status.network) {
             val = 1;
@@ -398,7 +386,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Tier' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.node.status.tier > b.node.status.tier) {
             val = 1;
@@ -408,7 +396,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Tier' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.node.status.tier < b.node.status.tier) {
             val = 1;
@@ -418,7 +406,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Status' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.node.status.status > b.node.status.status) {
             val = 1;
@@ -428,7 +416,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Status' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.node.status.status < b.node.status.status) {
             val = 1;
@@ -438,7 +426,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Payment Rank' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.node.status.rank > b.node.status.rank) {
             val = 1;
@@ -448,7 +436,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Payment Rank' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.node.status.rank < b.node.status.rank) {
             val = 1;
@@ -460,6 +448,7 @@ export default {
       } else {
         this.tableData = JSON.parse(this.originalData);
       }
+      return data;
     },
   },
 };

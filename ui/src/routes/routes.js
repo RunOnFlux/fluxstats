@@ -12,6 +12,7 @@ const NodeApp = () => import('@/pages/Dashboard/NodeInfo/NodeApp.vue');
 const NodeAppHash = () => import('@/pages/Dashboard/NodeInfo/NodeAppHash.vue');
 const NodeConnection = () => import('@/pages/Dashboard/NodeInfo/NodeConnection.vue');
 const AddressInfo = () => import('@/pages/Dashboard/NodeInfo/NodeAddressInfo.vue');
+const Benchmark = () => import('@/pages/Dashboard/NodeInfo/Benchmark.vue');
 
 // NodeHistory pages
 const HistoryInfo = () => import('@/pages/Dashboard/NodeHistory/HistoryInfo.vue');
@@ -60,6 +61,11 @@ const nodeInfo = {
       path: 'address',
       name: 'AddressInfo',
       component: AddressInfo,
+    },
+    {
+      path: 'benchmark',
+      name: 'Benchmark',
+      component: Benchmark,
     }],
 };
 

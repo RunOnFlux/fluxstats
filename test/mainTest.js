@@ -8,6 +8,10 @@ const fluxEndpointsTest = require('./ui/fluxEndpointsTest');
 const serviceHelperTest = require('./services/serviceHelperTest');
 const marketplaceServiceTest = require('./services/marketplaceServiceTest');
 const kadenaServiceTest = require('./services/kadenaServiceTest');
+const fluxServiceTest = require('./services/fluxServiceTest');
+const proposalServiceTest = require('./services/proposalServiceTest');
+const generalServiceTest = require('./services/generalServiceTest');
+
 const fluxServices = require('../src/services/fluxService');
 
 const server = app.listen(config.server.port, () => {
@@ -23,12 +27,15 @@ describe('Main Test', () => {
       server.close(done);
       setTimeout(() => {
         process.exit();
-      }, 10000);
+      }, 120000);
     });
     await fluxEndpointsTest(server);
     await uiFluxEndpointsTest(server);
     await serviceHelperTest();
     await marketplaceServiceTest();
     await kadenaServiceTest();
+    await fluxServiceTest();
+    await proposalServiceTest();
+    await generalServiceTest();
   });
 });

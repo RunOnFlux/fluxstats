@@ -752,4 +752,8 @@ module.exports = {
   getVotePower,
   submitProposal,
   voteProposal,
+  getLastProposalTxs,
+  checkForMissingTransactions,
+  checkOpenProposals,
+  votePower,
 };

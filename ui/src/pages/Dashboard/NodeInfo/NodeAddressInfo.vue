@@ -119,22 +119,22 @@ export default {
         {
           prop: 'zelId',
           label: 'Zel ID',
-          minWidth: 70,
+          minWidth: 150,
         },
         {
           prop: 'paymentId',
           label: 'Payment ID',
-          minWidth: 40,
+          minWidth: 150,
         },
         {
           prop: 'org',
           label: 'Organization',
-          minWidth: 40,
+          minWidth: 150,
         },
         {
           prop: 'totalNodes',
           label: 'Total Nodes',
-          minWidth: 90,
+          minWidth: 100,
         },
       ],
       tableData: [],
@@ -152,15 +152,6 @@ export default {
     };
   },
   computed: {
-    pagedData() {
-      return this.tableData.slice(this.from, this.to);
-    },
-    /** *
-     * Searches through table data and returns a paginated array.
-     * Note that this should not be used for table with a lot of data as it might be slow!
-     * Do the search and the pagination on the server and display the data retrieved from server instead.
-     * @returns {computed.pagedData}
-     */
     queriedData() {
       let result;
       if (this.searchQuery !== '') {
