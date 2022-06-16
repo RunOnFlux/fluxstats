@@ -365,33 +365,47 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
         return;
       }
     }
-    let appsHashes = fluxInfo.apps.hashes;
-    if (!appsHashes) {
-      appsHashes = await getFluxAppsHashes(fluxnode.ip, timeout * 3);
+    if (!fluxInfo.apps.hashes && !fluxInfo.appsHashesTotal && !fluxInfo.hashesPresent) {
+      const appsHashes = await getFluxAppsHashes(fluxnode.ip, timeout * 3);
+      const hashesOk = appsHashes.filter((data) => data.height >= 694000);
+      fluxInfo.appsHashesTotal = hashesOk.length;
+      const mesOK = hashesOk.filter((mes) => mes.message === true);
+      fluxInfo.hashesPresent = mesOK.length;
+    }
+    if (fluxInfo.apps.hashes) {
+      const hashesOk = fluxInfo.apps.hashes.filter((data) => data.height >= 694000);
+      fluxInfo.appsHashesTotal = hashesOk.length;
+      const mesOK = hashesOk.filter((mes) => mes.message === true);
+      fluxInfo.hashesPresent = mesOK.length;
+      delete fluxInfo.apps.hashes;
     }
     let scannedHeightInfo = fluxInfo.flux.explorerScannedHeigth;
     if (!scannedHeightInfo) {
       scannedHeightInfo = await getFluxSyncedHeight(fluxnode.ip, timeout);
+      fluxInfo.scannedHeight = scannedHeightInfo.generalScannedHeight;
+    } else {
+      fluxInfo.scannedHeight = scannedHeightInfo.generalScannedHeight;
+      delete fluxInfo.flux.explorerScannedHeigth;
     }
     let conOut = fluxInfo.flux.connectionsOut;
     if (conOut) {
-      const conOutOk = [];
-      conOut.forEach((con) => {
-        conOutOk.push(con.ip);
-      });
-      conOut = conOutOk;
+      conOut = conOut.length;
+    } else if (fluxInfo.flux.numberOfConnectionsOut) {
+      conOut = fluxInfo.flux.numberOfConnectionsOut;
+      delete fluxInfo.flux.numberOfConnectionsOut;
     } else {
-      conOut = await getConnectionsOut(fluxnode.ip, timeout);
+      const connectionsOut = await getConnectionsOut(fluxnode.ip, timeout);
+      conOut = connectionsOut.length;
     }
     let conIn = fluxInfo.flux.connectionsIn;
     if (conIn) {
-      const conInOk = [];
-      conInOk.forEach((con) => {
-        conInOk.push(con.ip);
-      });
-      conIn = conInOk;
+      conIn = conIn.length;
+    } else if (fluxInfo.flux.numberOfConnectionsIn) {
+      conIn = fluxInfo.flux.numberOfConnectionsOut;
+      delete fluxInfo.flux.numberOfConnectionsOut;
     } else {
-      conIn = await getConnectionsIn(fluxnode.ip, timeout);
+      const connectionsIn = await getConnectionsIn(fluxnode.ip, timeout);
+      conIn = connectionsIn.length;
     }
     const auxIp = fluxnode.ip.split(':')[0];
     const query = { ip: auxIp };
@@ -445,27 +459,13 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
     fluxInfo.collateralHash = getCollateralInfo(fluxnode.collateral).txhash;
     fluxInfo.collateralIndex = getCollateralInfo(fluxnode.collateral).txindex;
     fluxInfo.roundTime = currentRoundTime;
-    if (appsHashes) {
-      const hashesOk = appsHashes.filter((data) => data.height >= 694000);
-      fluxInfo.appsHashesTotal = hashesOk.length;
-      const mesOK = hashesOk.filter((mes) => mes.message === true);
-      fluxInfo.hashesPresent = mesOK.length;
-    }
-
-    if (scannedHeightInfo) {
-      fluxInfo.scannedHeight = scannedHeightInfo.generalScannedHeight;
-    }
 
     if (conOut) {
       fluxInfo.connectionsOut = conOut;
     }
 
     if (conIn) {
-      const conInOk = [];
-      conIn.forEach((con) => {
-        conInOk.push(con.replace('::ffff:', ''));
-      });
-      fluxInfo.connectionsIn = conInOk;
+      fluxInfo.connectionsIn = conIn;
     }
 
     const curTime = new Date().getTime();
@@ -675,7 +675,7 @@ async function processFluxNodes() {
         const index = fluxNodesWithError.indexOf(fluxnode);
         fluxNodesWithError.splice(index, 1);
         promiseArray.push(processFluxNode(fluxnode, currentRoundTime, explorerTimeout, true));
-        if ((i + 1) % 40 === 0) {
+        if ((i + 1) % 20 === 0) {
           await Promise.allSettled(promiseArray);
           promiseArray = [];
           myCacheProcessingIp.clear();
