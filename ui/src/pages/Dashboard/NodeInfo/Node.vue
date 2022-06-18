@@ -151,6 +151,9 @@ import axios from 'axios';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 import { MemoryStorage } from 'ttl-localstorage';
+import {
+  httpRequestFluxInfo, httpRequestDaemonInfo, httpRequestFluxHistoryStats,
+} from '../Request/HttpRequest';
 
 export default {
   components: {
@@ -258,6 +261,9 @@ export default {
   },
   async mounted() {
     this.setLoading(true);
+    await httpRequestFluxInfo(axios, MemoryStorage);
+    await httpRequestDaemonInfo(axios, MemoryStorage);
+    await httpRequestFluxHistoryStats(axios, MemoryStorage);
     await this.getFluxInfo();
     await this.getDaemonInfo();
     await this.processDaemonInfo();
@@ -301,25 +307,13 @@ export default {
       return result.slice(this.from, this.to);
     },
     async getFluxInfo() {
+      // projection=node,flux,appsHashesTotal
       const lsdata = MemoryStorage.get('fluxinfo');
-      if (!lsdata) {
-        // projection=node,flux,appsHashesTotal
-        const response = await axios.get('https://stats.runonflux.io/fluxinfo');
-        MemoryStorage.put('fluxinfo', response.data.data, 18000);
-        this.values = response.data.data;
-      } else {
-        this.values = lsdata;
-      }
+      this.values = lsdata;
     },
     async getDaemonInfo() {
       const lsdata = MemoryStorage.get('daemon/viewdeterministiczelnodelist');
-      if (!lsdata) {
-        const response = await axios.get('https://api.runonflux.io/daemon/viewdeterministiczelnodelist');
-        MemoryStorage.put('daemon/viewdeterministiczelnodelist', response.data.data, 18000);
-        this.daemon = response.data.data;
-      } else {
-        this.daemon = lsdata;
-      }
+      this.daemon = lsdata;
     },
     async processDaemonInfo() {
       this.daemon.map((el) => {

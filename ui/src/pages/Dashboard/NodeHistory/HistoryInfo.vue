@@ -105,6 +105,9 @@ import axios from 'axios';
 import Loading from 'vue-loading-overlay';
 import 'vue-loading-overlay/dist/vue-loading.css';
 import { MemoryStorage } from 'ttl-localstorage';
+import {
+  httpRequestFluxInfo, httpRequestDaemonInfo, httpRequestFluxHistoryStats,
+} from '../Request/HttpRequest';
 
 export default {
   components: {
@@ -203,6 +206,9 @@ export default {
   },
   async mounted() {
     this.setLoading(true);
+    await httpRequestFluxInfo(axios, MemoryStorage);
+    await httpRequestDaemonInfo(axios, MemoryStorage);
+    await httpRequestFluxHistoryStats(axios, MemoryStorage);
     await this.getFluxStats();
     await this.processFluxStats();
     this.setSearch();
@@ -214,13 +220,7 @@ export default {
     },
     async getFluxStats() {
       const lsdata = MemoryStorage.get('fluxhistorystats');
-      if (!lsdata) {
-        const response = await axios.get('https://stats.runonflux.io/fluxhistorystats');
-        MemoryStorage.put('fluxhistorystats', response.data.data, 18000);
-        this.values = response.data.data;
-      } else {
-        this.values = lsdata;
-      }
+      this.values = lsdata;
     },
     async processFluxStats() {
       for (const [key, value] of Object.entries(this.values)) {
