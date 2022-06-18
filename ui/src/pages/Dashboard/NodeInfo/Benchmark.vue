@@ -65,6 +65,23 @@
               />
             </div>
           </div>
+          <div
+            slot="header"
+            class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
+            style="padding:20px;"
+          >
+            <div class="">
+              <p class="card-category">
+                Showing {{ from + 1 }} to {{ to }} of {{ total }} entries
+              </p>
+            </div>
+            <l-pagination
+              v-model="pagination.currentPage"
+              class="pagination-no-border"
+              :per-page="pagination.perPage"
+              :total="pagination.total"
+            />
+          </div>
           <div class="col-sm-12">
             <el-table
               stripe
