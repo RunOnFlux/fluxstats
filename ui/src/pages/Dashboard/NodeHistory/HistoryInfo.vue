@@ -199,7 +199,7 @@ export default {
       const lsdata = MemoryStorage.get('fluxhistorystats');
       if (!lsdata) {
         const response = await axios.get('https://stats.runonflux.io/fluxhistorystats');
-        MemoryStorage.put('fluxhistorystats', response.data.data, 600);
+        MemoryStorage.put('fluxhistorystats', response.data.data, 18000);
         this.values = response.data.data;
       } else {
         this.values = lsdata;

@@ -205,10 +205,11 @@ export default {
       this.pagination.total = value;
     },
     async getFluxInfo() {
-      const lsdata = MemoryStorage.get('fluxinfo?projection=node,flux,geolocation,tier');
+      const lsdata = MemoryStorage.get('fluxinfo');
       if (!lsdata) {
-        const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=node,flux,geolocation,tier');
-        MemoryStorage.put('fluxinfo?projection=node,flux,geolocation,tier', response.data.data, 600);
+        // projection=node,flux,geolocation,tier
+        const response = await axios.get('https://stats.runonflux.io/fluxinfo');
+        MemoryStorage.put('fluxinfo', response.data.data, 18000);
         this.values = response.data.data;
       } else {
         this.values = lsdata;

@@ -301,10 +301,11 @@ export default {
       return result.slice(this.from, this.to);
     },
     async getFluxInfo() {
-      const lsdata = MemoryStorage.get('fluxinfo?projection=node,benchmark,geolocation,apps');
+      const lsdata = MemoryStorage.get('fluxinfo');
       if (!lsdata) {
-        const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=node,benchmark,geolocation,apps');
-        MemoryStorage.put('fluxinfo?projection=node,benchmark,geolocation,apps', response.data.data, 600);
+        // projection=node,benchmark,geolocation,apps
+        const response = await axios.get('https://stats.runonflux.io/fluxinfo');
+        MemoryStorage.put('fluxinfo', response.data.data, 18000);
         this.values = response.data.data;
       } else {
         this.values = lsdata;

@@ -460,15 +460,17 @@ export default {
     await this.processFluxInfo();
     await this.getFluxStats();
     await this.processFluxStats();
+    await this.getDaemonInfo();
     this.setLoading(false);
     this.setFetching(false);
   },
   methods: {
     async getFluxInfo() {
-      const lsdata = MemoryStorage.get('fluxinfo?projection=ip,tier,geolocation,benchmark,node,flux');
+      const lsdata = MemoryStorage.get('fluxinfo');
       if (!lsdata) {
-        const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=ip,tier,geolocation,benchmark,node,flux');
-        MemoryStorage.put('fluxinfo?projection=ip,tier,geolocation,benchmark,node,flux', response.data.data, 600);
+        // projection=ip,tier,geolocation,benchmark,node,flux
+        const response = await axios.get('https://stats.runonflux.io/fluxinfo');
+        MemoryStorage.put('fluxinfo', response.data.data, 18000);
         this.values = response.data.data;
         this.totalNumberOfNodes = Object.keys(response.data.data).length;
         this.tableData = response.data.data;
@@ -476,6 +478,14 @@ export default {
         this.values = lsdata;
         this.totalNumberOfNodes = Object.keys(lsdata).length;
         this.tableData = lsdata;
+      }
+    },
+    async getDaemonInfo() {
+      const lsdata = MemoryStorage.get('daemon/viewdeterministiczelnodelist');
+      if (!lsdata) {
+        const response = await axios.get('https://api.runonflux.io/daemon/viewdeterministiczelnodelist');
+        MemoryStorage.put('daemon/viewdeterministiczelnodelist', response.data.data, 18000);
+        this.daemon = response.data.data;
       }
     },
     async processFluxInfo() {
@@ -642,7 +652,7 @@ export default {
       const lsdata = MemoryStorage.get('fluxhistorystats');
       if (!lsdata) {
         const response = await axios.get('https://stats.runonflux.io/fluxhistorystats');
-        MemoryStorage.put('fluxhistorystats', response.data.data, 600);
+        MemoryStorage.put('fluxhistorystats', response.data.data, 18000);
         this.statsValues = response.data.data;
       } else {
         this.statsValues = lsdata;

@@ -208,10 +208,11 @@ export default {
       this.pagination.total = value;
     },
     async getFluxInfo() {
-      const lsdata = MemoryStorage.get('fluxinfo?projection=ip,connectionsOut,connectionsIn');
+      const lsdata = MemoryStorage.get('fluxinfo');
       if (!lsdata) {
-        const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=ip,connectionsOut,connectionsIn');
-        MemoryStorage.put('fluxinfo?projection=ip,connectionsOut,connectionsIn', response.data.data, 600);
+        // projection=ip,connectionsOut,connectionsIn
+        const response = await axios.get('https://stats.runonflux.io/fluxinfo');
+        MemoryStorage.put('fluxinfo', response.data.data, 18000);
         this.values = response.data.data;
       } else {
         this.values = lsdata;

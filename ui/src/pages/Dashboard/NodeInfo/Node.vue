@@ -284,10 +284,11 @@ export default {
       return result.slice(this.from, this.to);
     },
     async getFluxInfo() {
-      const lsdata = MemoryStorage.get('fluxinfo?projection=node,flux,appsHashesTotal');
+      const lsdata = MemoryStorage.get('fluxinfo');
       if (!lsdata) {
-        const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=node,flux,appsHashesTotal');
-        MemoryStorage.put('fluxinfo?projection=node,flux,appsHashesTotal', response.data.data, 600);
+        // projection=node,flux,appsHashesTotal
+        const response = await axios.get('https://stats.runonflux.io/fluxinfo');
+        MemoryStorage.put('fluxinfo', response.data.data, 18000);
         this.values = response.data.data;
       } else {
         this.values = lsdata;
@@ -297,7 +298,7 @@ export default {
       const lsdata = MemoryStorage.get('daemon/viewdeterministiczelnodelist');
       if (!lsdata) {
         const response = await axios.get('https://api.runonflux.io/daemon/viewdeterministiczelnodelist');
-        MemoryStorage.put('daemon/viewdeterministiczelnodelist', response.data.data, 600);
+        MemoryStorage.put('daemon/viewdeterministiczelnodelist', response.data.data, 18000);
         this.daemon = response.data.data;
       } else {
         this.daemon = lsdata;
