@@ -160,7 +160,7 @@
               Nodes History
             </h4>
             <p class="card-category">
-              Last 5 Round Time
+              Tier Node Count History
             </p>
           </template>
           <template slot="footer">
@@ -318,9 +318,9 @@ export default {
           axisX: {
             showGrid: false,
           },
-          lineSmooth: true,
+          lineSmooth: false,
           showLine: true,
-          showPoint: true,
+          showPoint: false,
           fullWidth: true,
           chartPadding: {
             right: 50,
@@ -667,23 +667,15 @@ export default {
           stratus: value.stratus,
         });
       }
-      this.statsLength = Object.keys(this.statsValues).length;
-      const items = [];
-      for (let i = 0; i < 5; i += 1) {
-        items.push(new Date(parseInt(this.tableData1[this.statsLength - (i + 1)].roundTime, 10)));
-      }
       const temp1 = [];
       const temp2 = [];
       const temp3 = [];
-      for (let i = 0; i < 6; i += 1) {
-        temp1.push(this.tableData1[this.statsLength - (i + 1)].cumulus);
-        temp2.push(this.tableData1[this.statsLength - (i + 1)].nimbus);
-        temp3.push(this.tableData1[this.statsLength - (i + 1)].stratus);
+      for (let i = 0; i < this.tableData1.length; i += 1) {
+        temp1.push(this.tableData1[i].cumulus);
+        temp2.push(this.tableData1[i].nimbus);
+        temp3.push(this.tableData1[i].stratus);
       }
       this.lineChart.data.series = [temp1, temp2, temp3];
-      for (let i = 0; i < 5; i += 1) {
-        this.lineChart.data.labels.push(`${items[i].toLocaleDateString()} ${items[i].toLocaleTimeString()}`);
-      }
     },
     setLoading(value) {
       this.isLoading = value;
