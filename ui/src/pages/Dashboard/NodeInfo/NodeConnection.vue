@@ -64,28 +64,6 @@
               border
               @sort-change="sortChange"
             >
-              <el-table-column type="expand">
-                <template slot-scope="props">
-                  <p><b>In:</b></p>
-                  <ul>
-                    <li
-                      v-for="(item,index) in props.row.connectionsIn"
-                      :key="index"
-                    >
-                      {{ item }}
-                    </li>
-                  </ul>
-                  <p><b>Out:</b></p>
-                  <ul>
-                    <li
-                      v-for="(item,index) in props.row.connectionsOut"
-                      :key="index"
-                    >
-                      {{ item }}
-                    </li>
-                  </ul>
-                </template>
-              </el-table-column>
               <el-table-column
                 v-for="column in tableColumns"
                 :key="column.label"
@@ -149,17 +127,17 @@ export default {
       propsToSearch: ['ip'],
       tableColumns: [
         {
-          prop: 'ip',
+          prop: 'flux.ip',
           label: 'IP Address',
           minWidth: 200,
         },
         {
-          prop: 'in',
+          prop: 'flux.numberOfConnectionsIn',
           label: 'Total Incoming',
           minWidth: 200,
         },
         {
-          prop: 'out',
+          prop: 'connectionsOut',
           label: 'Total Outgoing',
           minWidth: 200,
         },
@@ -216,7 +194,6 @@ export default {
   async mounted() {
     this.setLoading(true);
     await this.getFluxInfo();
-    await this.processFluxInfo();
     this.setSearch();
     this.setLoading(false);
   },
@@ -230,24 +207,10 @@ export default {
         // projection=ip,connectionsOut,connectionsIn
         const response = await axios.get('https://stats.runonflux.io/fluxinfo');
         MemoryStorage.put('fluxinfo', response.data.data, 18000);
-        this.values = response.data.data;
+        this.tableData = response.data.data;
       } else {
-        this.values = lsdata;
+        this.tableData = lsdata;
       }
-    },
-    async processFluxInfo() {
-      this.values.map((value) => {
-        const temp = value;
-        try {
-          temp.out = value.connectionsOut.length;
-          temp.in = value.connectionsIn.length;
-        } catch (ex) {
-          temp.out = 0;
-          temp.in = 0;
-        }
-        return temp;
-      });
-      this.tableData = this.values;
     },
     setSearch() {
       this.originalData = JSON.stringify(this.tableData);
