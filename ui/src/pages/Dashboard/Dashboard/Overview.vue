@@ -11,10 +11,7 @@
       </vue-ellipse-progress>
     </div>
     <div v-if="myProgress >= 100">
-      <div
-        v-if="!isFetching"
-        class="row"
-      >
+      <div class="row">
         <div class="col-xl-3 col-md-6">
           <stats-card
             :title="totalNumberOfNodes.toString()"
@@ -128,10 +125,7 @@
           </stats-card>
         </div>
       </div>
-      <div
-        v-if="!isFetching"
-        class="row"
-      >
+      <div class="row">
         <div class="col-md-4">
           <chart-card
             :chart-data="pieChart.data"
@@ -178,10 +172,7 @@
           </chart-card>
         </div>
       </div>
-      <div
-        v-if="!isFetching"
-        class="row"
-      >
+      <div class="row">
         <div class="col-md-6">
           <chart-card
             :chart-data="barChart1.data"
@@ -425,7 +416,6 @@ export default {
       totalTBRAM: 0,
       myProgress: 0,
       statsLength: 0,
-      isFetching: true,
       values: [],
       paymentAddress: new Map(),
       organization: new Map(),
@@ -469,7 +459,6 @@ export default {
     await this.getFluxStats();
     await this.processFluxStats();
     this.stopProcessing();
-    this.setFetching(false);
   },
   methods: {
     async initialize() {
@@ -667,9 +656,6 @@ export default {
         temp3.push(this.tableData1[i].stratus);
       }
       this.lineChart.data.series = [temp1, temp2, temp3];
-    },
-    setFetching(value) {
-      this.isFetching = value;
     },
   },
 };
