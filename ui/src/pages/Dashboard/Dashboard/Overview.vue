@@ -1,281 +1,284 @@
 <template>
   <div>
-    <div>
-      <loading
-        :active.sync="isLoading"
-        :can-cancel="true"
-      />
+    <div class="row" style="position: absolute; left: 45%; top: 40%;" v-if="myProgress < 100">
+      <vue-ellipse-progress
+        :half="false"
+        :progress="myProgress"
+        line-mode="in 10"
+        color="Silver"
+        :gap="10"
+        fontSize="3rem">
+      </vue-ellipse-progress>
     </div>
-
-    <div
-      v-if="!isFetching"
-      class="row"
-    >
-      <div class="col-xl-3 col-md-6">
-        <stats-card
-          :title="totalNumberOfNodes.toString()"
-          sub-title="Total Nodes"
-        >
-          <div
-            slot="header"
-            class="icon-success"
+    <div v-if="myProgress >= 100">
+      <div
+        v-if="!isFetching"
+        class="row"
+      >
+        <div class="col-xl-3 col-md-6">
+          <stats-card
+            :title="totalNumberOfNodes.toString()"
+            sub-title="Total Nodes"
           >
-            <i class="nc-icon nc-chart text-success" />
-          </div>
-          <template slot="footer">
-            Cumulus + Nimbus + Stratus
-          </template>
-        </stats-card>
-      </div>
-      <div class="col-xl-3 col-md-6">
-        <stats-card
-          :title="totalNumberOfCumulus.toString()"
-          sub-title="Cumulus"
-        >
-          <div
-            slot="header"
-            class="icon-info"
-          >
-            <i class="nc-icon nc-chart text-info" />
-          </div>
-          <template slot="footer">
-            1,000 Flux
-          </template>
-        </stats-card>
-      </div>
-      <div class="col-xl-3 col-md-6">
-        <stats-card
-          :title="totalNumberOfNimbus.toString()"
-          sub-title="Nimbus"
-        >
-          <div
-            slot="header"
-            class="icon-danger"
-          >
-            <i class="nc-icon nc-chart text-danger" />
-          </div>
-          <template slot="footer">
-            12,500 Flux
-          </template>
-        </stats-card>
-      </div>
-      <div class="col-xl-3 col-md-6">
-        <stats-card
-          :title="totalNumberOfStratus.toString()"
-          sub-title="Stratus"
-        >
-          <div
-            slot="header"
-            class="icon-warning"
-          >
-            <i class="nc-icon nc-chart text-warning" />
-          </div>
-          <template slot="footer">
-            40,000 Flux
-          </template>
-        </stats-card>
-      </div>
-      <div class="col-xl-3 col-md-6">
-        <stats-card
-          :title="totalTBSSD.toString()"
-          sub-title="TB SSD"
-        >
-          <div
-            slot="header"
-            class="icon-success"
-          >
-            <i class="nc-icon nc-chart-bar-32 text-success" />
-          </div>
-          <template slot="footer">
-            Total Number of Available Storage
-          </template>
-        </stats-card>
-      </div>
-      <div class="col-xl-3 col-md-6">
-        <stats-card
-          :title="totalVCores.toString()"
-          sub-title="VCORES"
-        >
-          <div
-            slot="header"
-            class="icon-info"
-          >
-            <i class="nc-icon nc-chart-bar-32 text-info" />
-          </div>
-          <template slot="footer">
-            Total Number of Available Cores
-          </template>
-        </stats-card>
-      </div>
-      <div class="col-xl-3 col-md-6">
-        <stats-card
-          :title="totalTBRAM.toString()"
-          sub-title="TB RAM"
-        >
-          <div
-            slot="header"
-            class="icon-danger"
-          >
-            <i class="nc-icon nc-chart-bar-32 text-danger" />
-          </div>
-          <template slot="footer">
-            Total Number of Available RAM
-          </template>
-        </stats-card>
-      </div>
-    </div>
-
-    <div
-      v-if="!isFetching"
-      class="row"
-    >
-      <div class="col-md-4">
-        <chart-card
-          :chart-data="pieChart.data"
-          chart-type="Pie"
-        >
-          <template slot="header">
-            <h4 class="card-title">
-              Nodes Statistics
-            </h4>
-          </template>
-          <template slot="footer">
-            <div class="legend">
-              <i class="fa fa-circle text-info" /> Cumulus
-              <i class="fa fa-circle text-danger" /> Nimbus
-              <i class="fa fa-circle text-warning" /> Stratus
+            <div
+              slot="header"
+              class="icon-success"
+            >
+              <i class="nc-icon nc-chart text-success" />
             </div>
-            <hr>
-          </template>
-        </chart-card>
-      </div>
-      <div class="col-md-8">
-        <chart-card
-          :chart-data="lineChart.data"
-          :chart-options="lineChart.options"
-          :responsive-options="lineChart.responsiveOptions"
-        >
-          <template slot="header">
-            <h4 class="card-title">
-              Nodes History
-            </h4>
-            <p class="card-category">
-              Tier Node Count History
-            </p>
-          </template>
-          <template slot="footer">
-            <div class="legend">
-              <i class="fa fa-circle text-info" /> Cumulus
-              <i class="fa fa-circle text-danger" /> Nimbus
-              <i class="fa fa-circle text-warning" /> Stratus
-            </div>
-            <hr>
-            <div class="stats" />
-          </template>
-        </chart-card>
-      </div>
-    </div>
-
-    <div
-      v-if="!isFetching"
-      class="row"
-    >
-      <div class="col-md-6">
-        <chart-card
-          :chart-data="barChart1.data"
-          :chart-options="barChart1.options"
-          :chart-responsive-options="barChart1.responsiveOptions"
-          chart-type="Bar"
-        >
-          <template slot="header">
-            <h4 class="card-title">
-              Top 10 Node Location
-            </h4>
-            <p class="card-category">
-              Countries With Highest Node Count
-            </p>
-          </template>
-          <template slot="footer">
-            <div class="legend">
-              <i class="fa fa-circle text-info" /> Cumulus
-              <i class="fa fa-circle text-danger" /> Nimbus
-              <i class="fa fa-circle text-warning" /> Stratus
-              <i class="fa fa-circle text-success" /> Total Nodes
-            </div>
-            <hr>
-            <div class="stats" />
-          </template>
-        </chart-card>
-      </div>
-      <div class="col-md-6">
-        <chart-card
-          :chart-data="barChart2.data"
-          :chart-options="barChart2.options"
-          :chart-responsive-options="barChart2.responsiveOptions"
-          chart-type="Bar"
-        >
-          <template slot="header">
-            <h4 class="card-title">
-              Network Speed Per Tier
-            </h4>
-            <p class="card-category">
-              Average Upload And Download Speed Per Tier
-            </p>
-          </template>
-          <template slot="footer">
-            <div class="legend">
-              <i class="fa fa-circle text-info" /> Upload Speed
-              <i class="fa fa-circle text-danger" /> Download Speed
-            </div>
-            <hr>
-            <div class="stats" />
-          </template>
-        </chart-card>
-      </div>
-      <div class="col-md-6">
-        <chart-card
-          :chart-data="barChart3.data"
-          :chart-options="barChart3.options"
-          :chart-responsive-options="barChart3.responsiveOptions"
-          chart-type="Bar"
-        >
-          <template slot="header">
-            <h4 class="card-title">
-              Top 5 Organizations
-            </h4>
-            <p class="card-category">
-              Organizations With Highest Node Count
-            </p>
-          </template>
-          <template slot="footer">
-            <div class="legend">
-              <i class="fa fa-circle text-info" /> Cumulus
-              <i class="fa fa-circle text-danger" /> Nimbus
-              <i class="fa fa-circle text-warning" /> Stratus
-              <i class="fa fa-circle text-success" /> Total Nodes
-            </div>
-            <hr>
-            <div class="stats" />
-          </template>
-        </chart-card>
-      </div>
-      <div class="col-md-6">
-        <card
-          class="card-tasks"
-          title="Top 5 Node Operator"
-          sub-title="Zel ID's With Highest Node Count"
-        >
-          <l-table :data="tableData2.data">
-            <template slot-scope="{row}">
-              <td>{{ row.title }}</td>
-              <td class="td-actions d-flex justify-content-end" />
+            <template slot="footer">
+              Cumulus + Nimbus + Stratus
             </template>
-          </l-table>
-          <div
-            slot="footer"
-            class="stats"
-          />
-        </card>
+          </stats-card>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <stats-card
+            :title="totalNumberOfCumulus.toString()"
+            sub-title="Cumulus"
+          >
+            <div
+              slot="header"
+              class="icon-info"
+            >
+              <i class="nc-icon nc-chart text-info" />
+            </div>
+            <template slot="footer">
+              1,000 Flux
+            </template>
+          </stats-card>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <stats-card
+            :title="totalNumberOfNimbus.toString()"
+            sub-title="Nimbus"
+          >
+            <div
+              slot="header"
+              class="icon-danger"
+            >
+              <i class="nc-icon nc-chart text-danger" />
+            </div>
+            <template slot="footer">
+              12,500 Flux
+            </template>
+          </stats-card>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <stats-card
+            :title="totalNumberOfStratus.toString()"
+            sub-title="Stratus"
+          >
+            <div
+              slot="header"
+              class="icon-warning"
+            >
+              <i class="nc-icon nc-chart text-warning" />
+            </div>
+            <template slot="footer">
+              40,000 Flux
+            </template>
+          </stats-card>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <stats-card
+            :title="totalTBSSD.toString()"
+            sub-title="TB SSD"
+          >
+            <div
+              slot="header"
+              class="icon-success"
+            >
+              <i class="nc-icon nc-chart-bar-32 text-success" />
+            </div>
+            <template slot="footer">
+              Total Number of Available Storage
+            </template>
+          </stats-card>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <stats-card
+            :title="totalVCores.toString()"
+            sub-title="VCORES"
+          >
+            <div
+              slot="header"
+              class="icon-info"
+            >
+              <i class="nc-icon nc-chart-bar-32 text-info" />
+            </div>
+            <template slot="footer">
+              Total Number of Available Cores
+            </template>
+          </stats-card>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <stats-card
+            :title="totalTBRAM.toString()"
+            sub-title="TB RAM"
+          >
+            <div
+              slot="header"
+              class="icon-danger"
+            >
+              <i class="nc-icon nc-chart-bar-32 text-danger" />
+            </div>
+            <template slot="footer">
+              Total Number of Available RAM
+            </template>
+          </stats-card>
+        </div>
+      </div>
+      <div
+        v-if="!isFetching"
+        class="row"
+      >
+        <div class="col-md-4">
+          <chart-card
+            :chart-data="pieChart.data"
+            chart-type="Pie"
+          >
+            <template slot="header">
+              <h4 class="card-title">
+                Nodes Statistics
+              </h4>
+            </template>
+            <template slot="footer">
+              <div class="legend">
+                <i class="fa fa-circle text-info" /> Cumulus
+                <i class="fa fa-circle text-danger" /> Nimbus
+                <i class="fa fa-circle text-warning" /> Stratus
+              </div>
+              <hr>
+            </template>
+          </chart-card>
+        </div>
+        <div class="col-md-8">
+          <chart-card
+            :chart-data="lineChart.data"
+            :chart-options="lineChart.options"
+            :responsive-options="lineChart.responsiveOptions"
+          >
+            <template slot="header">
+              <h4 class="card-title">
+                Nodes History
+              </h4>
+              <p class="card-category">
+                Tier Node Count History
+              </p>
+            </template>
+            <template slot="footer">
+              <div class="legend">
+                <i class="fa fa-circle text-info" /> Cumulus
+                <i class="fa fa-circle text-danger" /> Nimbus
+                <i class="fa fa-circle text-warning" /> Stratus
+              </div>
+              <hr>
+              <div class="stats" />
+            </template>
+          </chart-card>
+        </div>
+      </div>
+      <div
+        v-if="!isFetching"
+        class="row"
+      >
+        <div class="col-md-6">
+          <chart-card
+            :chart-data="barChart1.data"
+            :chart-options="barChart1.options"
+            :chart-responsive-options="barChart1.responsiveOptions"
+            chart-type="Bar"
+          >
+            <template slot="header">
+              <h4 class="card-title">
+                Top 10 Node Location
+              </h4>
+              <p class="card-category">
+                Countries With Highest Node Count
+              </p>
+            </template>
+            <template slot="footer">
+              <div class="legend">
+                <i class="fa fa-circle text-info" /> Cumulus
+                <i class="fa fa-circle text-danger" /> Nimbus
+                <i class="fa fa-circle text-warning" /> Stratus
+                <i class="fa fa-circle text-success" /> Total Nodes
+              </div>
+              <hr>
+              <div class="stats" />
+            </template>
+          </chart-card>
+        </div>
+        <div class="col-md-6">
+          <chart-card
+            :chart-data="barChart2.data"
+            :chart-options="barChart2.options"
+            :chart-responsive-options="barChart2.responsiveOptions"
+            chart-type="Bar"
+          >
+            <template slot="header">
+              <h4 class="card-title">
+                Network Speed Per Tier
+              </h4>
+              <p class="card-category">
+                Average Upload And Download Speed Per Tier
+              </p>
+            </template>
+            <template slot="footer">
+              <div class="legend">
+                <i class="fa fa-circle text-info" /> Upload Speed
+                <i class="fa fa-circle text-danger" /> Download Speed
+              </div>
+              <hr>
+              <div class="stats" />
+            </template>
+          </chart-card>
+        </div>
+        <div class="col-md-6">
+          <chart-card
+            :chart-data="barChart3.data"
+            :chart-options="barChart3.options"
+            :chart-responsive-options="barChart3.responsiveOptions"
+            chart-type="Bar"
+          >
+            <template slot="header">
+              <h4 class="card-title">
+                Top 5 Organizations
+              </h4>
+              <p class="card-category">
+                Organizations With Highest Node Count
+              </p>
+            </template>
+            <template slot="footer">
+              <div class="legend">
+                <i class="fa fa-circle text-info" /> Cumulus
+                <i class="fa fa-circle text-danger" /> Nimbus
+                <i class="fa fa-circle text-warning" /> Stratus
+                <i class="fa fa-circle text-success" /> Total Nodes
+              </div>
+              <hr>
+              <div class="stats" />
+            </template>
+          </chart-card>
+        </div>
+        <div class="col-md-6">
+          <card
+            class="card-tasks"
+            title="Top 5 Node Operator"
+            sub-title="Zel ID's With Highest Node Count"
+          >
+            <l-table :data="tableData2.data">
+              <template slot-scope="{row}">
+                <td>{{ row.title }}</td>
+                <td class="td-actions d-flex justify-content-end" />
+              </template>
+            </l-table>
+            <div
+              slot="footer"
+              class="stats"
+            />
+          </card>
+        </div>
       </div>
     </div>
   </div>
@@ -285,8 +288,7 @@ import {
   ChartCard, StatsCard, Card, Table as LTable,
 } from 'src/components/index';
 import axios from 'axios';
-import Loading from 'vue-loading-overlay';
-import 'vue-loading-overlay/dist/vue-loading.css';
+import { VueEllipseProgress } from 'vue-ellipse-progress';
 import { MemoryStorage } from 'ttl-localstorage';
 import {
   httpRequestFluxInfo, httpRequestDaemonInfo, httpRequestFluxHistoryStats,
@@ -296,7 +298,7 @@ export default {
   components: {
     ChartCard,
     StatsCard,
-    Loading,
+    VueEllipseProgress,
     LTable,
     Card,
   },
@@ -421,7 +423,7 @@ export default {
       totalTBSSD: 0,
       totalVCores: 0,
       totalTBRAM: 0,
-      isLoading: true,
+      myProgress: 0,
       statsLength: 0,
       isFetching: true,
       values: [],
@@ -458,20 +460,26 @@ export default {
     };
   },
   async created() {
-    this.setLoading(true);
-    await httpRequestFluxInfo(axios, MemoryStorage);
-    await httpRequestDaemonInfo(axios, MemoryStorage);
-    await httpRequestFluxHistoryStats(axios, MemoryStorage);
+    this.initialize();
+    this.myProgress = await httpRequestFluxInfo(axios, MemoryStorage);
+    this.myProgress = await httpRequestDaemonInfo(axios, MemoryStorage);
+    this.myProgress = await httpRequestFluxHistoryStats(axios, MemoryStorage);
     await this.getFluxInfo();
     await this.processFluxInfo();
     await this.getFluxStats();
     await this.processFluxStats();
-    this.setLoading(false);
+    this.stopProcessing();
     this.setFetching(false);
   },
   methods: {
+    async initialize() {
+      this.myProgress = 20;
+    },
+    async stopProcessing() {
+      this.myProgress = 100;
+    },
     async getFluxInfo() {
-      // projection=ip,tier,geolocation,benchmark,node,flux
+      // Projection being used in this page are ip,tier,geolocation,benchmark,node,flux
       const lsdata = MemoryStorage.get('fluxinfo');
       this.values = lsdata;
       this.totalNumberOfNodes = Object.keys(lsdata).length;
@@ -659,9 +667,6 @@ export default {
         temp3.push(this.tableData1[i].stratus);
       }
       this.lineChart.data.series = [temp1, temp2, temp3];
-    },
-    setLoading(value) {
-      this.isLoading = value;
     },
     setFetching(value) {
       this.isFetching = value;

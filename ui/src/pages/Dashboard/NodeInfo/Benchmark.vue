@@ -1,74 +1,135 @@
 <template>
-  <div class="row">
-    <div class="col-md-12">
-      <h2 class="title">
-        Benchmark
-      </h2>
+  <div>
+    <div class="row" style="position: absolute; left: 45%; top: 40%;" v-if="myProgress < 100">
+      <vue-ellipse-progress
+        :half="false"
+        :progress="myProgress"
+        line-mode="in 10"
+        color="Silver"
+        :gap="10"
+        fontSize="3rem">
+      </vue-ellipse-progress>
     </div>
-    <p class="category" />
-    <div>
-      <loading
-        :active.sync="isLoading"
-        :can-cancel="true"
-      />
-    </div>
-    <div class="col-12">
-      <card>
-        <div>
-          <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
-            <el-select
-              v-model="pagination.perPage"
-              class="select-default mb-3"
-              style="width: 200px"
-              placeholder="Per page"
-            >
-              <el-option
-                v-for="item in pagination.perPageOptions"
-                :key="item"
-                class="select-default"
-                :label="item"
-                :value="item"
-              />
-            </el-select>
-            <div
-              col-md-6
-              offset-md-3
-            >
+    <div class="row" v-if="myProgress >= 100">
+      <div class="col-md-12">
+        <h2 class="title">
+          Benchmark
+        </h2>
+      </div>
+      <p class="category" />
+      <div class="col-12">
+        <card>
+          <div>
+            <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
               <el-select
-                v-model="filters.default"
+                v-model="pagination.perPage"
                 class="select-default mb-3"
-                style="width: 450px"
-                multiple
-                collapse-tags
-                placeholder="Filters"
+                style="width: 200px"
+                placeholder="Per page"
               >
                 <el-option
-                  v-for="item in filters.others"
+                  v-for="item in pagination.perPageOptions"
                   :key="item"
                   class="select-default"
                   :label="item"
                   :value="item"
                 />
               </el-select>
+              <div
+                col-md-6
+                offset-md-3
+              >
+                <el-select
+                  v-model="filters.default"
+                  class="select-default mb-3"
+                  style="width: 450px"
+                  multiple
+                  collapse-tags
+                  placeholder="Filters"
+                >
+                  <el-option
+                    v-for="item in filters.others"
+                    :key="item"
+                    class="select-default"
+                    :label="item"
+                    :value="item"
+                  />
+                </el-select>
+              </div>
+              <div
+                col-md-3
+                offset-md-6
+              >
+                <el-input
+                  v-model="searchQuery"
+                  type="search"
+                  class="mb-3"
+                  style="width: 200px"
+                  placeholder="Search IP"
+                  aria-controls="datatables"
+                />
+              </div>
             </div>
             <div
-              col-md-3
-              offset-md-6
+              slot="header"
+              class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
+              style="padding:20px;"
             >
-              <el-input
-                v-model="searchQuery"
-                type="search"
-                class="mb-3"
-                style="width: 200px"
-                placeholder="Search IP"
-                aria-controls="datatables"
+              <div class="">
+                <p class="card-category">
+                  Showing {{ from + 1 }} to {{ to }} of {{ total }} entries
+                </p>
+              </div>
+              <l-pagination
+                v-model="pagination.currentPage"
+                class="pagination-no-border"
+                :per-page="pagination.perPage"
+                :total="pagination.total"
               />
+            </div>
+            <div class="col-sm-12">
+              <el-table
+                stripe
+                style="width: 100%;"
+                :data="queriedData"
+                border
+                @sort-change="sortChange"
+              >
+                <el-table-column type="expand">
+                  <template slot-scope="props">
+                    <p><b>RPC Port:</b> {{ props.row.benchmark.info.rpcport }} </p>
+                    <p><b>Benchmarking:</b> {{ props.row.benchmark.status.benchmarking }} </p>
+                    <p><b>Flux:</b> {{ props.row.benchmark.status.flux }} </p>
+                    <p><b>Architecture:</b> {{ props.row.benchmark.bench.architecture }}</p>
+                    <p><b>Arm Board:</b> {{ props.row.benchmark.bench.armboard }}</p>
+                    <p><b>Time:</b> {{ props.row.benchmark.bench.time }}</p>
+                    <p><b>Converted Time:</b> {{ `${new Date(parseInt(props.row.benchmark.bench.time) * 1000).toLocaleString()}` }}</p>
+                    <p><b>Real Cores:</b> {{ props.row.benchmark.bench.real_cores }}</p>
+                    <p><b>Cores:</b> {{ props.row.benchmark.bench.cores }}</p>
+                    <p><b>RAM:</b> {{ props.row.benchmark.bench.ram }}</p>
+                    <p><b>HDD:</b> {{ props.row.benchmark.bench.hdd }}</p>
+                    <p><b>Total Storage:</b> {{ props.row.benchmark.bench.totalstorage }}</p>
+                    <p><b>Disk:</b> {{ props.row.benchmark.bench.disksinfo.disk }}</p>
+                    <p><b>Disk Size:</b> {{ props.row.benchmark.bench.disksinfo.size }}</p>
+                    <p><b>Disk Write Speed:</b> {{ props.row.benchmark.bench.disksinfo.writespeed }}</p>
+                    <p><b>EPS:</b> {{ props.row.benchmark.bench.eps }}</p>
+                    <p><b>Errors:</b> {{ props.row.benchmark.bench.error }}</p>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  v-for="column in tableColumns"
+                  :key="column.label"
+                  :min-width="column.minWidth"
+                  :prop="column.prop"
+                  :label="column.label"
+                  sortable
+                />
+              </el-table>
             </div>
           </div>
           <div
-            slot="header"
+            slot="footer"
             class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
-            style="padding:20px;"
           >
             <div class="">
               <p class="card-category">
@@ -82,63 +143,8 @@
               :total="pagination.total"
             />
           </div>
-          <div class="col-sm-12">
-            <el-table
-              stripe
-              style="width: 100%;"
-              :data="queriedData"
-              border
-              @sort-change="sortChange"
-            >
-              <el-table-column type="expand">
-                <template slot-scope="props">
-                  <p><b>RPC Port:</b> {{ props.row.benchmark.info.rpcport }} </p>
-                  <p><b>Benchmarking:</b> {{ props.row.benchmark.status.benchmarking }} </p>
-                  <p><b>Flux:</b> {{ props.row.benchmark.status.flux }} </p>
-                  <p><b>Architecture:</b> {{ props.row.benchmark.bench.architecture }}</p>
-                  <p><b>Arm Board:</b> {{ props.row.benchmark.bench.armboard }}</p>
-                  <p><b>Time:</b> {{ props.row.benchmark.bench.time }}</p>
-                  <p><b>Converted Time:</b> {{ `${new Date(parseInt(props.row.benchmark.bench.time) * 1000).toLocaleString()}` }}</p>
-                  <p><b>Real Cores:</b> {{ props.row.benchmark.bench.real_cores }}</p>
-                  <p><b>Cores:</b> {{ props.row.benchmark.bench.cores }}</p>
-                  <p><b>RAM:</b> {{ props.row.benchmark.bench.ram }}</p>
-                  <p><b>HDD:</b> {{ props.row.benchmark.bench.hdd }}</p>
-                  <p><b>Total Storage:</b> {{ props.row.benchmark.bench.totalstorage }}</p>
-                  <p><b>Disk:</b> {{ props.row.benchmark.bench.disksinfo.disk }}</p>
-                  <p><b>Disk Size:</b> {{ props.row.benchmark.bench.disksinfo.size }}</p>
-                  <p><b>Disk Write Speed:</b> {{ props.row.benchmark.bench.disksinfo.writespeed }}</p>
-                  <p><b>EPS:</b> {{ props.row.benchmark.bench.eps }}</p>
-                  <p><b>Errors:</b> {{ props.row.benchmark.bench.error }}</p>
-                </template>
-              </el-table-column>
-              <el-table-column
-                v-for="column in tableColumns"
-                :key="column.label"
-                :min-width="column.minWidth"
-                :prop="column.prop"
-                :label="column.label"
-                sortable
-              />
-            </el-table>
-          </div>
-        </div>
-        <div
-          slot="footer"
-          class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
-        >
-          <div class="">
-            <p class="card-category">
-              Showing {{ from + 1 }} to {{ to }} of {{ total }} entries
-            </p>
-          </div>
-          <l-pagination
-            v-model="pagination.currentPage"
-            class="pagination-no-border"
-            :per-page="pagination.perPage"
-            :total="pagination.total"
-          />
-        </div>
-      </card>
+        </card>
+      </div>
     </div>
   </div>
 </template>
@@ -149,8 +155,7 @@ import {
 import { Pagination as LPagination } from 'src/components/index';
 import Fuse from 'fuse.js';
 import axios from 'axios';
-import Loading from 'vue-loading-overlay';
-import 'vue-loading-overlay/dist/vue-loading.css';
+import { VueEllipseProgress } from 'vue-ellipse-progress';
 import { MemoryStorage } from 'ttl-localstorage';
 import {
   httpRequestFluxInfo, httpRequestDaemonInfo, httpRequestFluxHistoryStats,
@@ -163,7 +168,7 @@ export default {
     [Option.name]: Option,
     [Table.name]: Table,
     [TableColumn.name]: TableColumn,
-    Loading,
+    VueEllipseProgress,
   },
   data() {
     return {
@@ -232,7 +237,7 @@ export default {
       filter: new Map(),
       originalData: null,
       fuseSearch: null,
-      isLoading: false,
+      myProgress: 0,
     };
   },
   computed: {
@@ -279,18 +284,20 @@ export default {
     },
   },
   async mounted() {
-    this.setLoading(true);
-    await httpRequestFluxInfo(axios, MemoryStorage);
-    await httpRequestDaemonInfo(axios, MemoryStorage);
-    await httpRequestFluxHistoryStats(axios, MemoryStorage);
+    this.initialize();
+    this.myProgress = await httpRequestFluxInfo(axios, MemoryStorage);
+    this.myProgress = await httpRequestDaemonInfo(axios, MemoryStorage);
+    this.myProgress = await httpRequestFluxHistoryStats(axios, MemoryStorage);
     await this.getFluxInfo();
     await this.processFluxInfo();
     this.setSearch();
-    this.setLoading(false);
   },
   methods: {
     paginationTotal(value) {
       this.pagination.total = value;
+    },
+    async initialize() {
+      this.myProgress = 20;
     },
     processData(sortProps) {
       let result;
@@ -324,7 +331,7 @@ export default {
       return result.slice(this.from, this.to);
     },
     async getFluxInfo() {
-      // projection=node,benchmark,geolocation,apps
+      // Projection being used in this page are node,benchmark,geolocation,apps
       const lsdata = MemoryStorage.get('fluxinfo');
       this.values = lsdata;
     },
@@ -481,9 +488,7 @@ export default {
     setSearch() {
       this.originalData = JSON.stringify(this.tableData);
       this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['benchmark.bench.ipaddress'] });
-    },
-    setLoading(value) {
-      this.isLoading = value;
+      this.myProgress = 100;
     },
     sortChange(sortProps) {
       this.processData(sortProps);

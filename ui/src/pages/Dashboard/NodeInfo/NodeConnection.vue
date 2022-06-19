@@ -1,48 +1,88 @@
 <template>
-  <div class="row">
-    <div class="col-md-12">
-      <h2 class="title">
-        Connection
-      </h2>
+  <div>
+    <div class="row" style="position: absolute; left: 45%; top: 40%;" v-if="myProgress < 100">
+      <vue-ellipse-progress
+        :half="false"
+        :progress="myProgress"
+        line-mode="in 10"
+        color="Silver"
+        :gap="10"
+        fontSize="3rem">
+      </vue-ellipse-progress>
     </div>
-    <p class="category" />
-    <div>
-      <loading
-        :active.sync="isLoading"
-        :can-cancel="true"
-      />
-    </div>
-    <div class="col-12">
-      <card>
-        <div>
-          <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
-            <el-select
-              v-model="pagination.perPage"
-              class="select-default mb-3"
-              style="width: 200px"
-              placeholder="Per page"
-            >
-              <el-option
-                v-for="item in pagination.perPageOptions"
-                :key="item"
-                class="select-default"
-                :label="item"
-                :value="item"
+    <div class="row" v-if="myProgress >= 100">
+      <div class="col-md-12">
+        <h2 class="title">
+          Connection
+        </h2>
+      </div>
+      <p class="category" />
+      <div class="col-12">
+        <card>
+          <div>
+            <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
+              <el-select
+                v-model="pagination.perPage"
+                class="select-default mb-3"
+                style="width: 200px"
+                placeholder="Per page"
+              >
+                <el-option
+                  v-for="item in pagination.perPageOptions"
+                  :key="item"
+                  class="select-default"
+                  :label="item"
+                  :value="item"
+                />
+              </el-select>
+              <el-input
+                v-model="searchQuery"
+                type="search"
+                class="mb-3"
+                style="width: 200px"
+                placeholder="Search IP"
+                aria-controls="datatables"
               />
-            </el-select>
-            <el-input
-              v-model="searchQuery"
-              type="search"
-              class="mb-3"
-              style="width: 200px"
-              placeholder="Search IP"
-              aria-controls="datatables"
-            />
+            </div>
+            <div
+              slot="header"
+              class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
+              style="padding:20px;"
+            >
+              <div class="">
+                <p class="card-category">
+                  Showing {{ from + 1 }} to {{ to }} of {{ total }} entries
+                </p>
+              </div>
+              <l-pagination
+                v-model="pagination.currentPage"
+                class="pagination-no-border"
+                :per-page="pagination.perPage"
+                :total="pagination.total"
+              />
+            </div>
+            <div class="col-sm-12">
+              <el-table
+                stripe
+                style="width: 100%;"
+                :data="queriedData"
+                border
+                @sort-change="sortChange"
+              >
+                <el-table-column
+                  v-for="column in tableColumns"
+                  :key="column.label"
+                  :min-width="column.minWidth"
+                  :prop="column.prop"
+                  :label="column.label"
+                  sortable
+                />
+              </el-table>
+            </div>
           </div>
           <div
-            slot="header"
+            slot="footer"
             class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
-            style="padding:20px;"
           >
             <div class="">
               <p class="card-category">
@@ -56,42 +96,8 @@
               :total="pagination.total"
             />
           </div>
-          <div class="col-sm-12">
-            <el-table
-              stripe
-              style="width: 100%;"
-              :data="queriedData"
-              border
-              @sort-change="sortChange"
-            >
-              <el-table-column
-                v-for="column in tableColumns"
-                :key="column.label"
-                :min-width="column.minWidth"
-                :prop="column.prop"
-                :label="column.label"
-                sortable
-              />
-            </el-table>
-          </div>
-        </div>
-        <div
-          slot="footer"
-          class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
-        >
-          <div class="">
-            <p class="card-category">
-              Showing {{ from + 1 }} to {{ to }} of {{ total }} entries
-            </p>
-          </div>
-          <l-pagination
-            v-model="pagination.currentPage"
-            class="pagination-no-border"
-            :per-page="pagination.perPage"
-            :total="pagination.total"
-          />
-        </div>
-      </card>
+        </card>
+      </div>
     </div>
   </div>
 </template>
@@ -102,8 +108,7 @@ import {
 import { Pagination as LPagination } from 'src/components/index';
 import Fuse from 'fuse.js';
 import axios from 'axios';
-import Loading from 'vue-loading-overlay';
-import 'vue-loading-overlay/dist/vue-loading.css';
+import { VueEllipseProgress } from 'vue-ellipse-progress';
 import { MemoryStorage } from 'ttl-localstorage';
 import {
   httpRequestFluxInfo, httpRequestDaemonInfo, httpRequestFluxHistoryStats,
@@ -116,7 +121,7 @@ export default {
     [Option.name]: Option,
     [Table.name]: Table,
     [TableColumn.name]: TableColumn,
-    Loading,
+    VueEllipseProgress,
   },
   data() {
     return {
@@ -149,7 +154,7 @@ export default {
       originalData: null,
       values: [],
       fuseSearch: null,
-      isLoading: false,
+      myProgress: 0,
     };
   },
   computed: {
@@ -195,29 +200,29 @@ export default {
     },
   },
   async mounted() {
-    this.setLoading(true);
-    await httpRequestFluxInfo(axios, MemoryStorage);
-    await httpRequestDaemonInfo(axios, MemoryStorage);
-    await httpRequestFluxHistoryStats(axios, MemoryStorage);
+    this.initialize();
+    this.myProgress = await httpRequestFluxInfo(axios, MemoryStorage);
+    this.myProgress = await httpRequestDaemonInfo(axios, MemoryStorage);
+    this.myProgress = await httpRequestFluxHistoryStats(axios, MemoryStorage);
     await this.getFluxInfo();
     this.setSearch();
-    this.setLoading(false);
   },
   methods: {
     paginationTotal(value) {
       this.pagination.total = value;
     },
+    async initialize() {
+      this.myProgress = 20;
+    },
     async getFluxInfo() {
-      // projection=ip,flux
+      // Projection being used in this page is flux
       const lsdata = MemoryStorage.get('fluxinfo');
       this.tableData = lsdata;
     },
     setSearch() {
       this.originalData = JSON.stringify(this.tableData);
       this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
-    },
-    setLoading(value) {
-      this.isLoading = value;
+      this.myProgress = 100;
     },
     sortChange(sortProps) {
       if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {

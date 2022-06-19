@@ -1,74 +1,134 @@
 <template>
-  <div class="row">
-    <div class="col-md-12">
-      <h2 class="title">
-        Node
-      </h2>
+  <div>
+    <div class="row" style="position: absolute; left: 45%; top: 40%;" v-if="myProgress < 100">
+      <vue-ellipse-progress
+        :half="false"
+        :progress="myProgress"
+        line-mode="in 10"
+        color="Silver"
+        :gap="10"
+        fontSize="3rem">
+      </vue-ellipse-progress>
     </div>
-    <p class="category" />
-    <div>
-      <loading
-        :active.sync="isLoading"
-        :can-cancel="true"
-      />
-    </div>
-    <div class="col-12">
-      <card>
-        <div>
-          <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
-            <el-select
-              v-model="pagination.perPage"
-              class="select-default mb-3"
-              style="width: 200px"
-              placeholder="Per page"
-            >
-              <el-option
-                v-for="item in pagination.perPageOptions"
-                :key="item"
-                class="select-default"
-                :label="item"
-                :value="item"
-              />
-            </el-select>
-            <div
-              col-md-6
-              offset-md-3
-            >
+    <div class="row" v-if="myProgress >= 100">
+      <div class="col-md-12">
+        <h2 class="title">
+          Node
+        </h2>
+      </div>
+      <p class="category" />
+      <div class="col-12">
+        <card>
+          <div>
+            <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
               <el-select
-                v-model="filters.default"
+                v-model="pagination.perPage"
                 class="select-default mb-3"
-                style="width: 300px"
-                multiple
-                collapse-tags
-                placeholder="Filters"
+                style="width: 200px"
+                placeholder="Per page"
               >
                 <el-option
-                  v-for="item in filters.others"
+                  v-for="item in pagination.perPageOptions"
                   :key="item"
                   class="select-default"
                   :label="item"
                   :value="item"
                 />
               </el-select>
+              <div
+                col-md-6
+                offset-md-3
+              >
+                <el-select
+                  v-model="filters.default"
+                  class="select-default mb-3"
+                  style="width: 300px"
+                  multiple
+                  collapse-tags
+                  placeholder="Filters"
+                >
+                  <el-option
+                    v-for="item in filters.others"
+                    :key="item"
+                    class="select-default"
+                    :label="item"
+                    :value="item"
+                  />
+                </el-select>
+              </div>
+              <div
+                col-md-3
+                offset-md-6
+              >
+                <el-input
+                  v-model="searchQuery"
+                  type="search"
+                  class="mb-3"
+                  style="width: 200px"
+                  placeholder="Search IP"
+                  aria-controls="datatables"
+                />
+              </div>
             </div>
             <div
-              col-md-3
-              offset-md-6
+              slot="header"
+              class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
+              style="padding:20px;"
             >
-              <el-input
-                v-model="searchQuery"
-                type="search"
-                class="mb-3"
-                style="width: 200px"
-                placeholder="Search IP"
-                aria-controls="datatables"
+              <div class="">
+                <p class="card-category">
+                  Showing {{ from + 1 }} to {{ to }} of {{ total }} entries
+                </p>
+              </div>
+              <l-pagination
+                v-model="pagination.currentPage"
+                class="pagination-no-border"
+                :per-page="pagination.perPage"
+                :total="pagination.total"
               />
+            </div>
+            <div class="col-sm-12">
+              <el-table
+                stripe
+                style="width: 100%;"
+                :data="queriedData"
+                border
+                @sort-change="sortChange"
+              >
+                <el-table-column type="expand">
+                  <template slot-scope="props">
+                    <p><b>Collateral:</b> {{ props.row.node.status.collateral }} </p>
+                    <p><b>Txn Hash:</b> {{ props.row.node.status.txhash }}</p>
+                    <p><b>Added Height:</b> {{ props.row.node.status.added_height }}</p>
+                    <p><b>Confirmed Height:</b> {{ props.row.node.status.confirmed_height }}</p>
+                    <p><b>Last Confirmed Height:</b> {{ props.row.node.status.last_confirmed_height }}</p>
+                    <p><b>Last Paid Height:</b> {{ props.row.node.status.last_paid_height }}</p>
+                    <p><b>Payment Address:</b> {{ props.row.node.status.payment_address }}</p>
+                    <p><b>Zel ID:</b> {{ props.row.flux.zelid }}</p>
+                    <p><b>Active Since:</b> {{ props.row.node.status.activesince }}</p>
+                    <p><b>Active Since Converted:</b> {{ new Date(parseInt(props.row.node.status.activesince * 1000)).toLocaleString() }}</p>
+                    <p><b>Last Paid:</b> {{ props.row.node.status.lastpaid }}</p>
+                    <p><b>Last Paid Converted:</b> {{ new Date(parseInt(props.row.node.status.lastpaid * 1000)).toLocaleString() }}</p>
+                    <p><b>Amount:</b> {{ props.row.node.status.amount }}</p>
+                    <p><b>Crux ID:</b> {{ props.row.flux.cruxid }}</p>
+                    <p><b>DOS State:</b> {{ props.row.flux.dos.dosState }}</p>
+                    <p><b>DOS Message:</b> {{ props.row.flux.dos.dosMessage }}</p>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  v-for="column in tableColumns"
+                  :key="column.label"
+                  :min-width="column.minWidth"
+                  :prop="column.prop"
+                  :label="column.label"
+                  sortable
+                />
+              </el-table>
             </div>
           </div>
           <div
-            slot="header"
+            slot="footer"
             class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
-            style="padding:20px;"
           >
             <div class="">
               <p class="card-category">
@@ -82,62 +142,8 @@
               :total="pagination.total"
             />
           </div>
-          <div class="col-sm-12">
-            <el-table
-              stripe
-              style="width: 100%;"
-              :data="queriedData"
-              border
-              @sort-change="sortChange"
-            >
-              <el-table-column type="expand">
-                <template slot-scope="props">
-                  <p><b>Collateral:</b> {{ props.row.node.status.collateral }} </p>
-                  <p><b>Txn Hash:</b> {{ props.row.node.status.txhash }}</p>
-                  <p><b>Added Height:</b> {{ props.row.node.status.added_height }}</p>
-                  <p><b>Confirmed Height:</b> {{ props.row.node.status.confirmed_height }}</p>
-                  <p><b>Last Confirmed Height:</b> {{ props.row.node.status.last_confirmed_height }}</p>
-                  <p><b>Last Paid Height:</b> {{ props.row.node.status.last_paid_height }}</p>
-                  <p><b>Payment Address:</b> {{ props.row.node.status.payment_address }}</p>
-                  <p><b>Zel ID:</b> {{ props.row.flux.zelid }}</p>
-                  <p><b>Active Since:</b> {{ props.row.node.status.activesince }}</p>
-                  <p><b>Active Since Converted:</b> {{ new Date(parseInt(props.row.node.status.activesince * 1000)).toLocaleString() }}</p>
-                  <p><b>Last Paid:</b> {{ props.row.node.status.lastpaid }}</p>
-                  <p><b>Last Paid Converted:</b> {{ new Date(parseInt(props.row.node.status.lastpaid * 1000)).toLocaleString() }}</p>
-                  <p><b>Amount:</b> {{ props.row.node.status.amount }}</p>
-                  <p><b>Crux ID:</b> {{ props.row.flux.cruxid }}</p>
-                  <p><b>DOS State:</b> {{ props.row.flux.dos.dosState }}</p>
-                  <p><b>DOS Message:</b> {{ props.row.flux.dos.dosMessage }}</p>
-                </template>
-              </el-table-column>
-              <el-table-column
-                v-for="column in tableColumns"
-                :key="column.label"
-                :min-width="column.minWidth"
-                :prop="column.prop"
-                :label="column.label"
-                sortable
-              />
-            </el-table>
-          </div>
-        </div>
-        <div
-          slot="footer"
-          class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
-        >
-          <div class="">
-            <p class="card-category">
-              Showing {{ from + 1 }} to {{ to }} of {{ total }} entries
-            </p>
-          </div>
-          <l-pagination
-            v-model="pagination.currentPage"
-            class="pagination-no-border"
-            :per-page="pagination.perPage"
-            :total="pagination.total"
-          />
-        </div>
-      </card>
+        </card>
+      </div>
     </div>
   </div>
 </template>
@@ -148,8 +154,7 @@ import {
 import { Pagination as LPagination } from 'src/components/index';
 import Fuse from 'fuse.js';
 import axios from 'axios';
-import Loading from 'vue-loading-overlay';
-import 'vue-loading-overlay/dist/vue-loading.css';
+import { VueEllipseProgress } from 'vue-ellipse-progress';
 import { MemoryStorage } from 'ttl-localstorage';
 import {
   httpRequestFluxInfo, httpRequestDaemonInfo, httpRequestFluxHistoryStats,
@@ -162,7 +167,7 @@ export default {
     [Option.name]: Option,
     [Table.name]: Table,
     [TableColumn.name]: TableColumn,
-    Loading,
+    VueEllipseProgress,
   },
   data() {
     return {
@@ -210,7 +215,7 @@ export default {
       values: [],
       daemon: [],
       fuseSearch: null,
-      isLoading: false,
+      myProgress: 0,
       filter: new Map(),
       filterValue: [],
       ranks: new Map(),
@@ -260,20 +265,22 @@ export default {
     },
   },
   async mounted() {
-    this.setLoading(true);
-    await httpRequestFluxInfo(axios, MemoryStorage);
-    await httpRequestDaemonInfo(axios, MemoryStorage);
-    await httpRequestFluxHistoryStats(axios, MemoryStorage);
+    this.initialize();
+    this.myProgress = await httpRequestFluxInfo(axios, MemoryStorage);
+    this.myProgress = await httpRequestDaemonInfo(axios, MemoryStorage);
+    this.myProgress = await httpRequestFluxHistoryStats(axios, MemoryStorage);
     await this.getFluxInfo();
+    await this.processFluxInfo();
     await this.getDaemonInfo();
     await this.processDaemonInfo();
-    await this.processFluxInfo();
     this.setSearch();
-    this.setLoading(false);
   },
   methods: {
     paginationTotal(value) {
       this.pagination.total = value;
+    },
+    async initialize() {
+      this.myProgress = 20;
     },
     processData(sortProps) {
       let result;
@@ -307,7 +314,7 @@ export default {
       return result.slice(this.from, this.to);
     },
     async getFluxInfo() {
-      // projection=node,flux,appsHashesTotal
+      // Projection being used in this page are node,flux,appsHashesTotal
       const lsdata = MemoryStorage.get('fluxinfo');
       this.values = lsdata;
     },
@@ -349,9 +356,7 @@ export default {
     setSearch() {
       this.originalData = JSON.stringify(this.tableData);
       this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['node.status.ip'] });
-    },
-    setLoading(value) {
-      this.isLoading = value;
+      this.myProgress = 100;
     },
     sortChange(sortProps) {
       this.processData(sortProps);
