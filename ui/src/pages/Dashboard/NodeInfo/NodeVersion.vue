@@ -247,7 +247,7 @@ export default {
       this.myProgress = 20;
     },
     async getFluxInfo() {
-      // projection=ip,daemon,benchmark,flux
+      // Projection being used in this page are ip,daemon,benchmark,flux
       const lsdata = MemoryStorage.get('fluxinfo');
       this.tableData = lsdata;
     },
