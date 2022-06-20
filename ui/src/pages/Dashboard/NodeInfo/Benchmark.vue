@@ -12,10 +12,19 @@
     </div>
     <div class="row" v-if="myProgress >= 100">
       <div class="col-md-12">
-        <l-button wide>Cumulus Nodes &#60; 25 Upload Speed: {{ filter.get(`network - cumulus upload speed &#60; 25`).length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[0] = filter.get(`network - cumulus upload speed < 25`)">Cumulus &#60; 25 Upload Speed: {{ temp[0] === undefined ? 0 : temp[0].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[1] = filter.get(`network - nimbus upload speed < 50`)">Nimbus &#60; 50 Upload Speed: {{ temp[1] === undefined ? 0 : temp[1].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[2] = filter.get(`network - stratus upload speed < 100`)">Stratus &#60; 100 Upload Speed: {{ temp[2] === undefined ? 0 : temp[2].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[3] = filter.get(`network - cumulus download speed < 25`)">Cumulus &#60; 25 Download Speed: {{ temp[3] === undefined ? 0 : temp[3].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[4] = filter.get(`network - nimbus download speed < 50`)">Nimbus &#60; 50 Download Speed: {{ temp[4] === undefined ? 0 : temp[4].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[5] = filter.get(`network - stratus download speed < 100`)">Stratus &#60; 100 Download Speed: {{ temp[5] === undefined ? 0 : temp[5].length }}</l-button>&nbsp;
       </div>
       <div class="col-md-12">
-        <l-button wide>Cumulus Nodes &#60; 25 Download Speed: {{ filter.get(`network - cumulus download speed &#60; 25`).length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[6] = filter.get(`upnp enabled - TRUE`)">UPnP Enabled: {{ temp[6] === undefined ? 0 : temp[6].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[7] = filter.get(`failed nodes - cumulus`)">Failed Cumulus: {{ temp[7] === undefined ? 0 : temp[7].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[8] = filter.get(`failed nodes - nimbus`)">Failed Nimbus: {{ temp[8] === undefined ? 0 : temp[8].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[9] = filter.get(`failed nodes - stratus`)">Failed Stratus: {{ emp[9] === undefined ? 0 : temp[9].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[10] = filter.get(`node tier - no tier`)">No Node Tier: {{ temp[10] === undefined ? 0 : temp[10].length }}</l-button>&nbsp;
       </div>
       <div class="col-md-12">
         <h2 class="title">
@@ -244,6 +253,7 @@ export default {
       originalData: null,
       fuseSearch: null,
       myProgress: 0,
+      temp: [],
     };
   },
   computed: {
@@ -355,7 +365,7 @@ export default {
         }
         temp.push(values);
         this.filter.set(`status - ${values.benchmark.status.status}`, temp);
-        const tier = values.node.status.tier !== undefined ? values.node.status.tier.toLowerCase() : '';
+        const tier = values.node.status.tier !== undefined ? values.node.status.tier.toLowerCase() : 'no tier';
         temp = this.filter.has(`node tier - ${tier}`) ? this.filter.get(`node tier - ${tier}`) : [];
         if (!this.filter.has(`node tier - ${tier}`)) {
           this.filterValue.push(`node tier - ${tier}`);
