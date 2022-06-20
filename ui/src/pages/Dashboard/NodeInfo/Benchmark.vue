@@ -12,6 +12,12 @@
     </div>
     <div class="row" v-if="myProgress >= 100">
       <div class="col-md-12">
+        <l-button wide>Cumulus Nodes &#60; 25 Upload Speed: {{ filter.get(`network - cumulus upload speed &#60; 25`).length }}</l-button>&nbsp;
+      </div>
+      <div class="col-md-12">
+        <l-button wide>Cumulus Nodes &#60; 25 Download Speed: {{ filter.get(`network - cumulus download speed &#60; 25`).length }}</l-button>&nbsp;
+      </div>
+      <div class="col-md-12">
         <h2 class="title">
           Benchmark
         </h2>
