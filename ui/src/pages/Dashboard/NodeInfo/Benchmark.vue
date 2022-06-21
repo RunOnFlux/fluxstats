@@ -27,6 +27,7 @@
         <l-button wide v-if="temp[10] = filter.get(`failed nodes - no tier`)">Failed No Tier: {{ temp[10] === undefined ? 0 : temp[10].length }}</l-button>&nbsp;
         <l-button wide v-if="temp[11] = filter.get(`node tier - no tier`)">No Tier Nodes: {{ temp[11] === undefined ? 0 : temp[11].length }}</l-button>&nbsp;
         <l-button wide v-if="temp[12] = filter.get(`organization - `)">No Organization Nodes: {{ temp[12] === undefined ? 0 : temp[12].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[13] = filter.get(`no ip address nodes`)">No IP Address Nodes: {{ temp[13] === undefined ? 0 : temp[13].length }}</l-button>&nbsp;
       </div>
       <div class="col-md-12">
         <h2 class="title">
@@ -130,7 +131,8 @@
                     <p><b>Disk Size:</b> {{ props.row.benchmark.bench.disksinfo.size }}</p>
                     <p><b>Disk Write Speed:</b> {{ props.row.benchmark.bench.disksinfo.writespeed }}</p>
                     <p><b>EPS:</b> {{ props.row.benchmark.bench.eps }}</p>
-                    <p><b>Errors:</b> {{ props.row.benchmark.bench.error }}</p>
+                    <p><b class="text-danger">Errors:</b> {{ props.row.benchmark.bench.error }}</p>
+                    <p><b class="text-warning">Needed To Fix Issues:</b> {{ props.row.benchmark.issues }} </p>
                   </template>
                 </el-table-column>
                 <el-table-column
@@ -357,6 +359,7 @@ export default {
       this.values.map((el) => {
         const values = el;
         const filtered = values.apps.runningapps.filter((item) => item.Image !== 'containrrr/watchtower');
+        values.benchmark.issues = [];
         values.apps.runningapps = filtered;
         values.apps.count = filtered.length !== undefined || filtered.length !== 0 ? filtered.length : 0;
         values.benchmark.upnp = values.benchmark.bench.ipaddress.includes(':') ? 'TRUE' : 'FALSE';
@@ -372,8 +375,22 @@ export default {
         if (!this.filter.has(`node tier - ${tier}`)) {
           this.filterValue.push(`node tier - ${tier}`);
         }
+        if (tier === 'no tier' && values.benchmark.bench.error === '') {
+          values.benchmark.issues.push('No Tier');
+        }
         temp.push(values);
         this.filter.set(`node tier - ${tier}`, temp);
+        temp = this.filter.has('no ip address nodes') ? this.filter.get('no ip address nodes') : [];
+        if ((values.benchmark.bench.ipaddress === undefined || values.benchmark.bench.ipaddress === '') && !this.filter.has('no ip address nodes')) {
+          this.filterValue.push('no ip address nodes');
+        }
+        if (values.benchmark.bench.ipaddress === undefined || values.benchmark.bench.ipaddress === '') {
+          if (values.benchmark.bench.error === '') {
+            values.benchmark.issues.push('No IP Address');
+          }
+          temp.push(values);
+          this.filter.set('no ip address nodes', temp);
+        }
         temp = this.filter.has(`${values.benchmark.status.benchmarking} nodes - ${tier}`) ? this.filter.get(`${values.benchmark.status.benchmarking} nodes - ${tier}`) : [];
         if (values.benchmark.status.benchmarking === 'failed' && !this.filter.has(`${values.benchmark.status.benchmarking} nodes - ${tier}`)) {
           this.filterValue.push(`${values.benchmark.status.benchmarking} nodes - ${tier}`);
@@ -408,6 +425,9 @@ export default {
           this.filterValue.push(label);
         }
         if (values.benchmark.bench.upload_speed < 25 && tier === 'cumulus') {
+          if (values.benchmark.bench.error === '') {
+            values.benchmark.issues.push('Upload Speed < 25');
+          }
           temp.push(values);
           this.filter.set(label, temp);
         }
@@ -426,6 +446,9 @@ export default {
           this.filterValue.push(label);
         }
         if (values.benchmark.bench.download_speed < 25 && tier === 'cumulus') {
+          if (values.benchmark.bench.error === '') {
+            values.benchmark.issues.push('Download Speed < 25');
+          }
           temp.push(values);
           this.filter.set(label, temp);
         }
@@ -444,6 +467,9 @@ export default {
           this.filterValue.push(label);
         }
         if (values.benchmark.bench.upload_speed < 50 && tier === 'nimbus') {
+          if (values.benchmark.bench.error === '') {
+            values.benchmark.issues.push('Upload Speed < 50');
+          }
           temp.push(values);
           this.filter.set(label, temp);
         }
@@ -462,6 +488,9 @@ export default {
           this.filterValue.push(label);
         }
         if (values.benchmark.bench.download_speed < 50 && tier === 'nimbus') {
+          if (values.benchmark.bench.error === '') {
+            values.benchmark.issues.push('Download Speed < 50');
+          }
           temp.push(values);
           this.filter.set(label, temp);
         }
@@ -480,6 +509,9 @@ export default {
           this.filterValue.push(label);
         }
         if (values.benchmark.bench.upload_speed < 100 && tier === 'stratus') {
+          if (values.benchmark.bench.error === '') {
+            values.benchmark.issues.push('Upload Speed < 100');
+          }
           temp.push(values);
           this.filter.set(label, temp);
         }
@@ -498,6 +530,9 @@ export default {
           this.filterValue.push(label);
         }
         if (values.benchmark.bench.download_speed < 100 && tier === 'stratus') {
+          if (values.benchmark.bench.error === '') {
+            values.benchmark.issues.push('Download Speed < 100');
+          }
           temp.push(values);
           this.filter.set(label, temp);
         }
