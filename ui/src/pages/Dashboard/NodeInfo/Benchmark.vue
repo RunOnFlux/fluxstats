@@ -19,12 +19,14 @@
         <l-button wide v-if="temp[4] = filter.get(`network - nimbus download speed < 50`)">Nimbus &#60; 50 Download Speed: {{ temp[4] === undefined ? 0 : temp[4].length }}</l-button>&nbsp;
         <l-button wide v-if="temp[5] = filter.get(`network - stratus download speed < 100`)">Stratus &#60; 100 Download Speed: {{ temp[5] === undefined ? 0 : temp[5].length }}</l-button>&nbsp;
       </div>
-      <div class="col-md-12">
+      <div class="col-md-12" style="padding-top: 25px;">
         <l-button wide v-if="temp[6] = filter.get(`upnp enabled - TRUE`)">UPnP Enabled: {{ temp[6] === undefined ? 0 : temp[6].length }}</l-button>&nbsp;
         <l-button wide v-if="temp[7] = filter.get(`failed nodes - cumulus`)">Failed Cumulus: {{ temp[7] === undefined ? 0 : temp[7].length }}</l-button>&nbsp;
         <l-button wide v-if="temp[8] = filter.get(`failed nodes - nimbus`)">Failed Nimbus: {{ temp[8] === undefined ? 0 : temp[8].length }}</l-button>&nbsp;
-        <l-button wide v-if="temp[9] = filter.get(`failed nodes - stratus`)">Failed Stratus: {{ emp[9] === undefined ? 0 : temp[9].length }}</l-button>&nbsp;
-        <l-button wide v-if="temp[10] = filter.get(`node tier - no tier`)">No Node Tier: {{ temp[10] === undefined ? 0 : temp[10].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[9] = filter.get(`failed nodes - stratus`)">Failed Stratus: {{ temp[9] === undefined ? 0 : temp[9].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[10] = filter.get(`failed nodes - no tier`)">Failed No Tier: {{ temp[10] === undefined ? 0 : temp[10].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[11] = filter.get(`node tier - no tier`)">No Tier Nodes: {{ temp[11] === undefined ? 0 : temp[11].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[12] = filter.get(`organization - `)">No Organization Nodes: {{ temp[12] === undefined ? 0 : temp[12].length }}</l-button>&nbsp;
       </div>
       <div class="col-md-12">
         <h2 class="title">
@@ -285,8 +287,8 @@ export default {
         this.filters.default.forEach((item) => {
           const objs = this.filter.get(item);
           objs.forEach((obj) => {
-            if (!arr.includes(obj.node.status.ip)) {
-              arr.push(obj.node.status.ip);
+            if (!arr.includes(obj.benchmark.bench.ipaddress)) {
+              arr.push(obj.benchmark.bench.ipaddress);
               data.push(obj);
             }
           });
@@ -330,8 +332,8 @@ export default {
         this.filters.default.forEach((item) => {
           const objs = this.filter.get(item);
           objs.forEach((obj) => {
-            if (!arr.includes(obj.node.status.ip)) {
-              arr.push(obj.node.status.ip);
+            if (!arr.includes(obj.benchmark.bench.ipaddress)) {
+              arr.push(obj.benchmark.bench.ipaddress);
               data.push(obj);
             }
           });
@@ -400,101 +402,113 @@ export default {
           temp.push(values);
           this.filter.set(`upnp ip address - ${ip}`, temp);
         }
-        let temp1 = this.filter.has('network - cumulus upload speed < 25') ? this.filter.get('network - cumulus upload speed < 25') : [];
-        if (values.benchmark.bench.upload_speed < 25 && tier === 'cumulus' && !this.filter.has('network - cumulus upload speed < 25')) {
-          this.filterValue.push('network - cumulus upload speed < 25');
+        let label = 'network - cumulus upload speed < 25';
+        temp = this.filter.has(label) ? this.filter.get(label) : [];
+        if (values.benchmark.bench.upload_speed < 25 && tier === 'cumulus' && !this.filter.has(label)) {
+          this.filterValue.push(label);
         }
         if (values.benchmark.bench.upload_speed < 25 && tier === 'cumulus') {
-          temp1.push(values);
-          this.filter.set('network - cumulus upload speed < 25', temp1);
+          temp.push(values);
+          this.filter.set(label, temp);
         }
-        let temp2 = this.filter.has('network - cumulus upload speed >= 25') ? this.filter.get('network - cumulus upload speed >= 25') : [];
-        if (values.benchmark.bench.upload_speed >= 25 && tier === 'cumulus' && !this.filter.has('network - cumulus upload speed >= 25')) {
-          this.filterValue.push('network - cumulus upload speed >= 25');
+        label = 'network - cumulus upload speed >= 25';
+        temp = this.filter.has(label) ? this.filter.get(label) : [];
+        if (values.benchmark.bench.upload_speed >= 25 && tier === 'cumulus' && !this.filter.has(label)) {
+          this.filterValue.push(label);
         }
         if (values.benchmark.bench.upload_speed >= 25 && tier === 'cumulus') {
-          temp2.push(values);
-          this.filter.set('network - cumulus upload speed >= 25', temp2);
+          temp.push(values);
+          this.filter.set(label, temp);
         }
-        let temp3 = this.filter.has('network - cumulus download speed < 25') ? this.filter.get('network - cumulus download speed < 25') : [];
-        if (values.benchmark.bench.download_speed < 25 && tier === 'cumulus' && !this.filter.has('network - cumulus download speed < 25')) {
-          this.filterValue.push('network - cumulus download speed < 25');
+        label = 'network - cumulus download speed < 25';
+        temp = this.filter.has(label) ? this.filter.get(label) : [];
+        if (values.benchmark.bench.download_speed < 25 && tier === 'cumulus' && !this.filter.has(label)) {
+          this.filterValue.push(label);
         }
         if (values.benchmark.bench.download_speed < 25 && tier === 'cumulus') {
-          temp3.push(values);
-          this.filter.set('network - cumulus download speed < 25', temp3);
+          temp.push(values);
+          this.filter.set(label, temp);
         }
-        let temp4 = this.filter.has('network - cumulus download speed >= 25') ? this.filter.get('network - cumulus download speed >= 25') : [];
-        if (values.benchmark.bench.download_speed >= 25 && tier === 'cumulus' && !this.filter.has('network - cumulus download speed >= 25')) {
-          this.filterValue.push('network - cumulus download speed >= 25');
+        label = 'network - cumulus download speed >= 25';
+        temp = this.filter.has(label) ? this.filter.get(label) : [];
+        if (values.benchmark.bench.download_speed >= 25 && tier === 'cumulus' && !this.filter.has(label)) {
+          this.filterValue.push(label);
         }
         if (values.benchmark.bench.download_speed >= 25 && tier === 'cumulus') {
-          temp4.push(values);
-          this.filter.set('network - cumulus download speed >= 25', temp4);
+          temp.push(values);
+          this.filter.set(label, temp);
         }
-        temp1 = this.filter.has('network - nimbus upload speed < 50') ? this.filter.get('network - nimbus upload speed < 50') : [];
-        if (values.benchmark.bench.upload_speed < 50 && tier === 'nimbus' && !this.filter.has('network - nimbus upload speed < 50')) {
-          this.filterValue.push('network - nimbus upload speed < 50');
+        label = 'network - nimbus upload speed < 50';
+        temp = this.filter.has(label) ? this.filter.get(label) : [];
+        if (values.benchmark.bench.upload_speed < 50 && tier === 'nimbus' && !this.filter.has(label)) {
+          this.filterValue.push(label);
         }
         if (values.benchmark.bench.upload_speed < 50 && tier === 'nimbus') {
-          temp1.push(values);
-          this.filter.set('network - nimbus upload speed < 50', temp1);
+          temp.push(values);
+          this.filter.set(label, temp);
         }
-        temp2 = this.filter.has('network - nimbus upload speed >= 50') ? this.filter.get('network - nimbus upload speed >= 50') : [];
-        if (values.benchmark.bench.upload_speed >= 50 && tier === 'nimbus' && !this.filter.has('network - nimbus upload speed >= 50')) {
-          this.filterValue.push('network - nimbus upload speed >= 50');
+        label = 'network - nimbus upload speed >= 50';
+        temp = this.filter.has(label) ? this.filter.get(label) : [];
+        if (values.benchmark.bench.upload_speed >= 50 && tier === 'nimbus' && !this.filter.has(label)) {
+          this.filterValue.push(label);
         }
         if (values.benchmark.bench.upload_speed >= 50 && tier === 'nimbus') {
-          temp2.push(values);
-          this.filter.set('network - nimbus upload speed >= 50', temp2);
+          temp.push(values);
+          this.filter.set(label, temp);
         }
-        temp3 = this.filter.has('network - nimbus download speed < 50') ? this.filter.get('network - nimbus download speed < 50') : [];
-        if (values.benchmark.bench.download_speed < 50 && tier === 'nimbus' && !this.filter.has('network - nimbus download speed < 50')) {
-          this.filterValue.push('network - nimbus download speed < 50');
+        label = 'network - nimbus download speed < 50';
+        temp = this.filter.has(label) ? this.filter.get(label) : [];
+        if (values.benchmark.bench.download_speed < 50 && tier === 'nimbus' && !this.filter.has(label)) {
+          this.filterValue.push(label);
         }
         if (values.benchmark.bench.download_speed < 50 && tier === 'nimbus') {
-          temp3.push(values);
-          this.filter.set('network - nimbus download speed < 50', temp3);
+          temp.push(values);
+          this.filter.set(label, temp);
         }
-        temp4 = this.filter.has('network - nimbus download speed >= 50') ? this.filter.get('network - nimbus download speed >= 50') : [];
-        if (values.benchmark.bench.download_speed >= 50 && tier === 'nimbus' && !this.filter.has('network - nimbus download speed >= 50')) {
-          this.filterValue.push('network - nimbus download speed >= 50');
+        label = 'network - nimbus download speed >= 50';
+        temp = this.filter.has(label) ? this.filter.get(label) : [];
+        if (values.benchmark.bench.download_speed >= 50 && tier === 'nimbus' && !this.filter.has(label)) {
+          this.filterValue.push(label);
         }
         if (values.benchmark.bench.download_speed >= 50 && tier === 'nimbus') {
-          temp4.push(values);
-          this.filter.set('network - nimbus download speed >= 50', temp4);
+          temp.push(values);
+          this.filter.set(label, temp);
         }
-        temp1 = this.filter.has('network - stratus upload speed < 100') ? this.filter.get('network - stratus upload speed < 100') : [];
-        if (values.benchmark.bench.upload_speed < 100 && tier === 'stratus' && !this.filter.has('network - stratus upload speed < 100')) {
-          this.filterValue.push('network - stratus upload speed < 100');
+        label = 'network - stratus upload speed < 100';
+        temp = this.filter.has(label) ? this.filter.get(label) : [];
+        if (values.benchmark.bench.upload_speed < 100 && tier === 'stratus' && !this.filter.has(label)) {
+          this.filterValue.push(label);
         }
         if (values.benchmark.bench.upload_speed < 100 && tier === 'stratus') {
-          temp1.push(values);
-          this.filter.set('network - stratus upload speed < 100', temp1);
+          temp.push(values);
+          this.filter.set(label, temp);
         }
-        temp2 = this.filter.has('network - stratus upload speed >= 100') ? this.filter.get('network - stratus upload speed >= 100') : [];
-        if (values.benchmark.bench.upload_speed >= 100 && tier === 'stratus' && !this.filter.has('network - stratus upload speed >= 100')) {
-          this.filterValue.push('network - stratus upload speed >= 100');
+        label = 'network - stratus upload speed >= 100';
+        temp = this.filter.has(label) ? this.filter.get(label) : [];
+        if (values.benchmark.bench.upload_speed >= 100 && tier === 'stratus' && !this.filter.has(label)) {
+          this.filterValue.push(label);
         }
         if (values.benchmark.bench.upload_speed >= 100 && tier === 'stratus') {
-          temp2.push(values);
-          this.filter.set('network - stratus upload speed >= 100', temp2);
+          temp.push(values);
+          this.filter.set(label, temp);
         }
-        temp3 = this.filter.has('network - stratus download speed < 100') ? this.filter.get('network - stratus download speed < 100') : [];
-        if (values.benchmark.bench.download_speed < 100 && tier === 'stratus' && !this.filter.has('network - stratus download speed < 100')) {
-          this.filterValue.push('network - stratus download speed < 100');
+        label = 'network - stratus download speed < 100';
+        temp = this.filter.has(label) ? this.filter.get(label) : [];
+        if (values.benchmark.bench.download_speed < 100 && tier === 'stratus' && !this.filter.has(label)) {
+          this.filterValue.push(label);
         }
         if (values.benchmark.bench.download_speed < 100 && tier === 'stratus') {
-          temp3.push(values);
-          this.filter.set('network - stratus download speed < 100', temp3);
+          temp.push(values);
+          this.filter.set(label, temp);
         }
-        temp4 = this.filter.has('network - stratus download speed >= 100') ? this.filter.get('network - stratus download speed >= 100') : [];
-        if (values.benchmark.bench.download_speed >= 100 && tier === 'stratus' && !this.filter.has('network - stratus download speed >= 100')) {
-          this.filterValue.push('network - stratus download speed >= 100');
+        label = 'network - stratus download speed >= 100';
+        temp = this.filter.has(label) ? this.filter.get(label) : [];
+        if (values.benchmark.bench.download_speed >= 100 && tier === 'stratus' && !this.filter.has(label)) {
+          this.filterValue.push(label);
         }
         if (values.benchmark.bench.download_speed >= 100 && tier === 'stratus') {
-          temp4.push(values);
-          this.filter.set('network - stratus download speed >= 100', temp4);
+          temp.push(values);
+          this.filter.set(label, temp);
         }
         return values;
       });
