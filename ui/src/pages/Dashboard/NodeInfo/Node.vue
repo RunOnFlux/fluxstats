@@ -332,22 +332,25 @@ export default {
     },
     async processFluxInfo() {
       this.values.map((el) => {
-        const values = el;
         let temp;
+        const values = el;
+        const ipaddress = values.node.status.ip;
+        const fluxversion = values.flux.version;
+        const apphashtotal = values.appsHashesTotal;
         values.node.status.network = 'ipv4';
-        values.node.status.rank = this.ranks.get(el.node.status.ip) === undefined ? 0 : this.ranks.get(el.node.status.ip);
-        temp = this.filter.has(`node version - ${values.flux.version}`) ? this.filter.get(`node version - ${values.flux.version}`) : [];
-        if (!this.filter.has(`node version - ${values.flux.version}`)) {
-          this.filterValue.push(`node version - ${values.flux.version}`);
+        values.node.status.rank = this.ranks.get(ipaddress) === undefined ? 0 : this.ranks.get(ipaddress);
+        temp = this.filter.has(`node version - ${fluxversion}`) ? this.filter.get(`node version - ${fluxversion}`) : [];
+        if (!this.filter.has(`node version - ${fluxversion}`)) {
+          this.filterValue.push(`node version - ${fluxversion}`);
         }
         temp.push(values);
-        this.filter.set(`node version - ${values.flux.version}`, temp);
-        temp = this.filter.has(`node hashes - ${values.appsHashesTotal}`) ? this.filter.get(`node hashes - ${values.appsHashesTotal}`) : [];
-        if (!this.filter.has(`node hashes - ${values.appsHashesTotal}`)) {
-          this.filterValue.push(`node hashes - ${values.appsHashesTotal}`);
+        this.filter.set(`node version - ${fluxversion}`, temp);
+        temp = this.filter.has(`node hashes - ${apphashtotal}`) ? this.filter.get(`node hashes - ${apphashtotal}`) : [];
+        if (!this.filter.has(`node hashes - ${apphashtotal}`)) {
+          this.filterValue.push(`node hashes - ${apphashtotal}`);
         }
         temp.push(values);
-        this.filter.set(`node hashes - ${values.appsHashesTotal}`, temp);
+        this.filter.set(`node hashes - ${apphashtotal}`, temp);
         return values;
       });
       this.filters.others = this.filterValue.sort();
