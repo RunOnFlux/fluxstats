@@ -11,10 +11,13 @@
       </vue-ellipse-progress>
     </div>
     <div class="row" v-if="myProgress >= 100">
-      <div class="col-md-12">
+      <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
         <h2 class="title">
           Version
         </h2>
+        <div>
+          <l-button v-on:click="downloadCsvFile(tableData)"><i class="nc-icon nc-cloud-download-93"></i></l-button>
+        </div>
       </div>
       <p class="category" />
       <div class="col-12">
@@ -128,6 +131,7 @@ import Fuse from 'fuse.js';
 import axios from 'axios';
 import { VueEllipseProgress } from 'vue-ellipse-progress';
 import { MemoryStorage } from 'ttl-localstorage';
+import { ExportToCsv } from 'export-to-csv';
 import {
   httpRequestFluxInfo, httpRequestDaemonInfo, httpRequestFluxHistoryStats,
 } from '../Request/HttpRequest';
@@ -342,6 +346,73 @@ export default {
       } else {
         this.tableData = JSON.parse(this.originalData);
       }
+    },
+    processDataForCsv(data) {
+      const values = [];
+      data.forEach((item) => {
+        values.push({
+          ip: !item.ip ? '' : item.ip,
+          daemonVersion: !item.daemon.info.version ? '' : item.daemon.info.version,
+          fluxVersion: !item.flux.version ? '' : item.flux.version,
+          benchmarkVersion: !item.benchmark.info.version ? '' : item.benchmark.info.version,
+          benchVersion: !item.benchmark.bench.bench_version ? '' : item.benchmark.bench.bench_version,
+          benchSpeedVersion: !item.benchmark.bench.speed_version ? '' : item.benchmark.bench.speed_version,
+          protocolVersion: !item.daemon.info.protocolversion ? '' : item.daemon.info.protocolversion,
+          walletVersion: !item.daemon.info.walletversion ? '' : item.daemon.info.walletversion,
+          blocks: !item.daemon.info.blocks ? '' : item.daemon.info.blocks,
+          timeOffset: !item.daemon.info.timeoffset ? '' : item.daemon.info.timeoffset,
+          connections: !item.daemon.info.connections ? '' : item.daemon.info.connections,
+          proxy: !item.daemon.info.proxy ? '' : item.daemon.info.proxy,
+          difficulty: !item.daemon.info.difficulty ? '' : item.daemon.info.difficulty,
+          testnet: !item.daemon.info.testnet ? '' : item.daemon.info.testnet,
+          keyPoolOldTest: !item.daemon.info.keypoololdest ? '' : item.daemon.info.keypoololdest,
+          keyPoolSize: !item.daemon.info.keypoolsize ? '' : item.daemon.info.keypoolsize,
+          payTxnFee: !item.daemon.info.paytxfee ? '' : item.daemon.info.paytxfee,
+          relayFee: !item.daemon.info.relayfee ? '' : item.daemon.info.relayfee,
+          errors: !item.daemon.info.errors ? '' : item.daemon.info.errors,
+        });
+      });
+      return values;
+    },
+    downloadCsvFile(data) {
+      const date = new Date();
+      const month = date.getMonth();
+      const day = date.getDate();
+      const year = date.getFullYear();
+      const options = {
+        filename: `Node_Version_${month}${day}${year}`,
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalSeparator: '.',
+        showLabels: true,
+        showTitle: true,
+        title: `Node Version - ${month}/${day}/${year}`,
+        useTextFile: false,
+        useBom: true,
+        headers: [
+          'IP Address',
+          'Daemon Version',
+          'Flux Version',
+          'Benchmark Version',
+          'Bench Version',
+          'Bench Speed Version',
+          'Protocol Version',
+          'Wallet Version',
+          'Blocks',
+          'Time Offset',
+          'Connections',
+          'Proxy',
+          'Difficulty',
+          'Testnet',
+          'Key Pool Old Test',
+          'Key Pool Size',
+          'Pay Txn Fee',
+          'Relay Fee',
+          'Errors',
+        ],
+      };
+      const csvExporter = new ExportToCsv(options);
+      csvExporter.generateCsv(this.processDataForCsv(data));
     },
   },
 };

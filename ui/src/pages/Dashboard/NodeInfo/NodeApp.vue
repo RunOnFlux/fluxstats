@@ -11,10 +11,13 @@
       </vue-ellipse-progress>
     </div>
     <div class="row" v-if="myProgress >= 100">
-      <div class="col-md-12">
+      <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
         <h2 class="title">
           Application
         </h2>
+        <div>
+          <l-button v-on:click="downloadCsvFile(tableData)"><i class="nc-icon nc-cloud-download-93"></i></l-button>
+        </div>
       </div>
       <p class="category" />
       <div class="col-12">
@@ -129,6 +132,7 @@ import Fuse from 'fuse.js';
 import axios from 'axios';
 import { VueEllipseProgress } from 'vue-ellipse-progress';
 import { MemoryStorage } from 'ttl-localstorage';
+import { ExportToCsv } from 'export-to-csv';
 import {
   httpRequestFluxInfo, httpRequestDaemonInfo, httpRequestFluxHistoryStats,
 } from '../Request/HttpRequest';
@@ -419,6 +423,51 @@ export default {
       } else {
         this.tableData = JSON.parse(this.originalData);
       }
+    },
+    processDataForCsv(data) {
+      const values = [];
+      data.forEach((item) => {
+        values.push({
+          ip: !item.ip ? '' : item.ip,
+          appsCount: !item.apps.count ? 0 : item.apps.count,
+          fluxTowerInstalled: !item.apps.fluxtower ? '' : item.apps.fluxtower,
+          fluxUsage: !item.apps.fluxusage ? '' : item.apps.fluxusage,
+          cpuLocked: !item.apps.resources.appsCpusLocked ? '' : item.apps.resources.appsCpusLocked,
+          ramLocked: !item.apps.resources.appsRamLocked ? '' : item.apps.resources.appsRamLocked,
+          hddLocked: !item.apps.resources.appsHddLocked ? '' : item.apps.resources.appsHddLocked,
+          runningApps: !item.apps.runningapps || item.apps.runningapps.length <= 0 ? '' : JSON.stringify(item.apps.runningapps, null, 2),
+        });
+      });
+      return values;
+    },
+    downloadCsvFile(data) {
+      const date = new Date();
+      const month = date.getMonth();
+      const day = date.getDate();
+      const year = date.getFullYear();
+      const options = {
+        filename: `Node_Application_${month}${day}${year}`,
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalSeparator: '.',
+        showLabels: true,
+        showTitle: true,
+        title: `Node Application - ${month}/${day}/${year}`,
+        useTextFile: false,
+        useBom: true,
+        headers: [
+          'IP Address',
+          'Total Application Running',
+          'Flux Tower Installed',
+          'Flux Usage',
+          'CPU Locked',
+          'RAM Locked',
+          'HDD Locked',
+          'Running Apps',
+        ],
+      };
+      const csvExporter = new ExportToCsv(options);
+      csvExporter.generateCsv(this.processDataForCsv(data));
     },
   },
 };

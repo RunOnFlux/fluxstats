@@ -11,10 +11,13 @@
       </vue-ellipse-progress>
     </div>
     <div class="row" v-if="myProgress >= 100">
-      <div class="col-md-12">
+      <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
         <h2 class="title">
           Up Time
         </h2>
+        <div>
+          <l-button v-on:click="downloadCsvFile(tableData)"><i class="nc-icon nc-cloud-download-93"></i></l-button>
+        </div>
       </div>
       <p class="category" />
       <div class="col-12">
@@ -110,6 +113,7 @@ import Fuse from 'fuse.js';
 import axios from 'axios';
 import { VueEllipseProgress } from 'vue-ellipse-progress';
 import { MemoryStorage } from 'ttl-localstorage';
+import { ExportToCsv } from 'export-to-csv';
 import {
   httpRequestFluxInfo, httpRequestDaemonInfo, httpRequestFluxHistoryStats,
 } from '../Request/HttpRequest';
@@ -351,6 +355,45 @@ export default {
       } else {
         this.tableData = JSON.parse(this.originalData);
       }
+    },
+    processDataForCsv(data) {
+      const values = [];
+      data.forEach((item) => {
+        values.push({
+          ip: !item.ip ? '' : item.ip,
+          activeSince: !item.activeSince ? '' : item.activeSince,
+          activeSinceConverted: !item.activeSinceConverted ? '' : item.activeSinceConverted,
+          dataCollectedAt: !item.dataCollectedAt ? '' : item.dataCollectedAt,
+          dataCollectedAtConverted: !item.dataCollectedAtConverted ? '' : item.dataCollectedAtConverted,
+        });
+      });
+      return values;
+    },
+    downloadCsvFile(data) {
+      const date = new Date();
+      const month = date.getMonth();
+      const day = date.getDate();
+      const year = date.getFullYear();
+      const options = {
+        filename: `Node_Up_Time_${month}${day}${year}`,
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalSeparator: '.',
+        showLabels: true,
+        showTitle: true,
+        title: `Node Up Time - ${month}/${day}/${year}`,
+        useTextFile: false,
+        useBom: true,
+        headers: [
+          'IP Address',
+          'Active Since',
+          'Active Since Converted',
+          'Data Collected At',
+          'Data Collected At Converted',
+        ],
+      };
+      const csvExporter = new ExportToCsv(options);
+      csvExporter.generateCsv(this.processDataForCsv(data));
     },
   },
 };

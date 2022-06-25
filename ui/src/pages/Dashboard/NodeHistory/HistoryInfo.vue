@@ -11,10 +11,13 @@
       </vue-ellipse-progress>
     </div>
     <div class="row" v-if="myProgress >= 100">
-      <div class="col-md-12">
+      <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
         <h2 class="title">
           Info
         </h2>
+        <div>
+          <l-button v-on:click="downloadCsvFile(tableData)"><i class="nc-icon nc-cloud-download-93"></i></l-button>
+        </div>
       </div>
       <p class="category" />
       <div class="col-12">
@@ -110,6 +113,7 @@ import Fuse from 'fuse.js';
 import axios from 'axios';
 import { VueEllipseProgress } from 'vue-ellipse-progress';
 import { MemoryStorage } from 'ttl-localstorage';
+import { ExportToCsv } from 'export-to-csv';
 import {
   httpRequestFluxInfo, httpRequestDaemonInfo, httpRequestFluxHistoryStats,
 } from '../Request/HttpRequest';
@@ -157,6 +161,11 @@ export default {
         {
           prop: 'stratus',
           label: 'Stratus',
+          minWidth: 120,
+        },
+        {
+          prop: 'total',
+          label: 'Total Nodes',
           minWidth: 120,
         },
       ],
@@ -237,6 +246,7 @@ export default {
           cumulus: value.cumulus,
           nimbus: value.nimbus,
           stratus: value.stratus,
+          total: value.cumulus + value.nimbus + value.stratus,
         });
       }
     },
@@ -346,9 +356,70 @@ export default {
           }
           return val;
         });
+      } else if (sortProps.column.label === 'Total Nodes' && sortProps.column.order === 'ascending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.total > b.total) {
+            val = 1;
+          } else if (a.total < b.total) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Total Nodes' && sortProps.column.order === 'descending') {
+        this.tableData.sort((a, b) => {
+          let val = 0;
+          if (a.total < b.total) {
+            val = 1;
+          } else if (a.total > b.total) {
+            val = -1;
+          }
+          return val;
+        });
       } else {
         this.tableData = JSON.parse(this.originalData);
       }
+    },
+    processDataForCsv(data) {
+      const values = [];
+      data.forEach((item) => {
+        values.push({
+          roundTime: !item.roundTime ? '' : item.roundTime,
+          roundTimeConverted: !item.roundTimeConverted ? '' : item.roundTimeConverted,
+          total: !item.total ? '' : item.total,
+          cumulus: !item.cumulus ? '' : item.cumulus,
+          nimbus: !item.nimbus ? '' : item.nimbus,
+          stratus: !item.stratus ? '' : item.stratus,
+        });
+      });
+      return values;
+    },
+    downloadCsvFile(data) {
+      const date = new Date();
+      const month = date.getMonth();
+      const day = date.getDate();
+      const year = date.getFullYear();
+      const options = {
+        filename: `History_Info_${month}${day}${year}`,
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalSeparator: '.',
+        showLabels: true,
+        showTitle: true,
+        title: `History_Info - ${month}/${day}/${year}`,
+        useTextFile: false,
+        useBom: true,
+        headers: [
+          'Round Time',
+          'Round Time Converted',
+          'Total Nodes',
+          'Cumulus',
+          'Nimbus',
+          'Stratus',
+        ],
+      };
+      const csvExporter = new ExportToCsv(options);
+      csvExporter.generateCsv(this.processDataForCsv(data));
     },
   },
 };

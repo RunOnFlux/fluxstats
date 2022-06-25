@@ -11,10 +11,13 @@
       </vue-ellipse-progress>
     </div>
     <div class="row" v-if="myProgress >= 100">
-      <div class="col-md-12">
+      <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
         <h2 class="title">
           Node
         </h2>
+        <div>
+          <l-button v-on:click="downloadCsvFile(tableData)"><i class="nc-icon nc-cloud-download-93"></i></l-button>
+        </div>
       </div>
       <p class="category" />
       <div class="col-12">
@@ -106,9 +109,9 @@
                     <p><b>Payment Address:</b> {{ props.row.node.status.payment_address }}</p>
                     <p><b>Zel ID:</b> {{ props.row.flux.zelid }}</p>
                     <p><b>Active Since:</b> {{ props.row.node.status.activesince }}</p>
-                    <p><b>Active Since Converted:</b> {{ new Date(parseInt(props.row.node.status.activesince * 1000)).toLocaleString() }}</p>
+                    <p><b>Active Since Converted:</b> {{ new Date(parseInt(props.row.node.status.activesince * 1000, 10)).toLocaleString() }}</p>
                     <p><b>Last Paid:</b> {{ props.row.node.status.lastpaid }}</p>
-                    <p><b>Last Paid Converted:</b> {{ new Date(parseInt(props.row.node.status.lastpaid * 1000)).toLocaleString() }}</p>
+                    <p><b>Last Paid Converted:</b> {{ new Date(parseInt(props.row.node.status.lastpaid * 1000, 10)).toLocaleString() }}</p>
                     <p><b>Amount:</b> {{ props.row.node.status.amount }}</p>
                     <p><b>Crux ID:</b> {{ props.row.flux.cruxid }}</p>
                     <p><b>DOS State:</b> {{ props.row.flux.dos.dosState }}</p>
@@ -156,6 +159,7 @@ import Fuse from 'fuse.js';
 import axios from 'axios';
 import { VueEllipseProgress } from 'vue-ellipse-progress';
 import { MemoryStorage } from 'ttl-localstorage';
+import { ExportToCsv } from 'export-to-csv';
 import {
   httpRequestFluxInfo, httpRequestDaemonInfo, httpRequestFluxHistoryStats,
 } from '../Request/HttpRequest';
@@ -338,7 +342,7 @@ export default {
         const fluxversion = values.flux.version;
         const apphashtotal = values.appsHashesTotal;
         values.node.status.network = 'ipv4';
-        values.node.status.rank = this.ranks.get(ipaddress) === undefined ? 0 : this.ranks.get(ipaddress);
+        values.node.status.rank = !this.ranks.get(ipaddress) ? 0 : this.ranks.get(ipaddress);
         temp = this.filter.has(`node version - ${fluxversion}`) ? this.filter.get(`node version - ${fluxversion}`) : [];
         if (!this.filter.has(`node version - ${fluxversion}`)) {
           this.filterValue.push(`node version - ${fluxversion}`);
@@ -469,6 +473,77 @@ export default {
         this.tableData = JSON.parse(this.originalData);
       }
       return data;
+    },
+    processDataForCsv(data) {
+      const values = [];
+      data.forEach((item) => {
+        values.push({
+          ip: !item.node.status.ip ? '' : item.node.status.ip,
+          networkProtocol: !item.node.status.network ? '' : item.node.status.network,
+          tier: !item.node.status.tier ? '' : item.node.status.tier,
+          status: !item.node.status.status ? '' : item.node.status.status,
+          paymentRank: !item.node.status.rank ? '' : item.node.status.rank,
+          collateral: !item.node.status.collateral ? '' : item.node.status.collateral,
+          txnHash: !item.node.status.txhash ? '' : item.node.status.txhash,
+          addedHeight: !item.node.status.added_height ? '' : item.node.status.added_height,
+          confirmedHeight: !item.node.status.confirmed_height ? '' : item.node.status.confirmed_height,
+          lastConfirmedHeight: !item.node.status.last_confirmed_height ? '' : item.node.status.last_confirmed_height,
+          lastPaidHeight: !item.node.status.last_paid_height ? '' : item.node.status.last_paid_height,
+          paymentAddress: !item.node.status.payment_address ? '' : item.node.status.payment_address,
+          zelId: !item.flux.zelid ? '' : item.flux.zelid,
+          activeSince: !item.node.status.activesince ? '' : item.node.status.activesince,
+          activeSinceConverted: !item.node.status.activesince ? '' : new Date(parseInt(item.node.status.activesince * 1000, 10)).toLocaleString(),
+          lastPaid: !item.node.status.lastpaid ? '' : item.node.status.lastpaid,
+          lastPaidConverted: !item.node.status.lastpaid ? '' : new Date(parseInt(item.node.status.lastpaid * 1000, 10)).toLocaleString(),
+          amount: !item.node.status.amount ? '' : item.node.status.amount,
+          cruxId: !item.flux.cruxid ? '' : item.flux.cruxid,
+          dosState: !item.flux.dos.dosState ? 0 : item.flux.dos.dosState,
+          dosMessage: !item.flux.dos.dosMessage ? '' : item.flux.dos.dosMessage,
+        });
+      });
+      return values;
+    },
+    downloadCsvFile(data) {
+      const date = new Date();
+      const month = date.getMonth();
+      const day = date.getDate();
+      const year = date.getFullYear();
+      const options = {
+        filename: `Nodes_${month}${day}${year}`,
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalSeparator: '.',
+        showLabels: true,
+        showTitle: true,
+        title: `Nodes - ${month}/${day}/${year}`,
+        useTextFile: false,
+        useBom: true,
+        headers: [
+          'IP Address',
+          'Network Protocol',
+          'Tier',
+          'Status',
+          'Payment Rank',
+          'Collateral',
+          'Txn Hash',
+          'Added Height',
+          'Confirmed Height',
+          'Last Confirmed Height',
+          'Last Paid Height',
+          'Payment Address',
+          'Zel ID',
+          'Active Since',
+          'Active Since Converted',
+          'Last Paid',
+          'Last Paid Converted',
+          'Amount',
+          'Crux ID',
+          'DOS State',
+          'DOS Message',
+        ],
+      };
+      const csvExporter = new ExportToCsv(options);
+      csvExporter.generateCsv(this.processDataForCsv(data));
     },
   },
 };

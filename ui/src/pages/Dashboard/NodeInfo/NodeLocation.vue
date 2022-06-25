@@ -11,10 +11,13 @@
       </vue-ellipse-progress>
     </div>
     <div class="row" v-if="myProgress >= 100">
-      <div class="col-md-12">
+      <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
         <h2 class="title">
           Geolocation
         </h2>
+        <div>
+          <l-button v-on:click="downloadCsvFile(tableData)"><i class="nc-icon nc-cloud-download-93"></i></l-button>
+        </div>
       </div>
       <p class="category" />
       <div class="col-12">
@@ -110,6 +113,7 @@ import Fuse from 'fuse.js';
 import axios from 'axios';
 import { VueEllipseProgress } from 'vue-ellipse-progress';
 import { MemoryStorage } from 'ttl-localstorage';
+import { ExportToCsv } from 'export-to-csv';
 import {
   httpRequestFluxInfo, httpRequestDaemonInfo, httpRequestFluxHistoryStats,
 } from '../Request/HttpRequest';
@@ -132,7 +136,7 @@ export default {
         total: 0,
       },
       searchQuery: '',
-      propsToSearch: ['ip'],
+      propsToSearch: ['geolocation.ip'],
       tableColumns: [
         {
           prop: 'geolocation.ip',
@@ -230,7 +234,7 @@ export default {
     },
     setSearch() {
       this.originalData = JSON.stringify(this.tableData);
-      this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
+      this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['geolocation.ip'] });
       this.myProgress = 100;
     },
     sortChange(sortProps) {
@@ -357,6 +361,45 @@ export default {
       } else {
         this.tableData = JSON.parse(this.originalData);
       }
+    },
+    processDataForCsv(data) {
+      const values = [];
+      data.forEach((item) => {
+        values.push({
+          ip: !item.geolocation.ip ? '' : item.geolocation.ip,
+          country: !item.geolocation.country ? '' : item.geolocation.country,
+          countryCode: !item.geolocation.countryCode ? '' : item.geolocation.countryCode,
+          latitude: !item.geolocation.lat ? '' : item.geolocation.lat,
+          longtitude: !item.geolocation.lon ? '' : item.geolocation.lon,
+        });
+      });
+      return values;
+    },
+    downloadCsvFile(data) {
+      const date = new Date();
+      const month = date.getMonth();
+      const day = date.getDate();
+      const year = date.getFullYear();
+      const options = {
+        filename: `Node_Geolocation_${month}${day}${year}`,
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalSeparator: '.',
+        showLabels: true,
+        showTitle: true,
+        title: `Node Geolocation - ${month}/${day}/${year}`,
+        useTextFile: false,
+        useBom: true,
+        headers: [
+          'IP Address',
+          'Country',
+          'Country Code',
+          'Latitude',
+          'Longtitude',
+        ],
+      };
+      const csvExporter = new ExportToCsv(options);
+      csvExporter.generateCsv(this.processDataForCsv(data));
     },
   },
 };

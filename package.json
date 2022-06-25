@@ -52,6 +52,7 @@
     "datamaps": "^0.5.9",
     "easy-pie-chart": "^2.1.7",
     "element-ui": "^2.15.8",
+    "export-to-csv": "^0.2.1",
     "express": "^4.17.3",
     "fuse.js": "^6.5.3",
     "google-maps": "^4.3.3",

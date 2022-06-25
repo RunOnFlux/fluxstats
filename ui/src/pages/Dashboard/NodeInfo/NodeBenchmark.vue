@@ -12,27 +12,28 @@
     </div>
     <div class="row" v-if="myProgress >= 100">
       <div class="col-md-12">
-        <l-button wide v-if="temp[0] = filter.get(`network - cumulus upload speed < 25`)">Cumulus &#60; 25 Upload Speed: {{ temp[0] === undefined ? 0 : temp[0].length }}</l-button>&nbsp;
-        <l-button wide v-if="temp[1] = filter.get(`network - nimbus upload speed < 50`)">Nimbus &#60; 50 Upload Speed: {{ temp[1] === undefined ? 0 : temp[1].length }}</l-button>&nbsp;
-        <l-button wide v-if="temp[2] = filter.get(`network - stratus upload speed < 100`)">Stratus &#60; 100 Upload Speed: {{ temp[2] === undefined ? 0 : temp[2].length }}</l-button>&nbsp;
-        <l-button wide v-if="temp[3] = filter.get(`network - cumulus download speed < 25`)">Cumulus &#60; 25 Download Speed: {{ temp[3] === undefined ? 0 : temp[3].length }}</l-button>&nbsp;
-        <l-button wide v-if="temp[4] = filter.get(`network - nimbus download speed < 50`)">Nimbus &#60; 50 Download Speed: {{ temp[4] === undefined ? 0 : temp[4].length }}</l-button>&nbsp;
-        <l-button wide v-if="temp[5] = filter.get(`network - stratus download speed < 100`)">Stratus &#60; 100 Download Speed: {{ temp[5] === undefined ? 0 : temp[5].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[0] = filter.get(`network - cumulus upload speed < 25`)">Cumulus &#60; 25 Upload Speed: {{ !temp[0] ? 0 : temp[0].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[1] = filter.get(`network - nimbus upload speed < 50`)">Nimbus &#60; 50 Upload Speed: {{ !temp[1] ? 0 : temp[1].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[2] = filter.get(`network - stratus upload speed < 100`)">Stratus &#60; 100 Upload Speed: {{ !temp[2] ? 0 : temp[2].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[3] = filter.get(`network - cumulus download speed < 25`)">Cumulus &#60; 25 Download Speed: {{ !temp[3] ? 0 : temp[3].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[4] = filter.get(`network - nimbus download speed < 50`)">Nimbus &#60; 50 Download Speed: {{ !temp[4] ? 0 : temp[4].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[5] = filter.get(`network - stratus download speed < 100`)">Stratus &#60; 100 Download Speed: {{ !temp[5] ? 0 : temp[5].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[6] = filter.get(`upnp enabled - TRUE`)">UPnP Enabled: {{ !temp[6] ? 0 : temp[6].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[7] = filter.get(`failed nodes - cumulus`)">Failed Cumulus: {{ !temp[7] ? 0 : temp[7].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[8] = filter.get(`failed nodes - nimbus`)">Failed Nimbus: {{ !temp[8] ? 0 : temp[8].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[9] = filter.get(`failed nodes - stratus`)">Failed Stratus: {{ !temp[9] ? 0 : temp[9].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[10] = filter.get(`failed nodes - no tier`)">Failed No Tier: {{ !temp[10] ? 0 : temp[10].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[11] = filter.get(`node tier - no tier`)">No Tier Nodes: {{ !temp[11] ? 0 : temp[11].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[12] = filter.get(`organization - `)">No Organization Nodes: {{ !temp[12] ? 0 : temp[12].length }}</l-button>&nbsp;
+        <l-button wide v-if="temp[13] = filter.get(`no ip address`)">No IP Address Nodes: {{ !temp[13] ? 0 : temp[13].length }}</l-button>&nbsp;
       </div>
-      <div class="col-md-12" style="padding-top: 25px;">
-        <l-button wide v-if="temp[6] = filter.get(`upnp enabled - TRUE`)">UPnP Enabled: {{ temp[6] === undefined ? 0 : temp[6].length }}</l-button>&nbsp;
-        <l-button wide v-if="temp[7] = filter.get(`failed nodes - cumulus`)">Failed Cumulus: {{ temp[7] === undefined ? 0 : temp[7].length }}</l-button>&nbsp;
-        <l-button wide v-if="temp[8] = filter.get(`failed nodes - nimbus`)">Failed Nimbus: {{ temp[8] === undefined ? 0 : temp[8].length }}</l-button>&nbsp;
-        <l-button wide v-if="temp[9] = filter.get(`failed nodes - stratus`)">Failed Stratus: {{ temp[9] === undefined ? 0 : temp[9].length }}</l-button>&nbsp;
-        <l-button wide v-if="temp[10] = filter.get(`failed nodes - no tier`)">Failed No Tier: {{ temp[10] === undefined ? 0 : temp[10].length }}</l-button>&nbsp;
-        <l-button wide v-if="temp[11] = filter.get(`node tier - no tier`)">No Tier Nodes: {{ temp[11] === undefined ? 0 : temp[11].length }}</l-button>&nbsp;
-        <l-button wide v-if="temp[12] = filter.get(`organization - `)">No Organization Nodes: {{ temp[12] === undefined ? 0 : temp[12].length }}</l-button>&nbsp;
-        <l-button wide v-if="temp[13] = filter.get(`no ip address`)">No IP Address Nodes: {{ temp[13] === undefined ? 0 : temp[13].length }}</l-button>&nbsp;
-      </div>
-      <div class="col-md-12">
+      <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
         <h2 class="title">
           Benchmark
         </h2>
+        <div>
+          <l-button v-on:click="downloadCsvFile(tableData)"><i class="nc-icon nc-cloud-download-93"></i></l-button>
+        </div>
       </div>
       <p class="category" />
       <div class="col-12">
@@ -121,7 +122,7 @@
                     <p><b>Architecture:</b> {{ props.row.benchmark.bench.architecture }}</p>
                     <p><b>Arm Board:</b> {{ props.row.benchmark.bench.armboard }}</p>
                     <p><b>Time:</b> {{ props.row.benchmark.bench.time }}</p>
-                    <p><b>Converted Time:</b> {{ `${new Date(parseInt(props.row.benchmark.bench.time) * 1000).toLocaleString()}` }}</p>
+                    <p><b>Converted Time:</b> {{ `${new Date(parseInt(props.row.benchmark.bench.time, 10) * 1000).toLocaleString()}` }}</p>
                     <p><b>Real Cores:</b> {{ props.row.benchmark.bench.real_cores }}</p>
                     <p><b>Cores:</b> {{ props.row.benchmark.bench.cores }}</p>
                     <p><b>RAM:</b> {{ props.row.benchmark.bench.ram }}</p>
@@ -176,6 +177,7 @@ import Fuse from 'fuse.js';
 import axios from 'axios';
 import { VueEllipseProgress } from 'vue-ellipse-progress';
 import { MemoryStorage } from 'ttl-localstorage';
+import { ExportToCsv } from 'export-to-csv';
 import {
   httpRequestFluxInfo, httpRequestDaemonInfo, httpRequestFluxHistoryStats,
 } from '../Request/HttpRequest';
@@ -365,12 +367,12 @@ export default {
         const benchmarkstatus = values.benchmark.status.benchmarking;
         const nodestatus = values.benchmark.status.status;
         const bencherror = values.benchmark.bench.error;
-        const tier = values.node.status.tier !== undefined ? values.node.status.tier.toLowerCase() : 'no tier';
+        const tier = values.node.status.tier ? values.node.status.tier.toLowerCase() : 'no tier';
         const org = values.geolocation.org.length > 30 ? `${values.geolocation.org.slice(0, 30)}...` : values.geolocation.org;
         const filtered = values.apps.runningapps.filter((item) => item.Image !== 'containrrr/watchtower');
         values.benchmark.issues = [];
         values.apps.runningapps = filtered;
-        values.apps.count = filtered.length !== undefined || filtered.length !== 0 ? filtered.length : 0;
+        values.apps.count = filtered.length || filtered.length !== 0 ? filtered.length : 0;
         values.benchmark.upnp = values.benchmark.bench.ipaddress.includes(':') ? 'TRUE' : 'FALSE';
         const upnpstatus = values.benchmark.upnp;
         temp = this.filter.has(`status - ${nodestatus}`) ? this.filter.get(`status - ${nodestatus}`) : [];
@@ -389,10 +391,10 @@ export default {
         temp.push(values);
         this.filter.set(`node tier - ${tier}`, temp);
         temp = this.filter.has('no ip address') ? this.filter.get('no ip address') : [];
-        if ((ip === undefined || ip === '') && !this.filter.has('no ip address')) {
+        if ((!ip || ip === '') && !this.filter.has('no ip address')) {
           this.filterValue.push('no ip address');
         }
-        if (ip === undefined || ip === '') {
+        if (!ip || ip === '') {
           if (bencherror === '') {
             values.benchmark.issues.push('No IP Address');
           }
@@ -729,6 +731,89 @@ export default {
         this.tableData = JSON.parse(this.originalData);
       }
       return data;
+    },
+    processDataForCsv(data) {
+      const values = [];
+      data.forEach((item) => {
+        values.push({
+          ip: !item.benchmark.bench.ipaddress ? '' : item.benchmark.bench.ipaddress,
+          organization: !item.geolocation.org ? '' : item.geolocation.org,
+          tier: !item.node.status.tier ? '' : item.node.status.tier,
+          downloadSpeed: !item.benchmark.bench.download_speed ? '' : item.benchmark.bench.download_speed,
+          uploadSpeed: !item.benchmark.bench.upload_speed ? '' : item.benchmark.bench.upload_speed,
+          ping: !item.benchmark.bench.ping ? '' : item.benchmark.bench.ping,
+          status: !item.benchmark.status.status ? '' : item.benchmark.status.status,
+          upnpEnabled: !item.benchmark.upnp ? '' : item.benchmark.upnp,
+          totalApplicationRunning: !item.apps.count ? 0 : item.apps.count,
+          rpcPort: !item.benchmark.info.rpcport ? '' : item.benchmark.info.rpcport,
+          benchmarking: !item.benchmark.status.benchmarking ? '' : item.benchmark.status.benchmarking,
+          flux: !item.benchmark.status.flux ? '' : item.benchmark.status.flux,
+          architecture: !item.benchmark.bench.architecture ? '' : item.benchmark.bench.architecture,
+          armBoard: !item.benchmark.bench.armboard ? '' : item.benchmark.bench.armboard,
+          time: !item.benchmark.bench.time ? '' : item.benchmark.bench.time,
+          convertedTime: !item.benchmark.bench.time ? '' : new Date(parseInt(item.benchmark.bench.time, 10) * 1000).toLocaleString(),
+          realCores: !item.benchmark.bench.real_cores ? '' : item.benchmark.bench.real_cores,
+          cores: !item.benchmark.bench.cores ? '' : item.benchmark.bench.cores,
+          ram: !item.benchmark.bench.ram ? '' : item.benchmark.bench.ram,
+          hdd: !item.benchmark.bench.hdd ? '' : item.benchmark.bench.hdd,
+          totalStorage: !item.benchmark.bench.totalstorage ? '' : item.benchmark.bench.totalstorage,
+          disk: !item.benchmark.bench.disksinfo.disk ? '' : item.benchmark.bench.disksinfo.disk,
+          diskSize: !item.benchmark.bench.disksinfo.size ? '' : item.benchmark.bench.disksinfo.size,
+          diskWriteSpeed: !item.benchmark.bench.disksinfo.writespeed ? '' : item.benchmark.bench.disksinfo.writespeed,
+          eps: !item.benchmark.bench.eps ? '' : item.benchmark.bench.eps,
+          errors: !item.benchmark.bench.error ? '' : item.benchmark.bench.error,
+          neededToFixIssues: !item.benchmark.issues ? '' : item.benchmark.issues,
+        });
+      });
+      return values;
+    },
+    downloadCsvFile(data) {
+      const date = new Date();
+      const month = date.getMonth();
+      const day = date.getDate();
+      const year = date.getFullYear();
+      const options = {
+        filename: `Node_Benchmark_${month}${day}${year}`,
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalSeparator: '.',
+        showLabels: true,
+        showTitle: true,
+        title: `Node Benchmark - ${month}/${day}/${year}`,
+        useTextFile: false,
+        useBom: true,
+        headers: [
+          'IP Address',
+          'Organization',
+          'Tier',
+          'Download Speed',
+          'Upload Speed',
+          'Ping',
+          'Status',
+          'UPnP Enabled',
+          'Total Application Running',
+          'RPC Port',
+          'Benchmarking',
+          'Flux',
+          'Architecture',
+          'Arm Board',
+          'Time',
+          'Converted Time',
+          'Real Cores',
+          'Cores',
+          'RAM',
+          'HDD',
+          'Total Storage',
+          'Disk',
+          'Disk Size',
+          'Disk Write Speed',
+          'EPS',
+          'Errors',
+          'Needed To Fix Issues',
+        ],
+      };
+      const csvExporter = new ExportToCsv(options);
+      csvExporter.generateCsv(this.processDataForCsv(data));
     },
   },
 };
