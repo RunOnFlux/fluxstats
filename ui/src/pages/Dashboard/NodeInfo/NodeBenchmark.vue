@@ -11,28 +11,22 @@
       </vue-ellipse-progress>
     </div>
     <div class="row" v-if="myProgress >= 100">
-      <div class="col-md-12">
-        <l-button wide v-if="temp[0] = filter.get(`network - cumulus upload speed < 25`)">Cumulus &#60; 25 Upload Speed: {{ !temp[0] ? 0 : temp[0].length }}</l-button>&nbsp;
-        <l-button wide v-if="temp[1] = filter.get(`network - nimbus upload speed < 50`)">Nimbus &#60; 50 Upload Speed: {{ !temp[1] ? 0 : temp[1].length }}</l-button>&nbsp;
-        <l-button wide v-if="temp[2] = filter.get(`network - stratus upload speed < 100`)">Stratus &#60; 100 Upload Speed: {{ !temp[2] ? 0 : temp[2].length }}</l-button>&nbsp;
-        <l-button wide v-if="temp[3] = filter.get(`network - cumulus download speed < 25`)">Cumulus &#60; 25 Download Speed: {{ !temp[3] ? 0 : temp[3].length }}</l-button>&nbsp;
-        <l-button wide v-if="temp[4] = filter.get(`network - nimbus download speed < 50`)">Nimbus &#60; 50 Download Speed: {{ !temp[4] ? 0 : temp[4].length }}</l-button>&nbsp;
-        <l-button wide v-if="temp[5] = filter.get(`network - stratus download speed < 100`)">Stratus &#60; 100 Download Speed: {{ !temp[5] ? 0 : temp[5].length }}</l-button>&nbsp;
-        <l-button wide v-if="temp[6] = filter.get(`upnp enabled - TRUE`)">UPnP Enabled: {{ !temp[6] ? 0 : temp[6].length }}</l-button>&nbsp;
-        <l-button wide v-if="temp[7] = filter.get(`failed nodes - cumulus`)">Failed Cumulus: {{ !temp[7] ? 0 : temp[7].length }}</l-button>&nbsp;
-        <l-button wide v-if="temp[8] = filter.get(`failed nodes - nimbus`)">Failed Nimbus: {{ !temp[8] ? 0 : temp[8].length }}</l-button>&nbsp;
-        <l-button wide v-if="temp[9] = filter.get(`failed nodes - stratus`)">Failed Stratus: {{ !temp[9] ? 0 : temp[9].length }}</l-button>&nbsp;
-        <l-button wide v-if="temp[10] = filter.get(`failed nodes - no tier`)">Failed No Tier: {{ !temp[10] ? 0 : temp[10].length }}</l-button>&nbsp;
-        <l-button wide v-if="temp[11] = filter.get(`node tier - no tier`)">No Tier Nodes: {{ !temp[11] ? 0 : temp[11].length }}</l-button>&nbsp;
-        <l-button wide v-if="temp[12] = filter.get(`organization - `)">No Organization Nodes: {{ !temp[12] ? 0 : temp[12].length }}</l-button>&nbsp;
-        <l-button wide v-if="temp[13] = filter.get(`no ip address`)">No IP Address Nodes: {{ !temp[13] ? 0 : temp[13].length }}</l-button>&nbsp;
+      <div class="col-12 d-flex flex-wrap">
+        <div v-for="[key, value] in filter" :key="key">
+          <l-button style="margin-right: 10px;" wide v-if="key.includes('<')">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
+          <l-button style="margin-right: 10px;" wide v-if="key.includes('upnp enabled - TRUE')">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
+          <l-button style="margin-right: 10px;" wide v-if="key.includes('failed nodes')">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
+          <l-button style="margin-right: 10px;" wide v-if="key === 'node tier - no tier'">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
+          <l-button style="margin-right: 10px;" wide v-if="key === 'organization - '">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
+          <l-button style="margin-right: 10px;" wide v-if="key === 'no ip address'">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
+        </div>
       </div>
       <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
         <h2 class="title">
           Benchmark
         </h2>
         <div>
-          <l-button v-on:click="downloadCsvFile(tableData)"><i class="nc-icon nc-cloud-download-93"></i></l-button>
+          <l-button v-on:click="downloadCsvFile(dataFilters)"><i class="nc-icon nc-cloud-download-93"></i></l-button>
         </div>
       </div>
       <p class="category" />
@@ -259,7 +253,7 @@ export default {
       originalData: null,
       fuseSearch: null,
       myProgress: 0,
-      temp: [],
+      dataFilters: [],
     };
   },
   computed: {
@@ -277,30 +271,7 @@ export default {
       return this.pagination.perPage * (this.pagination.currentPage - 1);
     },
     total() {
-      let result;
-      if (this.searchQuery !== '') {
-        const temp = [];
-        result = this.fuseSearch.search(`=${this.searchQuery}`);
-        for (let i = 0; i < Object.keys(result).length; i += 1) {
-          temp.push(result[i].item);
-        }
-        result = temp;
-      } else if (this.filters.default.length) {
-        const arr = [];
-        const data = [];
-        this.filters.default.forEach((item) => {
-          const objs = this.filter.get(item);
-          objs.forEach((obj) => {
-            if (!arr.includes(obj.benchmark.bench.ipaddress)) {
-              arr.push(obj.benchmark.bench.ipaddress);
-              data.push(obj);
-            }
-          });
-        });
-        result = data;
-      } else {
-        result = this.tableData;
-      }
+      const result = this.dataFilters;
       this.paginationTotal(result.length);
       return result.length;
     },
@@ -317,6 +288,9 @@ export default {
   methods: {
     paginationTotal(value) {
       this.pagination.total = value;
+    },
+    setDataFilters(data) {
+      this.dataFilters = data;
     },
     async initialize() {
       this.myProgress = 20;
@@ -349,6 +323,7 @@ export default {
       if (sortProps) {
         result = this.sorting(sortProps, result);
       }
+      this.setDataFilters(result);
       this.paginationTotal(result.length);
       return result.slice(this.from, this.to);
     },

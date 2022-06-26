@@ -11,12 +11,18 @@
       </vue-ellipse-progress>
     </div>
     <div class="row" v-if="myProgress >= 100">
+      <div class="col-12 d-flex flex-wrap">
+        <div v-for="[key, value] in filter" :key="key">
+          <l-button style="margin-right: 10px;" wide v-if="key === 'node hashes - 0'">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
+          <l-button style="margin-right: 10px;" wide v-if="key.includes('version')">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
+        </div>
+      </div>
       <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
         <h2 class="title">
           Node
         </h2>
         <div>
-          <l-button v-on:click="downloadCsvFile(tableData)"><i class="nc-icon nc-cloud-download-93"></i></l-button>
+          <l-button v-on:click="downloadCsvFile(dataFilters)"><i class="nc-icon nc-cloud-download-93"></i></l-button>
         </div>
       </div>
       <p class="category" />
@@ -223,6 +229,7 @@ export default {
       filter: new Map(),
       filterValue: [],
       ranks: new Map(),
+      dataFilters: [],
     };
   },
   computed: {
@@ -240,30 +247,7 @@ export default {
       return this.pagination.perPage * (this.pagination.currentPage - 1);
     },
     total() {
-      let result = [];
-      if (this.searchQuery !== '') {
-        const temp = [];
-        result = this.fuseSearch.search(`=${this.searchQuery}`);
-        for (let i = 0; i < Object.keys(result).length; i += 1) {
-          temp.push(result[i].item);
-        }
-        result = temp;
-      } else if (this.filters.default.length) {
-        const arr = [];
-        const data = [];
-        this.filters.default.forEach((item) => {
-          const objs = this.filter.get(item);
-          objs.forEach((obj) => {
-            if (!arr.includes(obj.node.status.ip)) {
-              arr.push(obj.node.status.ip);
-              data.push(obj);
-            }
-          });
-        });
-        result = data;
-      } else {
-        result = this.tableData;
-      }
+      const result = this.dataFilters;
       this.paginationTotal(result.length);
       return result.length;
     },
@@ -282,6 +266,9 @@ export default {
   methods: {
     paginationTotal(value) {
       this.pagination.total = value;
+    },
+    setDataFilters(data) {
+      this.dataFilters = data;
     },
     async initialize() {
       this.myProgress = 20;
@@ -314,6 +301,7 @@ export default {
       if (sortProps) {
         result = this.sorting(sortProps, result);
       }
+      this.setDataFilters(result);
       this.paginationTotal(result.length);
       return result.slice(this.from, this.to);
     },

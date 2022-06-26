@@ -16,7 +16,7 @@
           Up Time
         </h2>
         <div>
-          <l-button v-on:click="downloadCsvFile(tableData)"><i class="nc-icon nc-cloud-download-93"></i></l-button>
+          <l-button v-on:click="downloadCsvFile(dataFilters)"><i class="nc-icon nc-cloud-download-93"></i></l-button>
         </div>
       </div>
       <p class="category" />
@@ -169,6 +169,7 @@ export default {
       responseData: [],
       fuseSearch: null,
       myProgress: 0,
+      dataFilters: [],
     };
   },
   computed: {
@@ -184,6 +185,7 @@ export default {
       } else {
         result = this.tableData;
       }
+      this.setDataFilters(result);
       this.paginationTotal(result.length);
       return result.slice(this.from, this.to);
     },
@@ -198,17 +200,7 @@ export default {
       return this.pagination.perPage * (this.pagination.currentPage - 1);
     },
     total() {
-      let result;
-      if (this.searchQuery !== '') {
-        const temp = [];
-        result = this.fuseSearch.search(`=${this.searchQuery}`);
-        for (let i = 0; i < Object.keys(result).length; i += 1) {
-          temp.push(result[i].item);
-        }
-        result = temp;
-      } else {
-        result = this.tableData;
-      }
+      const result = this.dataFilters;
       this.paginationTotal(result.length);
       return result.length;
     },
@@ -225,6 +217,9 @@ export default {
   methods: {
     paginationTotal(value) {
       this.pagination.total = value;
+    },
+    setDataFilters(data) {
+      this.dataFilters = data;
     },
     async initialize() {
       this.myProgress = 20;
