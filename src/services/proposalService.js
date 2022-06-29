@@ -412,13 +412,11 @@ async function votePower(zelid, hash) {
   }
 
   const p = {};
-  const fluxcollection = config.database.local.collections.fluxes;
   const completedRoundsCollection = config.database.local.collections.completedRounds;
   const lastRound = await serviceHelper.findOneInDatabaseReverse(database, completedRoundsCollection, q, p);
   const lastCompletedRound = lastRound ? lastRound.timestamp : 0;
-  const query = {
-    roundTime: lastCompletedRound, // may not contain completely accurate list which is 'ok'
-  };
+  const currentCollectionName = `fluxes${lastCompletedRound}`;
+  const query = {};
   const projection = {
     projection: {
       _id: 0,
@@ -427,7 +425,7 @@ async function votePower(zelid, hash) {
     },
   };
   // return latest fluxnode round
-  const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection);
+  const results = await serviceHelper.findInDatabase(database, currentCollectionName, query, projection);
   const nodes = [];
   let votepowa = 0;
   // eslint-disable-next-line no-restricted-syntax

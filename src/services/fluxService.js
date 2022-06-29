@@ -36,7 +36,6 @@ const myCacheShort = new LRU(LRUoptionsShort);
 
 let db = null;
 const geocollection = config.database.local.collections.geolocation;
-const fluxcollection = config.database.local.collections.fluxes;
 const completedRoundsCollection = config.database.local.collections.completedRounds;
 
 let currentFluxNodeIps = [];
@@ -277,10 +276,8 @@ function getCollateralInfo(collateralOutpoint) {
 
 async function bootstrapFluxCollection(timestamp) {
   const database = db.db(config.database.local.database);
-  let collectionName = fluxcollection;
-  if (timestamp) {
-    collectionName = `fluxes${timestamp}`;
-  }
+  const collectionName = `fluxes${timestamp}`;
+
   await database.collection(collectionName).createIndex({ ip: 1 }, { name: 'query for getting list of Flux data associated to IP address' });
   await database.collection(collectionName).createIndex({ ip: 1, roundTime: 1 }, { name: 'query for getting list of Flux data associated to IP address since some roundTime' });
   await database.collection(collectionName).createIndex({ addedHeight: 1 }, { name: 'query for getting list of Flux data tied to addedHeight' });
@@ -328,21 +325,19 @@ async function createHistoryStats() {
   for (let y = 0; y < okTimestamps.length; y += 1) {
     const time = okTimestamps[y];
     log.info(`Getting historystaty for time/round ->${time}`);
+    const currentCollectionName = `fluxes${time}`;
     let query = {
-      roundTime: time,
       tier: 'CUMULUS',
     };
-    const cumulusCount = await serviceHelper.countInDatabase(database, fluxcollection, query);
+    const cumulusCount = await serviceHelper.countInDatabase(database, currentCollectionName, query);
     query = {
-      roundTime: time,
       tier: 'NIMBUS',
     };
-    const nimbusCount = await serviceHelper.countInDatabase(database, fluxcollection, query);
+    const nimbusCount = await serviceHelper.countInDatabase(database, currentCollectionName, query);
     query = {
-      roundTime: time,
       tier: 'STRATUS',
     };
-    const stratusCount = await serviceHelper.countInDatabase(database, fluxcollection, query);
+    const stratusCount = await serviceHelper.countInDatabase(database, currentCollectionName, query);
     data[time] = {};
     data[time].cumulus = cumulusCount;
     data[time].nimbus = nimbusCount;
@@ -643,10 +638,6 @@ async function processFluxNodes() {
           await Promise.allSettled(promiseArray);
           promiseArray = [];
           myCacheProcessingIp.clear();
-          // currently inserting to BOTH databases. TODO change to new scheme after a month
-          await serviceHelper.insertManyToDatabase(database, fluxcollection, processedFluxNodes).catch((error) => {
-            log.error(`Error inserting in fluxcollection db: ${error}`);
-          });
           await serviceHelper.insertManyToDatabase(database, currentCollectionName, processedFluxNodes).catch((error) => {
             log.error(`Error inserting in ${currentCollectionName} db: ${error}`);
           });
@@ -658,9 +649,6 @@ async function processFluxNodes() {
         await Promise.allSettled(promiseArray);
         promiseArray = [];
         myCacheProcessingIp.clear();
-        await serviceHelper.insertManyToDatabase(database, fluxcollection, processedFluxNodes).catch((error) => {
-          log.error(`Error inserting in fluxcollection db: ${error}`);
-        });
         await serviceHelper.insertManyToDatabase(database, currentCollectionName, processedFluxNodes).catch((error) => {
           log.error(`Error inserting in ${currentCollectionName} db: ${error}`);
         });
@@ -678,9 +666,6 @@ async function processFluxNodes() {
           await Promise.allSettled(promiseArray);
           promiseArray = [];
           myCacheProcessingIp.clear();
-          await serviceHelper.insertManyToDatabase(database, fluxcollection, processedFluxNodes).catch((error) => {
-            log.error(`Error inserting in fluxcollection db: ${error}`);
-          });
           await serviceHelper.insertManyToDatabase(database, currentCollectionName, processedFluxNodes).catch((error) => {
             log.error(`Error inserting in ${currentCollectionName} db: ${error}`);
           });
@@ -691,9 +676,6 @@ async function processFluxNodes() {
         await Promise.allSettled(promiseArray);
         promiseArray = [];
         myCacheProcessingIp.clear();
-        await serviceHelper.insertManyToDatabase(database, fluxcollection, processedFluxNodes).catch((error) => {
-          log.error(`Error inserting in fluxcollection db: ${error}`);
-        });
         await serviceHelper.insertManyToDatabase(database, currentCollectionName, processedFluxNodes).catch((error) => {
           log.error(`Error inserting in ${currentCollectionName} db: ${error}`);
         });
@@ -709,6 +691,7 @@ async function processFluxNodes() {
       await serviceHelper.insertOneToDatabase(database, completedRoundsCollection, crt).catch((error) => {
         log.error(error);
       });
+      await bootstrapFluxCollection(currentRoundTime);
     } else {
       log.error('No flux Nodes Found');
     }
@@ -1007,48 +990,66 @@ async function getAllFluxGeolocation(req, res, i = 0) {
 
 async function getFluxIPHistory(req, res) {
   try {
-    const database = db.db(config.database.local.database);
     let { ip } = req.params; // we accept both help/command and help?command=getinfo
     ip = ip || req.query.ip;
     if (!ip) {
       throw new Error('No IP provided');
     }
-    let ipHistory = myCacheShort.get(`ipHistory${ip}`);
-    if (!ipHistory) {
-      const query = {
-        ip,
-      };
-      const projection = {
-        projection: {
-          _id: 0,
-          ip: 1,
-          addedHeight: 1,
-          lastPaidHeight: 1,
-          tier: 1,
-          activeSince: 1,
-          confirmedHeight: 1,
-          lastConfirmedHeight: 1,
-          collateralHash: 1,
-          collateralIndex: 1,
-          paymentAddress: 1,
-          roundTime: 1,
-          dataCollectedAt: 1,
-          geolocation: 1,
-          daemon: 1,
-          node: 1,
-          benchmark: 1,
-          flux: 1,
-          apps: 1,
-          error: 1,
-        },
-      };
-      // return latest fluxnode round
-      ipHistory = await serviceHelper.findInDatabase(database, fluxcollection, query, projection);
-      myCacheShort.set(`ipHistory${ip}`, ipHistory);
-    } else {
-      log.info('Using getFluxIPHistory cache');
+    const ipHistory = myCacheShort.get(`ipHistory${ip}`);
+    if (ipHistory) {
+      const resMessage = serviceHelper.createDataMessage(ipHistory);
+      res.json(resMessage);
+      return;
     }
-    const resMessage = serviceHelper.createDataMessage(ipHistory);
+    const database = db.db(config.database.local.database);
+    // last month
+    const lastMonthTime = new Date().getTime() - 2592000000; // 30 days in ms
+    const q = {
+      timestamp: { $gte: lastMonthTime },
+    };
+    const p = {
+      _id: 0,
+      timestamp: 1,
+    };
+    const completedRounds = await serviceHelper.findInDatabase(database, completedRoundsCollection, q, p);
+    const bresults = completedRounds.map((x) => x.timestamp);
+
+    const query = {
+      ip,
+    };
+    const projection = {
+      projection: {
+        _id: 0,
+        ip: 1,
+        addedHeight: 1,
+        lastPaidHeight: 1,
+        tier: 1,
+        activeSince: 1,
+        confirmedHeight: 1,
+        lastConfirmedHeight: 1,
+        collateralHash: 1,
+        collateralIndex: 1,
+        paymentAddress: 1,
+        roundTime: 1,
+        dataCollectedAt: 1,
+        geolocation: 1,
+        daemon: 1,
+        node: 1,
+        benchmark: 1,
+        flux: 1,
+        apps: 1,
+        error: 1,
+      },
+    };
+    const ipHistoryNew = [];
+    for (let y = 0; y < bresults.length; y += 1) {
+      const time = bresults[y];
+      const currentCollectionName = `fluxes${time}`;
+      const entry = await serviceHelper.findInDatabase(database, currentCollectionName, query, projection);
+      ipHistoryNew.push(entry);
+    }
+    myCacheShort.set(`ipHistory${ip}`, ipHistoryNew);
+    const resMessage = serviceHelper.createDataMessage(ipHistoryNew);
     res.json(resMessage);
   } catch (error) {
     const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
@@ -1125,7 +1126,6 @@ async function start() {
       log.error(error);
       throw error;
     });
-    await bootstrapFluxCollection();
     log.info('Initiating Flux API services...');
     // begin fluxnodes processing;
     await createHistoryStats();
