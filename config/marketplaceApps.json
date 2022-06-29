@@ -124,7 +124,7 @@
         "domains": [
           ""
         ],
-        "environmentParameters": [],
+        "environmentParameters": ["STAKE=disconnected:oldest,wallet:minimum", "ALLOW_DISCONNECTED_STAKE_TRANSFER_AFTER=30m"],
         "commands": [],
         "containerData": "/app/node",
         "tiered": false,
