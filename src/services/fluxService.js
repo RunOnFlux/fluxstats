@@ -1045,8 +1045,10 @@ async function getFluxIPHistory(req, res) {
     for (let y = 0; y < bresults.length; y += 1) {
       const time = bresults[y];
       const currentCollectionName = `fluxes${time}`;
-      const entry = await serviceHelper.findInDatabase(database, currentCollectionName, query, projection);
-      ipHistoryNew.push(entry);
+      const entry = await serviceHelper.findOneInDatabase(database, currentCollectionName, query, projection);
+      if (entry) {
+        ipHistoryNew.push(entry);
+      }
     }
     myCacheShort.set(`ipHistory${ip}`, ipHistoryNew);
     const resMessage = serviceHelper.createDataMessage(ipHistoryNew);
