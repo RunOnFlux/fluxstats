@@ -1,99 +1,125 @@
 <template>
-  <div class="row">
-    <div class="col-md-12">
-      <h2 class="title">
-        Application
-      </h2>
+  <div>
+    <div class="row" style="position: absolute; left: 45%; top: 40%;" v-if="myProgress < 100">
+      <vue-ellipse-progress
+        :half="false"
+        :progress="myProgress"
+        line-mode="in 10"
+        color="Silver"
+        :gap="10"
+        fontSize="3rem">
+      </vue-ellipse-progress>
     </div>
-    <p class="category" />
-    <div>
-      <loading
-        :active.sync="isLoading"
-        :can-cancel="true"
-      />
-    </div>
-    <div class="col-12">
-      <card>
+    <div class="row" v-if="myProgress >= 100">
+      <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
+        <h2 class="title">
+          Application
+        </h2>
         <div>
-          <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
-            <el-select
-              v-model="pagination.perPage"
-              class="select-default mb-3"
-              style="width: 200px"
-              placeholder="Per page"
-            >
-              <el-option
-                v-for="item in pagination.perPageOptions"
-                :key="item"
-                class="select-default"
-                :label="item"
-                :value="item"
+          <l-button v-on:click="downloadCsvFile(dataFilters)"><i class="nc-icon nc-cloud-download-93"></i></l-button>
+        </div>
+      </div>
+      <p class="category" />
+      <div class="col-12">
+        <card>
+          <div>
+            <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
+              <el-select
+                v-model="pagination.perPage"
+                class="select-default mb-3"
+                style="width: 200px"
+                placeholder="Per page"
+              >
+                <el-option
+                  v-for="item in pagination.perPageOptions"
+                  :key="item"
+                  class="select-default"
+                  :label="item"
+                  :value="item"
+                />
+              </el-select>
+              <el-input
+                v-model="searchQuery"
+                type="search"
+                class="mb-3"
+                style="width: 200px"
+                placeholder="Search IP"
+                aria-controls="datatables"
               />
-            </el-select>
-            <el-input
-              v-model="searchQuery"
-              type="search"
-              class="mb-3"
-              style="width: 200px"
-              placeholder="Search IP"
-              aria-controls="datatables"
+            </div>
+            <div
+              slot="header"
+              class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
+              style="padding:20px;"
+            >
+              <div class="">
+                <p class="card-category">
+                  Showing {{ from + 1 }} to {{ to }} of {{ total }} entries
+                </p>
+              </div>
+              <l-pagination
+                v-model="pagination.currentPage"
+                class="pagination-no-border"
+                :per-page="pagination.perPage"
+                :total="pagination.total"
+              />
+            </div>
+            <div class="col-sm-12">
+              <el-table
+                stripe
+                style="width: 100%;"
+                :data="queriedData"
+                border
+                @sort-change="sortChange"
+              >
+                <el-table-column type="expand">
+                  <template slot-scope="props">
+                    <p
+                      v-for="(item,index) in props.row.apps.runningapps"
+                      :key="index"
+                    >
+                      <b>Application {{ index + 1 }}:</b> <br>
+                      <b>ID:</b> {{ item.Id }} <br>
+                      <b>Names:</b> {{ item.Names }} <br>
+                      <b>Image:</b> {{ item.Image }} <br>
+                      <b>Image ID:</b> {{ item.ImageID }} <br>
+                      <b>Command:</b> {{ item.Command }} <br>
+                      <b>Ports:</b> {{ item.Ports }} <br>
+                      <b>Labels:</b> {{ item.Labels }} <br>
+                      <b>State:</b> {{ item.State }} <br>
+                      <b>Status:</b> {{ item.Status }} <br>
+                    </p>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  v-for="column in tableColumns"
+                  :key="column.label"
+                  :min-width="column.minWidth"
+                  :prop="column.prop"
+                  :label="column.label"
+                  sortable
+                />
+              </el-table>
+            </div>
+          </div>
+          <div
+            slot="footer"
+            class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
+          >
+            <div class="">
+              <p class="card-category">
+                Showing {{ from + 1 }} to {{ to }} of {{ total }} entries
+              </p>
+            </div>
+            <l-pagination
+              v-model="pagination.currentPage"
+              class="pagination-no-border"
+              :per-page="pagination.perPage"
+              :total="pagination.total"
             />
           </div>
-          <div class="col-sm-12">
-            <el-table
-              stripe
-              style="width: 100%;"
-              :data="queriedData"
-              border
-              @sort-change="sortChange"
-            >
-              <el-table-column type="expand">
-                <template slot-scope="props">
-                  <p
-                    v-for="(item,index) in props.row.apps.runningapps"
-                    :key="index"
-                  >
-                    <b>Application {{ index + 1 }}:</b> <br>
-                    <b>ID:</b> {{ item.Id }} <br>
-                    <b>Names:</b> {{ item.Names }} <br>
-                    <b>Image:</b> {{ item.Image }} <br>
-                    <b>Image ID:</b> {{ item.ImageID }} <br>
-                    <b>Command:</b> {{ item.Command }} <br>
-                    <b>Ports:</b> {{ item.Ports }} <br>
-                    <b>Labels:</b> {{ item.Labels }} <br>
-                    <b>State:</b> {{ item.State }} <br>
-                    <b>Status:</b> {{ item.Status }} <br>
-                  </p>
-                </template>
-              </el-table-column>
-              <el-table-column
-                v-for="column in tableColumns"
-                :key="column.label"
-                :min-width="column.minWidth"
-                :prop="column.prop"
-                :label="column.label"
-                sortable
-              />
-            </el-table>
-          </div>
-        </div>
-        <div
-          slot="footer"
-          class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
-        >
-          <div class="">
-            <p class="card-category">
-              Showing {{ from + 1 }} to {{ to }} of {{ total }} entries
-            </p>
-          </div>
-          <l-pagination
-            v-model="pagination.currentPage"
-            class="pagination-no-border"
-            :per-page="pagination.perPage"
-            :total="pagination.total"
-          />
-        </div>
-      </card>
+        </card>
+      </div>
     </div>
   </div>
 </template>
@@ -104,9 +130,12 @@ import {
 import { Pagination as LPagination } from 'src/components/index';
 import Fuse from 'fuse.js';
 import axios from 'axios';
-import Loading from 'vue-loading-overlay';
-import 'vue-loading-overlay/dist/vue-loading.css';
+import { VueEllipseProgress } from 'vue-ellipse-progress';
 import { MemoryStorage } from 'ttl-localstorage';
+import { ExportToCsv } from 'export-to-csv';
+import {
+  httpRequestFluxInfo, httpRequestDaemonInfo, httpRequestFluxHistoryStats,
+} from '../Request/HttpRequest';
 
 export default {
   components: {
@@ -115,7 +144,7 @@ export default {
     [Option.name]: Option,
     [Table.name]: Table,
     [TableColumn.name]: TableColumn,
-    Loading,
+    VueEllipseProgress,
   },
   data() {
     return {
@@ -168,7 +197,8 @@ export default {
       originalData: null,
       values: [],
       fuseSearch: null,
-      isLoading: false,
+      myProgress: 0,
+      dataFilters: [],
     };
   },
   computed: {
@@ -184,6 +214,7 @@ export default {
       } else {
         result = this.tableData;
       }
+      this.setDataFilters(result);
       this.paginationTotal(result.length);
       return result.slice(this.from, this.to);
     },
@@ -198,41 +229,34 @@ export default {
       return this.pagination.perPage * (this.pagination.currentPage - 1);
     },
     total() {
-      let result;
-      if (this.searchQuery !== '') {
-        const temp = [];
-        result = this.fuseSearch.search(`=${this.searchQuery}`);
-        for (let i = 0; i < Object.keys(result).length; i += 1) {
-          temp.push(result[i].item);
-        }
-        result = temp;
-      } else {
-        result = this.tableData;
-      }
+      const result = this.dataFilters;
       this.paginationTotal(result.length);
       return result.length;
     },
   },
   async mounted() {
-    this.setLoading(true);
+    this.initialize();
+    this.myProgress = await httpRequestFluxInfo(axios, MemoryStorage);
+    this.myProgress = await httpRequestDaemonInfo(axios, MemoryStorage);
+    this.myProgress = await httpRequestFluxHistoryStats(axios, MemoryStorage);
     await this.getFluxInfo();
     await this.processFluxInfo();
     this.setSearch();
-    this.setLoading(false);
   },
   methods: {
     paginationTotal(value) {
       this.pagination.total = value;
     },
+    setDataFilters(data) {
+      this.dataFilters = data;
+    },
+    async initialize() {
+      this.myProgress = 20;
+    },
     async getFluxInfo() {
-      const lsdata = MemoryStorage.get('fluxinfo?projection=ip,apps');
-      if (!lsdata) {
-        const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=ip,apps');
-        MemoryStorage.put('fluxinfo?projection=ip,apps', response.data.data, 600);
-        this.values = response.data.data;
-      } else {
-        this.values = lsdata;
-      }
+      // Projection being used in this page are ip,apps
+      const lsdata = MemoryStorage.get('fluxinfo');
+      this.values = lsdata;
     },
     async processFluxInfo() {
       this.values.map((value) => {
@@ -248,9 +272,7 @@ export default {
     setSearch() {
       this.originalData = JSON.stringify(this.tableData);
       this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
-    },
-    setLoading(value) {
-      this.isLoading = value;
+      this.myProgress = 100;
     },
     sortChange(sortProps) {
       if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
@@ -396,6 +418,51 @@ export default {
       } else {
         this.tableData = JSON.parse(this.originalData);
       }
+    },
+    processDataForCsv(data) {
+      const values = [];
+      data.forEach((item) => {
+        values.push({
+          ip: !item.ip ? '' : item.ip,
+          appsCount: !item.apps.count ? 0 : item.apps.count,
+          fluxTowerInstalled: !item.apps.fluxtower ? '' : item.apps.fluxtower,
+          fluxUsage: !item.apps.fluxusage ? '' : item.apps.fluxusage,
+          cpuLocked: !item.apps.resources.appsCpusLocked ? '' : item.apps.resources.appsCpusLocked,
+          ramLocked: !item.apps.resources.appsRamLocked ? '' : item.apps.resources.appsRamLocked,
+          hddLocked: !item.apps.resources.appsHddLocked ? '' : item.apps.resources.appsHddLocked,
+          runningApps: !item.apps.runningapps || item.apps.runningapps.length <= 0 ? '' : JSON.stringify(item.apps.runningapps, null, 2),
+        });
+      });
+      return values;
+    },
+    downloadCsvFile(data) {
+      const date = new Date();
+      const month = date.getMonth();
+      const day = date.getDate();
+      const year = date.getFullYear();
+      const options = {
+        filename: `Node_Application_${month}${day}${year}`,
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalSeparator: '.',
+        showLabels: true,
+        showTitle: true,
+        title: `Node Application - ${month}/${day}/${year}`,
+        useTextFile: false,
+        useBom: true,
+        headers: [
+          'IP Address',
+          'Total Application Running',
+          'Flux Tower Installed',
+          'Flux Usage',
+          'CPU Locked',
+          'RAM Locked',
+          'HDD Locked',
+          'Running Apps',
+        ],
+      };
+      const csvExporter = new ExportToCsv(options);
+      csvExporter.generateCsv(this.processDataForCsv(data));
     },
   },
 };

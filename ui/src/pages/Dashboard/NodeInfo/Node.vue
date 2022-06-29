@@ -1,126 +1,158 @@
 <template>
-  <div class="row">
-    <div class="col-md-12">
-      <h2 class="title">
-        Node
-      </h2>
+  <div>
+    <div class="row" style="position: absolute; left: 45%; top: 40%;" v-if="myProgress < 100">
+      <vue-ellipse-progress
+        :half="false"
+        :progress="myProgress"
+        line-mode="in 10"
+        color="Silver"
+        :gap="10"
+        fontSize="3rem">
+      </vue-ellipse-progress>
     </div>
-    <p class="category" />
-    <div>
-      <loading
-        :active.sync="isLoading"
-        :can-cancel="true"
-      />
-    </div>
-    <div class="col-12">
-      <card>
+    <div class="row" v-if="myProgress >= 100">
+      <div class="col-12 d-flex flex-wrap">
+        <div v-for="[key, value] in filter" :key="key">
+          <l-button style="margin-right: 10px;" wide v-if="key === 'node hashes - 0'">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
+          <l-button style="margin-right: 10px;" wide v-if="key.includes('version')">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
+        </div>
+      </div>
+      <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
+        <h2 class="title">
+          Node
+        </h2>
         <div>
-          <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
-            <el-select
-              v-model="pagination.perPage"
-              class="select-default mb-3"
-              style="width: 200px"
-              placeholder="Per page"
-            >
-              <el-option
-                v-for="item in pagination.perPageOptions"
-                :key="item"
-                class="select-default"
-                :label="item"
-                :value="item"
-              />
-            </el-select>
-            <div
-              col-md-6
-              offset-md-3
-            >
+          <l-button v-on:click="downloadCsvFile(dataFilters)"><i class="nc-icon nc-cloud-download-93"></i></l-button>
+        </div>
+      </div>
+      <p class="category" />
+      <div class="col-12">
+        <card>
+          <div>
+            <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
               <el-select
-                v-model="filters.default"
+                v-model="pagination.perPage"
                 class="select-default mb-3"
-                style="width: 300px"
-                multiple
-                collapse-tags
-                placeholder="Filters"
+                style="width: 200px"
+                placeholder="Per page"
               >
                 <el-option
-                  v-for="item in filters.others"
+                  v-for="item in pagination.perPageOptions"
                   :key="item"
                   class="select-default"
                   :label="item"
                   :value="item"
                 />
               </el-select>
+              <div
+                col-md-6
+                offset-md-3
+              >
+                <el-select
+                  v-model="filters.default"
+                  class="select-default mb-3"
+                  style="width: 300px"
+                  multiple
+                  collapse-tags
+                  placeholder="Filters"
+                >
+                  <el-option
+                    v-for="item in filters.others"
+                    :key="item"
+                    class="select-default"
+                    :label="item"
+                    :value="item"
+                  />
+                </el-select>
+              </div>
+              <div
+                col-md-3
+                offset-md-6
+              >
+                <el-input
+                  v-model="searchQuery"
+                  type="search"
+                  class="mb-3"
+                  style="width: 200px"
+                  placeholder="Search IP"
+                  aria-controls="datatables"
+                />
+              </div>
             </div>
             <div
-              col-md-3
-              offset-md-6
+              slot="header"
+              class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
+              style="padding:20px;"
             >
-              <el-input
-                v-model="searchQuery"
-                type="search"
-                class="mb-3"
-                style="width: 200px"
-                placeholder="Search IP"
-                aria-controls="datatables"
+              <div class="">
+                <p class="card-category">
+                  Showing {{ from + 1 }} to {{ to }} of {{ total }} entries
+                </p>
+              </div>
+              <l-pagination
+                v-model="pagination.currentPage"
+                class="pagination-no-border"
+                :per-page="pagination.perPage"
+                :total="pagination.total"
               />
             </div>
+            <div class="col-sm-12">
+              <el-table
+                stripe
+                style="width: 100%;"
+                :data="queriedData"
+                border
+                @sort-change="sortChange"
+              >
+                <el-table-column type="expand">
+                  <template slot-scope="props">
+                    <p><b>Collateral:</b> {{ props.row.node.status.collateral }} </p>
+                    <p><b>Txn Hash:</b> {{ props.row.node.status.txhash }}</p>
+                    <p><b>Added Height:</b> {{ props.row.node.status.added_height }}</p>
+                    <p><b>Confirmed Height:</b> {{ props.row.node.status.confirmed_height }}</p>
+                    <p><b>Last Confirmed Height:</b> {{ props.row.node.status.last_confirmed_height }}</p>
+                    <p><b>Last Paid Height:</b> {{ props.row.node.status.last_paid_height }}</p>
+                    <p><b>Payment Address:</b> {{ props.row.node.status.payment_address }}</p>
+                    <p><b>Zel ID:</b> {{ props.row.flux.zelid }}</p>
+                    <p><b>Active Since:</b> {{ props.row.node.status.activesince }}</p>
+                    <p><b>Active Since Converted:</b> {{ new Date(parseInt(props.row.node.status.activesince * 1000, 10)).toLocaleString() }}</p>
+                    <p><b>Last Paid:</b> {{ props.row.node.status.lastpaid }}</p>
+                    <p><b>Last Paid Converted:</b> {{ new Date(parseInt(props.row.node.status.lastpaid * 1000, 10)).toLocaleString() }}</p>
+                    <p><b>Amount:</b> {{ props.row.node.status.amount }}</p>
+                    <p><b>Crux ID:</b> {{ props.row.flux.cruxid }}</p>
+                    <p><b>DOS State:</b> {{ props.row.flux.dos.dosState }}</p>
+                    <p><b>DOS Message:</b> {{ props.row.flux.dos.dosMessage }}</p>
+                  </template>
+                </el-table-column>
+                <el-table-column
+                  v-for="column in tableColumns"
+                  :key="column.label"
+                  :min-width="column.minWidth"
+                  :prop="column.prop"
+                  :label="column.label"
+                  sortable
+                />
+              </el-table>
+            </div>
           </div>
-          <div class="col-sm-12">
-            <el-table
-              stripe
-              style="width: 100%;"
-              :data="queriedData"
-              border
-              @sort-change="sortChange"
-            >
-              <el-table-column type="expand">
-                <template slot-scope="props">
-                  <p><b>Collateral:</b> {{ props.row.node.status.collateral }} </p>
-                  <p><b>Txn Hash:</b> {{ props.row.node.status.txhash }}</p>
-                  <p><b>Added Height:</b> {{ props.row.node.status.added_height }}</p>
-                  <p><b>Confirmed Height:</b> {{ props.row.node.status.confirmed_height }}</p>
-                  <p><b>Last Confirmed Height:</b> {{ props.row.node.status.last_confirmed_height }}</p>
-                  <p><b>Last Paid Height:</b> {{ props.row.node.status.last_paid_height }}</p>
-                  <p><b>Payment Address:</b> {{ props.row.node.status.payment_address }}</p>
-                  <p><b>Zel ID:</b> {{ props.row.flux.zelid }}</p>
-                  <p><b>Active Since:</b> {{ props.row.node.status.activesince }}</p>
-                  <p><b>Active Since Converted:</b> {{ new Date(parseInt(props.row.node.status.activesince * 1000)).toLocaleString() }}</p>
-                  <p><b>Last Paid:</b> {{ props.row.node.status.lastpaid }}</p>
-                  <p><b>Last Paid Converted:</b> {{ new Date(parseInt(props.row.node.status.lastpaid * 1000)).toLocaleString() }}</p>
-                  <p><b>Amount:</b> {{ props.row.node.status.amount }}</p>
-                  <p><b>Crux ID:</b> {{ props.row.flux.cruxid }}</p>
-                  <p><b>DOS State:</b> {{ props.row.flux.dos.dosState }}</p>
-                  <p><b>DOS Message:</b> {{ props.row.flux.dos.dosMessage }}</p>
-                </template>
-              </el-table-column>
-              <el-table-column
-                v-for="column in tableColumns"
-                :key="column.label"
-                :min-width="column.minWidth"
-                :prop="column.prop"
-                :label="column.label"
-                sortable
-              />
-            </el-table>
+          <div
+            slot="footer"
+            class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
+          >
+            <div class="">
+              <p class="card-category">
+                Showing {{ from + 1 }} to {{ to }} of {{ total }} entries
+              </p>
+            </div>
+            <l-pagination
+              v-model="pagination.currentPage"
+              class="pagination-no-border"
+              :per-page="pagination.perPage"
+              :total="pagination.total"
+            />
           </div>
-        </div>
-        <div
-          slot="footer"
-          class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
-        >
-          <div class="">
-            <p class="card-category">
-              Showing {{ from + 1 }} to {{ to }} of {{ total }} entries
-            </p>
-          </div>
-          <l-pagination
-            v-model="pagination.currentPage"
-            class="pagination-no-border"
-            :per-page="pagination.perPage"
-            :total="pagination.total"
-          />
-        </div>
-      </card>
+        </card>
+      </div>
     </div>
   </div>
 </template>
@@ -131,9 +163,12 @@ import {
 import { Pagination as LPagination } from 'src/components/index';
 import Fuse from 'fuse.js';
 import axios from 'axios';
-import Loading from 'vue-loading-overlay';
-import 'vue-loading-overlay/dist/vue-loading.css';
+import { VueEllipseProgress } from 'vue-ellipse-progress';
 import { MemoryStorage } from 'ttl-localstorage';
+import { ExportToCsv } from 'export-to-csv';
+import {
+  httpRequestFluxInfo, httpRequestDaemonInfo, httpRequestFluxHistoryStats,
+} from '../Request/HttpRequest';
 
 export default {
   components: {
@@ -142,7 +177,7 @@ export default {
     [Option.name]: Option,
     [Table.name]: Table,
     [TableColumn.name]: TableColumn,
-    Loading,
+    VueEllipseProgress,
   },
   data() {
     return {
@@ -190,10 +225,11 @@ export default {
       values: [],
       daemon: [],
       fuseSearch: null,
-      isLoading: false,
+      myProgress: 0,
       filter: new Map(),
       filterValue: [],
       ranks: new Map(),
+      dataFilters: [],
     };
   },
   computed: {
@@ -211,46 +247,31 @@ export default {
       return this.pagination.perPage * (this.pagination.currentPage - 1);
     },
     total() {
-      let result = [];
-      if (this.searchQuery !== '') {
-        const temp = [];
-        result = this.fuseSearch.search(`=${this.searchQuery}`);
-        for (let i = 0; i < Object.keys(result).length; i += 1) {
-          temp.push(result[i].item);
-        }
-        result = temp;
-      } else if (this.filters.default.length) {
-        const arr = [];
-        const data = [];
-        this.filters.default.forEach((item) => {
-          const objs = this.filter.get(item);
-          objs.forEach((obj) => {
-            if (!arr.includes(obj.node.status.ip)) {
-              arr.push(obj.node.status.ip);
-              data.push(obj);
-            }
-          });
-        });
-        result = data;
-      } else {
-        result = this.tableData;
-      }
+      const result = this.dataFilters;
       this.paginationTotal(result.length);
       return result.length;
     },
   },
   async mounted() {
-    this.setLoading(true);
+    this.initialize();
+    this.myProgress = await httpRequestFluxInfo(axios, MemoryStorage);
+    this.myProgress = await httpRequestDaemonInfo(axios, MemoryStorage);
+    this.myProgress = await httpRequestFluxHistoryStats(axios, MemoryStorage);
     await this.getFluxInfo();
+    await this.processFluxInfo();
     await this.getDaemonInfo();
     await this.processDaemonInfo();
-    await this.processFluxInfo();
     this.setSearch();
-    this.setLoading(false);
   },
   methods: {
     paginationTotal(value) {
       this.pagination.total = value;
+    },
+    setDataFilters(data) {
+      this.dataFilters = data;
+    },
+    async initialize() {
+      this.myProgress = 20;
     },
     processData(sortProps) {
       let result;
@@ -280,28 +301,18 @@ export default {
       if (sortProps) {
         result = this.sorting(sortProps, result);
       }
+      this.setDataFilters(result);
       this.paginationTotal(result.length);
       return result.slice(this.from, this.to);
     },
     async getFluxInfo() {
-      const lsdata = MemoryStorage.get('fluxinfo?projection=node,flux,appsHashesTotal');
-      if (!lsdata) {
-        const response = await axios.get('https://stats.runonflux.io/fluxinfo?projection=node,flux,appsHashesTotal');
-        MemoryStorage.put('fluxinfo?projection=node,flux,appsHashesTotal', response.data.data, 600);
-        this.values = response.data.data;
-      } else {
-        this.values = lsdata;
-      }
+      // Projection being used in this page are node,flux,appsHashesTotal
+      const lsdata = MemoryStorage.get('fluxinfo');
+      this.values = lsdata;
     },
     async getDaemonInfo() {
       const lsdata = MemoryStorage.get('daemon/viewdeterministiczelnodelist');
-      if (!lsdata) {
-        const response = await axios.get('https://api.runonflux.io/daemon/viewdeterministiczelnodelist');
-        MemoryStorage.put('daemon/viewdeterministiczelnodelist', response.data.data, 600);
-        this.daemon = response.data.data;
-      } else {
-        this.daemon = lsdata;
-      }
+      this.daemon = lsdata;
     },
     async processDaemonInfo() {
       this.daemon.map((el) => {
@@ -313,22 +324,25 @@ export default {
     },
     async processFluxInfo() {
       this.values.map((el) => {
-        const values = el;
         let temp;
+        const values = el;
+        const ipaddress = values.node.status.ip;
+        const fluxversion = values.flux.version;
+        const apphashtotal = values.appsHashesTotal;
         values.node.status.network = 'ipv4';
-        values.node.status.rank = this.ranks.get(el.node.status.ip) === undefined ? 0 : this.ranks.get(el.node.status.ip);
-        temp = this.filter.has(`node version - ${values.flux.version}`) ? this.filter.get(`node version - ${values.flux.version}`) : [];
-        if (!this.filter.has(`node version - ${values.flux.version}`)) {
-          this.filterValue.push(`node version - ${values.flux.version}`);
+        values.node.status.rank = !this.ranks.get(ipaddress) ? 0 : this.ranks.get(ipaddress);
+        temp = this.filter.has(`node version - ${fluxversion}`) ? this.filter.get(`node version - ${fluxversion}`) : [];
+        if (!this.filter.has(`node version - ${fluxversion}`)) {
+          this.filterValue.push(`node version - ${fluxversion}`);
         }
         temp.push(values);
-        this.filter.set(`node version - ${values.flux.version}`, temp);
-        temp = this.filter.has(`node hashes - ${values.appsHashesTotal}`) ? this.filter.get(`node hashes - ${values.appsHashesTotal}`) : [];
-        if (!this.filter.has(`node hashes - ${values.appsHashesTotal}`)) {
-          this.filterValue.push(`node hashes - ${values.appsHashesTotal}`);
+        this.filter.set(`node version - ${fluxversion}`, temp);
+        temp = this.filter.has(`node hashes - ${apphashtotal}`) ? this.filter.get(`node hashes - ${apphashtotal}`) : [];
+        if (!this.filter.has(`node hashes - ${apphashtotal}`)) {
+          this.filterValue.push(`node hashes - ${apphashtotal}`);
         }
         temp.push(values);
-        this.filter.set(`node hashes - ${values.appsHashesTotal}`, temp);
+        this.filter.set(`node hashes - ${apphashtotal}`, temp);
         return values;
       });
       this.filters.others = this.filterValue.sort();
@@ -337,9 +351,7 @@ export default {
     setSearch() {
       this.originalData = JSON.stringify(this.tableData);
       this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['node.status.ip'] });
-    },
-    setLoading(value) {
-      this.isLoading = value;
+      this.myProgress = 100;
     },
     sortChange(sortProps) {
       this.processData(sortProps);
@@ -449,6 +461,77 @@ export default {
         this.tableData = JSON.parse(this.originalData);
       }
       return data;
+    },
+    processDataForCsv(data) {
+      const values = [];
+      data.forEach((item) => {
+        values.push({
+          ip: !item.node.status.ip ? '' : item.node.status.ip,
+          networkProtocol: !item.node.status.network ? '' : item.node.status.network,
+          tier: !item.node.status.tier ? '' : item.node.status.tier,
+          status: !item.node.status.status ? '' : item.node.status.status,
+          paymentRank: !item.node.status.rank ? '' : item.node.status.rank,
+          collateral: !item.node.status.collateral ? '' : item.node.status.collateral,
+          txnHash: !item.node.status.txhash ? '' : item.node.status.txhash,
+          addedHeight: !item.node.status.added_height ? '' : item.node.status.added_height,
+          confirmedHeight: !item.node.status.confirmed_height ? '' : item.node.status.confirmed_height,
+          lastConfirmedHeight: !item.node.status.last_confirmed_height ? '' : item.node.status.last_confirmed_height,
+          lastPaidHeight: !item.node.status.last_paid_height ? '' : item.node.status.last_paid_height,
+          paymentAddress: !item.node.status.payment_address ? '' : item.node.status.payment_address,
+          zelId: !item.flux.zelid ? '' : item.flux.zelid,
+          activeSince: !item.node.status.activesince ? '' : item.node.status.activesince,
+          activeSinceConverted: !item.node.status.activesince ? '' : new Date(parseInt(item.node.status.activesince * 1000, 10)).toLocaleString(),
+          lastPaid: !item.node.status.lastpaid ? '' : item.node.status.lastpaid,
+          lastPaidConverted: !item.node.status.lastpaid ? '' : new Date(parseInt(item.node.status.lastpaid * 1000, 10)).toLocaleString(),
+          amount: !item.node.status.amount ? '' : item.node.status.amount,
+          cruxId: !item.flux.cruxid ? '' : item.flux.cruxid,
+          dosState: !item.flux.dos.dosState ? 0 : item.flux.dos.dosState,
+          dosMessage: !item.flux.dos.dosMessage ? '' : item.flux.dos.dosMessage,
+        });
+      });
+      return values;
+    },
+    downloadCsvFile(data) {
+      const date = new Date();
+      const month = date.getMonth();
+      const day = date.getDate();
+      const year = date.getFullYear();
+      const options = {
+        filename: `Nodes_${month}${day}${year}`,
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalSeparator: '.',
+        showLabels: true,
+        showTitle: true,
+        title: `Nodes - ${month}/${day}/${year}`,
+        useTextFile: false,
+        useBom: true,
+        headers: [
+          'IP Address',
+          'Network Protocol',
+          'Tier',
+          'Status',
+          'Payment Rank',
+          'Collateral',
+          'Txn Hash',
+          'Added Height',
+          'Confirmed Height',
+          'Last Confirmed Height',
+          'Last Paid Height',
+          'Payment Address',
+          'Zel ID',
+          'Active Since',
+          'Active Since Converted',
+          'Last Paid',
+          'Last Paid Converted',
+          'Amount',
+          'Crux ID',
+          'DOS State',
+          'DOS Message',
+        ],
+      };
+      const csvExporter = new ExportToCsv(options);
+      csvExporter.generateCsv(this.processDataForCsv(data));
     },
   },
 };
