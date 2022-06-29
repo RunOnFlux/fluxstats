@@ -3,7 +3,7 @@
     "description": "A simple hello world app with parameterized content",
     "price": 0.1,
     "category": "Hosting",
-    "version": 5,
+    "version": 4,
     "name": "HelloWorldParams",
     "instances": 3,
     "compose": [
@@ -60,7 +60,7 @@
     "description": "Host your Firo Node on the Flux Network",
     "price": 3,
     "category": "Crypto",
-    "version": 5,
+    "version": 4,
     "name": "FiroNode",
     "instances": 3,
     "compose": [
@@ -110,7 +110,7 @@
     "description": "Presearch is a Decentralized Search Engine - Host your Presearch Node on the Flux Network",
     "price": 1,
     "category": "Crypto",
-    "version": 5,
+    "version": 4,
     "name": "PresearchNode",
     "instances": 3,
     "compose": [
@@ -160,7 +160,7 @@
     "description": "Host your PivX Node on the Flux Network",
     "price": 3,
     "category": "Crypto",
-    "version": 5,
+    "version": 4,
     "name": "PivXNode",
     "instances": 3,
     "compose": [
@@ -210,7 +210,7 @@
     "description": "Host your Dash Node on the Flux Network",
     "price": 3,
     "category": "Crypto",
-    "version": 5,
+    "version": 4,
     "name": "DashNode",
     "instances": 3,
     "compose": [
