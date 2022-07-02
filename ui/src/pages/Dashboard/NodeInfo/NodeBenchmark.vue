@@ -17,7 +17,7 @@
           <l-button style="margin-right: 10px;" wide v-if="key.includes('upnp enabled - TRUE')">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
           <l-button style="margin-right: 10px;" wide v-if="key.includes('failed nodes')">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
           <l-button style="margin-right: 10px;" wide v-if="key === 'node tier - no tier'">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
-          <l-button style="margin-right: 10px;" wide v-if="key === 'organization - '">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
+          <l-button style="margin-right: 10px;" wide v-if="key === 'organization - '">no organization: {{ !value ? 0 : value.length }}</l-button>
           <l-button style="margin-right: 10px;" wide v-if="key === 'no ip address'">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
         </div>
       </div>
@@ -58,6 +58,7 @@
                   style="width: 450px"
                   multiple
                   collapse-tags
+                  filterable
                   placeholder="Filters"
                 >
                   <el-option
@@ -683,7 +684,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Organization' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.geolocation.org > b.geolocation.org) {
             val = 1;
@@ -693,7 +694,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Organization' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.geolocation.org < b.geolocation.org) {
             val = 1;

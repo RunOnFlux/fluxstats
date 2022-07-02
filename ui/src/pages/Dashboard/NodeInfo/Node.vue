@@ -14,7 +14,9 @@
       <div class="col-12 d-flex flex-wrap">
         <div v-for="[key, value] in filter" :key="key">
           <l-button style="margin-right: 10px;" wide v-if="key === 'node hashes - 0'">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
+          <l-button style="margin-right: 10px;" wide v-if="key === 'no ip address'">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
           <l-button style="margin-right: 10px;" wide v-if="key.includes('version')">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
+          <l-button style="margin-right: 10px;" wide v-if="key.includes('node status')">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
         </div>
       </div>
       <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
@@ -51,9 +53,10 @@
                 <el-select
                   v-model="filters.default"
                   class="select-default mb-3"
-                  style="width: 300px"
+                  style="width: 450px"
                   multiple
                   collapse-tags
+                  filterable
                   placeholder="Filters"
                 >
                   <el-option
@@ -329,6 +332,7 @@ export default {
         const ipaddress = values.node.status.ip;
         const fluxversion = values.flux.version;
         const apphashtotal = values.appsHashesTotal;
+        const nodestatus = values.node.status.status;
         values.node.status.network = 'ipv4';
         values.node.status.rank = !this.ranks.get(ipaddress) ? 0 : this.ranks.get(ipaddress);
         temp = this.filter.has(`node version - ${fluxversion}`) ? this.filter.get(`node version - ${fluxversion}`) : [];
@@ -343,6 +347,20 @@ export default {
         }
         temp.push(values);
         this.filter.set(`node hashes - ${apphashtotal}`, temp);
+        temp = this.filter.has(`node status - ${nodestatus}`) ? this.filter.get(`node status - ${nodestatus}`) : [];
+        if (!this.filter.has(`node status - ${nodestatus}`)) {
+          this.filterValue.push(`node status - ${nodestatus}`);
+        }
+        temp.push(values);
+        this.filter.set(`node status - ${nodestatus}`, temp);
+        temp = this.filter.has('no ip address') ? this.filter.get('no ip address') : [];
+        if (!this.filter.has('no ip address') && (!ipaddress || ipaddress === '')) {
+          this.filterValue.push('no ip address');
+        }
+        if (!ipaddress || ipaddress === '') {
+          temp.push(values);
+        }
+        this.filter.set('no ip address', temp);
         return values;
       });
       this.filters.others = this.filterValue.sort();
