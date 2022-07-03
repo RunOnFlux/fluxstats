@@ -16,7 +16,7 @@
           <l-button style="margin-right: 10px;" wide v-if="key.includes('<')">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
           <l-button style="margin-right: 10px;" wide v-if="key.includes('upnp enabled - TRUE')">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
           <l-button style="margin-right: 10px;" wide v-if="key.includes('failed nodes')">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
-          <l-button style="margin-right: 10px;" wide v-if="key === 'node tier - no tier'">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
+          <l-button style="margin-right: 10px;" wide v-if="key === 'node tier - no tier'">no tier: {{ !value ? 0 : value.length }}</l-button>
           <l-button style="margin-right: 10px;" wide v-if="key === 'organization - '">no organization: {{ !value ? 0 : value.length }}</l-button>
           <l-button style="margin-right: 10px;" wide v-if="key === 'no ip address'">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
         </div>

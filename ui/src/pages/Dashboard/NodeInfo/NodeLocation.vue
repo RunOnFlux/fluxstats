@@ -38,6 +38,28 @@
                   :value="item"
                 />
               </el-select>
+              <div
+                col-md-6
+                offset-md-3
+              >
+                <el-select
+                  v-model="filters.default"
+                  class="select-default mb-3"
+                  style="width: 450px"
+                  multiple
+                  collapse-tags
+                  filterable
+                  placeholder="Filters"
+                >
+                  <el-option
+                    v-for="item in filters.others"
+                    :key="item"
+                    class="select-default"
+                    :label="item"
+                    :value="item"
+                  />
+                </el-select>
+              </div>
               <el-input
                 v-model="searchQuery"
                 type="search"
@@ -135,6 +157,10 @@ export default {
         perPageOptions: [5, 10, 25, 50, 100, 200, 500, 1000, 2000, 5000, 10000],
         total: 0,
       },
+      filters: {
+        default: [],
+        others: [],
+      },
       searchQuery: '',
       propsToSearch: ['geolocation.ip'],
       tableColumns: [
@@ -165,6 +191,8 @@ export default {
         },
       ],
       tableData: [],
+      filterValue: [],
+      filter: new Map(),
       originalData: null,
       fuseSearch: null,
       myProgress: 0,
@@ -173,20 +201,7 @@ export default {
   },
   computed: {
     queriedData() {
-      let result;
-      if (this.searchQuery !== '') {
-        const temp = [];
-        result = this.fuseSearch.search(`=${this.searchQuery}`);
-        for (let i = 0; i < Object.keys(result).length; i += 1) {
-          temp.push(result[i].item);
-        }
-        result = temp;
-      } else {
-        result = this.tableData;
-      }
-      this.setDataFilters(result);
-      this.paginationTotal(result.length);
-      return result.slice(this.from, this.to);
+      return this.processData();
     },
     to() {
       let highBound = this.from + this.pagination.perPage;
@@ -210,6 +225,7 @@ export default {
     this.myProgress = await httpRequestDaemonInfo(axios, MemoryStorage);
     this.myProgress = await httpRequestFluxHistoryStats(axios, MemoryStorage);
     await this.getFluxInfo();
+    await this.processFluxInfo();
     this.setSearch();
   },
   methods: {
@@ -222,10 +238,56 @@ export default {
     async initialize() {
       this.myProgress = 20;
     },
+    processData(sortProps) {
+      let result;
+      if (this.searchQuery !== '') {
+        const temp = [];
+        result = this.fuseSearch.search(`=${this.searchQuery}`);
+        for (let i = 0; i < Object.keys(result).length; i += 1) {
+          temp.push(result[i].item);
+        }
+        result = temp;
+      } else if (this.filters.default.length) {
+        const arr = [];
+        const data = [];
+        this.filters.default.forEach((item) => {
+          const objs = this.filter.get(item);
+          objs.forEach((obj) => {
+            if (!arr.includes(obj.geolocation.ip)) {
+              arr.push(obj.geolocation.ip);
+              data.push(obj);
+            }
+          });
+        });
+        result = data;
+      } else {
+        result = this.tableData;
+      }
+      if (sortProps) {
+        result = this.sorting(sortProps, result);
+      }
+      this.setDataFilters(result);
+      this.paginationTotal(result.length);
+      return result.slice(this.from, this.to);
+    },
     async getFluxInfo() {
       // Projection being used in this page are ip,geolocation
       const lsdata = MemoryStorage.get('fluxinfo');
-      this.tableData = lsdata;
+      this.values = lsdata;
+    },
+    async processFluxInfo() {
+      this.values.map((value) => {
+        const values = value;
+        const temp = this.filter.has(`node count - ${values.geolocation.country}`) ? this.filter.get(`node count - ${values.geolocation.country}`) : [];
+        if (!this.filter.has(`node count - ${values.geolocation.country}`)) {
+          this.filterValue.push(`node count - ${values.geolocation.country}`);
+        }
+        temp.push(values);
+        this.filter.set(`node count - ${values.geolocation.country}`, temp);
+        return values;
+      });
+      this.filters.others = this.filterValue.sort();
+      this.tableData = this.values;
     },
     setSearch() {
       this.originalData = JSON.stringify(this.tableData);
@@ -233,8 +295,11 @@ export default {
       this.myProgress = 100;
     },
     sortChange(sortProps) {
+      this.processData(sortProps);
+    },
+    sorting(sortProps, data) {
       if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.geolocation.ip > b.geolocation.ip) {
             val = 1;
@@ -244,7 +309,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.geolocation.ip < b.geolocation.ip) {
             val = 1;
@@ -254,7 +319,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Country' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.geolocation.country > b.geolocation.country) {
             val = 1;
@@ -264,7 +329,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Country' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.geolocation.country < b.geolocation.country) {
             val = 1;
@@ -274,7 +339,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Country Code' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.geolocation.countryCode > b.geolocation.countryCode) {
             val = 1;
@@ -284,7 +349,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Country Code' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.geolocation.countryCode < b.geolocation.countryCode) {
             val = 1;
@@ -294,7 +359,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Latitude' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.geolocation.lat > b.geolocation.lat) {
             val = 1;
@@ -304,7 +369,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Latitude' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.geolocation.lat < b.geolocation.lat) {
             val = 1;
@@ -314,7 +379,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Longtitude' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.geolocation.lon > b.geolocation.lon) {
             val = 1;
@@ -324,7 +389,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Longtitude' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.geolocation.lon < b.geolocation.lon) {
             val = 1;
@@ -334,7 +399,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Organization' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.geolocation.org > b.geolocation.org) {
             val = 1;
@@ -344,7 +409,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Organization' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.geolocation.org < b.geolocation.org) {
             val = 1;
@@ -356,6 +421,7 @@ export default {
       } else {
         this.tableData = JSON.parse(this.originalData);
       }
+      return data;
     },
     processDataForCsv(data) {
       const values = [];

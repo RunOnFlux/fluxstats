@@ -11,9 +11,20 @@
       </vue-ellipse-progress>
     </div>
     <div class="row" v-if="myProgress >= 100">
+      <div class="col-12 d-flex flex-wrap">
+        <div v-for="[key, value] in filter" :key="key">
+          <l-button style="margin-right: 10px;" wide v-if="key.includes('daemon version')">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
+          <l-button style="margin-right: 10px;" wide v-if="key.includes('flux version')">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
+          <l-button style="margin-right: 10px;" wide v-if="key.includes('benchmark version')">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
+          <l-button style="margin-right: 10px;" wide v-if="key.includes('bench version')">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
+          <l-button style="margin-right: 10px;" wide v-if="key.includes('bench speed version')">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
+          <l-button style="margin-right: 10px;" wide v-if="key.includes('protocol version')">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
+          <l-button style="margin-right: 10px;" wide v-if="key.includes('wallet version')">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
+        </div>
+      </div>
       <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
         <h2 class="title">
-          Version
+          Daemon
         </h2>
         <div>
           <l-button v-on:click="downloadCsvFile(dataFilters)"><i class="nc-icon nc-cloud-download-93"></i></l-button>
@@ -38,6 +49,28 @@
                   :value="item"
                 />
               </el-select>
+               <div
+                col-md-6
+                offset-md-3
+              >
+                <el-select
+                  v-model="filters.default"
+                  class="select-default mb-3"
+                  style="width: 450px"
+                  multiple
+                  collapse-tags
+                  filterable
+                  placeholder="Filters"
+                >
+                  <el-option
+                    v-for="item in filters.others"
+                    :key="item"
+                    class="select-default"
+                    :label="item"
+                    :value="item"
+                  />
+                </el-select>
+              </div>
               <el-input
                 v-model="searchQuery"
                 type="search"
@@ -153,6 +186,10 @@ export default {
         perPageOptions: [5, 10, 25, 50, 100, 200, 500, 1000, 2000, 5000, 10000],
         total: 0,
       },
+      filters: {
+        default: [],
+        others: [],
+      },
       searchQuery: '',
       propsToSearch: ['ip'],
       tableColumns: [
@@ -188,6 +225,8 @@ export default {
         },
       ],
       tableData: [],
+      filterValue: [],
+      filter: new Map(),
       originalData: null,
       fuseSearch: null,
       myProgress: 0,
@@ -196,20 +235,7 @@ export default {
   },
   computed: {
     queriedData() {
-      let result;
-      if (this.searchQuery !== '') {
-        const temp = [];
-        result = this.fuseSearch.search(`=${this.searchQuery}`);
-        for (let i = 0; i < Object.keys(result).length; i += 1) {
-          temp.push(result[i].item);
-        }
-        result = temp;
-      } else {
-        result = this.tableData;
-      }
-      this.setDataFilters(result);
-      this.paginationTotal(result.length);
-      return result.slice(this.from, this.to);
+      return this.processData();
     },
     to() {
       let highBound = this.from + this.pagination.perPage;
@@ -233,6 +259,7 @@ export default {
     this.myProgress = await httpRequestDaemonInfo(axios, MemoryStorage);
     this.myProgress = await httpRequestFluxHistoryStats(axios, MemoryStorage);
     await this.getFluxInfo();
+    await this.processFluxInfo();
     this.setSearch();
   },
   methods: {
@@ -245,10 +272,93 @@ export default {
     async initialize() {
       this.myProgress = 20;
     },
+    processData(sortProps) {
+      let result;
+      if (this.searchQuery !== '') {
+        const temp = [];
+        result = this.fuseSearch.search(`=${this.searchQuery}`);
+        for (let i = 0; i < Object.keys(result).length; i += 1) {
+          temp.push(result[i].item);
+        }
+        result = temp;
+      } else if (this.filters.default.length) {
+        const arr = [];
+        const data = [];
+        this.filters.default.forEach((item) => {
+          const objs = this.filter.get(item);
+          objs.forEach((obj) => {
+            if (!arr.includes(obj.ip)) {
+              arr.push(obj.ip);
+              data.push(obj);
+            }
+          });
+        });
+        result = data;
+      } else {
+        result = this.tableData;
+      }
+      if (sortProps) {
+        result = this.sorting(sortProps, result);
+      }
+      this.setDataFilters(result);
+      this.paginationTotal(result.length);
+      return result.slice(this.from, this.to);
+    },
     async getFluxInfo() {
       // Projection being used in this page are ip,daemon,benchmark,flux
       const lsdata = MemoryStorage.get('fluxinfo');
-      this.tableData = lsdata;
+      this.values = lsdata;
+    },
+    async processFluxInfo() {
+      this.values.map((value) => {
+        let temp;
+        const values = value;
+        temp = this.filter.has(`daemon version - ${values.daemon.info.version}`) ? this.filter.get(`daemon version - ${values.daemon.info.version}`) : [];
+        if (!this.filter.has(`daemon version - ${values.daemon.info.version}`)) {
+          this.filterValue.push(`daemon version - ${values.daemon.info.version}`);
+        }
+        temp.push(values);
+        this.filter.set(`daemon version - ${values.daemon.info.version}`, temp);
+        temp = this.filter.has(`flux version - ${values.flux.version}`) ? this.filter.get(`flux version - ${values.flux.version}`) : [];
+        if (!this.filter.has(`flux version - ${values.flux.version}`)) {
+          this.filterValue.push(`flux version - ${values.flux.version}`);
+        }
+        temp.push(values);
+        this.filter.set(`flux version - ${values.flux.version}`, temp);
+        temp = this.filter.has(`benchmark version - ${values.benchmark.info.version}`) ? this.filter.get(`benchmark version - ${values.benchmark.info.version}`) : [];
+        if (!this.filter.has(`benchmark version - ${values.benchmark.info.version}`)) {
+          this.filterValue.push(`benchmark version - ${values.benchmark.info.version}`);
+        }
+        temp.push(values);
+        this.filter.set(`benchmark version - ${values.benchmark.info.version}`, temp);
+        temp = this.filter.has(`bench version - ${values.benchmark.bench.bench_version}`) ? this.filter.get(`bench version - ${values.benchmark.bench.bench_version}`) : [];
+        if (!this.filter.has(`bench version - ${values.benchmark.bench.bench_version}`)) {
+          this.filterValue.push(`bench version - ${values.benchmark.bench.bench_version}`);
+        }
+        temp.push(values);
+        this.filter.set(`bench version - ${values.benchmark.bench.bench_version}`, temp);
+        temp = this.filter.has(`bench speed version - ${values.benchmark.bench.speed_version}`) ? this.filter.get(`bench speed version - ${values.benchmark.bench.speed_version}`) : [];
+        if (!this.filter.has(`bench speed version - ${values.benchmark.bench.speed_version}`)) {
+          this.filterValue.push(`bench speed version - ${values.benchmark.bench.speed_version}`);
+        }
+        temp.push(values);
+        this.filter.set(`bench speed version - ${values.benchmark.bench.speed_version}`, temp);
+        temp = this.filter.has(`protocol version - ${values.daemon.info.protocolversion}`) ? this.filter.get(`protocol version - ${values.daemon.info.protocolversion}`) : [];
+        if (!this.filter.has(`protocol version - ${values.daemon.info.protocolversion}`)) {
+          this.filterValue.push(`protocol version - ${values.daemon.info.protocolversion}`);
+        }
+        temp.push(values);
+        this.filter.set(`protocol version - ${values.daemon.info.protocolversion}`, temp);
+        temp = this.filter.has(`wallet version - ${values.daemon.info.walletversion}`) ? this.filter.get(`wallet version - ${values.daemon.info.walletversion}`) : [];
+        if (!this.filter.has(`wallet version - ${values.daemon.info.walletversion}`)) {
+          this.filterValue.push(`wallet version - ${values.daemon.info.walletversion}`);
+        }
+        temp.push(values);
+        this.filter.set(`wallet version - ${values.daemon.info.walletversion}`, temp);
+        return values;
+      });
+      this.filters.others = this.filterValue.sort();
+      this.tableData = this.values;
     },
     setSearch() {
       this.originalData = JSON.stringify(this.tableData);
@@ -256,8 +366,11 @@ export default {
       this.myProgress = 100;
     },
     sortChange(sortProps) {
+      this.processData(sortProps);
+    },
+    sorting(sortProps, data) {
       if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val;
           if (a.ip > b.ip) {
             val = 1;
@@ -269,7 +382,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.ip < b.ip) {
             val = 1;
@@ -279,7 +392,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Daemon Version' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.daemon.info.version > b.daemon.info.version) {
             val = 1;
@@ -289,7 +402,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Daemon Version' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.daemon.info.version < b.daemon.info.version) {
             val = 1;
@@ -299,7 +412,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Benchmark Version' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.benchmark.info.version > b.benchmark.info.version) {
             val = 1;
@@ -309,7 +422,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Benchmark Version' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.benchmark.info.version < b.benchmark.info.version) {
             val = 1;
@@ -319,7 +432,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Flux Version' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.flux.version > b.flux.version) {
             val = 1;
@@ -329,7 +442,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Flux Version' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.flux.version < b.flux.version) {
             val = 1;
@@ -341,6 +454,7 @@ export default {
       } else {
         this.tableData = JSON.parse(this.originalData);
       }
+      return data;
     },
     processDataForCsv(data) {
       const values = [];

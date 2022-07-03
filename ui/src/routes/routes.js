@@ -5,7 +5,7 @@ import Overview from 'src/pages/Dashboard/Dashboard/Overview.vue';
 
 // NodeInfo pages
 const Node = () => import('@/pages/Dashboard/NodeInfo/Node.vue');
-const NodeVersion = () => import('@/pages/Dashboard/NodeInfo/NodeVersion.vue');
+const NodeDaemon = () => import('@/pages/Dashboard/NodeInfo/NodeDaemon.vue');
 const NodeLocation = () => import('@/pages/Dashboard/NodeInfo/NodeLocation.vue');
 const NodeUptime = () => import('@/pages/Dashboard/NodeInfo/NodeUptime.vue');
 const NodeApp = () => import('@/pages/Dashboard/NodeInfo/NodeApp.vue');
@@ -38,9 +38,9 @@ const nodeInfo = {
       component: Node,
     },
     {
-      path: 'version',
-      name: 'Version',
-      component: NodeVersion,
+      path: 'daemon',
+      name: 'Daemon',
+      component: NodeDaemon,
     },
     {
       path: 'app',

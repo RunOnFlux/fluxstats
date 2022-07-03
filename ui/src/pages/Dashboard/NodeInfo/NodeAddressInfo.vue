@@ -11,6 +11,11 @@
       </vue-ellipse-progress>
     </div>
     <div class="row" v-if="myProgress >= 100">
+      <div class="col-12 d-flex flex-wrap">
+        <div v-for="[key, value] in filter" :key="key">
+          <l-button style="margin-right: 10px;" wide v-if="key === 'organization - '">no organization: {{ !value ? 0 : value.length }}</l-button>
+        </div>
+      </div>
       <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
         <h2 class="title">
           Address Info
@@ -38,6 +43,28 @@
                   :value="item"
                 />
               </el-select>
+              <div
+                col-md-6
+                offset-md-3
+              >
+                <el-select
+                  v-model="filters.default"
+                  class="select-default mb-3"
+                  style="width: 450px"
+                  multiple
+                  collapse-tags
+                  filterable
+                  placeholder="Filters"
+                >
+                  <el-option
+                    v-for="item in filters.others"
+                    :key="item"
+                    class="select-default"
+                    :label="item"
+                    :value="item"
+                  />
+                </el-select>
+              </div>
               <el-input
                 v-model="searchQuery"
                 type="search"
@@ -142,6 +169,10 @@ export default {
         perPageOptions: [5, 10, 25, 50, 100, 200, 500, 1000, 2000, 5000, 10000],
         total: 0,
       },
+      filters: {
+        default: [],
+        others: [],
+      },
       searchQuery: '',
       propsToSearch: ['zelId'],
       tableColumns: [
@@ -167,6 +198,8 @@ export default {
         },
       ],
       tableData: [],
+      filterValue: [],
+      filter: new Map(),
       originalData: null,
       values: [],
       fuseSearch: null,
@@ -183,20 +216,7 @@ export default {
   },
   computed: {
     queriedData() {
-      let result;
-      if (this.searchQuery !== '') {
-        const temp = [];
-        result = this.fuseSearch.search(`=${this.searchQuery}`);
-        for (let i = 0; i < Object.keys(result).length; i += 1) {
-          temp.push(result[i].item);
-        }
-        result = temp;
-      } else {
-        result = this.tableData;
-      }
-      this.setDataFilters(result);
-      this.paginationTotal(result.length);
-      return result.slice(this.from, this.to);
+      return this.processData();
     },
     to() {
       let highBound = this.from + this.pagination.perPage;
@@ -232,6 +252,38 @@ export default {
     },
     async initialize() {
       this.myProgress = 20;
+    },
+    processData(sortProps) {
+      let result;
+      if (this.searchQuery !== '') {
+        const temp = [];
+        result = this.fuseSearch.search(`=${this.searchQuery}`);
+        for (let i = 0; i < Object.keys(result).length; i += 1) {
+          temp.push(result[i].item);
+        }
+        result = temp;
+      } else if (this.filters.default.length) {
+        const arr = [];
+        const data = [];
+        this.filters.default.forEach((item) => {
+          const objs = this.filter.get(item);
+          objs.forEach((obj) => {
+            if (!arr.includes(obj.zelId)) {
+              arr.push(obj.zelId);
+              data.push(obj);
+            }
+          });
+        });
+        result = data;
+      } else {
+        result = this.tableData;
+      }
+      if (sortProps) {
+        result = this.sorting(sortProps, result);
+      }
+      this.setDataFilters(result);
+      this.paginationTotal(result.length);
+      return result.slice(this.from, this.to);
     },
     async getFluxInfo() {
       // Projection being used in this page are node,flux,geolocation,tier
@@ -273,6 +325,18 @@ export default {
           },
         );
       }
+      this.zelids.map((value) => {
+        const values = value;
+        const org = values.org.length > 30 ? `${values.org.slice(0, 30)}...` : values.org;
+        const temp = this.filter.has(`organization - ${org}`) ? this.filter.get(`organization - ${org}`) : [];
+        if (!this.filter.has(`organization - ${org}`)) {
+          this.filterValue.push(`organization - ${org}`);
+        }
+        temp.push(values);
+        this.filter.set(`organization - ${org}`, temp);
+        return values;
+      });
+      this.filters.others = this.filterValue.sort();
       this.tableData = this.zelids;
     },
     setSearch() {
