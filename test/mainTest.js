@@ -1,9 +1,10 @@
-const config = require('config');
+// const config = require('config');
+
 const app = require('../src/lib/server');
 const log = require('../src/lib/log');
 
-const uiFluxEndpointsTest = require('./ui/fluxUIEndpointsTest');
-const fluxEndpointsTest = require('./ui/fluxEndpointsTest');
+// const uiFluxEndpointsTest = require('./ui/fluxUIEndpointsTest');
+// const fluxEndpointsTest = require('./ui/fluxEndpointsTest');
 
 const serviceHelperTest = require('./services/serviceHelperTest');
 const marketplaceServiceTest = require('./services/marketplaceServiceTest');
@@ -12,30 +13,36 @@ const fluxServiceTest = require('./services/fluxServiceTest');
 const proposalServiceTest = require('./services/proposalServiceTest');
 const generalServiceTest = require('./services/generalServiceTest');
 
-const fluxServices = require('../src/services/fluxService');
+// const fluxServices = require('../src/services/fluxService');
 
-const server = app.listen(config.server.port, () => {
-  log.info(`Flux API listening on port ${config.server.port}!`);
-});
+// *** Used to define server
+// const server = app.listen(config.server.port, () => {
+//   log.info(`Flux API listening on port ${config.server.port}!`);
+// });
 
 describe('Main Test', () => {
-  describe('Executing Test Cases', async () => {
+  describe('Executing Test Cases', () => {
     before(async () => {
-      await fluxServices.start();
+      // *** Used to start server
+      // await fluxServices.start();
     });
-    after((done) => {
-      server.close(done);
+    after(() => {
+      // *** Used to stop server
+      // server.close(done);
+      // *** Adjust timeout if ever some test cases needs time to finished
       setTimeout(() => {
         process.exit();
-      }, 120000);
+      }, 20000);
     });
-    await fluxEndpointsTest(server);
-    await uiFluxEndpointsTest(server);
-    await serviceHelperTest();
-    await marketplaceServiceTest();
-    await kadenaServiceTest();
-    await fluxServiceTest();
-    await proposalServiceTest();
-    await generalServiceTest();
+    // *** Test cases for UI and flux endpoint testing
+    // fluxEndpointsTest(server);
+    // uiFluxEndpointsTest(server);
+    // ***********************************************
+    serviceHelperTest();
+    marketplaceServiceTest();
+    kadenaServiceTest();
+    fluxServiceTest();
+    proposalServiceTest();
+    generalServiceTest();
   });
 });
