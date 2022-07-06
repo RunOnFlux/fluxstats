@@ -1,25 +1,77 @@
 <template>
   <div>
-    <div class="row" style="position: absolute; left: 45%; top: 40%;" v-if="myProgress < 100">
+    <div
+      v-if="myProgress < 100"
+      class="row"
+      style="position: absolute; left: 45%; top: 40%;"
+    >
       <vue-ellipse-progress
         :half="false"
         :progress="myProgress"
         line-mode="in 10"
         color="Silver"
         :gap="10"
-        fontSize="3rem">
-      </vue-ellipse-progress>
+        fontSize="3rem"
+      />
     </div>
-    <div class="row" v-if="myProgress >= 100">
+    <div
+      v-if="myProgress >= 100"
+      class="row"
+    >
       <div class="col-12 d-flex flex-wrap">
-        <div v-for="[key, value] in filter" :key="key">
-          <l-button style="margin-right: 10px;" wide v-if="key.includes('daemon version')">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
-          <l-button style="margin-right: 10px;" wide v-if="key.includes('flux version')">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
-          <l-button style="margin-right: 10px;" wide v-if="key.includes('benchmark version')">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
-          <l-button style="margin-right: 10px;" wide v-if="key.includes('bench version')">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
-          <l-button style="margin-right: 10px;" wide v-if="key.includes('bench speed version')">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
-          <l-button style="margin-right: 10px;" wide v-if="key.includes('protocol version')">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
-          <l-button style="margin-right: 10px;" wide v-if="key.includes('wallet version')">{{ key }}: {{ !value ? 0 : value.length }}</l-button>
+        <div
+          v-for="[key, value] in filter"
+          :key="key"
+        >
+          <l-button
+            v-if="key.includes('daemon version')"
+            style="margin-right: 10px;"
+            wide
+          >
+            {{ key }}: {{ !value ? 0 : value.length }}
+          </l-button>
+          <l-button
+            v-if="key.includes('flux version')"
+            style="margin-right: 10px;"
+            wide
+          >
+            {{ key }}: {{ !value ? 0 : value.length }}
+          </l-button>
+          <l-button
+            v-if="key.includes('benchmark version')"
+            style="margin-right: 10px;"
+            wide
+          >
+            {{ key }}: {{ !value ? 0 : value.length }}
+          </l-button>
+          <l-button
+            v-if="key.includes('bench version')"
+            style="margin-right: 10px;"
+            wide
+          >
+            {{ key }}: {{ !value ? 0 : value.length }}
+          </l-button>
+          <l-button
+            v-if="key.includes('bench speed version')"
+            style="margin-right: 10px;"
+            wide
+          >
+            {{ key }}: {{ !value ? 0 : value.length }}
+          </l-button>
+          <l-button
+            v-if="key.includes('protocol version')"
+            style="margin-right: 10px;"
+            wide
+          >
+            {{ key }}: {{ !value ? 0 : value.length }}
+          </l-button>
+          <l-button
+            v-if="key.includes('wallet version')"
+            style="margin-right: 10px;"
+            wide
+          >
+            {{ key }}: {{ !value ? 0 : value.length }}
+          </l-button>
         </div>
       </div>
       <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
@@ -27,7 +79,11 @@
           Daemon
         </h2>
         <div>
-          <l-button v-on:click="downloadCsvFile(dataFilters)"><i class="nc-icon nc-cloud-download-93"></i></l-button>
+          <l-button
+            @click="downloadCsvFile(dataFilters)"
+          >
+            <i class="nc-icon nc-cloud-download-93" />
+          </l-button>
         </div>
       </div>
       <p class="category" />
@@ -49,7 +105,7 @@
                   :value="item"
                 />
               </el-select>
-               <div
+              <div
                 col-md-6
                 offset-md-3
               >

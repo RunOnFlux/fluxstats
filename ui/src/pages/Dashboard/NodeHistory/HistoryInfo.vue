@@ -1,20 +1,42 @@
 <template>
   <div>
-    <div class="row" style="position: absolute; left: 45%; top: 40%;" v-if="myProgress < 100">
+    <div
+      v-if="myProgress < 100"
+      class="row"
+      style="position: absolute; left: 45%; top: 40%;"
+    >
       <vue-ellipse-progress
         :half="false"
         :progress="myProgress"
         line-mode="in 10"
         color="Silver"
         :gap="10"
-        fontSize="3rem">
-      </vue-ellipse-progress>
+        fontSize="3rem"
+      />
     </div>
-    <div class="row" v-if="myProgress >= 100">
+    <div
+      v-if="myProgress >= 100"
+      class="row"
+    >
       <div class="col-12 d-flex flex-wrap">
-        <div v-for="[key, value] in filter" :key="key">
-          <l-button style="margin-right: 10px;" wide v-if="key === 'highest node count'">{{ key }}: {{ !value ? 0 : value[0].total }}</l-button>
-          <l-button style="margin-right: 10px;" wide v-if="key === 'highest node count roundtime'">{{ key }}: {{ !value ? 0 : value[0].roundTime }}</l-button>
+        <div
+          v-for="[key, value] in filter"
+          :key="key"
+        >
+          <l-button
+            v-if="key === 'highest node count'"
+            style="margin-right: 10px;"
+            wide
+          >
+            {{ key }}: {{ !value ? 0 : value[0].total }}
+          </l-button>
+          <l-button
+            v-if="key === 'highest node count roundtime'"
+            style="margin-right: 10px;"
+            wide
+          >
+            {{ key }}: {{ !value ? 0 : value[0].roundTime }}
+          </l-button>
         </div>
       </div>
       <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
@@ -22,7 +44,11 @@
           Info
         </h2>
         <div>
-          <l-button v-on:click="downloadCsvFile(dataFilters)"><i class="nc-icon nc-cloud-download-93"></i></l-button>
+          <l-button
+            @click="downloadCsvFile(dataFilters)"
+          >
+            <i class="nc-icon nc-cloud-download-93" />
+          </l-button>
         </div>
       </div>
       <p class="category" />

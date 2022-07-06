@@ -1,19 +1,35 @@
 <template>
   <div>
-    <div class="row" style="position: absolute; left: 45%; top: 40%;" v-if="myProgress < 100">
+    <div
+      v-if="myProgress < 100"
+      class="row"
+      style="position: absolute; left: 45%;top: 40%;"
+    >
       <vue-ellipse-progress
         :half="false"
         :progress="myProgress"
         line-mode="in 10"
         color="Silver"
         :gap="10"
-        fontSize="3rem">
-      </vue-ellipse-progress>
+        fontSize="3rem"
+      />
     </div>
-    <div class="row" v-if="myProgress >= 100">
+    <div
+      v-if="myProgress >= 100"
+      class="row"
+    >
       <div class="col-12 d-flex flex-wrap">
-        <div v-for="[key, value] in filter" :key="key">
-          <l-button style="margin-right: 10px;" wide v-if="key === 'organization - '">no organization: {{ !value ? 0 : value.length }}</l-button>
+        <div
+          v-for="[key, value] in filter"
+          :key="key"
+        >
+          <l-button
+            v-if="key === 'organization - '"
+            style="margin-right: 10px;"
+            wide
+          >
+            no organization: {{ !value ? 0 : value.length }}
+          </l-button>
         </div>
       </div>
       <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
@@ -21,7 +37,11 @@
           Address Info
         </h2>
         <div>
-          <l-button v-on:click="downloadCsvFile(dataFilters)"><i class="nc-icon nc-cloud-download-93"></i></l-button>
+          <l-button
+            @click="downloadCsvFile(dataFilters)"
+          >
+            <i class="nc-icon nc-cloud-download-93" />
+          </l-button>
         </div>
       </div>
       <p class="category" />
