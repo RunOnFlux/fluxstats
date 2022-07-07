@@ -16,7 +16,7 @@
           <sidebar-item :link="{name: 'Geolocation', path: '/flux/nodeinfo/location'}" />
           <sidebar-item :link="{name: 'Connection', path: '/flux/nodeinfo/connection'}" />
           <sidebar-item :link="{name: 'Up Time', path: '/flux/nodeinfo/uptime'}" />
-          <sidebar-item :link="{name: 'Version', path: '/flux/nodeinfo/version'}" />
+          <sidebar-item :link="{name: 'Daemon', path: '/flux/nodeinfo/daemon'}" />
         </sidebar-item>
         <sidebar-item :link="{name: 'History', icon: 'nc-icon nc-notes'}">
           <sidebar-item :link="{name: 'Info', path: '/flux/nodehistory/historyinfo'}" />

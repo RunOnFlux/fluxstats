@@ -1,14 +1,18 @@
 <template>
   <div>
-    <div class="row" style="position: absolute; left: 45%; top: 40%;" v-if="myProgress < 100">
+    <div
+      v-if="myProgress < 100"
+      class="row"
+      style="position: absolute; left: 45%; top: 40%;"
+    >
       <vue-ellipse-progress
         :half="false"
         :progress="myProgress"
         line-mode="in 10"
         color="Silver"
         :gap="10"
-        fontSize="3rem">
-      </vue-ellipse-progress>
+        fontSize="3rem"
+      />
     </div>
     <div v-if="myProgress >= 100">
       <div class="row">

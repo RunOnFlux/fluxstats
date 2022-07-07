@@ -111,8 +111,8 @@ module.exports = () => {
       const db = await service.connectMongoDb(`mongodb://${config.database.url}:${config.database.port}/`);
       const database = db.db(config.database.local.database);
       const collection = 'samplecollection';
-      service.insertOneToDatabase(database, collection, findOneInDatabaseData1);
-      service.insertOneToDatabase(database, collection, findOneInDatabaseData2);
+      await service.insertOneToDatabase(database, collection, findOneInDatabaseData1);
+      await service.insertOneToDatabase(database, collection, findOneInDatabaseData2);
       const res = await service.findOneInDatabase(database, collection, findOneInDatabaseQuery, findOneInDatabaseProjection);
       chai.expect(res).to.deep.equal(
         {
@@ -185,7 +185,7 @@ module.exports = () => {
       const db = await service.connectMongoDb(`mongodb://${config.database.url}:${config.database.port}/`);
       const database = db.db(config.database.local.database);
       const collection = 'samplecollection';
-      service.findOneAndUpdateInDatabase(database, collection, findOneAndUpdateInDatabaseQuery, findOneAndUpdateInDatabaseUpdate, findOneAndUpdateInDatabaseProjection);
+      await service.findOneAndUpdateInDatabase(database, collection, findOneAndUpdateInDatabaseQuery, findOneAndUpdateInDatabaseUpdate, findOneAndUpdateInDatabaseProjection);
       const res = await service.findOneInDatabase(database, collection, findOneAndUpdateInDatabaseQuery, findOneAndUpdateInDatabaseProjection);
       chai.expect(res).to.deep.equal(
         {
@@ -210,7 +210,7 @@ module.exports = () => {
       const db = await service.connectMongoDb(`mongodb://${config.database.url}:${config.database.port}/`);
       const database = db.db(config.database.local.database);
       const collection = 'samplecollection';
-      service.updateInDatabase(database, collection, updateOneInDatabaseQuery, updateInDatabaseQuery, updateOneInDatabaseProjection);
+      await service.updateInDatabase(database, collection, updateOneInDatabaseQuery, updateInDatabaseQuery, updateOneInDatabaseProjection);
       const res = await service.findOneInDatabase(database, collection, updateOneInDatabaseQuery, updateOneInDatabaseProjection);
       chai.expect(res).to.deep.equal(
         {
@@ -238,7 +238,7 @@ module.exports = () => {
       const db = await service.connectMongoDb(`mongodb://${config.database.url}:${config.database.port}/`);
       const database = db.db(config.database.local.database);
       const collection = 'samplecollection';
-      service.updateOneInDatabase(database, collection, updateOneInDatabaseQuery, updateOneInDatabaseUpdate, updateOneInDatabaseProjection);
+      await service.updateOneInDatabase(database, collection, updateOneInDatabaseQuery, updateOneInDatabaseUpdate, updateOneInDatabaseProjection);
       const res = await service.findOneInDatabase(database, collection, updateOneInDatabaseQuery, updateOneInDatabaseProjection);
       chai.expect(res).to.deep.equal(
         {
@@ -314,7 +314,7 @@ module.exports = () => {
       const db = await service.connectMongoDb(`mongodb://${config.database.url}:${config.database.port}/`);
       const database = db.db(config.database.local.database);
       const collection = 'samplecollection';
-      service.insertManyToDatabase(database, collection, insertManyToDatabaseData);
+      await service.insertManyToDatabase(database, collection, insertManyToDatabaseData);
       const res = await service.findOneInDatabase(database, collection, insertManyToDatabaseQuery, insertManyToDatabaseProjection);
       chai.expect(res).to.deep.equal(
         {

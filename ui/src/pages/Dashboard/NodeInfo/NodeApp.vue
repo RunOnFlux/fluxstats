@@ -1,22 +1,54 @@
 <template>
   <div>
-    <div class="row" style="position: absolute; left: 45%; top: 40%;" v-if="myProgress < 100">
+    <div
+      v-if="myProgress < 100"
+      class="row"
+      style="position: absolute; left: 45%; top: 40%;"
+    >
       <vue-ellipse-progress
         :half="false"
         :progress="myProgress"
         line-mode="in 10"
         color="Silver"
         :gap="10"
-        fontSize="3rem">
-      </vue-ellipse-progress>
+        fontSize="3rem"
+      />
     </div>
-    <div class="row" v-if="myProgress >= 100">
+    <div
+      v-if="myProgress >= 100"
+      class="row"
+    >
+      <div class="col-12 d-flex flex-wrap">
+        <div
+          v-for="[key, value] in filter"
+          :key="key"
+        >
+          <l-button
+            v-if="key.includes('application running')"
+            style="margin-right: 10px;"
+            wide
+          >
+            {{ key }}: {{ !value ? 0 : value.length }}
+          </l-button>
+          <l-button
+            v-if="key.includes('flux watch')"
+            style="margin-right: 10px;"
+            wide
+          >
+            {{ key }}: {{ !value ? 0 : value.length }}
+          </l-button>
+        </div>
+      </div>
       <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
         <h2 class="title">
           Application
         </h2>
         <div>
-          <l-button v-on:click="downloadCsvFile(dataFilters)"><i class="nc-icon nc-cloud-download-93"></i></l-button>
+          <l-button
+            @click="downloadCsvFile(dataFilters)"
+          >
+            <i class="nc-icon nc-cloud-download-93" />
+          </l-button>
         </div>
       </div>
       <p class="category" />
@@ -38,6 +70,28 @@
                   :value="item"
                 />
               </el-select>
+              <div
+                col-md-6
+                offset-md-3
+              >
+                <el-select
+                  v-model="filters.default"
+                  class="select-default mb-3"
+                  style="width: 450px"
+                  multiple
+                  collapse-tags
+                  filterable
+                  placeholder="Filters"
+                >
+                  <el-option
+                    v-for="item in filters.others"
+                    :key="item"
+                    class="select-default"
+                    :label="item"
+                    :value="item"
+                  />
+                </el-select>
+              </div>
               <el-input
                 v-model="searchQuery"
                 type="search"
@@ -154,6 +208,10 @@ export default {
         perPageOptions: [5, 10, 25, 50, 100, 200, 500, 1000, 2000, 5000, 10000],
         total: 0,
       },
+      filters: {
+        default: [],
+        others: [],
+      },
       searchQuery: '',
       propsToSearch: ['ip'],
       tableColumns: [
@@ -194,6 +252,8 @@ export default {
         },
       ],
       tableData: [],
+      filterValue: [],
+      filter: new Map(),
       originalData: null,
       values: [],
       fuseSearch: null,
@@ -203,20 +263,7 @@ export default {
   },
   computed: {
     queriedData() {
-      let result;
-      if (this.searchQuery !== '') {
-        const temp = [];
-        result = this.fuseSearch.search(`=${this.searchQuery}`);
-        for (let i = 0; i < Object.keys(result).length; i += 1) {
-          temp.push(result[i].item);
-        }
-        result = temp;
-      } else {
-        result = this.tableData;
-      }
-      this.setDataFilters(result);
-      this.paginationTotal(result.length);
-      return result.slice(this.from, this.to);
+      return this.processData();
     },
     to() {
       let highBound = this.from + this.pagination.perPage;
@@ -253,6 +300,38 @@ export default {
     async initialize() {
       this.myProgress = 20;
     },
+    processData(sortProps) {
+      let result;
+      if (this.searchQuery !== '') {
+        const temp = [];
+        result = this.fuseSearch.search(`=${this.searchQuery}`);
+        for (let i = 0; i < Object.keys(result).length; i += 1) {
+          temp.push(result[i].item);
+        }
+        result = temp;
+      } else if (this.filters.default.length) {
+        const arr = [];
+        const data = [];
+        this.filters.default.forEach((item) => {
+          const objs = this.filter.get(item);
+          objs.forEach((obj) => {
+            if (!arr.includes(obj.ip)) {
+              arr.push(obj.ip);
+              data.push(obj);
+            }
+          });
+        });
+        result = data;
+      } else {
+        result = this.tableData;
+      }
+      if (sortProps) {
+        result = this.sorting(sortProps, result);
+      }
+      this.setDataFilters(result);
+      this.paginationTotal(result.length);
+      return result.slice(this.from, this.to);
+    },
     async getFluxInfo() {
       // Projection being used in this page are ip,apps
       const lsdata = MemoryStorage.get('fluxinfo');
@@ -260,13 +339,27 @@ export default {
     },
     async processFluxInfo() {
       this.values.map((value) => {
-        const returnValue = value;
-        const filtered = returnValue.apps.runningapps.filter((item) => item.Image !== 'containrrr/watchtower');
-        returnValue.apps.runningapps = filtered;
-        returnValue.apps.fluxtower = filtered.length !== undefined || filtered.length !== 0 ? 'TRUE' : 'FALSE';
-        returnValue.apps.count = filtered.length !== undefined || filtered.length !== 0 ? filtered.length : 0;
-        return returnValue;
+        let temp;
+        const values = value;
+        const filtered = values.apps.runningapps.filter((item) => item.Image !== 'containrrr/watchtower');
+        values.apps.runningapps = filtered;
+        values.apps.fluxtower = filtered.length !== undefined || filtered.length !== 0 ? 'TRUE' : 'FALSE';
+        values.apps.count = filtered.length !== undefined || filtered.length !== 0 ? filtered.length : 0;
+        temp = this.filter.has(`application running - ${values.apps.count}`) ? this.filter.get(`application running - ${values.apps.count}`) : [];
+        if (!this.filter.has(`application running - ${values.apps.count}`)) {
+          this.filterValue.push(`application running - ${values.apps.count}`);
+        }
+        temp.push(values);
+        this.filter.set(`application running - ${values.apps.count}`, temp);
+        temp = this.filter.has(`flux watch tower installed - ${values.apps.fluxtower}`) ? this.filter.get(`flux watch tower installed - ${values.apps.fluxtower}`) : [];
+        if (!this.filter.has(`flux watch tower installed - ${values.apps.fluxtower}`)) {
+          this.filterValue.push(`flux watch tower installed - ${values.apps.fluxtower}`);
+        }
+        temp.push(values);
+        this.filter.set(`flux watch tower installed - ${values.apps.fluxtower}`, temp);
+        return values;
       });
+      this.filters.others = this.filterValue.sort();
       this.tableData = this.values;
     },
     setSearch() {
@@ -275,8 +368,11 @@ export default {
       this.myProgress = 100;
     },
     sortChange(sortProps) {
+      this.processData(sortProps);
+    },
+    sorting(sortProps, data) {
       if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.ip > b.ip) {
             val = 1;
@@ -286,7 +382,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.ip < b.ip) {
             val = 1;
@@ -296,7 +392,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Total Application Running' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.apps.count > b.apps.count) {
             val = 1;
@@ -306,7 +402,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Total Application Running' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.apps.count < b.apps.count) {
             val = 1;
@@ -316,7 +412,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Flux Watch Tower Installed' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.apps.fluxtower > b.apps.fluxtower) {
             val = 1;
@@ -326,7 +422,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Flux Watch Tower Installed' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.apps.fluxtower < b.apps.fluxtower) {
             val = 1;
@@ -336,7 +432,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Flux Usage' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.apps.fluxusage > b.apps.fluxusage) {
             val = 1;
@@ -346,7 +442,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Flux Usage' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.apps.fluxusage < b.apps.fluxusage) {
             val = 1;
@@ -356,7 +452,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'CPU Locked' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.apps.resources.appsCpusLocked > b.apps.resources.appsCpusLocked) {
             val = 1;
@@ -366,7 +462,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'CPU Locked' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.apps.resources.appsCpusLocked < b.apps.resources.appsCpusLocked) {
             val = 1;
@@ -376,7 +472,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'RAM Locked' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.apps.resources.appsRamLocked > b.apps.resources.appsRamLocked) {
             val = 1;
@@ -386,7 +482,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'RAM Locked' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.apps.resources.appsRamLocked < b.apps.resources.appsRamLocked) {
             val = 1;
@@ -396,7 +492,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'HDD Locked' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.apps.resources.appsHddLocked > b.apps.resources.appsHddLocked) {
             val = 1;
@@ -406,7 +502,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'HDD Locked' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.apps.resources.appsHddLocked < b.apps.resources.appsHddLocked) {
             val = 1;
@@ -418,6 +514,7 @@ export default {
       } else {
         this.tableData = JSON.parse(this.originalData);
       }
+      return data;
     },
     processDataForCsv(data) {
       const values = [];

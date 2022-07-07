@@ -1,22 +1,54 @@
 <template>
   <div>
-    <div class="row" style="position: absolute; left: 45%; top: 40%;" v-if="myProgress < 100">
+    <div
+      v-if="myProgress < 100"
+      class="row"
+      style="position: absolute; left: 45%; top: 40%;"
+    >
       <vue-ellipse-progress
         :half="false"
         :progress="myProgress"
         line-mode="in 10"
         color="Silver"
         :gap="10"
-        fontSize="3rem">
-      </vue-ellipse-progress>
+        fontSize="3rem"
+      />
     </div>
-    <div class="row" v-if="myProgress >= 100">
+    <div
+      v-if="myProgress >= 100"
+      class="row"
+    >
+      <div class="col-12 d-flex flex-wrap">
+        <div
+          v-for="[key, value] in filter"
+          :key="key"
+        >
+          <l-button
+            v-if="key === 'highest node count'"
+            style="margin-right: 10px;"
+            wide
+          >
+            {{ key }}: {{ !value ? 0 : value[0].total }}
+          </l-button>
+          <l-button
+            v-if="key === 'highest node count roundtime'"
+            style="margin-right: 10px;"
+            wide
+          >
+            {{ key }}: {{ !value ? 0 : value[0].roundTime }}
+          </l-button>
+        </div>
+      </div>
       <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
         <h2 class="title">
           Info
         </h2>
         <div>
-          <l-button v-on:click="downloadCsvFile(dataFilters)"><i class="nc-icon nc-cloud-download-93"></i></l-button>
+          <l-button
+            @click="downloadCsvFile(dataFilters)"
+          >
+            <i class="nc-icon nc-cloud-download-93" />
+          </l-button>
         </div>
       </div>
       <p class="category" />
@@ -38,6 +70,28 @@
                   :value="item"
                 />
               </el-select>
+              <div
+                col-md-6
+                offset-md-3
+              >
+                <el-select
+                  v-model="filters.default"
+                  class="select-default mb-3"
+                  style="width: 450px"
+                  multiple
+                  collapse-tags
+                  filterable
+                  placeholder="Filters"
+                >
+                  <el-option
+                    v-for="item in filters.others"
+                    :key="item"
+                    class="select-default"
+                    :label="item"
+                    :value="item"
+                  />
+                </el-select>
+              </div>
               <el-input
                 v-model="searchQuery"
                 type="search"
@@ -135,6 +189,10 @@ export default {
         perPageOptions: [5, 10, 25, 50, 100, 200, 500, 1000, 2000, 5000, 10000],
         total: 0,
       },
+      filters: {
+        default: [],
+        others: [],
+      },
       searchQuery: '',
       propsToSearch: ['roundTime'],
       tableColumns: [
@@ -170,6 +228,8 @@ export default {
         },
       ],
       tableData: [],
+      filterValue: [],
+      filter: new Map(),
       originalData: null,
       values: [],
       fuseSearch: null,
@@ -179,20 +239,7 @@ export default {
   },
   computed: {
     queriedData() {
-      let result;
-      if (this.searchQuery !== '') {
-        const temp = [];
-        result = this.fuseSearch.search(`=${this.searchQuery}`);
-        for (let i = 0; i < Object.keys(result).length; i += 1) {
-          temp.push(result[i].item);
-        }
-        result = temp;
-      } else {
-        result = this.tableData;
-      }
-      this.setDataFilters(result);
-      this.paginationTotal(result.length);
-      return result.slice(this.from, this.to);
+      return this.processData();
     },
     to() {
       let highBound = this.from + this.pagination.perPage;
@@ -229,11 +276,44 @@ export default {
     async initialize() {
       this.myProgress = 20;
     },
+    processData(sortProps) {
+      let result;
+      if (this.searchQuery !== '') {
+        const temp = [];
+        result = this.fuseSearch.search(`=${this.searchQuery}`);
+        for (let i = 0; i < Object.keys(result).length; i += 1) {
+          temp.push(result[i].item);
+        }
+        result = temp;
+      } else if (this.filters.default.length) {
+        const arr = [];
+        const data = [];
+        this.filters.default.forEach((item) => {
+          const objs = this.filter.get(item);
+          objs.forEach((obj) => {
+            if (!arr.includes(obj.roundTime)) {
+              arr.push(obj.roundTime);
+              data.push(obj);
+            }
+          });
+        });
+        result = data;
+      } else {
+        result = this.tableData;
+      }
+      if (sortProps) {
+        result = this.sorting(sortProps, result);
+      }
+      this.setDataFilters(result);
+      this.paginationTotal(result.length);
+      return result.slice(this.from, this.to);
+    },
     async getFluxStats() {
       const lsdata = MemoryStorage.get('fluxhistorystats');
       this.values = lsdata;
     },
     async processFluxStats() {
+      let hTotal = 0;
       for (const [key, value] of Object.entries(this.values)) {
         this.tableData.push({
           roundTime: key,
@@ -244,6 +324,29 @@ export default {
           total: value.cumulus + value.nimbus + value.stratus,
         });
       }
+      this.tableData.map((value) => {
+        let temp;
+        const values = value;
+        temp = [];
+        if (!this.filter.has('highest node count roundtime') && hTotal < values.total) {
+          this.filterValue.push('highest node count roundtime');
+        }
+        if (hTotal < values.total) {
+          temp.push(values);
+          this.filter.set('highest node count roundtime', temp);
+        }
+        temp = [];
+        if (!this.filter.has('highest node count') && hTotal < values.total) {
+          this.filterValue.push('highest node count');
+        }
+        if (hTotal < values.total) {
+          temp.push(values);
+          this.filter.set('highest node count', temp);
+          hTotal = values.total;
+        }
+        return values;
+      });
+      this.filters.others = this.filterValue.sort();
     },
     setSearch() {
       this.originalData = JSON.stringify(this.tableData);
@@ -251,8 +354,11 @@ export default {
       this.myProgress = 100;
     },
     sortChange(sortProps) {
+      this.processData(sortProps);
+    },
+    sorting(sortProps, data) {
       if (sortProps.column.label === 'Round Time' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.roundTime > b.roundTime) {
             val = 1;
@@ -262,7 +368,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Round Time' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.roundTime < b.roundTime) {
             val = 1;
@@ -272,7 +378,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Round Time Converted' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.roundTime > b.roundTime) {
             val = 1;
@@ -282,7 +388,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Round Time Converted' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.roundTime < b.roundTime) {
             val = 1;
@@ -292,7 +398,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Cumulus' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.cumulus > b.cumulus) {
             val = 1;
@@ -302,7 +408,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Cumulus' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.cumulus < b.cumulus) {
             val = 1;
@@ -312,7 +418,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Nimbus' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.nimbus > b.nimbus) {
             val = 1;
@@ -322,7 +428,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Nimbus' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.nimbus < b.nimbus) {
             val = 1;
@@ -332,7 +438,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Stratus' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.stratus > b.stratus) {
             val = 1;
@@ -342,7 +448,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Stratus' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.stratus < b.stratus) {
             val = 1;
@@ -352,7 +458,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Total Nodes' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.total > b.total) {
             val = 1;
@@ -362,7 +468,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Total Nodes' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.total < b.total) {
             val = 1;
@@ -374,6 +480,7 @@ export default {
       } else {
         this.tableData = JSON.parse(this.originalData);
       }
+      return data;
     },
     processDataForCsv(data) {
       const values = [];

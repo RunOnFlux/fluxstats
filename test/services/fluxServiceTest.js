@@ -7,17 +7,19 @@ const config = require('../../config/default');
 
 chai.use(require('chai-json-schema'));
 
-const LRUoptions = {
-  max: 50, // store 50 values, we shall not have more values at any period
-  ttl: 1000 * 60 * 60, // 1 hour
-};
-const myCache = new LRU(LRUoptions);
+// *** Used if test case with server on is running
+// const LRUoptions = {
+//   max: 50, // store 50 values, we shall not have more values at any period
+//   ttl: 1000 * 60 * 60, // 1 hour
+// };
+// const myCache = new LRU(LRUoptions);
 
 module.exports = () => {
   describe('Flux Service Test', () => {
-    it('Should start process', async () => {
-      chai.expect(service.start());
-    });
+    // *** Special test case to run server
+    // it('Should start process', async () => {
+    //   chai.expect(service.start());
+    // });
     
     it('Should return flux node list', async () => {
       const response = await service.getFluxNodeList();
@@ -103,19 +105,21 @@ module.exports = () => {
       chai.expect(response).to.deep.equal({ txhash: '1', txindex: 2 });
     });
 
-    it('Should create and drop bootstrap flux collection', async () => {
-      await service.bootstrapFluxCollection('1654316207606');
-      const db = await serviceHelper.connectMongoDb(`mongodb://${config.database.url}:${config.database.port}/`);
-      const database = db.db(config.database.local.database);
-      const collection = 'fluxes1654316207606';
-      const res = await serviceHelper.dropCollection(database, collection);
-      chai.expect(res).to.not.be.null;
-    });
+    // *** Special test case if server running is enabled
+    // it('Should create and drop bootstrap flux collection', async () => {
+    //   await service.bootstrapFluxCollection('1654316207606');
+    //   const db = await serviceHelper.connectMongoDb(`mongodb://${config.database.url}:${config.database.port}/`);
+    //   const database = db.db(config.database.local.database);
+    //   const collection = 'fluxes1654316207606';
+    //   const res = await serviceHelper.dropCollection(database, collection);
+    //   chai.expect(res).to.not.be.null;
+    // });
 
-    it('Should create history stats', async () => {
-      await service.createHistoryStats();
-      chai.expect(myCache.get('historyStats')).to.be.not.null;
-    });
+    // *** Special test case if server running is enabled
+    // it('Should create history stats', async () => {
+    //   await service.createHistoryStats();
+    //   chai.expect(myCache.get('historyStats')).to.be.not.null;
+    // });
 
     it('Should process flux nodes', async () => {
       chai.expect(await service.processFluxNode({ip: '38.242.236.226:16127', collateral: '12345678901, 2)'}, '1654316207606', 1000000000));
@@ -130,14 +134,15 @@ module.exports = () => {
       chai.expect(res).to.be.at.least(0);
     });
 
-    it('Should process flux nodes', async () => {
-      service.processFluxNodes();
-      const db = await serviceHelper.connectMongoDb(`mongodb://${config.database.url}:${config.database.port}/`);
-      const database = db.db(config.database.local.database);
-      const collection = 'fluxes';
-      const res = await serviceHelper.countInDatabase(database, collection, null);
-      chai.expect(res).to.be.at.least(0);
-    });
+    // *** Special test case if server running is enabled
+    // it('Should process flux nodes', async () => {
+    //   service.processFluxNodes();
+    //   const db = await serviceHelper.connectMongoDb(`mongodb://${config.database.url}:${config.database.port}/`);
+    //   const database = db.db(config.database.local.database);
+    //   const collection = 'fluxes';
+    //   const res = await serviceHelper.countInDatabase(database, collection, null);
+    //   chai.expect(res).to.be.at.least(0);
+    // });
 
     it('Should process geolocation', async () => {
       const req = {};
