@@ -47,6 +47,135 @@ let processedFluxNodes = [];
 const myCacheProcessingIp = new Map();
 
 let runninggetFluxNodeList = false;
+
+const dummyData = {
+  daemon: {
+    info: {
+      version: 0,
+      protocolversion: 0,
+      walletversion: 0,
+      blocks: 0,
+      timeoffset: 0,
+      connections: 0,
+      proxy: '',
+      difficulty: 0,
+      testnet: false,
+      keypoololdest: 0,
+      keypoolsize: 0,
+      paytxfee: 0,
+      relayfee: 0,
+      errors: '',
+    },
+  },
+  node: {
+    status: {
+      status: '',
+      collateral: '',
+      txhash: '',
+      outidx: '0',
+      ip: '',
+      network: '',
+      added_height: 0,
+      confirmed_height: 0,
+      last_confirmed_height: 0,
+      last_paid_height: 0,
+      tier: '',
+      payment_address: '',
+      pubkey: '',
+      activesince: '',
+      lastpaid: '',
+      amount: '',
+    },
+  },
+  benchmark: {
+    info: {
+      version: '0',
+      rpcport: 0,
+    },
+    status: {
+      status: '',
+      benchmarking: '',
+      flux: '',
+    },
+    bench: {
+      ipaddress: '',
+      architecture: '',
+      armboard: '',
+      status: '0',
+      time: 0,
+      real_cores: 0,
+      cores: 0,
+      ram: 0,
+      ssd: 0,
+      hdd: 0,
+      ddwrite: 0,
+      totalstorage: 0,
+      disksinfo: [
+        {
+          disk: 'sda',
+          size: 0,
+          writespeed: 0,
+        },
+      ],
+      eps: 0,
+      ping: 0,
+      download_speed: 0,
+      upload_speed: 0,
+      bench_version: '',
+      speed_version: '',
+      error: '',
+    },
+  },
+  flux: {
+    version: '',
+    ip: '',
+    zelid: '',
+    cruxid: null,
+    timezone: '',
+    dos: {
+      dosState: 0,
+      dosMessage: null,
+    },
+    numberOfConnectionsIn: 0,
+  },
+  apps: {
+    fluxusage: '0',
+    runningapps: [],
+    resources: {
+      appsCpusLocked: 0,
+      appsRamLocked: 0,
+      appsHddLocked: 0,
+    },
+  },
+  geolocation: {
+    ip: '',
+    continent: '',
+    continentCode: '',
+    country: '',
+    countryCode: '',
+    region: '',
+    regionName: '',
+    lat: 0,
+    lon: 0,
+    org: '',
+  },
+  appsHashesTotal: 0,
+  hashesPresent: 0,
+  scannedHeight: 0,
+  ip: '',
+  addedHeight: 0,
+  confirmedHeight: 0,
+  lastConfirmedHeight: 0,
+  lastPaidHeight: 0,
+  tier: '',
+  paymentAddress: '',
+  activeSince: '',
+  collateralHash: '',
+  collateralIndex: 0,
+  roundTime: 0,
+  connectionsOut: 0,
+  dataCollectedAt: 0,
+};
 async function getFluxNodeList(i = 0) {
   try {
     const list = myCacheShort.get('fluxnodelist');
@@ -349,9 +478,10 @@ async function createHistoryStats() {
 }
 
 async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = false) {
+  let fluxInfo = dummyData;
   try {
     const database = db.db(config.database.local.database);
-    const fluxInfo = await getFluxInformation(fluxnode.ip, timeout);
+    fluxInfo = await getFluxInformation(fluxnode.ip, timeout);
     if (!fluxInfo) {
       if (retry) {
         throw new Error(`Retry processFluxNode for the FluxNode ip: ${fluxnode.ip}`);
@@ -471,7 +601,7 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
     delete fluxInfo.flux.explorerScannedHeigth;
     processedFluxNodes.push(fluxInfo);
   } catch (error) {
-    const fluxInfo = {};
+    const curTime = new Date().getTime();
     fluxInfo.ip = fluxnode.ip;
     fluxInfo.addedHeight = fluxnode.added_height;
     fluxInfo.confirmedHeight = fluxnode.confirmed_height;
@@ -483,8 +613,9 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
     fluxInfo.collateralHash = getCollateralInfo(fluxnode.collateral).txhash;
     fluxInfo.collateralIndex = getCollateralInfo(fluxnode.collateral).txindex;
     fluxInfo.roundTime = currentRoundTime;
-    fluxInfo.error = true;
-    // processedFluxNodes.push(fluxInfo);
+    fluxInfo.dataCollectedAt = curTime;
+    fluxInfo.error = error;
+    processedFluxNodes.push(fluxInfo);
     log.error(error);
     log.error(fluxInfo.ip);
   }
