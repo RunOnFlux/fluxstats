@@ -324,15 +324,11 @@ export default {
         }
         result = temp;
       } else if (this.filters.default.length) {
-        const arr = [];
         const data = [];
         this.filters.default.forEach((item) => {
           const objs = this.filter.get(item);
           objs.forEach((obj) => {
-            if (!arr.includes(obj.node.status.ip)) {
-              arr.push(obj.node.status.ip);
-              data.push(obj);
-            }
+            data.push(obj);
           });
         });
         result = data;
@@ -397,8 +393,8 @@ export default {
         }
         if (!ipaddress || ipaddress === '') {
           temp.push(values);
+          this.filter.set('no ip address', temp);
         }
-        this.filter.set('no ip address', temp);
         return values;
       });
       this.filters.others = this.filterValue.sort();

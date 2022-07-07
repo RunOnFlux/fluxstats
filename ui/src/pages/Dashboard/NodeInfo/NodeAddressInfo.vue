@@ -283,15 +283,11 @@ export default {
         }
         result = temp;
       } else if (this.filters.default.length) {
-        const arr = [];
         const data = [];
         this.filters.default.forEach((item) => {
           const objs = this.filter.get(item);
           objs.forEach((obj) => {
-            if (!arr.includes(obj.zelId)) {
-              arr.push(obj.zelId);
-              data.push(obj);
-            }
+            data.push(obj);
           });
         });
         result = data;
