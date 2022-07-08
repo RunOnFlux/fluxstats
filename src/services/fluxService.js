@@ -601,6 +601,9 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
     delete fluxInfo.flux.explorerScannedHeigth;
     processedFluxNodes.push(fluxInfo);
   } catch (error) {
+    log.error(error);
+    log.error(fluxnode.ip);
+    log.error(fluxnode);
     const curTime = new Date().getTime();
     fluxInfo.ip = fluxnode.ip;
     fluxInfo.addedHeight = fluxnode.added_height;
@@ -616,8 +619,6 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
     fluxInfo.dataCollectedAt = curTime;
     fluxInfo.error = error;
     processedFluxNodes.push(fluxInfo);
-    log.error(error);
-    log.error(fluxInfo.ip);
   }
 }
 
