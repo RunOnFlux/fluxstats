@@ -26,7 +26,7 @@
           <l-button
             v-if="key === 'organization - '"
             style="margin-right: 10px;"
-            wide
+            size="sm"
           >
             no organization: {{ !value ? 0 : value.length }}
           </l-button>
@@ -36,18 +36,21 @@
         <h2 class="title">
           Address Info
         </h2>
-        <div>
-          <l-button
-            @click="downloadCsvFile(dataFilters)"
-          >
-            <i class="nc-icon nc-cloud-download-93" />
-          </l-button>
-        </div>
       </div>
       <p class="category" />
       <div class="col-12">
         <card>
           <div>
+            <div
+              class="pull-right"
+              style="padding:20px;"
+            >
+              <l-button
+                @click="downloadCsvFile(dataFilters)"
+              >
+                <i class="nc-icon nc-cloud-download-93" />
+              </l-button>
+            </div>
             <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
               <el-select
                 v-model="pagination.perPage"

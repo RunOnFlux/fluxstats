@@ -26,14 +26,14 @@
           <l-button
             v-if="key.includes('application running')"
             style="margin-right: 10px;"
-            wide
+            size="sm"
           >
             {{ key }}: {{ !value ? 0 : value.length }}
           </l-button>
           <l-button
             v-if="key.includes('flux watch')"
             style="margin-right: 10px;"
-            wide
+            size="sm"
           >
             {{ key }}: {{ !value ? 0 : value.length }}
           </l-button>
@@ -43,18 +43,21 @@
         <h2 class="title">
           Application
         </h2>
-        <div>
-          <l-button
-            @click="downloadCsvFile(dataFilters)"
-          >
-            <i class="nc-icon nc-cloud-download-93" />
-          </l-button>
-        </div>
       </div>
       <p class="category" />
       <div class="col-12">
         <card>
           <div>
+            <div
+              class="pull-right"
+              style="padding:20px;"
+            >
+              <l-button
+                @click="downloadCsvFile(dataFilters)"
+              >
+                <i class="nc-icon nc-cloud-download-93" />
+              </l-button>
+            </div>
             <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
               <el-select
                 v-model="pagination.perPage"

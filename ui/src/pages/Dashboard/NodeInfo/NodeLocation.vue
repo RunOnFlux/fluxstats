@@ -18,22 +18,38 @@
       v-if="myProgress >= 100"
       class="row"
     >
+      <div class="col-12 d-flex flex-wrap">
+        <div
+          v-for="[key, value] in filter"
+          :key="key"
+        >
+          <l-button
+            style="margin-right: 10px;"
+            size="sm"
+          >
+            {{ key }}: {{ !value ? 0 : value.length }}
+          </l-button>
+        </div>
+      </div>
       <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
         <h2 class="title">
           Geolocation
         </h2>
-        <div>
-          <l-button
-            @click="downloadCsvFile(dataFilters)"
-          >
-            <i class="nc-icon nc-cloud-download-93" />
-          </l-button>
-        </div>
       </div>
       <p class="category" />
       <div class="col-12">
         <card>
           <div>
+            <div
+              class="pull-right"
+              style="padding:20px;"
+            >
+              <l-button
+                @click="downloadCsvFile(dataFilters)"
+              >
+                <i class="nc-icon nc-cloud-download-93" />
+              </l-button>
+            </div>
             <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
               <el-select
                 v-model="pagination.perPage"
@@ -289,12 +305,12 @@ export default {
     async processFluxInfo() {
       this.values.map((value) => {
         const values = value;
-        const temp = this.filter.has(`node count - ${values.geolocation.country}`) ? this.filter.get(`node count - ${values.geolocation.country}`) : [];
-        if (!this.filter.has(`node count - ${values.geolocation.country}`)) {
-          this.filterValue.push(`node count - ${values.geolocation.country}`);
+        const temp = this.filter.has(values.geolocation.country) ? this.filter.get(values.geolocation.country) : [];
+        if (!this.filter.has(values.geolocation.country)) {
+          this.filterValue.push(values.geolocation.country);
         }
         temp.push(values);
-        this.filter.set(`node count - ${values.geolocation.country}`, temp);
+        this.filter.set(values.geolocation.country, temp);
         return values;
       });
       this.filters.others = this.filterValue.sort();

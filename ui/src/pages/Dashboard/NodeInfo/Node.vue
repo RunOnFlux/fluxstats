@@ -26,28 +26,28 @@
           <l-button
             v-if="key === 'node hashes - 0'"
             style="margin-right: 10px;"
-            wide
+            size="sm"
           >
             {{ key }}: {{ !value ? 0 : value.length }}
           </l-button>
           <l-button
             v-if="key === 'no ip address'"
             style="margin-right: 10px;"
-            wide
+            size="sm"
           >
             {{ key }}: {{ !value ? 0 : value.length }}
           </l-button>
           <l-button
             v-if="key.includes('version')"
             style="margin-right: 10px;"
-            wide
+            size="sm"
           >
             {{ key }}: {{ !value ? 0 : value.length }}
           </l-button>
           <l-button
             v-if="key.includes('node status')"
             style="margin-right: 10px;"
-            wide
+            size="sm"
           >
             {{ key }}: {{ !value ? 0 : value.length }}
           </l-button>
@@ -57,18 +57,21 @@
         <h2 class="title">
           Node
         </h2>
-        <div>
-          <l-button
-            @click="downloadCsvFile(dataFilters)"
-          >
-            <i class="nc-icon nc-cloud-download-93" />
-          </l-button>
-        </div>
       </div>
       <p class="category" />
       <div class="col-12">
         <card>
           <div>
+            <div
+              class="pull-right"
+              style="padding:20px;"
+            >
+              <l-button
+                @click="downloadCsvFile(dataFilters)"
+              >
+                <i class="nc-icon nc-cloud-download-93" />
+              </l-button>
+            </div>
             <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
               <el-select
                 v-model="pagination.perPage"
@@ -106,19 +109,14 @@
                   />
                 </el-select>
               </div>
-              <div
-                col-md-3
-                offset-md-6
-              >
-                <el-input
-                  v-model="searchQuery"
-                  type="search"
-                  class="mb-3"
-                  style="width: 200px"
-                  placeholder="Search IP"
-                  aria-controls="datatables"
-                />
-              </div>
+              <el-input
+                v-model="searchQuery"
+                type="search"
+                class="mb-3"
+                style="width: 200px"
+                placeholder="Search IP"
+                aria-controls="datatables"
+              />
             </div>
             <div
               slot="header"
@@ -549,13 +547,13 @@ export default {
       const day = date.getDate();
       const year = date.getFullYear();
       const options = {
-        filename: `Nodes_${month}${day}${year}`,
+        filename: `Node_${month}${day}${year}`,
         fieldSeparator: ',',
         quoteStrings: '"',
         decimalSeparator: '.',
         showLabels: true,
         showTitle: true,
-        title: `Nodes - ${month}/${day}/${year}`,
+        title: `Node - ${month}/${day}/${year}`,
         useTextFile: false,
         useBom: true,
         headers: [

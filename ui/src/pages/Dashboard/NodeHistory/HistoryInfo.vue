@@ -26,14 +26,14 @@
           <l-button
             v-if="key === 'highest node count'"
             style="margin-right: 10px;"
-            wide
+            size="sm"
           >
             {{ key }}: {{ !value ? 0 : value[0].total }}
           </l-button>
           <l-button
             v-if="key === 'highest node count roundtime'"
             style="margin-right: 10px;"
-            wide
+            size="sm"
           >
             {{ key }}: {{ !value ? 0 : value[0].roundTime }}
           </l-button>
@@ -43,18 +43,21 @@
         <h2 class="title">
           Info
         </h2>
-        <div>
-          <l-button
-            @click="downloadCsvFile(dataFilters)"
-          >
-            <i class="nc-icon nc-cloud-download-93" />
-          </l-button>
-        </div>
       </div>
       <p class="category" />
       <div class="col-12">
         <card>
           <div>
+            <div
+              class="pull-right"
+              style="padding:20px;"
+            >
+              <l-button
+                @click="downloadCsvFile(dataFilters)"
+              >
+                <i class="nc-icon nc-cloud-download-93" />
+              </l-button>
+            </div>
             <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
               <el-select
                 v-model="pagination.perPage"

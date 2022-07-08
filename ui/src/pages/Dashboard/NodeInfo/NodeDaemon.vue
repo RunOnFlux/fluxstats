@@ -26,49 +26,49 @@
           <l-button
             v-if="key.includes('daemon version')"
             style="margin-right: 10px;"
-            wide
+            size="sm"
           >
             {{ key }}: {{ !value ? 0 : value.length }}
           </l-button>
           <l-button
             v-if="key.includes('flux version')"
             style="margin-right: 10px;"
-            wide
+            size="sm"
           >
             {{ key }}: {{ !value ? 0 : value.length }}
           </l-button>
           <l-button
             v-if="key.includes('benchmark version')"
             style="margin-right: 10px;"
-            wide
+            size="sm"
           >
             {{ key }}: {{ !value ? 0 : value.length }}
           </l-button>
           <l-button
             v-if="key.includes('bench version')"
             style="margin-right: 10px;"
-            wide
+            size="sm"
           >
             {{ key }}: {{ !value ? 0 : value.length }}
           </l-button>
           <l-button
             v-if="key.includes('bench speed version')"
             style="margin-right: 10px;"
-            wide
+            size="sm"
           >
             {{ key }}: {{ !value ? 0 : value.length }}
           </l-button>
           <l-button
             v-if="key.includes('protocol version')"
             style="margin-right: 10px;"
-            wide
+            size="sm"
           >
             {{ key }}: {{ !value ? 0 : value.length }}
           </l-button>
           <l-button
             v-if="key.includes('wallet version')"
             style="margin-right: 10px;"
-            wide
+            size="sm"
           >
             {{ key }}: {{ !value ? 0 : value.length }}
           </l-button>
@@ -78,18 +78,21 @@
         <h2 class="title">
           Daemon
         </h2>
-        <div>
-          <l-button
-            @click="downloadCsvFile(dataFilters)"
-          >
-            <i class="nc-icon nc-cloud-download-93" />
-          </l-button>
-        </div>
       </div>
       <p class="category" />
       <div class="col-12">
         <card>
           <div>
+            <div
+              class="pull-right"
+              style="padding:20px;"
+            >
+              <l-button
+                @click="downloadCsvFile(dataFilters)"
+              >
+                <i class="nc-icon nc-cloud-download-93" />
+              </l-button>
+            </div>
             <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
               <el-select
                 v-model="pagination.perPage"
@@ -541,13 +544,13 @@ export default {
       const day = date.getDate();
       const year = date.getFullYear();
       const options = {
-        filename: `Node_Version_${month}${day}${year}`,
+        filename: `Node_Daemon_${month}${day}${year}`,
         fieldSeparator: ',',
         quoteStrings: '"',
         decimalSeparator: '.',
         showLabels: true,
         showTitle: true,
-        title: `Node Version - ${month}/${day}/${year}`,
+        title: `Node Daemon - ${month}/${day}/${year}`,
         useTextFile: false,
         useBom: true,
         headers: [
