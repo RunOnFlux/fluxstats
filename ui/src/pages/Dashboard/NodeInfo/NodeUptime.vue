@@ -278,11 +278,15 @@ export default {
         }
         result = temp;
       } else if (this.filters.default.length) {
+        const arr = [];
         const data = [];
         this.filters.default.forEach((item) => {
           const objs = this.filter.get(item);
           objs.forEach((obj) => {
-            data.push(obj);
+            if (!arr.includes(obj.ip)) {
+              arr.push(obj.ip);
+              data.push(obj);
+            }
           });
         });
         result = data;
@@ -334,8 +338,11 @@ export default {
       this.myProgress = 100;
     },
     sortChange(sortProps) {
+      this.processData(sortProps);
+    },
+    sorting(sortProps, data) {
       if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.ip > b.ip) {
             val = 1;
@@ -345,7 +352,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.ip < b.ip) {
             val = 1;
@@ -355,7 +362,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Active Since' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.activeSince > b.activeSince) {
             val = 1;
@@ -365,7 +372,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Active Since' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.activeSince < b.activeSince) {
             val = 1;
@@ -375,7 +382,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Active Since Converted' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (new Date(a.activeSinceConverted).getTime() > new Date(b.activeSinceConverted).getTime()) {
             val = 1;
@@ -385,7 +392,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Active Since Converted' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (new Date(a.activeSinceConverted).getTime() < new Date(b.activeSinceConverted).getTime()) {
             val = 1;
@@ -395,7 +402,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Data Collected At' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.dataCollectedAt > b.dataCollectedAt) {
             val = 1;
@@ -405,7 +412,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Data Collected At' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.dataCollectedAt < b.dataCollectedAt) {
             val = 1;
@@ -415,7 +422,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Data Collected At Converted' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (new Date(a.dataCollectedAtConverted).getTime() > new Date(b.dataCollectedAtConverted).getTime()) {
             val = 1;
@@ -425,7 +432,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Data Collected At Converted' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (new Date(a.dataCollectedAtConverted).getTime() < new Date(b.dataCollectedAtConverted).getTime()) {
             val = 1;
@@ -437,6 +444,7 @@ export default {
       } else {
         this.tableData = JSON.parse(this.originalData);
       }
+      return data;
     },
     processDataForCsv(data) {
       const values = [];

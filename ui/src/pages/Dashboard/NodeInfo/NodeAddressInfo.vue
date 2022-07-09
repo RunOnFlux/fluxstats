@@ -287,11 +287,15 @@ export default {
         }
         result = temp;
       } else if (this.filters.default.length) {
+        const arr = [];
         const data = [];
         this.filters.default.forEach((item) => {
           const objs = this.filter.get(item);
           objs.forEach((obj) => {
-            data.push(obj);
+            if (!arr.includes(obj.zelId)) {
+              arr.push(obj.zelId);
+              data.push(obj);
+            }
           });
         });
         result = data;
@@ -365,8 +369,11 @@ export default {
       this.myProgress = 100;
     },
     sortChange(sortProps) {
+      this.processData(sortProps);
+    },
+    sorting(sortProps, data) {
       if (sortProps.column.label === 'Zel ID' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.zelId > b.zelId) {
             val = 1;
@@ -376,7 +383,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Zel ID' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.zelId < b.zelId) {
             val = 1;
@@ -386,7 +393,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Payment ID' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.paymentId > b.paymentId) {
             val = 1;
@@ -396,7 +403,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Payment ID' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.paymentId < b.paymentId) {
             val = 1;
@@ -406,7 +413,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Organization' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.org > b.org) {
             val = 1;
@@ -416,7 +423,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Organization' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.org < b.org) {
             val = 1;
@@ -426,7 +433,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Total Nodes' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (parseInt(a.totalNodes, 10) > parseInt(b.totalNodes, 10)) {
             val = 1;
@@ -436,7 +443,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Total Nodes' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (parseInt(a.totalNodes, 10) < parseInt(b.totalNodes, 10)) {
             val = 1;
@@ -448,6 +455,7 @@ export default {
       } else {
         this.tableData = JSON.parse(this.originalData);
       }
+      return data;
     },
     processDataForCsv(data) {
       const values = [];

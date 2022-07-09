@@ -290,11 +290,15 @@ export default {
         }
         result = temp;
       } else if (this.filters.default.length) {
+        const arr = [];
         const data = [];
         this.filters.default.forEach((item) => {
           const objs = this.filter.get(item);
           objs.forEach((obj) => {
-            data.push(obj);
+            if (!arr.includes(obj.roundTime)) {
+              arr.push(obj.roundTime);
+              data.push(obj);
+            }
           });
         });
         result = data;
