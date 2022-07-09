@@ -18,6 +18,27 @@
       v-if="myProgress >= 100"
       class="row"
     >
+      <div class="col-12 d-flex flex-wrap">
+        <div
+          v-for="[key, value] in filter"
+          :key="key"
+        >
+          <l-button
+            v-if="key === 'app hashes total - 0'"
+            style="margin-right: 10px;"
+            size="sm"
+          >
+            {{ key }}: {{ !value ? 0 : value.length }}
+          </l-button>
+          <l-button
+            v-if="key === 'hashes present - 0'"
+            style="margin-right: 10px;"
+            size="sm"
+          >
+            {{ key }}: {{ !value ? 0 : value.length }}
+          </l-button>
+        </div>
+      </div>
       <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
         <h2 class="title">
           Hashes
