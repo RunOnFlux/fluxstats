@@ -177,6 +177,7 @@
           <div
             slot="footer"
             class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
+            style="padding:20px;"
           >
             <div class="">
               <p class="card-category">
@@ -251,11 +252,6 @@ export default {
         {
           prop: 'node.status.status',
           label: 'Status',
-          minWidth: 100,
-        },
-        {
-          prop: 'node.status.rank',
-          label: 'Payment Rank',
           minWidth: 100,
         },
       ],
@@ -487,26 +483,6 @@ export default {
           }
           return val;
         });
-      } else if (sortProps.column.label === 'Payment Rank' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.node.status.rank > b.node.status.rank) {
-            val = 1;
-          } else if (a.node.status.rank < b.node.status.rank) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Payment Rank' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.node.status.rank < b.node.status.rank) {
-            val = 1;
-          } else if (a.node.status.rank > b.node.status.rank) {
-            val = -1;
-          }
-          return val;
-        });
       } else {
         this.tableData = JSON.parse(this.originalData);
       }
@@ -520,7 +496,6 @@ export default {
           networkProtocol: !item.node.status.network ? '' : item.node.status.network,
           tier: !item.node.status.tier ? '' : item.node.status.tier,
           status: !item.node.status.status ? '' : item.node.status.status,
-          paymentRank: !item.node.status.rank ? '' : item.node.status.rank,
           collateral: !item.node.status.collateral ? '' : item.node.status.collateral,
           txnHash: !item.node.status.txhash ? '' : item.node.status.txhash,
           addedHeight: !item.node.status.added_height ? '' : item.node.status.added_height,
@@ -561,7 +536,6 @@ export default {
           'Network Protocol',
           'Tier',
           'Status',
-          'Payment Rank',
           'Collateral',
           'Txn Hash',
           'Added Height',

@@ -162,6 +162,7 @@
           <div
             slot="footer"
             class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
+            style="padding:20px;"
           >
             <div class="">
               <p class="card-category">

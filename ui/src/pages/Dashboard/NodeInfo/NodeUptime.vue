@@ -18,6 +18,20 @@
       v-if="myProgress >= 100"
       class="row"
     >
+      <div class="col-12 d-flex flex-wrap">
+        <div
+          v-for="[key, value] in filter"
+          :key="key"
+        >
+          <l-button
+            v-if="key.includes('active since')"
+            style="margin-right: 10px;"
+            size="sm"
+          >
+            {{ key }}: {{ !value ? 0 : value.length }}
+          </l-button>
+        </div>
+      </div>
       <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
         <h2 class="title">
           Up Time
@@ -52,6 +66,28 @@
                   :value="item"
                 />
               </el-select>
+              <div
+                col-md-6
+                offset-md-3
+              >
+                <el-select
+                  v-model="filters.default"
+                  class="select-default mb-3"
+                  style="width: 450px"
+                  multiple
+                  collapse-tags
+                  filterable
+                  placeholder="Filters"
+                >
+                  <el-option
+                    v-for="item in filters.others"
+                    :key="item"
+                    class="select-default"
+                    :label="item"
+                    :value="item"
+                  />
+                </el-select>
+              </div>
               <el-input
                 v-model="searchQuery"
                 type="search"
@@ -100,6 +136,7 @@
           <div
             slot="footer"
             class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
+            style="padding:20px;"
           >
             <div class="">
               <p class="card-category">
@@ -149,6 +186,10 @@ export default {
         perPageOptions: [5, 10, 25, 50, 100, 200, 500, 1000, 2000, 5000, 10000],
         total: 0,
       },
+      filters: {
+        default: [],
+        others: [],
+      },
       searchQuery: '',
       propsToSearch: ['ip'],
       tableColumns: [
@@ -179,8 +220,10 @@ export default {
         },
       ],
       tableData: [],
+      filterValue: [],
+      filter: new Map(),
       originalData: null,
-      responseData: [],
+      values: [],
       fuseSearch: null,
       myProgress: 0,
       dataFilters: [],
@@ -188,20 +231,7 @@ export default {
   },
   computed: {
     queriedData() {
-      let result;
-      if (this.searchQuery !== '') {
-        const temp = [];
-        result = this.fuseSearch.search(`=${this.searchQuery}`);
-        for (let i = 0; i < Object.keys(result).length; i += 1) {
-          temp.push(result[i].item);
-        }
-        result = temp;
-      } else {
-        result = this.tableData;
-      }
-      this.setDataFilters(result);
-      this.paginationTotal(result.length);
-      return result.slice(this.from, this.to);
+      return this.processData();
     },
     to() {
       let highBound = this.from + this.pagination.perPage;
@@ -238,13 +268,41 @@ export default {
     async initialize() {
       this.myProgress = 20;
     },
+    processData(sortProps) {
+      let result;
+      if (this.searchQuery !== '') {
+        const temp = [];
+        result = this.fuseSearch.search(`=${this.searchQuery}`);
+        for (let i = 0; i < Object.keys(result).length; i += 1) {
+          temp.push(result[i].item);
+        }
+        result = temp;
+      } else if (this.filters.default.length) {
+        const data = [];
+        this.filters.default.forEach((item) => {
+          const objs = this.filter.get(item);
+          objs.forEach((obj) => {
+            data.push(obj);
+          });
+        });
+        result = data;
+      } else {
+        result = this.tableData;
+      }
+      if (sortProps) {
+        result = this.sorting(sortProps, result);
+      }
+      this.setDataFilters(result);
+      this.paginationTotal(result.length);
+      return result.slice(this.from, this.to);
+    },
     async getFluxInfo() {
       // Projection being used in this page are ip,activeSince,dataCollectedAt
       const lsdata = MemoryStorage.get('fluxinfo');
-      this.responseData = lsdata;
+      this.values = lsdata;
     },
     async processFluxInfo() {
-      this.responseData.map((value) => {
+      this.values.map((value) => {
         this.tableData.push({
           ip: value.ip,
           activeSince: value.activeSince,
@@ -254,6 +312,21 @@ export default {
         });
         return value;
       });
+      this.tableData.map((el) => {
+        const values = el;
+        const date = values.activeSinceConverted.split(', ')[0];
+        const month = date.split('/')[0];
+        const year = date.split('/')[2];
+        const activesince = `${month}/${year}`;
+        const temp = this.filter.has(`active since - ${activesince}`) ? this.filter.get(`active since - ${activesince}`) : [];
+        if (!this.filter.has(`active since - ${activesince}`)) {
+          this.filterValue.push(`active since - ${activesince}`);
+        }
+        temp.push(values);
+        this.filter.set(`active since - ${activesince}`, temp);
+        return values;
+      });
+      this.filters.others = this.filterValue.sort();
     },
     setSearch() {
       this.originalData = JSON.stringify(this.tableData);

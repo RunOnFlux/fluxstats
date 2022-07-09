@@ -52,6 +52,28 @@
                   :value="item"
                 />
               </el-select>
+              <div
+                col-md-6
+                offset-md-3
+              >
+                <el-select
+                  v-model="filters.default"
+                  class="select-default mb-3"
+                  style="width: 450px"
+                  multiple
+                  collapse-tags
+                  filterable
+                  placeholder="Filters"
+                >
+                  <el-option
+                    v-for="item in filters.others"
+                    :key="item"
+                    class="select-default"
+                    :label="item"
+                    :value="item"
+                  />
+                </el-select>
+              </div>
               <el-input
                 v-model="searchQuery"
                 type="search"
@@ -100,6 +122,7 @@
           <div
             slot="footer"
             class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
+            style="padding:20px;"
           >
             <div class="">
               <p class="card-category">
@@ -149,6 +172,10 @@ export default {
         perPageOptions: [5, 10, 25, 50, 100, 200, 500, 1000, 2000, 5000, 10000],
         total: 0,
       },
+      filters: {
+        default: [],
+        others: [],
+      },
       searchQuery: '',
       propsToSearch: ['ip'],
       tableColumns: [
@@ -174,6 +201,9 @@ export default {
         },
       ],
       tableData: [],
+      filterValue: [],
+      filter: new Map(),
+      values: [],
       originalData: null,
       fuseSearch: null,
       myProgress: 0,
@@ -182,20 +212,7 @@ export default {
   },
   computed: {
     queriedData() {
-      let result;
-      if (this.searchQuery !== '') {
-        const temp = [];
-        result = this.fuseSearch.search(`=${this.searchQuery}`);
-        for (let i = 0; i < Object.keys(result).length; i += 1) {
-          temp.push(result[i].item);
-        }
-        result = temp;
-      } else {
-        result = this.tableData;
-      }
-      this.setDataFilters(result);
-      this.paginationTotal(result.length);
-      return result.slice(this.from, this.to);
+      return this.processData();
     },
     to() {
       let highBound = this.from + this.pagination.perPage;
@@ -219,6 +236,7 @@ export default {
     this.myProgress = await httpRequestDaemonInfo(axios, MemoryStorage);
     this.myProgress = await httpRequestFluxHistoryStats(axios, MemoryStorage);
     await this.getFluxInfo();
+    await this.processFluxInfo();
     this.setSearch();
   },
   methods: {
@@ -231,10 +249,68 @@ export default {
     async initialize() {
       this.myProgress = 20;
     },
+    processData(sortProps) {
+      let result;
+      if (this.searchQuery !== '') {
+        const temp = [];
+        result = this.fuseSearch.search(`=${this.searchQuery}`);
+        for (let i = 0; i < Object.keys(result).length; i += 1) {
+          temp.push(result[i].item);
+        }
+        result = temp;
+      } else if (this.filters.default.length) {
+        const data = [];
+        this.filters.default.forEach((item) => {
+          const objs = this.filter.get(item);
+          objs.forEach((obj) => {
+            data.push(obj);
+          });
+        });
+        result = data;
+      } else {
+        result = this.tableData;
+      }
+      if (sortProps) {
+        result = this.sorting(sortProps, result);
+      }
+      this.setDataFilters(result);
+      this.paginationTotal(result.length);
+      return result.slice(this.from, this.to);
+    },
     async getFluxInfo() {
       // Projection being used in this page are ip,appsHashesTotal,hashesPresent,scannedHeight
       const lsdata = MemoryStorage.get('fluxinfo');
-      this.tableData = lsdata;
+      this.values = lsdata;
+    },
+    async processFluxInfo() {
+      this.values.map((el) => {
+        let temp;
+        const values = el;
+        const scannedheight = values.scannedHeight;
+        const hashespresent = values.hashesPresent;
+        const apphashestotal = values.appsHashesTotal;
+        temp = this.filter.has(`scanned height - ${scannedheight}`) ? this.filter.get(`scanned height - ${scannedheight}`) : [];
+        if (!this.filter.has(`scanned height - ${scannedheight}`)) {
+          this.filterValue.push(`scanned height - ${scannedheight}`);
+        }
+        temp.push(values);
+        this.filter.set(`scanned height - ${scannedheight}`, temp);
+        temp = this.filter.has(`hashes present - ${hashespresent}`) ? this.filter.get(`hashes present - ${hashespresent}`) : [];
+        if (!this.filter.has(`hashes present - ${hashespresent}`)) {
+          this.filterValue.push(`hashes present - ${hashespresent}`);
+        }
+        temp.push(values);
+        this.filter.set(`hashes present - ${hashespresent}`, temp);
+        temp = this.filter.has(`app hashes total - ${apphashestotal}`) ? this.filter.get(`app hashes total - ${apphashestotal}`) : [];
+        if (!this.filter.has(`app hashes total - ${apphashestotal}`)) {
+          this.filterValue.push(`app hashes total - ${apphashestotal}`);
+        }
+        temp.push(values);
+        this.filter.set(`app hashes total - ${apphashestotal}`, temp);
+        return values;
+      });
+      this.filters.others = this.filterValue.sort();
+      this.tableData = this.values;
     },
     setSearch() {
       this.originalData = JSON.stringify(this.tableData);
@@ -242,8 +318,11 @@ export default {
       this.myProgress = 100;
     },
     sortChange(sortProps) {
+      this.processData(sortProps);
+    },
+    sorting(sortProps, data) {
       if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.ip > b.ip) {
             val = 1;
@@ -253,7 +332,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.ip < b.ip) {
             val = 1;
@@ -263,7 +342,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Scanned Height' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.scannedHeight > b.scannedHeight) {
             val = 1;
@@ -273,7 +352,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Scanned Height' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.scannedHeight < b.scannedHeight) {
             val = 1;
@@ -283,7 +362,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Hashes Present' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.hashesPresent > b.hashesPresent) {
             val = 1;
@@ -293,7 +372,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Hashes Present' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.hashesPresent < b.hashesPresent) {
             val = 1;
@@ -303,7 +382,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'App Hashes Total' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.appsHashesTotal > b.appsHashesTotal) {
             val = 1;
@@ -313,7 +392,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'App Hashes Total' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.appsHashesTotal < b.appsHashesTotal) {
             val = 1;
@@ -325,6 +404,7 @@ export default {
       } else {
         this.tableData = JSON.parse(this.originalData);
       }
+      return data;
     },
     processDataForCsv(data) {
       const values = [];
