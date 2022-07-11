@@ -813,6 +813,7 @@ async function processFluxNodes() {
           await Promise.allSettled(promiseArray);
           promiseArray = [];
           myCacheProcessingIp.clear();
+          log.error(processedFluxNodes);
           await serviceHelper.insertManyToDatabase(database, currentCollectionName, processedFluxNodes).catch((error) => {
             log.error(`Error inserting in ${currentCollectionName} db: ${error}`);
           });
