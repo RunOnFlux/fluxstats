@@ -606,19 +606,33 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
     log.error(fluxnode);
     const curTime = new Date().getTime();
     fluxInfo.ip = fluxnode.ip;
+    log.error('1');
     fluxInfo.addedHeight = fluxnode.added_height;
+    log.error('2');
     fluxInfo.confirmedHeight = fluxnode.confirmed_height;
+    log.error('3');
     fluxInfo.lastConfirmedHeight = fluxnode.last_confirmed_height;
+    log.error('4');
     fluxInfo.lastPaidHeight = fluxnode.last_paid_height;
+    log.error('5');
     fluxInfo.tier = fluxnode.tier;
+    log.error('6');
     fluxInfo.paymentAddress = fluxnode.payment_address;
+    log.error('7');
     fluxInfo.activeSince = fluxnode.activesince;
+    log.error('8');
     fluxInfo.collateralHash = getCollateralInfo(fluxnode.collateral).txhash;
+    log.error('9');
     fluxInfo.collateralIndex = getCollateralInfo(fluxnode.collateral).txindex;
+    log.error('10');
     fluxInfo.roundTime = currentRoundTime;
+    log.error('11');
     fluxInfo.dataCollectedAt = curTime;
+    log.error('12');
     fluxInfo.error = error;
+    log.error('13');
     processedFluxNodes.push(fluxInfo);
+    log.error('14');
   }
 }
 
