@@ -20,36 +20,44 @@
     >
       <div class="col-12 d-flex flex-wrap">
         <div
-          v-for="[key, value] in filter"
-          :key="key"
+          v-for="(btn, idx) in filters.states"
+          :key="idx"
         >
           <l-button
-            v-if="key === 'node hashes - 0'"
+            v-if="btn.name === 'node hashes - 0'"
             style="margin-right: 10px;"
             size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
           >
-            {{ key }}: {{ !value ? 0 : value.length }}
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
           </l-button>
           <l-button
-            v-if="key === 'no ip address'"
+            v-if="btn.name === 'no ip address'"
             style="margin-right: 10px;"
             size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
           >
-            {{ key }}: {{ !value ? 0 : value.length }}
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
           </l-button>
           <l-button
-            v-if="key.includes('version')"
+            v-if="btn.name.includes('version')"
             style="margin-right: 10px;"
             size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
           >
-            {{ key }}: {{ !value ? 0 : value.length }}
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
           </l-button>
           <l-button
-            v-if="key.includes('node status')"
+            v-if="btn.name.includes('node status')"
             style="margin-right: 10px;"
             size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
           >
-            {{ key }}: {{ !value ? 0 : value.length }}
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
           </l-button>
         </div>
       </div>
@@ -230,6 +238,7 @@ export default {
       filters: {
         default: [],
         others: [],
+        states: [],
       },
       searchQuery: '',
       propsToSearch: ['node.status.ip'],
@@ -269,7 +278,7 @@ export default {
   },
   computed: {
     queriedData() {
-      return this.processData();
+      return this.processData(false, true);
     },
     to() {
       let highBound = this.from + this.pagination.perPage;
@@ -308,7 +317,7 @@ export default {
     async initialize() {
       this.myProgress = 20;
     },
-    processData(sortProps) {
+    processData(sortProps, isProcessingState) {
       let result;
       if (this.searchQuery !== '') {
         const temp = [];
@@ -323,8 +332,8 @@ export default {
         this.filters.default.forEach((item) => {
           const objs = this.filter.get(item);
           objs.forEach((obj) => {
-            if (!arr.includes(obj.node.status.ip)) {
-              arr.push(obj.node.status.ip);
+            if (!arr.includes(`${obj.node.status.ip}${obj.flux.zelid}`)) {
+              arr.push(`${obj.node.status.ip}${obj.flux.zelid}`);
               data.push(obj);
             }
           });
@@ -335,6 +344,9 @@ export default {
       }
       if (sortProps) {
         result = this.sorting(sortProps, result);
+      }
+      if (isProcessingState) {
+        this.processState(this.filters.default);
       }
       this.setDataFilters(result);
       this.paginationTotal(result.length);
@@ -397,6 +409,12 @@ export default {
       });
       this.filters.others = this.filterValue.sort();
       this.tableData = this.values;
+      this.filterValue.forEach((value) => {
+        this.filters.states.push({
+          name: value,
+          state: false,
+        });
+      });
     },
     setSearch() {
       this.originalData = JSON.stringify(this.tableData);
@@ -404,7 +422,7 @@ export default {
       this.myProgress = 100;
     },
     sortChange(sortProps) {
-      this.processData(sortProps);
+      this.processData(sortProps, true);
     },
     sorting(sortProps, data) {
       if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
@@ -560,6 +578,27 @@ export default {
       };
       const csvExporter = new ExportToCsv(options);
       csvExporter.generateCsv(this.processDataForCsv(data));
+    },
+    processFilters(key) {
+      if (!this.filters.default.includes(key)) {
+        this.filters.default.push(key);
+      } else {
+        this.filters.default = this.filters.default.filter((value) => value !== key);
+      }
+      const keys = [];
+      keys.push(key);
+      this.processState(keys);
+      return this.processData(false, false);
+    },
+    processState(keys) {
+      this.filters.states.map((item) => {
+        const values = item;
+        values.state = false;
+        if (keys.includes(values.name)) {
+          values.state = true;
+        }
+        return values;
+      });
     },
   },
 };
