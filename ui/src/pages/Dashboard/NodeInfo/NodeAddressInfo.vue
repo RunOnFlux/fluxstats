@@ -48,6 +48,7 @@
               style="padding:20px;"
             >
               <l-button
+                title="Download CSV"
                 @click="downloadCsvFile(dataFilters)"
               >
                 <i class="nc-icon nc-cloud-download-93" />

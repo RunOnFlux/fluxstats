@@ -48,6 +48,7 @@
               style="padding:20px;"
             >
               <l-button
+                title="Download CSV"
                 @click="downloadCsvFile(dataFilters)"
               >
                 <i class="nc-icon nc-cloud-download-93" />
@@ -202,6 +203,11 @@ export default {
           minWidth: 200,
         },
         {
+          prop: 'tier',
+          label: 'Tier',
+          minWidth: 150,
+        },
+        {
           prop: 'activeSince',
           label: 'Active Since',
           minWidth: 150,
@@ -319,6 +325,7 @@ export default {
           activeSinceConverted: new Date(parseInt(value.activeSince * 1000, 10)).toLocaleString(),
           dataCollectedAt: value.dataCollectedAt,
           dataCollectedAtConverted: new Date(parseInt(value.dataCollectedAt, 10)).toLocaleString(),
+          tier: value.node.status.tier,
         });
         return value;
       });
@@ -463,6 +470,7 @@ export default {
       data.forEach((item) => {
         values.push({
           ip: !item.ip ? '' : item.ip,
+          tier: !item.tier ? '' : item.tier,
           activeSince: !item.activeSince ? '' : item.activeSince,
           activeSinceConverted: !item.activeSinceConverted ? '' : item.activeSinceConverted,
           dataCollectedAt: !item.dataCollectedAt ? '' : item.dataCollectedAt,
@@ -488,6 +496,7 @@ export default {
         useBom: true,
         headers: [
           'IP Address',
+          'Tier',
           'Active Since',
           'Active Since Converted',
           'Data Collected At',
