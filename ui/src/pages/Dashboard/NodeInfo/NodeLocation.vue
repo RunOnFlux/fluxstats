@@ -18,22 +18,41 @@
       v-if="myProgress >= 100"
       class="row"
     >
+      <div class="col-12 d-flex flex-wrap">
+        <div
+          v-for="(btn, idx) in filters.states"
+          :key="idx"
+        >
+          <l-button
+            style="margin-right: 10px;"
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
+          >
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+          </l-button>
+        </div>
+      </div>
       <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
         <h2 class="title">
           Geolocation
         </h2>
-        <div>
-          <l-button
-            @click="downloadCsvFile(dataFilters)"
-          >
-            <i class="nc-icon nc-cloud-download-93" />
-          </l-button>
-        </div>
       </div>
       <p class="category" />
       <div class="col-12">
         <card>
           <div>
+            <div
+              class="pull-right"
+              style="padding:20px;"
+            >
+              <l-button
+                title="Download CSV"
+                @click="downloadCsvFile(dataFilters)"
+              >
+                <i class="nc-icon nc-cloud-download-93" />
+              </l-button>
+            </div>
             <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
               <el-select
                 v-model="pagination.perPage"
@@ -119,6 +138,7 @@
           <div
             slot="footer"
             class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
+            style="padding:20px;"
           >
             <div class="">
               <p class="card-category">
@@ -171,6 +191,7 @@ export default {
       filters: {
         default: [],
         others: [],
+        states: [],
       },
       searchQuery: '',
       propsToSearch: ['geolocation.ip'],
@@ -212,7 +233,7 @@ export default {
   },
   computed: {
     queriedData() {
-      return this.processData();
+      return this.processData(false, true);
     },
     to() {
       let highBound = this.from + this.pagination.perPage;
@@ -249,7 +270,7 @@ export default {
     async initialize() {
       this.myProgress = 20;
     },
-    processData(sortProps) {
+    processData(sortProps, isProcessingState) {
       let result;
       if (this.searchQuery !== '') {
         const temp = [];
@@ -264,8 +285,8 @@ export default {
         this.filters.default.forEach((item) => {
           const objs = this.filter.get(item);
           objs.forEach((obj) => {
-            if (!arr.includes(obj.geolocation.ip)) {
-              arr.push(obj.geolocation.ip);
+            if (!arr.includes(`${obj.geolocation.ip}${obj.geolocation.country}`)) {
+              arr.push(`${obj.geolocation.ip}${obj.geolocation.country}`);
               data.push(obj);
             }
           });
@@ -276,6 +297,9 @@ export default {
       }
       if (sortProps) {
         result = this.sorting(sortProps, result);
+      }
+      if (isProcessingState) {
+        this.processState(this.filters.default);
       }
       this.setDataFilters(result);
       this.paginationTotal(result.length);
@@ -289,16 +313,22 @@ export default {
     async processFluxInfo() {
       this.values.map((value) => {
         const values = value;
-        const temp = this.filter.has(`node count - ${values.geolocation.country}`) ? this.filter.get(`node count - ${values.geolocation.country}`) : [];
-        if (!this.filter.has(`node count - ${values.geolocation.country}`)) {
-          this.filterValue.push(`node count - ${values.geolocation.country}`);
+        const temp = this.filter.has(values.geolocation.country) ? this.filter.get(values.geolocation.country) : [];
+        if (!this.filter.has(values.geolocation.country)) {
+          this.filterValue.push(values.geolocation.country);
         }
         temp.push(values);
-        this.filter.set(`node count - ${values.geolocation.country}`, temp);
+        this.filter.set(values.geolocation.country, temp);
         return values;
       });
       this.filters.others = this.filterValue.sort();
       this.tableData = this.values;
+      this.filterValue.forEach((value) => {
+        this.filters.states.push({
+          name: value,
+          state: false,
+        });
+      });
     },
     setSearch() {
       this.originalData = JSON.stringify(this.tableData);
@@ -306,7 +336,7 @@ export default {
       this.myProgress = 100;
     },
     sortChange(sortProps) {
-      this.processData(sortProps);
+      this.processData(sortProps, true);
     },
     sorting(sortProps, data) {
       if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
@@ -472,6 +502,27 @@ export default {
       };
       const csvExporter = new ExportToCsv(options);
       csvExporter.generateCsv(this.processDataForCsv(data));
+    },
+    processFilters(key) {
+      if (!this.filters.default.includes(key)) {
+        this.filters.default.push(key);
+      } else {
+        this.filters.default = this.filters.default.filter((value) => value !== key);
+      }
+      const keys = [];
+      keys.push(key);
+      this.processState(keys);
+      return this.processData(false, false);
+    },
+    processState(keys) {
+      this.filters.states.map((item) => {
+        const values = item;
+        values.state = false;
+        if (keys.includes(values.name)) {
+          values.state = true;
+        }
+        return values;
+      });
     },
   },
 };

@@ -18,22 +18,69 @@
       v-if="myProgress >= 100"
       class="row"
     >
+      <div class="col-12 d-flex flex-wrap">
+        <div
+          v-for="(btn, idx) in filters.states"
+          :key="idx"
+        >
+          <l-button
+            v-if="btn.name === 'total incoming - 0'"
+            style="margin-right: 10px;"
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
+          >
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+          </l-button>
+          <l-button
+            v-if="btn.name === 'total incoming - undefined'"
+            style="margin-right: 10px;"
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
+          >
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+          </l-button>
+          <l-button
+            v-if="btn.name === 'total outgoing - 0'"
+            style="margin-right: 10px;"
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
+          >
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+          </l-button>
+          <l-button
+            v-if="btn.name === 'total outgoing - undefined'"
+            style="margin-right: 10px;"
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
+          >
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+          </l-button>
+        </div>
+      </div>
       <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
         <h2 class="title">
           Connection
         </h2>
-        <div>
-          <l-button
-            @click="downloadCsvFile(dataFilters)"
-          >
-            <i class="nc-icon nc-cloud-download-93" />
-          </l-button>
-        </div>
       </div>
       <p class="category" />
       <div class="col-12">
         <card>
           <div>
+            <div
+              class="pull-right"
+              style="padding:20px;"
+            >
+              <l-button
+                title="Download CSV"
+                @click="downloadCsvFile(dataFilters)"
+              >
+                <i class="nc-icon nc-cloud-download-93" />
+              </l-button>
+            </div>
             <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
               <el-select
                 v-model="pagination.perPage"
@@ -49,6 +96,28 @@
                   :value="item"
                 />
               </el-select>
+              <div
+                col-md-6
+                offset-md-3
+              >
+                <el-select
+                  v-model="filters.default"
+                  class="select-default mb-3"
+                  style="width: 450px"
+                  multiple
+                  collapse-tags
+                  filterable
+                  placeholder="Filters"
+                >
+                  <el-option
+                    v-for="item in filters.others"
+                    :key="item"
+                    class="select-default"
+                    :label="item"
+                    :value="item"
+                  />
+                </el-select>
+              </div>
               <el-input
                 v-model="searchQuery"
                 type="search"
@@ -97,6 +166,7 @@
           <div
             slot="footer"
             class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
+            style="padding:20px;"
           >
             <div class="">
               <p class="card-category">
@@ -146,6 +216,11 @@ export default {
         perPageOptions: [5, 10, 25, 50, 100, 200, 500, 1000, 2000, 5000, 10000],
         total: 0,
       },
+      filters: {
+        default: [],
+        others: [],
+        states: [],
+      },
       searchQuery: '',
       propsToSearch: ['flux.ip'],
       tableColumns: [
@@ -166,6 +241,8 @@ export default {
         },
       ],
       tableData: [],
+      filterValue: [],
+      filter: new Map(),
       originalData: null,
       values: [],
       fuseSearch: null,
@@ -175,20 +252,7 @@ export default {
   },
   computed: {
     queriedData() {
-      let result;
-      if (this.searchQuery !== '') {
-        const temp = [];
-        result = this.fuseSearch.search(`=${this.searchQuery}`);
-        for (let i = 0; i < Object.keys(result).length; i += 1) {
-          temp.push(result[i].item);
-        }
-        result = temp;
-      } else {
-        result = this.tableData;
-      }
-      this.setDataFilters(result);
-      this.paginationTotal(result.length);
-      return result.slice(this.from, this.to);
+      return this.processData(false, true);
     },
     to() {
       let highBound = this.from + this.pagination.perPage;
@@ -212,6 +276,7 @@ export default {
     this.myProgress = await httpRequestDaemonInfo(axios, MemoryStorage);
     this.myProgress = await httpRequestFluxHistoryStats(axios, MemoryStorage);
     await this.getFluxInfo();
+    await this.processFluxInfo();
     this.setSearch();
   },
   methods: {
@@ -224,10 +289,74 @@ export default {
     async initialize() {
       this.myProgress = 20;
     },
+    processData(sortProps, isProcessingState) {
+      let result;
+      if (this.searchQuery !== '') {
+        const temp = [];
+        result = this.fuseSearch.search(`=${this.searchQuery}`);
+        for (let i = 0; i < Object.keys(result).length; i += 1) {
+          temp.push(result[i].item);
+        }
+        result = temp;
+      } else if (this.filters.default.length) {
+        const arr = [];
+        const data = [];
+        this.filters.default.forEach((item) => {
+          const objs = this.filter.get(item);
+          objs.forEach((obj) => {
+            if (!arr.includes(`${obj.flux.ip}${obj.flux.numberOfConnectionsIn}`)) {
+              arr.push(`${obj.flux.ip}${obj.flux.numberOfConnectionsIn}`);
+              data.push(obj);
+            }
+          });
+        });
+        result = data;
+      } else {
+        result = this.tableData;
+      }
+      if (sortProps) {
+        result = this.sorting(sortProps, result);
+      }
+      if (isProcessingState) {
+        this.processState(this.filters.default);
+      }
+      this.setDataFilters(result);
+      this.paginationTotal(result.length);
+      return result.slice(this.from, this.to);
+    },
     async getFluxInfo() {
       // Projection being used in this page is flux
       const lsdata = MemoryStorage.get('fluxinfo');
-      this.tableData = lsdata;
+      this.values = lsdata;
+    },
+    async processFluxInfo() {
+      this.values.map((el) => {
+        let temp;
+        const values = el;
+        const totalincoming = values.flux.numberOfConnectionsIn;
+        const totaloutgoing = values.connectionsOut;
+        temp = this.filter.has(`total incoming - ${totalincoming}`) ? this.filter.get(`total incoming - ${totalincoming}`) : [];
+        if (!this.filter.has(`total incoming - ${totalincoming}`)) {
+          this.filterValue.push(`total incoming - ${totalincoming}`);
+        }
+        temp.push(values);
+        this.filter.set(`total incoming - ${totalincoming}`, temp);
+        temp = this.filter.has(`total outgoing - ${totaloutgoing}`) ? this.filter.get(`total outgoing - ${totaloutgoing}`) : [];
+        if (!this.filter.has(`total outgoing - ${totaloutgoing}`)) {
+          this.filterValue.push(`total outgoing - ${totaloutgoing}`);
+        }
+        temp.push(values);
+        this.filter.set(`total outgoing - ${totaloutgoing}`, temp);
+        return values;
+      });
+      this.filters.others = this.filterValue.sort();
+      this.tableData = this.values;
+      this.filterValue.forEach((value) => {
+        this.filters.states.push({
+          name: value,
+          state: false,
+        });
+      });
     },
     setSearch() {
       this.originalData = JSON.stringify(this.tableData);
@@ -235,8 +364,11 @@ export default {
       this.myProgress = 100;
     },
     sortChange(sortProps) {
+      this.processData(sortProps, true);
+    },
+    sorting(sortProps, data) {
       if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.ip > b.ip) {
             val = 1;
@@ -246,7 +378,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.ip < b.ip) {
             val = 1;
@@ -256,7 +388,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Total Incoming' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.in > b.in) {
             val = 1;
@@ -266,7 +398,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Total Incoming' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.in < b.in) {
             val = 1;
@@ -276,7 +408,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Total Outgoing' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.out > b.out) {
             val = 1;
@@ -286,7 +418,7 @@ export default {
           return val;
         });
       } else if (sortProps.column.label === 'Total Outgoing' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
+        data.sort((a, b) => {
           let val = 0;
           if (a.out < b.out) {
             val = 1;
@@ -298,6 +430,7 @@ export default {
       } else {
         this.tableData = JSON.parse(this.originalData);
       }
+      return data;
     },
     processDataForCsv(data) {
       const values = [];
@@ -333,6 +466,27 @@ export default {
       };
       const csvExporter = new ExportToCsv(options);
       csvExporter.generateCsv(this.processDataForCsv(data));
+    },
+    processFilters(key) {
+      if (!this.filters.default.includes(key)) {
+        this.filters.default.push(key);
+      } else {
+        this.filters.default = this.filters.default.filter((value) => value !== key);
+      }
+      const keys = [];
+      keys.push(key);
+      this.processState(keys);
+      return this.processData(false, false);
+    },
+    processState(keys) {
+      this.filters.states.map((item) => {
+        const values = item;
+        values.state = false;
+        if (keys.includes(values.name)) {
+          values.state = true;
+        }
+        return values;
+      });
     },
   },
 };

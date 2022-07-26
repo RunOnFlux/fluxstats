@@ -20,36 +20,44 @@
     >
       <div class="col-12 d-flex flex-wrap">
         <div
-          v-for="[key, value] in filter"
-          :key="key"
+          v-for="(btn, idx) in filters.states"
+          :key="idx"
         >
           <l-button
-            v-if="key === 'node hashes - 0'"
+            v-if="btn.name === 'node hashes - 0'"
             style="margin-right: 10px;"
-            wide
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
           >
-            {{ key }}: {{ !value ? 0 : value.length }}
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
           </l-button>
           <l-button
-            v-if="key === 'no ip address'"
+            v-if="btn.name === 'no ip address'"
             style="margin-right: 10px;"
-            wide
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
           >
-            {{ key }}: {{ !value ? 0 : value.length }}
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
           </l-button>
           <l-button
-            v-if="key.includes('version')"
+            v-if="btn.name.includes('version')"
             style="margin-right: 10px;"
-            wide
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
           >
-            {{ key }}: {{ !value ? 0 : value.length }}
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
           </l-button>
           <l-button
-            v-if="key.includes('node status')"
+            v-if="btn.name.includes('node status')"
             style="margin-right: 10px;"
-            wide
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
           >
-            {{ key }}: {{ !value ? 0 : value.length }}
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
           </l-button>
         </div>
       </div>
@@ -57,18 +65,22 @@
         <h2 class="title">
           Node
         </h2>
-        <div>
-          <l-button
-            @click="downloadCsvFile(dataFilters)"
-          >
-            <i class="nc-icon nc-cloud-download-93" />
-          </l-button>
-        </div>
       </div>
       <p class="category" />
       <div class="col-12">
         <card>
           <div>
+            <div
+              class="pull-right"
+              style="padding:20px;"
+            >
+              <l-button
+                title="Download CSV"
+                @click="downloadCsvFile(dataFilters)"
+              >
+                <i class="nc-icon nc-cloud-download-93" />
+              </l-button>
+            </div>
             <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
               <el-select
                 v-model="pagination.perPage"
@@ -106,19 +118,14 @@
                   />
                 </el-select>
               </div>
-              <div
-                col-md-3
-                offset-md-6
-              >
-                <el-input
-                  v-model="searchQuery"
-                  type="search"
-                  class="mb-3"
-                  style="width: 200px"
-                  placeholder="Search IP"
-                  aria-controls="datatables"
-                />
-              </div>
+              <el-input
+                v-model="searchQuery"
+                type="search"
+                class="mb-3"
+                style="width: 200px"
+                placeholder="Search IP"
+                aria-controls="datatables"
+              />
             </div>
             <div
               slot="header"
@@ -179,6 +186,7 @@
           <div
             slot="footer"
             class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
+            style="padding:20px;"
           >
             <div class="">
               <p class="card-category">
@@ -231,6 +239,7 @@ export default {
       filters: {
         default: [],
         others: [],
+        states: [],
       },
       searchQuery: '',
       propsToSearch: ['node.status.ip'],
@@ -255,11 +264,6 @@ export default {
           label: 'Status',
           minWidth: 100,
         },
-        {
-          prop: 'node.status.rank',
-          label: 'Payment Rank',
-          minWidth: 100,
-        },
       ],
       tableData: [],
       originalData: null,
@@ -275,7 +279,7 @@ export default {
   },
   computed: {
     queriedData() {
-      return this.processData();
+      return this.processData(false, true);
     },
     to() {
       let highBound = this.from + this.pagination.perPage;
@@ -314,7 +318,7 @@ export default {
     async initialize() {
       this.myProgress = 20;
     },
-    processData(sortProps) {
+    processData(sortProps, isProcessingState) {
       let result;
       if (this.searchQuery !== '') {
         const temp = [];
@@ -329,8 +333,8 @@ export default {
         this.filters.default.forEach((item) => {
           const objs = this.filter.get(item);
           objs.forEach((obj) => {
-            if (!arr.includes(obj.node.status.ip)) {
-              arr.push(obj.node.status.ip);
+            if (!arr.includes(`${obj.node.status.ip}${obj.flux.zelid}`)) {
+              arr.push(`${obj.node.status.ip}${obj.flux.zelid}`);
               data.push(obj);
             }
           });
@@ -341,6 +345,9 @@ export default {
       }
       if (sortProps) {
         result = this.sorting(sortProps, result);
+      }
+      if (isProcessingState) {
+        this.processState(this.filters.default);
       }
       this.setDataFilters(result);
       this.paginationTotal(result.length);
@@ -397,12 +404,18 @@ export default {
         }
         if (!ipaddress || ipaddress === '') {
           temp.push(values);
+          this.filter.set('no ip address', temp);
         }
-        this.filter.set('no ip address', temp);
         return values;
       });
       this.filters.others = this.filterValue.sort();
       this.tableData = this.values;
+      this.filterValue.forEach((value) => {
+        this.filters.states.push({
+          name: value,
+          state: false,
+        });
+      });
     },
     setSearch() {
       this.originalData = JSON.stringify(this.tableData);
@@ -410,7 +423,7 @@ export default {
       this.myProgress = 100;
     },
     sortChange(sortProps) {
-      this.processData(sortProps);
+      this.processData(sortProps, true);
     },
     sorting(sortProps, data) {
       if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
@@ -493,26 +506,6 @@ export default {
           }
           return val;
         });
-      } else if (sortProps.column.label === 'Payment Rank' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.node.status.rank > b.node.status.rank) {
-            val = 1;
-          } else if (a.node.status.rank < b.node.status.rank) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Payment Rank' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.node.status.rank < b.node.status.rank) {
-            val = 1;
-          } else if (a.node.status.rank > b.node.status.rank) {
-            val = -1;
-          }
-          return val;
-        });
       } else {
         this.tableData = JSON.parse(this.originalData);
       }
@@ -526,7 +519,6 @@ export default {
           networkProtocol: !item.node.status.network ? '' : item.node.status.network,
           tier: !item.node.status.tier ? '' : item.node.status.tier,
           status: !item.node.status.status ? '' : item.node.status.status,
-          paymentRank: !item.node.status.rank ? '' : item.node.status.rank,
           collateral: !item.node.status.collateral ? '' : item.node.status.collateral,
           txnHash: !item.node.status.txhash ? '' : item.node.status.txhash,
           addedHeight: !item.node.status.added_height ? '' : item.node.status.added_height,
@@ -553,13 +545,13 @@ export default {
       const day = date.getDate();
       const year = date.getFullYear();
       const options = {
-        filename: `Nodes_${month}${day}${year}`,
+        filename: `Node_${month}${day}${year}`,
         fieldSeparator: ',',
         quoteStrings: '"',
         decimalSeparator: '.',
         showLabels: true,
         showTitle: true,
-        title: `Nodes - ${month}/${day}/${year}`,
+        title: `Node - ${month}/${day}/${year}`,
         useTextFile: false,
         useBom: true,
         headers: [
@@ -567,7 +559,6 @@ export default {
           'Network Protocol',
           'Tier',
           'Status',
-          'Payment Rank',
           'Collateral',
           'Txn Hash',
           'Added Height',
@@ -588,6 +579,27 @@ export default {
       };
       const csvExporter = new ExportToCsv(options);
       csvExporter.generateCsv(this.processDataForCsv(data));
+    },
+    processFilters(key) {
+      if (!this.filters.default.includes(key)) {
+        this.filters.default.push(key);
+      } else {
+        this.filters.default = this.filters.default.filter((value) => value !== key);
+      }
+      const keys = [];
+      keys.push(key);
+      this.processState(keys);
+      return this.processData(false, false);
+    },
+    processState(keys) {
+      this.filters.states.map((item) => {
+        const values = item;
+        values.state = false;
+        if (keys.includes(values.name)) {
+          values.state = true;
+        }
+        return values;
+      });
     },
   },
 };
