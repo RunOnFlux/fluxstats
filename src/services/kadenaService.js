@@ -159,7 +159,7 @@ async function processKDA() {
       if (nodeExists) {
         const mokNode = JSON.parse(JSON.stringify(nodeExists));
         mokNode.tier = 'mok';
-        nodesWithKDAset.push(chainwebDataNode);
+        nodesWithKDAset.push(mokNode);
       }
     }
     processedKDAnodes = nodesWithKDAset;
