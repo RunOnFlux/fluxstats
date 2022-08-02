@@ -78,11 +78,11 @@
     }
 
     .simple-text {
-      text-transform: uppercase;
+      text-transform: capitalize;
       padding: $padding-small-vertical $padding-zero;
       display: inline-block;
-      font-size: $font-size-large;
-      font-weight: $font-weight-normal;
+      font-size: 130%;
+      font-weight: bold;
       line-height: 30px;
       white-space: nowrap;
       color: $white-color;
