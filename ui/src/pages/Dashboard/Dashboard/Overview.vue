@@ -146,332 +146,671 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-4">
-          <chart-card
-            :chart-data="pieChart.data"
-            chart-type="Pie"
-          >
-            <template slot="header">
-              <h4 class="card-title">
-                Nodes Statistics
-              </h4>
-            </template>
-            <template slot="footer">
-              <div class="legend">
-                <i class="fa fa-circle text-info" /> Cumulus
-                <i class="fa fa-circle text-danger" /> Nimbus
-                <i class="fa fa-circle text-warning" /> Stratus
-              </div>
-              <hr>
-            </template>
-          </chart-card>
+        <div class="col-md-4 card"
+             style="margin-left: 15px;margin-right: 30px;"
+        >
+          <apexchart
+            type="pie"
+            height="600"
+            :options="pieChart.data.chartOptions"
+            :series="pieChart.data.series"
+          />
         </div>
-        <div class="col-md-8">
-          <chart-card
-            :chart-data="lineChart.data"
-            :chart-options="lineChart.options"
-            :responsive-options="lineChart.responsiveOptions"
-          >
-            <template slot="header">
-              <h4 class="card-title">
-                Nodes History
-              </h4>
-              <p class="card-category">
-                Tier Node Count History
-              </p>
-            </template>
-            <template slot="footer">
-              <div class="legend">
-                <i class="fa fa-circle text-info" /> Cumulus
-                <i class="fa fa-circle text-danger" /> Nimbus
-                <i class="fa fa-circle text-warning" /> Stratus
-                <i class="fa fa-circle text-success" /> Total
-              </div>
-              <hr>
-              <div class="stats" />
-            </template>
-          </chart-card>
+        <div class="col-md-7 card">
+          <apexchart
+            type="area"
+            height="500"
+            :options="lineChart.data.chartOptions"
+            :series="lineChart.data.series"
+          />
         </div>
       </div>
       <div class="row">
-        <div class="col-md-6">
-          <chart-card
-            :chart-data="barChart1.data"
-            :chart-options="barChart1.options"
-            :chart-responsive-options="barChart1.responsiveOptions"
-            chart-type="Bar"
-          >
-            <template slot="header">
-              <h4 class="card-title">
-                Top 10 Node Location
-              </h4>
-              <p class="card-category">
-                Countries With Highest Node Count
-              </p>
-            </template>
-            <template slot="footer">
-              <div class="legend">
-                <i class="fa fa-circle text-info" /> Cumulus
-                <i class="fa fa-circle text-danger" /> Nimbus
-                <i class="fa fa-circle text-warning" /> Stratus
-                <i class="fa fa-circle text-success" /> Total Nodes
-              </div>
-              <hr>
-              <div class="stats" />
-            </template>
-          </chart-card>
+        <div class="col-md-6 card"
+             style="margin-left: 15px;margin-right: 30px;"
+        >
+          <apexchart
+            type="bar"
+            height="500"
+            :options="barChart1.data.chartOptions"
+            :series="barChart1.data.series"
+          />
         </div>
-        <div class="col-md-6">
-          <chart-card
-            :chart-data="barChart2.data"
-            :chart-options="barChart2.options"
-            :chart-responsive-options="barChart2.responsiveOptions"
-            chart-type="Bar"
-          >
-            <template slot="header">
-              <h4 class="card-title">
-                Network Speed Per Tier
-              </h4>
-              <p class="card-category">
-                Average Upload And Download Speed Per Tier
-              </p>
-            </template>
-            <template slot="footer">
-              <div class="legend">
-                <i class="fa fa-circle text-info" /> Upload Speed
-                <i class="fa fa-circle text-danger" /> Download Speed
-              </div>
-              <hr>
-              <div class="stats" />
-            </template>
-          </chart-card>
+        <div class="col-md-5 card">
+          <apexchart
+            type="bar"
+            height="500"
+            :options="barChart2.data.chartOptions"
+            :series="barChart2.data.series"
+          />
         </div>
-        <div class="col-md-6">
-          <chart-card
-            :chart-data="barChart3.data"
-            :chart-options="barChart3.options"
-            :chart-responsive-options="barChart3.responsiveOptions"
-            chart-type="Bar"
-          >
-            <template slot="header">
-              <h4 class="card-title">
-                Top 5 Organizations
-              </h4>
-              <p class="card-category">
-                Organizations With Highest Node Count
-              </p>
-            </template>
-            <template slot="footer">
-              <div class="legend">
-                <i class="fa fa-circle text-info" /> Cumulus
-                <i class="fa fa-circle text-danger" /> Nimbus
-                <i class="fa fa-circle text-warning" /> Stratus
-                <i class="fa fa-circle text-success" /> Total Nodes
-              </div>
-              <hr>
-              <div class="stats" />
-            </template>
-          </chart-card>
+        <div class="col-md-6 card"
+             style="margin-left: 15px;margin-right: 30px;"
+        >
+          <apexchart
+            type="bar"
+            height="500"
+            :options="barChart3.data.chartOptions"
+            :series="barChart3.data.series"
+          />
         </div>
-        <div class="col-md-6">
-          <card
-            class="card-tasks"
-            title="Top 5 Node Operator"
-            sub-title="Zel ID's With Highest Node Count"
-          >
-            <l-table :data="tableData2.data">
-              <template slot-scope="{row}">
-                <td>{{ row.title }}</td>
-                <td class="td-actions d-flex justify-content-end" />
-              </template>
-            </l-table>
-            <div
-              slot="footer"
-              class="stats"
-            />
-          </card>
+        <div class="col-md-5 card">
+          <apexchart
+            type="bar"
+            height="500"
+            :options="barChart4.data.chartOptions"
+            :series="barChart4.data.series"
+          />
         </div>
-        <div class="col-md-6">
-          <card
-            class="card-tasks"
-            title="Active Since Information"
-            sub-title="Total Nodes Based On Starting Month And Year"
-          >
-            <l-table :data="tableData3.data">
-              <template slot-scope="{row}">
-                <td>{{ row.title }}</td>
-                <td class="td-actions d-flex justify-content-end" />
-              </template>
-            </l-table>
-            <div
-              slot="footer"
-              class="stats"
-            />
-          </card>
+        <div class="col-md-6 card"
+             style="margin-left: 15px;margin-right: 30px;"
+        >
+          <apexchart
+            type="bar"
+            height="500"
+            :options="barChart5.data.chartOptions"
+            :series="barChart5.data.series"
+          />
         </div>
-        <div class="col-md-6">
-          <card
-            class="card-tasks"
-            title="Top 5 Highest Node Count Round Time"
-            sub-title="Round Time With Highest Node Count"
-          >
-            <l-table :data="tableData4.data">
-              <template slot-scope="{row}">
-                <td>{{ row.title }}</td>
-                <td class="td-actions d-flex justify-content-end" />
-              </template>
-            </l-table>
-            <div
-              slot="footer"
-              class="stats"
-            />
-          </card>
+        <div class="col-md-5 card">
+          <apexchart
+            type="bar"
+            height="500"
+            :options="barChart6.data.chartOptions"
+            :series="barChart6.data.series"
+          />
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import {
-  ChartCard, StatsCard, Card, Table as LTable,
-} from 'src/components/index';
+import VueApexCharts from 'vue-apexcharts';
+import { StatsCard } from 'src/components/index';
 import axios from 'axios';
 import { VueEllipseProgress } from 'vue-ellipse-progress';
 import { MemoryStorage } from 'ttl-localstorage';
 import {
-  httpRequestFluxInfo, httpRequestDaemonInfo, httpRequestFluxHistoryStats,
+  httpRequestFluxInfo,
+  httpRequestDaemonInfo,
+  httpRequestFluxHistoryStats,
 } from '../Request/HttpRequest';
 
 export default {
   components: {
-    ChartCard,
     StatsCard,
     VueEllipseProgress,
-    LTable,
-    Card,
+    apexchart: VueApexCharts,
   },
   data() {
     return {
       pieChart: {
         data: {
-          labels: [],
           series: [],
+          chartOptions: {
+            chart: {
+              width: '500',
+              type: 'pie',
+            },
+            labels: ['Cumulus', 'Nimbus', 'Stratus'],
+            title: {
+              text: 'Node Statistics',
+              margin: 50,
+              style: {
+                fontSize: '22px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            responsive: [
+              {
+                breakpoint: 480,
+                options: {
+                  chart: {
+                    width: 200,
+                  },
+                  legend: {
+                    position: 'bottom',
+                  },
+                },
+              },
+            ],
+          },
         },
       },
       lineChart: {
         data: {
-          labels: [],
-          series: [],
-        },
-        options: {
-          low: 0,
-          high: 15000,
-          showArea: false,
-          height: '245px',
-          axisX: {
-            showGrid: false,
-          },
-          lineSmooth: false,
-          showLine: true,
-          showPoint: false,
-          fullWidth: true,
-          chartPadding: {
-            right: 50,
-          },
-        },
-        responsiveOptions: [
-          ['screen and (max-width: 640px)', {
-            axisX: {
-              labelInterpolationFnc(value) {
-                return value[0];
+          series: [
+            {
+              name: 'Cumulus',
+              data: [],
+            },
+            {
+              name: 'Nimbus',
+              data: [],
+            },
+            {
+              name: 'Stratus',
+              data: [],
+            },
+            {
+              name: 'Total',
+              data: [],
+            },
+          ],
+          chartOptions: {
+            chart: {
+              type: 'area',
+              stacked: false,
+              width: 900,
+              zoom: {
+                type: 'x',
+                enabled: true,
+                autoScaleYaxis: true,
+              },
+              toolbar: {
+                autoSelected: 'zoom',
               },
             },
-          }],
-        ],
+            dataLabels: {
+              enabled: false,
+            },
+            markers: {
+              size: 0,
+            },
+            title: {
+              text: 'Node History',
+              margin: 50,
+              style: {
+                fontSize: '22px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            subtitle: {
+              text: 'Tier Node Count History',
+              margin: 70,
+              style: {
+                fontSize: '12px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            fill: {
+              type: 'gradient',
+              gradient: {
+                shadeIntensity: 1,
+                inverseColors: false,
+                opacityFrom: 0.5,
+                opacityTo: 0,
+                stops: [0, 90, 100],
+              },
+            },
+            yaxis: {
+              title: {
+                text: 'Node Count',
+              },
+            },
+            xaxis: {
+              type: 'datetime',
+            },
+            tooltip: {
+              shared: false,
+            },
+            responsive: [
+              {
+                options: {
+                  chart: {
+                    width: 600,
+                  },
+                },
+              },
+            ],
+          },
+        },
       },
       barChart1: {
         data: {
-          labels: [],
-          series: [],
-        },
-        options: {
-          seriesBarDistance: 10,
-          axisX: {
-            showGrid: false,
-          },
-          height: '245px',
-        },
-        responsiveOptions: [
-          ['screen and (max-width: 640px)', {
-            seriesBarDistance: 5,
-            axisX: {
-              labelInterpolationFnc(value) {
-                return value[0];
+          series: [{
+            name: 'Cumulus',
+            data: [],
+          }, {
+            name: 'Nimbus',
+            data: [],
+          }, {
+            name: 'Stratus',
+            data: [],
+          }],
+          chartOptions: {
+            chart: {
+              type: 'bar',
+              width: 300,
+              stacked: true,
+              toolbar: {
+                show: true,
+              },
+              zoom: {
+                enabled: true,
               },
             },
-          }],
-        ],
+            title: {
+              text: 'Top 10 Node Location',
+              margin: 50,
+              style: {
+                fontSize: '22px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            subtitle: {
+              text: 'Countries With Highest Node Count',
+              margin: 70,
+              style: {
+                fontSize: '12px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            responsive: [
+              {
+                options: {
+                  chart: {
+                    width: 150,
+                  },
+                },
+              },
+            ],
+            plotOptions: {
+              bar: {
+                horizontal: false,
+                borderRadius: 10,
+              },
+            },
+            xaxis: {
+              categories: [],
+            },
+            yaxis: {
+              title: {
+                text: 'Node Count',
+              },
+            },
+            legend: {
+              position: 'right',
+              offsetY: 40,
+            },
+            fill: {
+              opacity: 1,
+            },
+          },
+        },
       },
       barChart2: {
         data: {
-          labels: [],
-          series: [],
-        },
-        options: {
-          seriesBarDistance: 10,
-          axisX: {
-            showGrid: false,
-          },
-          height: '245px',
-        },
-        responsiveOptions: [
-          ['screen and (max-width: 640px)', {
-            seriesBarDistance: 5,
-            axisX: {
-              labelInterpolationFnc(value) {
-                return value[0];
+          series: [{
+            name: 'Upload Speed',
+            data: [],
+          }, {
+            name: 'Download Speed',
+            data: [],
+          }],
+          chartOptions: {
+            chart: {
+              type: 'bar',
+              height: 350,
+            },
+            plotOptions: {
+              bar: {
+                horizontal: false,
+                columnWidth: '55%',
+                endingShape: 'rounded',
               },
             },
-          }],
-        ],
+            dataLabels: {
+              enabled: false,
+            },
+            stroke: {
+              show: true,
+              width: 2,
+              colors: ['transparent'],
+            },
+            xaxis: {
+              categories: ['Cumulus', 'Nimbus', 'Stratus'],
+            },
+            yaxis: {
+              title: {
+                text: 'Internet Speed (Mbps)',
+              },
+            },
+            fill: {
+              opacity: 1,
+            },
+            title: {
+              text: 'Network Speed Per Tier',
+              margin: 50,
+              style: {
+                fontSize: '22px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            subtitle: {
+              text: 'Average Upload And Download Speed Per Tier',
+              margin: 70,
+              style: {
+                fontSize: '12px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+          },
+        },
       },
       barChart3: {
         data: {
-          labels: [],
-          series: [],
-        },
-        options: {
-          seriesBarDistance: 10,
-          axisX: {
-            showGrid: false,
-          },
-          height: '245px',
-        },
-        responsiveOptions: [
-          ['screen and (max-width: 640px)', {
-            seriesBarDistance: 5,
-            axisX: {
-              labelInterpolationFnc(value) {
-                return value[0];
+          series: [{
+            name: 'Cumulus',
+            data: [],
+          }, {
+            name: 'Nimbus',
+            data: [],
+          }, {
+            name: 'Stratus',
+            data: [],
+          }],
+          chartOptions: {
+            chart: {
+              type: 'bar',
+              width: 300,
+              stacked: true,
+              toolbar: {
+                show: true,
+              },
+              zoom: {
+                enabled: true,
               },
             },
+            title: {
+              text: 'Top 5 Organizations',
+              margin: 50,
+              style: {
+                fontSize: '22px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            subtitle: {
+              text: 'Organizations With Highest Node Count',
+              margin: 70,
+              style: {
+                fontSize: '12px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            responsive: [
+              {
+                options: {
+                  chart: {
+                    width: 150,
+                  },
+                },
+              },
+            ],
+            plotOptions: {
+              bar: {
+                horizontal: false,
+                borderRadius: 10,
+              },
+            },
+            xaxis: {
+              categories: [],
+            },
+            legend: {
+              position: 'right',
+              offsetY: 40,
+            },
+            yaxis: {
+              title: {
+                text: 'Node Count',
+              },
+            },
+            fill: {
+              opacity: 1,
+            },
+          },
+        },
+      },
+      barChart4: {
+        data: {
+          series: [{
+            name: 'Cumulus',
+            data: [],
+          }, {
+            name: 'Nimbus',
+            data: [],
+          }, {
+            name: 'Stratus',
+            data: [],
           }],
-        ],
+          chartOptions: {
+            chart: {
+              type: 'bar',
+              width: 300,
+              stacked: true,
+              toolbar: {
+                show: true,
+              },
+              zoom: {
+                enabled: true,
+              },
+            },
+            title: {
+              text: 'Top 5 Node Operator',
+              margin: 50,
+              style: {
+                fontSize: '22px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            subtitle: {
+              text: 'Zel IDs With Highest Node Count',
+              margin: 70,
+              style: {
+                fontSize: '12px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            responsive: [
+              {
+                options: {
+                  chart: {
+                    width: 150,
+                  },
+                },
+              },
+            ],
+            plotOptions: {
+              bar: {
+                horizontal: false,
+                borderRadius: 10,
+              },
+            },
+            xaxis: {
+              categories: [],
+              labels: {
+                show: false,
+              },
+            },
+            yaxis: {
+              title: {
+                text: 'Node Count',
+              },
+            },
+            legend: {
+              position: 'right',
+              offsetY: 40,
+            },
+            fill: {
+              opacity: 1,
+            },
+          },
+        },
+      },
+      barChart5: {
+        data: {
+          series: [{
+            name: 'Cumulus',
+            data: [],
+          }, {
+            name: 'Nimbus',
+            data: [],
+          }, {
+            name: 'Stratus',
+            data: [],
+          }],
+          chartOptions: {
+            chart: {
+              type: 'bar',
+              height: 350,
+              stacked: true,
+            },
+            plotOptions: {
+              bar: {
+                horizontal: true,
+              },
+            },
+            stroke: {
+              width: 1,
+              colors: ['#fff'],
+            },
+            xaxis: {
+              categories: [],
+              title: {
+                text: 'Node Count',
+              },
+            },
+            title: {
+              text: 'Active Since Information',
+              margin: 50,
+              style: {
+                fontSize: '22px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            subtitle: {
+              text: 'Total Nodes Based On Starting Month And Year',
+              margin: 70,
+              style: {
+                fontSize: '12px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            fill: {
+              opacity: 1,
+            },
+            legend: {
+              position: 'right',
+              offsetY: 40,
+            },
+          },
+        },
+      },
+      barChart6: {
+        data: {
+          series: [{
+            name: 'Cumulus',
+            data: [],
+          }, {
+            name: 'Nimbus',
+            data: [],
+          }, {
+            name: 'Stratus',
+            data: [],
+          }, {
+            name: 'Total',
+            data: [],
+          }],
+          chartOptions: {
+            chart: {
+              type: 'bar',
+              height: 430,
+            },
+            plotOptions: {
+              bar: {
+                horizontal: true,
+                dataLabels: {
+                  position: 'top',
+                },
+              },
+            },
+            dataLabels: {
+              enabled: true,
+              offsetX: -6,
+              style: {
+                fontSize: '12px',
+                colors: ['#fff'],
+              },
+            },
+            stroke: {
+              show: true,
+              width: 1,
+              colors: ['#fff'],
+            },
+            tooltip: {
+              shared: true,
+              intersect: false,
+            },
+            xaxis: {
+              categories: [],
+              title: {
+                text: 'Node Count',
+              },
+            },
+            title: {
+              text: 'Top 5 Highest Node Count Round Time',
+              margin: 50,
+              style: {
+                fontSize: '22px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            subtitle: {
+              text: 'Total Nodes Based On Round Time',
+              margin: 70,
+              style: {
+                fontSize: '12px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            legend: {
+              position: 'right',
+              offsetY: 40,
+            },
+          },
+        },
       },
       tableData: [],
-      tableData1: [],
-      tableData2: {
-        data: [
-        ],
-      },
-      tableData3: {
-        data: [
-        ],
-      },
-      tableData4: {
-        data: [
-        ],
-      },
       totalNumberOfNodes: 0,
       totalNumberOfCumulus: 0,
       totalNumberOfNimbus: 0,
@@ -599,11 +938,7 @@ export default {
       });
       this.totalTBSSD = Number(this.totalTBSSD / 1000).toFixed(2);
       this.totalTBRAM = Number(this.totalTBRAM / 1000).toFixed(2);
-      const pieChartPercentageCumulus = ((this.totalNumberOfCumulus / this.totalNumberOfNodes) * 100).toFixed(2);
-      const pieChartPercentageNimbus = ((this.totalNumberOfNimbus / this.totalNumberOfNodes) * 100).toFixed(2);
-      const pieChartPercentageStratus = ((this.totalNumberOfStratus / this.totalNumberOfNodes) * 100).toFixed(2);
-      this.pieChart.data.labels = [`${pieChartPercentageCumulus} %`, `${pieChartPercentageNimbus} %`, `${pieChartPercentageStratus} %`];
-      this.pieChart.data.series = [pieChartPercentageCumulus, pieChartPercentageNimbus, pieChartPercentageStratus];
+      this.pieChart.data.series = [this.totalNumberOfCumulus, this.totalNumberOfNimbus, this.totalNumberOfStratus];
       let idx = 0;
       let ent = [];
       for (const entry of new Map([...this.map.entries()].sort((a, b) => b[1] - a[1])).entries()) {
@@ -619,30 +954,22 @@ export default {
           break;
         }
       }
-      let temp1 = [];
-      let temp2 = [];
-      let temp3 = [];
-      let temp4 = [];
       for (let i = 0; i < 10; i += 1) {
-        this.barChart1.data.labels.push(ent[i].name);
-        temp1.push(this.mapCumulus.get(ent[i].name));
-        temp2.push(this.mapNimbus.get(ent[i].name));
-        temp3.push(this.mapStratus.get(ent[i].name));
-        temp4.push(ent[i].total);
+        this.barChart1.data.chartOptions.xaxis.categories.push(ent[i].name);
+        this.barChart1.data.series[0].data.push(this.mapCumulus.get(ent[i].name));
+        this.barChart1.data.series[1].data.push(this.mapNimbus.get(ent[i].name));
+        this.barChart1.data.series[2].data.push(this.mapStratus.get(ent[i].name));
       }
-      this.barChart1.data.series = [temp1, temp2, temp3, temp4];
       idx = 0;
       ent = [];
       for (const entry of new Map([...this.mapOrganizations.entries()].sort((a, b) => b[1] - a[1])).entries()) {
         const key = entry[0];
-        const value = entry[1];
         if (key !== '') {
           ent.push({
             name: key,
             cumulus: this.mapOrganizationsCumulus.get(key),
             nimbus: this.mapOrganizationsNimbus.get(key),
             stratus: this.mapOrganizationsStratus.get(key),
-            total: value,
           });
           if (idx < 5) {
             idx += 1;
@@ -651,18 +978,12 @@ export default {
           }
         }
       }
-      temp1 = [];
-      temp2 = [];
-      temp3 = [];
-      temp4 = [];
       for (let i = 0; i < 5; i += 1) {
-        this.barChart3.data.labels.push(ent[i].name);
-        temp1.push(ent[i].cumulus);
-        temp2.push(ent[i].nimbus);
-        temp3.push(ent[i].stratus);
-        temp4.push(ent[i].total);
+        this.barChart3.data.chartOptions.xaxis.categories.push(ent[i].name);
+        this.barChart3.data.series[0].data.push(ent[i].cumulus);
+        this.barChart3.data.series[1].data.push(ent[i].nimbus);
+        this.barChart3.data.series[2].data.push(ent[i].stratus);
       }
-      this.barChart3.data.series = [temp1, temp2, temp3, temp4];
       this.values.map((data) => {
         if (this.paymentAddress.get(data.flux.zelid) !== undefined) {
           this.totalNodes.set(data.flux.zelid, this.totalNodes.get(data.flux.zelid) + 1);
@@ -705,11 +1026,14 @@ export default {
         }
       }
       for (let i = 0; i < 5; i += 1) {
-        this.tableData2.data.push({ title: `${i + 1}. Zel ID: ${ent[i].zelId} - Total: ${this.totalNodes.get(ent[i].zelId)} Cumulus: ${this.totalCumulus.get(ent[i].zelId)} Nimbus: ${this.totalNimbus.get(ent[i].zelId)} Stratus: ${this.totalStratus.get(ent[i].zelId)}` });
+        this.barChart4.data.chartOptions.xaxis.categories.push(ent[i].zelId);
+        this.barChart4.data.series[0].data.push(this.totalCumulus.get(ent[i].zelId));
+        this.barChart4.data.series[1].data.push(this.totalNimbus.get(ent[i].zelId));
+        this.barChart4.data.series[2].data.push(this.totalStratus.get(ent[i].zelId));
       }
       idx = 0;
       ent = [];
-      for (const entry of new Map([...this.activeSince.entries()].sort((a, b) => b[1] - a[1])).entries()) {
+      for (const entry of new Map([...this.activeSince.entries()].sort()).entries()) {
         const key = entry[0];
         const value = entry[1];
         if (key !== '') {
@@ -720,20 +1044,20 @@ export default {
         }
       }
       for (let i = 0; i < Object.keys(ent).length; i += 1) {
-        this.tableData3.data.push({ title: `${ent[i].date} - Total: ${ent[i].total} Cumulus: ${this.activeSinceCumulus.get(ent[i].date)} Nimbus: ${this.activeSinceNimbus.get(ent[i].date)} Stratus: ${this.activeSinceStratus.get(ent[i].date)}` });
+        this.barChart5.data.chartOptions.xaxis.categories.push(ent[i].date);
+        this.barChart5.data.series[0].data.push(this.activeSinceCumulus.get(ent[i].date));
+        this.barChart5.data.series[1].data.push(this.activeSinceNimbus.get(ent[i].date));
+        this.barChart5.data.series[2].data.push(this.activeSinceStratus.get(ent[i].date));
       }
-      this.barChart2.data.labels = ['Cumulus Nodes', 'Nimbus Nodes', 'Stratus Nodes'];
-      this.barChart2.data.series = [
-        [
-          parseFloat(this.averageUploadSpeedCumulus / this.totalNumberOfCumulus).toFixed(2),
-          parseFloat(this.averageUploadSpeedNimbus / this.totalNumberOfNimbus).toFixed(2),
-          parseFloat(this.averageUploadSpeedStratus / this.totalNumberOfStratus).toFixed(2),
-        ],
-        [
-          parseFloat(this.averageDownloadSpeedCumulus / this.totalNumberOfCumulus).toFixed(2),
-          parseFloat(this.averageDownloadSpeedNimbus / this.totalNumberOfNimbus).toFixed(2),
-          parseFloat(this.averageDownloadSpeedStratus / this.totalNumberOfStratus).toFixed(2),
-        ],
+      this.barChart2.data.series[0].data = [
+        parseFloat(this.averageUploadSpeedCumulus / this.totalNumberOfCumulus).toFixed(2),
+        parseFloat(this.averageUploadSpeedNimbus / this.totalNumberOfNimbus).toFixed(2),
+        parseFloat(this.averageUploadSpeedStratus / this.totalNumberOfStratus).toFixed(2),
+      ];
+      this.barChart2.data.series[1].data = [
+        parseFloat(this.averageDownloadSpeedCumulus / this.totalNumberOfCumulus).toFixed(2),
+        parseFloat(this.averageDownloadSpeedNimbus / this.totalNumberOfNimbus).toFixed(2),
+        parseFloat(this.averageDownloadSpeedStratus / this.totalNumberOfStratus).toFixed(2),
       ];
     },
     async getFluxStats() {
@@ -742,29 +1066,15 @@ export default {
     },
     async processFluxStats() {
       for (const [key, value] of Object.entries(this.statsValues)) {
-        this.tableData1.push({
-          roundTime: key,
-          cumulus: value.cumulus,
-          nimbus: value.nimbus,
-          stratus: value.stratus,
-          total: value.cumulus + value.nimbus + value.stratus,
-        });
+        this.lineChart.data.series[0].data.push([parseInt(key, 10), value.cumulus]);
+        this.lineChart.data.series[1].data.push([parseInt(key, 10), value.nimbus]);
+        this.lineChart.data.series[2].data.push([parseInt(key, 10), value.stratus]);
+        this.lineChart.data.series[3].data.push([parseInt(key, 10), value.cumulus + value.nimbus + value.stratus]);
         this.roundTimeCumulus.set(key, value.cumulus);
         this.roundTimeNimbus.set(key, value.nimbus);
         this.roundTimeStratus.set(key, value.stratus);
         this.roundTime.set(key, value.cumulus + value.nimbus + value.stratus);
       }
-      const temp1 = [];
-      const temp2 = [];
-      const temp3 = [];
-      const temp4 = [];
-      for (let i = 0; i < this.tableData1.length; i += 1) {
-        temp1.push(this.tableData1[i].cumulus);
-        temp2.push(this.tableData1[i].nimbus);
-        temp3.push(this.tableData1[i].stratus);
-        temp4.push(this.tableData1[i].total);
-      }
-      this.lineChart.data.series = [temp1, temp2, temp3, temp4];
       let idx = 0;
       const ent = [];
       for (const entry of new Map([...this.roundTime.entries()].sort((a, b) => b[1] - a[1])).entries()) {
@@ -783,7 +1093,11 @@ export default {
         }
       }
       for (let i = 0; i < 5; i += 1) {
-        this.tableData4.data.push({ title: `${i + 1}. Round Time: ${ent[i].roundTime} - Total: ${ent[i].total} Cumulus: ${this.roundTimeCumulus.get(ent[i].roundTime)} Nimbus: ${this.roundTimeNimbus.get(ent[i].roundTime)} Stratus: ${this.roundTimeStratus.get(ent[i].roundTime)}` });
+        this.barChart6.data.chartOptions.xaxis.categories.push(ent[i].roundTime);
+        this.barChart6.data.series[0].data.push(this.roundTimeCumulus.get(ent[i].roundTime));
+        this.barChart6.data.series[1].data.push(this.roundTimeNimbus.get(ent[i].roundTime));
+        this.barChart6.data.series[2].data.push(this.roundTimeStratus.get(ent[i].roundTime));
+        this.barChart6.data.series[3].data.push(ent[i].total);
       }
     },
   },
