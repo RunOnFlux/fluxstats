@@ -20,7 +20,6 @@
           </div>
         </a>
         <a
-          href=""
           class="simple-text logo-normal"
         >
           {{ title }}
@@ -79,7 +78,7 @@ export default {
     },
     backgroundColor: {
       type: String,
-      default: 'black',
+      default: '',
       validator: (value) => {
         const acceptedValues = ['', 'blue', 'azure', 'green', 'orange', 'red', 'purple', 'black'];
         return acceptedValues.indexOf(value) !== -1;
@@ -87,7 +86,7 @@ export default {
     },
     backgroundImage: {
       type: String,
-      default: 'static/img/sidebar-5.jpg',
+      default: 'static/img/fluxlabs_backg1-p-800.png',
     },
     activeColor: {
       type: String,
