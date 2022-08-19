@@ -4,7 +4,7 @@ const httpRequestFluxInfo = async (axios, MemoryStorage) => {
     const response = await axios.get('https://stats.runonflux.io/fluxinfo');
     MemoryStorage.put('fluxinfo', response.data.data, 18000);
   }
-  return 80;
+  return 60;
 };
 
 const httpRequestDaemonInfo = async (axios, MemoryStorage) => {
@@ -13,7 +13,7 @@ const httpRequestDaemonInfo = async (axios, MemoryStorage) => {
     const response = await axios.get('https://api.runonflux.io/daemon/viewdeterministiczelnodelist');
     MemoryStorage.put('daemon/viewdeterministiczelnodelist', response.data.data, 18000);
   }
-  return 85;
+  return 80;
 };
 
 const httpRequestFluxHistoryStats = async (axios, MemoryStorage) => {
