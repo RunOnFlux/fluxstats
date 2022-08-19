@@ -1,6 +1,7 @@
 .DS_Store
 node_modules/
 ui/dist/
+.history
 
 package-lock.json
 
