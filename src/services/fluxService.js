@@ -1105,7 +1105,7 @@ async function fluxNodesHistoryStats(req, res, i = 0) {
       }
       fluxNodeHistoryStatsRunning = true;
       await createHistoryStats();
-      historystats = myCache.get('historyStats');
+      historystats = myCache.set('historyStats');
       fluxNodeHistoryStatsRunning = false;
     } else {
       log.info('Using fluxNodesHistoryStats cache');
