@@ -146,8 +146,18 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-4 card"
+        <div class="col-md-7 card"
              style="margin-left: 15px;margin-right: 30px;"
+        >
+          <GChart
+            :settings="{ packages: ['geochart'] }"
+            type="GeoChart"
+            :data="worldMap.data.chartData"
+            :options="worldMap.data.chartOptions"
+          />
+        </div>
+        <div class="col-md-4 card"
+             style="margin-right: 30px;"
         >
           <apexchart
             type="pie"
@@ -156,7 +166,11 @@
             :series="pieChart.data.series"
           />
         </div>
-        <div class="col-md-7 card">
+      </div>
+      <div class="row">
+        <div class="col-md-11 card"
+             style="margin-left: 15px;margin-right: 30px;"
+        >
           <apexchart
             type="area"
             height="500"
@@ -230,6 +244,7 @@ import { StatsCard } from 'src/components/index';
 import axios from 'axios';
 import { VueEllipseProgress } from 'vue-ellipse-progress';
 import { MemoryStorage } from 'ttl-localstorage';
+import { GChart } from 'vue-google-charts/legacy';
 import {
   httpRequestFluxInfo,
   httpRequestDaemonInfo,
@@ -240,10 +255,25 @@ export default {
   components: {
     StatsCard,
     VueEllipseProgress,
+    GChart,
     apexchart: VueApexCharts,
   },
   data() {
     return {
+      worldMap: {
+        data: {
+          chartData: [
+            ['Country', 'Nodes'],
+          ],
+          chartOptions: {
+            colorAxis: { colors: ['#EBF5FB', '#1B4F72'] },
+            backgroundColor: '#EAECEE',
+            keepAspectRatio: false,
+            legend: { textStyle: { color: '#959392', fontSize: 12 } },
+            tooltip: { textStyle: { color: '#959392' }, showColorCode: true },
+          },
+        },
+      },
       pieChart: {
         data: {
           series: [],
@@ -258,6 +288,16 @@ export default {
               margin: 50,
               style: {
                 fontSize: '22px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            subtitle: {
+              text: 'Tier Percentage Based From Total Nodes',
+              margin: 70,
+              style: {
+                fontSize: '12px',
                 fontWeight: '9px',
                 fontFamily: 'Arial',
                 color: '#959392',
@@ -936,6 +976,9 @@ export default {
         this.activeSinceStratus.set(datevalue, data.tier === 'STRATUS' ? this.activeSinceStratus.get(datevalue) + 1 : this.activeSinceStratus.get(datevalue));
         return data;
       });
+      for (const entry of new Map([...this.map.entries()]).entries()) {
+        this.worldMap.data.chartData.push([entry[0], entry[1]]);
+      }
       this.totalTBSSD = Number(this.totalTBSSD / 1000).toFixed(2);
       this.totalTBRAM = Number(this.totalTBRAM / 1000).toFixed(2);
       this.pieChart.data.series = [this.totalNumberOfCumulus, this.totalNumberOfNimbus, this.totalNumberOfStratus];
