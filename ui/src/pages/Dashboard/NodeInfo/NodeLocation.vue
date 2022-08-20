@@ -221,6 +221,11 @@ export default {
           label: 'Longtitude',
           minWidth: 120,
         },
+        {
+          prop: 'node.status.tier',
+          label: 'Tier',
+          minWidth: 120,
+        },
       ],
       tableData: [],
       filterValue: [],
@@ -285,8 +290,8 @@ export default {
         this.filters.default.forEach((item) => {
           const objs = this.filter.get(item);
           objs.forEach((obj) => {
-            if (!arr.includes(`${obj.geolocation.ip}${obj.geolocation.country}`)) {
-              arr.push(`${obj.geolocation.ip}${obj.geolocation.country}`);
+            if (!arr.includes(`${obj.geolocation.ip}${obj.geolocation.country}${obj.node.status.tier}`)) {
+              arr.push(`${obj.geolocation.ip}${obj.geolocation.country}${obj.node.status.tier}`);
               data.push(obj);
             }
           });
@@ -313,21 +318,30 @@ export default {
     async processFluxInfo() {
       this.values.map((value) => {
         const values = value;
-        const temp = this.filter.has(values.geolocation.country) ? this.filter.get(values.geolocation.country) : [];
+        const tierval = values.node.status.tier;
+        const temp1 = this.filter.has(values.geolocation.country) ? this.filter.get(values.geolocation.country) : [];
+        const temp2 = this.filter.has(`${values.geolocation.country} - ${tierval}`) ? this.filter.get(`${values.geolocation.country} - ${tierval}`) : [];
         if (!this.filter.has(values.geolocation.country)) {
           this.filterValue.push(values.geolocation.country);
         }
-        temp.push(values);
-        this.filter.set(values.geolocation.country, temp);
+        temp1.push(values);
+        this.filter.set(values.geolocation.country, temp1);
+        if (!this.filter.has(`${values.geolocation.country} - ${tierval}`)) {
+          this.filterValue.push(`${values.geolocation.country} - ${tierval}`);
+        }
+        temp2.push(values);
+        this.filter.set(`${values.geolocation.country} - ${tierval}`, temp2);
         return values;
       });
       this.filters.others = this.filterValue.sort();
       this.tableData = this.values;
       this.filterValue.forEach((value) => {
-        this.filters.states.push({
-          name: value,
-          state: false,
-        });
+        if (!value.includes('-')) {
+          this.filters.states.push({
+            name: value,
+            state: false,
+          });
+        }
       });
     },
     setSearch() {
@@ -459,6 +473,26 @@ export default {
           }
           return val;
         });
+      } else if (sortProps.column.label === 'Tier' && sortProps.column.order === 'ascending') {
+        data.sort((a, b) => {
+          let val = 0;
+          if (a.node.status.tier > b.node.status.tier) {
+            val = 1;
+          } else if (a.node.status.tier < b.node.status.tier) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Tier' && sortProps.column.order === 'descending') {
+        data.sort((a, b) => {
+          let val = 0;
+          if (a.node.status.tier < b.node.status.tier) {
+            val = 1;
+          } else if (a.node.status.tier > b.node.status.tier) {
+            val = -1;
+          }
+          return val;
+        });
       } else {
         this.tableData = JSON.parse(this.originalData);
       }
@@ -473,6 +507,7 @@ export default {
           countryCode: !item.geolocation.countryCode ? '' : item.geolocation.countryCode,
           latitude: !item.geolocation.lat ? '' : item.geolocation.lat,
           longtitude: !item.geolocation.lon ? '' : item.geolocation.lon,
+          tier: !item.node.status.tier ? '' : item.node.status.tier,
         });
       });
       return values;
@@ -498,6 +533,7 @@ export default {
           'Country Code',
           'Latitude',
           'Longtitude',
+          'Tier',
         ],
       };
       const csvExporter = new ExportToCsv(options);
