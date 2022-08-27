@@ -17,6 +17,9 @@ const NodeBenchmark = () => import('@/pages/Dashboard/NodeInfo/NodeBenchmark.vue
 // NodeHistory pages
 const HistoryInfo = () => import('@/pages/Dashboard/NodeHistory/HistoryInfo.vue');
 
+// Maintenance pages
+const Error = () => import('@/pages/Dashboard/Maintenance/Error.vue');
+
 const nodeInfo = {
   path: '/flux/nodeinfo',
   component: DashboardLayout,
@@ -81,6 +84,11 @@ const nodeHistory = {
     }],
 };
 
+const maintenance = {
+  path: '/flux/maintenance/error',
+  component: Error,
+};
+
 const routes = [
   {
     path: '/',
@@ -88,6 +96,7 @@ const routes = [
   },
   nodeInfo,
   nodeHistory,
+  maintenance,
   {
     path: '/flux/dashboard',
     component: DashboardLayout,

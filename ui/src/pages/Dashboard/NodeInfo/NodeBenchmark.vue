@@ -341,13 +341,17 @@ export default {
     },
   },
   async mounted() {
-    this.initialize();
-    this.myProgress = await httpRequestFluxInfo(axios, MemoryStorage);
-    this.myProgress = await httpRequestDaemonInfo(axios, MemoryStorage);
-    this.myProgress = await httpRequestFluxHistoryStats(axios, MemoryStorage);
-    await this.getFluxInfo();
-    await this.processFluxInfo();
-    this.setSearch();
+    try {
+      this.initialize();
+      this.myProgress = await httpRequestFluxInfo(axios, MemoryStorage);
+      this.myProgress = await httpRequestDaemonInfo(axios, MemoryStorage);
+      this.myProgress = await httpRequestFluxHistoryStats(axios, MemoryStorage);
+      await this.getFluxInfo();
+      await this.processFluxInfo();
+      this.setSearch();
+    } catch (e) {
+      this.$router.push('/flux/maintenance/error').catch(() => {});
+    }
   },
   methods: {
     paginationTotal(value) {

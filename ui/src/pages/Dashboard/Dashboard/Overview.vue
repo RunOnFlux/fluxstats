@@ -895,15 +895,19 @@ export default {
     };
   },
   async created() {
-    this.initialize();
-    this.myProgress = await httpRequestFluxInfo(axios, MemoryStorage);
-    this.myProgress = await httpRequestDaemonInfo(axios, MemoryStorage);
-    this.myProgress = await httpRequestFluxHistoryStats(axios, MemoryStorage);
-    await this.getFluxInfo();
-    await this.processFluxInfo();
-    await this.getFluxStats();
-    await this.processFluxStats();
-    this.stopProcessing();
+    try {
+      this.initialize();
+      this.myProgress = await httpRequestFluxInfo(axios, MemoryStorage);
+      this.myProgress = await httpRequestDaemonInfo(axios, MemoryStorage);
+      this.myProgress = await httpRequestFluxHistoryStats(axios, MemoryStorage);
+      await this.getFluxInfo();
+      await this.processFluxInfo();
+      await this.getFluxStats();
+      await this.processFluxStats();
+      this.stopProcessing();
+    } catch (e) {
+      this.$router.push('/flux/maintenance/error').catch(() => {});
+    }
   },
   methods: {
     async initialize() {
