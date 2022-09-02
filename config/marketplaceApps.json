@@ -293,7 +293,7 @@
         "portSpecs": [
           "37700-37999"
         ],
-        "ports": [37700],
+        "ports": [37700,37701],
         "userEnvironmentParameters": [],
       }
     ],
