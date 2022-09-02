@@ -294,7 +294,13 @@
           "37700-37999"
         ],
         "ports": [37700,37701],
-        "userEnvironmentParameters": [],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
       }
     ],
     "visible": true,
