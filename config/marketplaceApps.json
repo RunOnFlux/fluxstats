@@ -257,10 +257,10 @@
     "enabled": true
   },
   {
-	"description": "Host your Kaspa Node on the Flux Network",
+    "description": "Host your Kaspa Node on the Flux Network",
     "price": 4.5,
     "category": "Crypto",
-    "version": 5,
+    "version": 4,
     "name": "KaspaNode",
     "instances": 3,
     "compose": [
