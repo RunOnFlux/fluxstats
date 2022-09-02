@@ -255,5 +255,49 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+	"description": "Host your Kaspa Node on the Flux Network",
+    "price": 4.5,
+    "category": "Crypto",
+    "version": 5,
+    "name": "KaspaNode",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "node",
+        "description": "The Kaspa Node container",
+        "repotag": "supertypo/kaspad:latest",
+        "containerPorts": [
+          16110,16111
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/tmp",
+        "tiered": false,
+        "cpu": 4,
+        "ram": 8000,
+        "hdd": 50,
+        "cpubasic": 4,
+        "cpusuper": 4,
+        "cpubamf": 4,
+        "rambasic": 8000,
+        "ramsuper": 8000,
+        "rambamf": 8000,
+        "hddbasic": 50,
+        "hddsuper": 50,
+        "hddbamf": 50,
+        "portSpecs": [
+          "37700-37999"
+        ],
+        "ports": [37700,37701],
+        "userEnvironmentParameters": [],
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
