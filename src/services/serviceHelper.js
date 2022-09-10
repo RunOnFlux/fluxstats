@@ -166,6 +166,11 @@ async function removeDocumentsFromCollection(database, collection, query) {
   return result;
 }
 
+async function listCollections(database) {
+  const result = await database.listCollections().toArray();
+  return result;
+}
+
 async function dropCollection(database, collection) {
   const result = await database.collection(collection).drop().catch((error) => { throw error; });
   return result;
@@ -212,4 +217,5 @@ module.exports = {
   createWarningMessage,
   createErrorMessage,
   countInDatabase,
+  listCollections,
 };

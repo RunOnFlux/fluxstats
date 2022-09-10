@@ -27,6 +27,19 @@ async function removeRecords() {
 
   const resultB = await serviceHelper.removeDocumentsFromCollection(database, completedRoundsCollection, queryB);
   console.log(resultB);
+
+  const collections = await serviceHelper.listCollections(database);
+  console.log(collections);
+  for (const collection of collections) {
+    const alteredName = collection.slice(6);
+    const collectionTimestamp = Number(alteredName) * 1000;
+    if (collectionTimestamp < minimumTime && collection.startsWitH('fluxes')) {
+      // drop it
+      // eslint-disable-next-line no-await-in-loop
+      await serviceHelper.dropCollection(database, collection);
+      console.log(collection);
+    }
+  }
 }
 
 module.exports = {
