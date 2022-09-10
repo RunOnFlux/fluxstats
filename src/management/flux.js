@@ -31,13 +31,13 @@ async function removeRecords() {
   const collections = await serviceHelper.listCollections(database);
   console.log(collections);
   for (const collection of collections) {
-    const alteredName = collection.slice(6);
+    const alteredName = collection.name.slice(6);
     const collectionTimestamp = Number(alteredName) * 1000;
-    if (collectionTimestamp < minimumTime && collection.startsWitH('fluxes')) {
+    if (collectionTimestamp < minimumTime && collection.name.startsWitH('fluxes')) {
       // drop it
       // eslint-disable-next-line no-await-in-loop
       await serviceHelper.dropCollection(database, collection);
-      console.log(collection);
+      console.log(collection.name);
     }
   }
 }
