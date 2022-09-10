@@ -32,11 +32,11 @@ async function removeRecords() {
   console.log(collections);
   for (const collection of collections) {
     const alteredName = collection.name.slice(6);
-    const collectionTimestamp = Number(alteredName) * 1000;
-    if (collectionTimestamp < minimumTime && collection.name.startsWitH('fluxes')) {
+    const collectionTimestamp = Number(alteredName);
+    if (collectionTimestamp < minimumTime && collection.name.startsWith('fluxes')) {
       // drop it
       // eslint-disable-next-line no-await-in-loop
-      await serviceHelper.dropCollection(database, collection);
+      await serviceHelper.dropCollection(database, collection.name);
       console.log(collection.name);
     }
   }
