@@ -305,5 +305,55 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+	"description": "Host your Ravencoin Node on the Flux Network",
+    "price": 1.59,
+    "category": "Crypto",
+    "version": 4,
+    "name": "RavenNode",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "node",
+        "description": "The Raven Node container",
+        "repotag": "dramirezrt/ravencoin-core-server:latest",
+        "containerPorts": [
+          38080,38767,31413
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": ["RAVEN_PORT=38767,TRANSMISSION_PORT=31413,FRONTEND_PORT=38080,UACOMMENT=RQXme1Es7mfnzGiQj62M51zMGbzB5FiQom"],
+        "commands": [],
+        "containerData": "/kingofthenorth/",
+        "tiered": false,
+        "cpu": 1,
+        "ram": 1500,
+        "hdd": 69,
+        "cpubasic": 1,
+        "cpusuper": 1,
+        "cpubamf": 1,
+        "rambasic": 1500,
+        "ramsuper": 1500,
+        "rambamf": 1500,
+        "hddbasic": 69,
+        "hddsuper": 69,
+        "hddbamf": 69,
+        "portSpecs": [
+          "36750-36999"
+        ],
+        "ports": [36750,36751],
+        "userEnvironmentParameters": [
+          {
+            "name": "UACOMMENT",
+            "description": "Let the community reward you for hosting this Raven Node or use it as a Placeholder",
+            "placeholder": "Enter your RVN address/Placeholder here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
