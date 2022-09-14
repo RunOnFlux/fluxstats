@@ -324,7 +324,7 @@
         "domains": [
           ""
         ],
-        "environmentParameters": ["RAVEN_PORT=38767,TRANSMISSION_PORT=31413,FRONTEND_PORT=38080,UACOMMENT=RQXme1Es7mfnzGiQj62M51zMGbzB5FiQom"],
+        "environmentParameters": ["RAVEN_PORT=38767,TRANSMISSION_PORT=31413,FRONTEND_PORT=38080"],
         "commands": [],
         "containerData": "/kingofthenorth/",
         "tiered": false,
