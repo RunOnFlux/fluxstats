@@ -54,7 +54,7 @@ async function kadenaAppLocations() { // chainwebdata
 }
 
 async function MOKAppLocations() { // MOK only
-  const apps = ['themok', 'themok2', 'themok3', 'themok4'];
+  const apps = ['themok', 'themok2', 'themok3', 'themok4', 'themok5'];
   let locations = [];
   try {
     // eslint-disable-next-line no-restricted-syntax
