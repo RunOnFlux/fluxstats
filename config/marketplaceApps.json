@@ -308,7 +308,7 @@
   },
   {
     "description": "Host your Ravencoin Node on the Flux Network",
-    "price": 1.59,
+    "price": 1.69,
     "category": "Crypto",
     "version": 4,
     "name": "RavenNode",
@@ -324,9 +324,9 @@
         "domains": [
           "","",""
         ],
-        "environmentParameters": ["RAVEN_PORT=38767,TRANSMISSION_PORT=31413,FRONTEND_PORT=38080"],
+        "environmentParameters": ["RAVEN_PORT=38767","TRANSMISSION_PORT=31413","FRONTEND_PORT=38080"],
         "commands": [],
-        "containerData": "/kingofthenorth/",
+        "containerData": "/kingofthenorth",
         "tiered": false,
         "cpu": 1,
         "ram": 1500,
