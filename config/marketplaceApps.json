@@ -341,9 +341,9 @@
         "hddsuper": 69,
         "hddbamf": 69,
         "portSpecs": [
-          "36750-36999"
+          "31350-38999"
         ],
-        "ports": [36750,36751,36752],
+        "ports": [38080,38767,31413],
         "userEnvironmentParameters": [
           {
             "name": "UACOMMENT",
