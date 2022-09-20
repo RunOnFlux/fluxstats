@@ -355,5 +355,55 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "Host your Kadena Chainweb Node on the Flux Network",
+    "price": 4.55,
+    "category": "Crypto",
+    "version": 4,
+    "name": "ChainwebNode",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "kadenachainwebnode",
+        "description": "Canary branch of Node",
+        "repotag": "runonflux/kadena-chainweb-node:canary",
+        "containerPorts": [
+          31350,31351
+        ],
+        "domains": [
+          "",""
+        ],
+        "environmentParameters": ["CHAINWEB_P2P_PORT=31350","CHAINWEB_SERVICE_PORT=31351","LOGLEVEL=warn"],
+        "commands": ["/bin/bash,-c,(test -d /data/chainweb-db/0 && ./run-chainweb-node.sh) || (/chainweb/initialize-db.sh && ./run-chainweb-node.sh)"],
+        "containerData": "/data",
+        "tiered": false,
+        "cpu": 3,
+        "ram": 6000,
+        "hdd": 151,
+        "cpubasic": 3,
+        "cpusuper": 3,
+        "cpubamf": 3,
+        "rambasic": 6000,
+        "ramsuper": 6000,
+        "rambamf": 6000,
+        "hddbasic": 151,
+        "hddsuper": 151,
+        "hddbamf": 151,
+        "portSpecs": [
+          "31250-36500"
+        ],
+        "ports": [31350,31351],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
