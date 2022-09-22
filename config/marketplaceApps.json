@@ -367,7 +367,7 @@
       {
         "name": "kadenachainwebnode",
         "description": "Canary branch of Node",
-        "repotag": "runonflux/kadena-chainweb-node:canary",
+        "repotag": "runonflux/kadena-chainweb-node:latest",
         "containerPorts": [
           31350,31351
         ],
@@ -375,7 +375,7 @@
           "",""
         ],
         "environmentParameters": ["CHAINWEB_P2P_PORT=31350","CHAINWEB_SERVICE_PORT=31351","LOGLEVEL=warn"],
-        "commands": ["/bin/bash,-c,(test -d /data/chainweb-db/0 && ./run-chainweb-node.sh) || (/chainweb/initialize-db.sh && ./run-chainweb-node.sh)"],
+        "commands": ["/bin/bash","-c","(test -d /data/chainweb-db/0 && ./run-chainweb-node.sh) || (/chainweb/initialize-db.sh && ./run-chainweb-node.sh)"],
         "containerData": "/data",
         "tiered": false,
         "cpu": 3,
