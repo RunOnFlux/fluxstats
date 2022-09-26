@@ -276,7 +276,7 @@
         ],
         "environmentParameters": [],
         "commands": [],
-        "containerData": "/tmp",
+        "containerData": "/app/data",
         "tiered": false,
         "cpu": 4,
         "ram": 8000,
