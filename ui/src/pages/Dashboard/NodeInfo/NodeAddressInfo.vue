@@ -327,10 +327,10 @@ export default {
     },
     async processFluxInfo() {
       this.values.map((value) => {
-        let temp1 = this.totalNodes.get(value.flux.zelid) === undefined ? 0 : this.totalNodes.get(value.flux.zelid);
-        const temp2 = this.totalCumulus.get(value.flux.zelid) === undefined ? 0 : this.totalCumulus.get(value.flux.zelid);
-        const temp3 = this.totalNimbus.get(value.flux.zelid) === undefined ? 0 : this.totalNimbus.get(value.flux.zelid);
-        const temp4 = this.totalStratus.get(value.flux.zelid) === undefined ? 0 : this.totalStratus.get(value.flux.zelid);
+        let temp1 = !this.totalNodes.get(value.flux.zelid) ? 0 : this.totalNodes.get(value.flux.zelid);
+        const temp2 = !this.totalCumulus.get(value.flux.zelid) ? 0 : this.totalCumulus.get(value.flux.zelid);
+        const temp3 = !this.totalNimbus.get(value.flux.zelid) ? 0 : this.totalNimbus.get(value.flux.zelid);
+        const temp4 = !this.totalStratus.get(value.flux.zelid) ? 0 : this.totalStratus.get(value.flux.zelid);
         this.totalNodes.set(value.flux.zelid, temp1 += 1);
         this.totalCumulus.set(value.flux.zelid, value.tier === 'CUMULUS' ? temp2 + 1 : temp2);
         this.totalNimbus.set(value.flux.zelid, value.tier === 'NIMBUS' ? temp3 + 1 : temp3);

@@ -218,7 +218,7 @@ export default {
         },
         {
           prop: 'geolocation.lon',
-          label: 'Longtitude',
+          label: 'Longitude',
           minWidth: 120,
         },
         {
@@ -437,7 +437,7 @@ export default {
           }
           return val;
         });
-      } else if (sortProps.column.label === 'Longtitude' && sortProps.column.order === 'ascending') {
+      } else if (sortProps.column.label === 'Longitude' && sortProps.column.order === 'ascending') {
         data.sort((a, b) => {
           let val = 0;
           if (a.geolocation.lon > b.geolocation.lon) {
@@ -447,7 +447,7 @@ export default {
           }
           return val;
         });
-      } else if (sortProps.column.label === 'Longtitude' && sortProps.column.order === 'descending') {
+      } else if (sortProps.column.label === 'Longitude' && sortProps.column.order === 'descending') {
         data.sort((a, b) => {
           let val = 0;
           if (a.geolocation.lon < b.geolocation.lon) {
@@ -536,7 +536,7 @@ export default {
           'Country',
           'Country Code',
           'Latitude',
-          'Longtitude',
+          'Longitude',
           'Tier',
         ],
       };

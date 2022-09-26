@@ -13,6 +13,7 @@ const NodeAppHash = () => import('@/pages/Dashboard/NodeInfo/NodeAppHash.vue');
 const NodeConnection = () => import('@/pages/Dashboard/NodeInfo/NodeConnection.vue');
 const NodeAddressInfo = () => import('@/pages/Dashboard/NodeInfo/NodeAddressInfo.vue');
 const NodeBenchmark = () => import('@/pages/Dashboard/NodeInfo/NodeBenchmark.vue');
+const FluxNetwork = () => import('@/pages/Dashboard/Visualization/FluxNetwork.vue');
 
 // NodeHistory pages
 const HistoryInfo = () => import('@/pages/Dashboard/NodeHistory/HistoryInfo.vue');
@@ -89,6 +90,20 @@ const maintenance = {
   component: Error,
 };
 
+const fluxnetwork = {
+  path: '/flux/network/',
+  component: DashboardLayout,
+  name: 'fluxnetwork',
+  redirect: '/flux/network/visualization',
+  children: [
+    {
+      path: 'visualization',
+      name: 'visualization',
+      component: FluxNetwork,
+    },
+  ],
+};
+
 const routes = [
   {
     path: '/',
@@ -109,6 +124,7 @@ const routes = [
       },
     ],
   },
+  fluxnetwork,
   { path: '*', redirect: '/flux/dashboard/overview' },
 ];
 
