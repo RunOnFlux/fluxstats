@@ -405,5 +405,55 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "Host your Neoxa Node on the Flux Network",
+    "price": 2.3,
+    "category": "Crypto",
+    "version": 4,
+    "name": "NeoxaNode",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "neoxanode",
+        "description": "The Neoxa Node container",
+        "repotag": "neoxa/full-node:latest",
+        "containerPorts": [
+          8788
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/tmp",
+        "tiered": false,
+        "cpu": 2,
+        "ram": 4000,
+        "hdd": 22,
+        "cpubasic": 2,
+        "cpusuper": 2,
+        "cpubamf": 2,
+        "rambasic": 4000,
+        "ramsuper": 4000,
+        "rambamf": 4000,
+        "hddbasic": 22,
+        "hddsuper": 22,
+        "hddbamf": 22,
+        "portSpecs": [
+          "31000-31250"
+        ],
+        "ports": [31000],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
