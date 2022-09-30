@@ -426,7 +426,7 @@
         ],
         "environmentParameters": [],
         "commands": [],
-        "containerData": "/var/lib/neoxa",
+        "containerData": "/home/neoxa/.neoxa",
         "tiered": false,
         "cpu": 2,
         "ram": 4000,
