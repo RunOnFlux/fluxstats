@@ -455,5 +455,105 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "Host your Polkadot Node on the Flux Network",
+    "price": 1.1,
+    "category": "Crypto",
+    "version": 4,
+    "name": "PolkadotNode",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "polkadotnode",
+        "description": "The Polkadot Node container",
+        "repotag": "runonflux/polkadot-docker:latest",
+        "containerPorts": [
+          30333,9933,9944
+        ],
+        "domains": [
+          "","",""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/chaindata",
+        "tiered": false,
+        "cpu": 0.8,
+        "ram": 1800,
+        "hdd": 20,
+        "cpubasic": 0.8,
+        "cpusuper": 0.8,
+        "cpubamf": 0.8,
+        "rambasic": 1800,
+        "ramsuper": 1800,
+        "rambamf": 1800,
+        "hddbasic": 20,
+        "hddsuper": 20,
+        "hddbamf": 20,
+        "portSpecs": [
+          "33200-34000"
+        ],
+        "ports": [33201,33202,33203],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Kusama Node on the Flux Network",
+    "price": 1.1,
+    "category": "Crypto",
+    "version": 4,
+    "name": "KusamaNode",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "kusamanode",
+        "description": "The Kusama Node container",
+        "repotag": "runonflux/polkadot-docker:latest",
+        "containerPorts": [
+          30333,9933,9944
+        ],
+        "domains": [
+          "","",""
+        ],
+        "environmentParameters": [],
+        "commands": ["--chain","kusama"],
+        "containerData": "/chaindata",
+        "tiered": false,
+        "cpu": 0.8,
+        "ram": 1800,
+        "hdd": 20,
+        "cpubasic": 0.8,
+        "cpusuper": 0.8,
+        "cpubamf": 0.8,
+        "rambasic": 1800,
+        "ramsuper": 1800,
+        "rambamf": 1800,
+        "hddbasic": 20,
+        "hddsuper": 20,
+        "hddbamf": 20,
+        "portSpecs": [
+          "33200-34000"
+        ],
+        "ports": [33204,33205,33206],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
