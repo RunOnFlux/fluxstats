@@ -7,6 +7,7 @@
     <side-bar>
       <template slot="links">
         <sidebar-item :link="{name: 'Dashboard', icon: 'nc-icon nc-chart-pie-35', path: '/flux/dashboard/overview'}" />
+        <sidebar-item :link="{name: 'Flux Network', icon: 'nc-icon nc-grid-45', path: '/flux/network/visualization'}" />
         <sidebar-item :link="{name: 'Node Info', icon: 'nc-icon nc-app'}">
           <sidebar-item :link="{name: 'Node', path: '/flux/nodeinfo/node'}" />
           <sidebar-item :link="{name: 'Benchmark', path: '/flux/nodeinfo/benchmark'}" />
