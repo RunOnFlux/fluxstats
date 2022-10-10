@@ -555,5 +555,55 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "Host your Handshake Node on the Flux Network",
+    "price": 2.3,
+    "category": "Crypto",
+    "version": 4,
+    "name": "HandshakeNode",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "hsdnode",
+        "description": "The Handshake Node container",
+        "repotag": "rithvikvibhu/hsd-with-ip:latest",
+        "containerPorts": [
+          12038
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": ["hsd","--bip37=true","--listen=true","--public-port=39001","--port=12038","--max-inbound=1000"],
+        "containerData": "/root/.hsd",
+        "tiered": false,
+        "cpu": 1.5,
+        "ram": 2000,
+        "hdd": 100,
+        "cpubasic": 1.5,
+        "cpusuper": 1.5,
+        "cpubamf": 1.5,
+        "rambasic": 2000,
+        "ramsuper": 2000,
+        "rambamf": 2000,
+        "hddbasic": 100,
+        "hddsuper": 100,
+        "hddbamf": 100,
+        "portSpecs": [
+          "39000-39500"
+        ],
+        "ports": [39001],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
