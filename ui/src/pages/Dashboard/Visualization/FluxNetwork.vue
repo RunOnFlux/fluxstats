@@ -29,7 +29,7 @@
           v-model="tierFilter.default"
           class="select-default mb-3"
           style="width: 200px"
-          placeholder="Tiers"
+          placeholder="Select Filters"
           multiple
           collapse-tags
           filterable
@@ -93,7 +93,7 @@ export default {
       searchQuery: '',
       tierFilter: {
         default: [],
-        others: ['CUMULUS', 'NIMBUS', 'STRATUS'],
+        others: ['CUMULUS', 'NIMBUS', 'STRATUS', 'IN', 'OUT'],
       },
       values: [],
       nodes: [],
@@ -157,7 +157,11 @@ export default {
         });
 
         await item.connectionin.map(async (cin) => {
-          if (this.tierChecking(cin.tier)) {
+          if ((this.tierChecking(cin.tier)
+            || Object.keys(this.tierFilter.default).length <= 0)
+            && (this.tierFilter.default.includes('IN')
+            || (!this.tierFilter.default.includes('OUT') && !this.tierFilter.default.includes('IN')))
+          ) {
             nodemap.push({
               id: nodeId += 1,
               name: `in: ${cin.ip}`,
@@ -168,7 +172,11 @@ export default {
         });
 
         await item.connectionout.map(async (cout) => {
-          if (this.tierChecking(cout.tier)) {
+          if ((this.tierChecking(cout.tier)
+            || Object.keys(this.tierFilter.default).length <= 0)
+            && (this.tierFilter.default.includes('OUT')
+            || (!this.tierFilter.default.includes('OUT') && !this.tierFilter.default.includes('IN')))
+          ) {
             nodemap.push({
               id: nodeId += 1,
               name: `out: ${cout.ip}`,
