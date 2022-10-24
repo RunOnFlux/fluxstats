@@ -605,5 +605,55 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "Host your Deso backend Node on the Flux Network",
+    "price": 15.2,
+    "category": "Crypto",
+    "version": 4,
+    "name": "DesoNode",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "desonode",
+        "description": "The Deso Node container",
+        "repotag": "honsontran/deso-backend:stable",
+        "containerPorts": [
+          33444,33445
+        ],
+        "domains": [
+          "",""
+        ],
+        "environmentParameters": [],
+        "commands": ["run"],
+        "containerData": "/db",
+        "tiered": false,
+        "cpu": 8.0,
+        "ram": 32000,
+        "hdd": 400,
+        "cpubasic": 8.0,
+        "cpusuper": 8.0,
+        "cpubamf": 8.0,
+        "rambasic": 32000,
+        "ramsuper": 32000,
+        "rambamf": 32000,
+        "hddbasic": 400,
+        "hddsuper": 400,
+        "hddbamf": 400,
+        "portSpecs": [
+          "33400-33600"
+        ],
+        "ports": [33444,33445],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
