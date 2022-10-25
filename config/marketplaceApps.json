@@ -619,7 +619,7 @@
         "description": "The Deso Node container",
         "repotag": "honsontran/deso-backend:stable",
         "containerPorts": [
-          33444,33445
+          33445,33444
         ],
         "domains": [
           "",""
@@ -643,7 +643,7 @@
         "portSpecs": [
           "33400-33600"
         ],
-        "ports": [33444,33445],
+        "ports": [33445,33444],
         "userEnvironmentParameters": [
           {
             "name": "KEY",
