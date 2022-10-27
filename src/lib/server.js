@@ -12,7 +12,6 @@ if (nodeEnv !== 'test') {
 }
 
 app.use(cors({ origin: '*' }));
-app.use(express.json({limit: '5mb'}));
 const fluxStatsUI = path.join(__dirname, '../../ui/dist');
 app.use(express.static(fluxStatsUI));
 require('../routes')(app);
