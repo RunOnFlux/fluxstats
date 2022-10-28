@@ -1288,6 +1288,7 @@ async function start() {
     }, 5 * 60 * 1000);
   }
 }
+
 module.exports = {
   start,
   getFluxNodeIPs,

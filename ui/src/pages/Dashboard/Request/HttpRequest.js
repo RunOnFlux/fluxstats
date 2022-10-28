@@ -25,42 +25,71 @@ const httpRequestFluxHistoryStats = async (axios, MemoryStorage) => {
   return 95;
 };
 
-const httpRequestIncomingConnectedPeers = async (axios, ipport) => {
-  const ip = ipport;
-  let response = '';
-  if (ipport.includes(':')) {
-    response = await axios.get(`http://${ipport.split(':')[0]}:${ipport.split(':')[1]}/flux/incomingconnectionsinfo`, { timeout: 2000 });
-    if (response) {
-      return response.data.data;
-    }
-  }
-  response = await axios.get(`http://${ip}:16127/flux/incomingconnectionsinfo`, { timeout: 2000 });
-  if (response) {
-    return response.data.data;
-  }
-  return [];
-};
+// ipports -> array of string port value
+async function httpRequestFluxConnections(axios, ipports) {
+  console.log(ipports);
+  try {
+    const ret = [];
+    const ips = ipports;
+    const datain = [];
+    const dataout = [];
 
-const httpRequestOutgoingConnectedPeers = async (axios, ipport) => {
-  const ip = ipport;
-  let response = '';
-  if (ipport.includes(':')) {
-    response = await axios.get(`http://${ipport.split(':')[0]}:${ipport.split(':')[1]}/flux/connectedpeersinfo`, { timeout: 2000 });
-    if (response) {
-      return response.data.data;
-    }
+    await ips.map((item) => {
+      ret.push({
+        ip: item,
+        in: [],
+        out: [],
+      });
+      return item;
+    });
+
+    await Promise.all(
+      ret.map(async (item) => {
+        const value = item;
+        const ipval = value.ip;
+        if (!ipval) {
+          return value;
+        }
+        try {
+          let response1 = '';
+          let response2 = '';
+          if (ipval.includes(':')) {
+            response1 = await axios.get(`http://${ipval.split(':')[0]}:${ipval.split(':')[1]}/flux/incomingconnectionsinfo`, { timeout: 2000 });
+            response2 = await axios.get(`http://${ipval.split(':')[0]}:${ipval.split(':')[1]}/flux/connectedpeersinfo`, { timeout: 2000 });
+          } else {
+            response1 = await axios.get(`http://${ipval}:16127/flux/incomingconnectionsinfo`, { timeout: 2000 });
+            response2 = await axios.get(`http://${ipval}:16127/flux/connectedpeersinfo`, { timeout: 2000 });
+          }
+          if (response1) {
+            await response1.data.data.map((i) => {
+              datain.push(i.ip.split(':')[3]);
+              return i;
+            });
+          }
+          if (response2) {
+            await response2.data.data.map((i) => {
+              dataout.push(i.ip);
+              return i;
+            });
+          }
+          value.in = datain;
+          value.out = dataout;
+          return value;
+        } catch (e) {
+          return value;
+        }
+      }),
+    );
+
+    return ret;
+  } catch (e) {
+    return [];
   }
-  response = await axios.get(`http://${ip}:16127/flux/connectedpeersinfo`, { timeout: 2000 });
-  if (response) {
-    return response.data.data;
-  }
-  return [];
-};
+}
 
 module.exports = {
   httpRequestFluxInfo,
   httpRequestDaemonInfo,
   httpRequestFluxHistoryStats,
-  httpRequestIncomingConnectedPeers,
-  httpRequestOutgoingConnectedPeers,
+  httpRequestFluxConnections,
 };

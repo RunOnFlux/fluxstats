@@ -71,13 +71,13 @@ import {
 import D3Network from 'vue-d3-network';
 import { VueEllipseProgress } from 'vue-ellipse-progress';
 import axios from 'axios';
+import rateLimit from 'axios-rate-limit';
 import { MemoryStorage } from 'ttl-localstorage';
-import { getIndividualDataVisualization } from '../Request/DataVirtualization';
+import { getDataVisualization } from '../Request/DataVirtualization';
 import FluxNetwork from '../Components/FluxNetwork.vue';
 import {
   httpRequestFluxInfo,
-  httpRequestIncomingConnectedPeers,
-  httpRequestOutgoingConnectedPeers,
+  httpRequestFluxConnections,
 } from '../Request/HttpRequest';
 
 export default {
@@ -99,6 +99,7 @@ export default {
       nodes: [],
       links: [],
       options: {
+        canvas: false,
         force: 3000,
         size: { w: 1600, h: 1000 },
         nodeSize: 30,
@@ -130,7 +131,6 @@ export default {
         this.values = [];
         await this.assignData();
         await this.processNodesAndLinks();
-        // await this.processNodesAndLinksChildren();
       } catch (e) {
         this.nodes.push({
           id: 0,
@@ -141,30 +141,33 @@ export default {
     },
     async assignData() {
       if (this.searchQuery !== '') {
-        this.values = await getIndividualDataVisualization(axios, MemoryStorage, httpRequestIncomingConnectedPeers, httpRequestOutgoingConnectedPeers, this.searchQuery);
+        this.values = await getDataVisualization(rateLimit, axios, MemoryStorage, httpRequestFluxConnections, this.searchQuery);
       }
     },
-    async processNodesAndLinks() {
-      const line = '#6E2C00';
-      let rootNodeId = 1;
-      let nodeId = 1;
-      let nodemap = [];
-      this.values.map(async (item) => {
+    async processing(values, map, rootId, id, line) {
+      let nodeId = id;
+      let rootNodeId = rootId;
+      let nodemap = map;
+      await values.map(async (item) => {
         nodemap.push({
-          id: rootNodeId,
+          id: nodeId,
           name: item.ip,
+          rootid: rootNodeId,
           _color: this.processColorsByTier('root'),
         });
 
         await item.connectionin.map(async (cin) => {
-          if ((this.tierChecking(cin.tier)
-            || Object.keys(this.tierFilter.default).length <= 0)
-            && (this.tierFilter.default.includes('IN')
-            || (!this.tierFilter.default.includes('OUT') && !this.tierFilter.default.includes('IN')))
+          if (
+            Object.keys(this.tierFilter.default).length <= 0
+            || this.tierFilter.default.includes('IN')
+            || this.tierChecking(cin.tier)
           ) {
             nodemap.push({
               id: nodeId += 1,
               name: `in: ${cin.ip}`,
+              rootid: rootNodeId,
+              connectionin: cin.connectionin,
+              connectionout: cin.connectionout,
               _color: this.processColorsByTier(cin.tier),
             });
           }
@@ -172,14 +175,17 @@ export default {
         });
 
         await item.connectionout.map(async (cout) => {
-          if ((this.tierChecking(cout.tier)
-            || Object.keys(this.tierFilter.default).length <= 0)
-            && (this.tierFilter.default.includes('OUT')
-            || (!this.tierFilter.default.includes('OUT') && !this.tierFilter.default.includes('IN')))
+          if (
+            Object.keys(this.tierFilter.default).length <= 0
+            || this.tierFilter.default.includes('OUT')
+            || this.tierChecking(cout.tier)
           ) {
             nodemap.push({
               id: nodeId += 1,
               name: `out: ${cout.ip}`,
+              rootid: rootNodeId,
+              connectionin: cout.connectionin,
+              connectionout: cout.connectionout,
               _color: this.processColorsByTier(cout.tier),
             });
           }
@@ -191,7 +197,7 @@ export default {
           this.nodes.push(i);
           if (i.id > 1) {
             this.links.push({
-              tid: rootNodeId,
+              tid: i.rootid,
               sid: i.id,
               _color: line,
             });
@@ -204,31 +210,12 @@ export default {
         return item;
       });
     },
-    async processNodesAndLinksChildren() {
+    async processNodesAndLinks() {
       const line = '#6E2C00';
-      this.values.connectionin.map((i) => {
-        this.values.connectionin.connectionin.map((e) => {
-          if (i.ip === e.ip) {
-            this.links.push({
-              tid: e.ip,
-              sid: i.id,
-              _color: line,
-            });
-          }
-          return e;
-        });
-        this.values.connectionin.connectionin.map((e) => {
-          if (i.ip === e.ip) {
-            this.links.push({
-              tid: e.ip,
-              sid: i.id,
-              _color: line,
-            });
-          }
-          return e;
-        });
-        return i;
-      });
+      const rootNodeId = 1;
+      const nodeId = 1;
+      const nodemap = [];
+      await this.processing(this.values, nodemap, rootNodeId, nodeId, line);
     },
     processColorsByTier(tier) {
       // Colors for cumulus, nimbus and stratus respectively
