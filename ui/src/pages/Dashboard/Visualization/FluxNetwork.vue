@@ -140,9 +140,8 @@ export default {
       }
     },
     async assignData() {
-      const httpFluxConnection = rateLimit(axios.create(), { maxRequests: 50, perMilliseconds: 10000 });
       if (this.searchQuery !== '') {
-        this.values = await getDataVisualization(httpFluxConnection, MemoryStorage, httpRequestFluxConnections, this.searchQuery);
+        this.values = await getDataVisualization(rateLimit, axios, MemoryStorage, httpRequestFluxConnections, this.searchQuery);
       }
     },
     async processing(values, map, rootId, id, line) {

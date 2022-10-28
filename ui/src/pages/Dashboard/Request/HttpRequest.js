@@ -26,15 +26,66 @@ const httpRequestFluxHistoryStats = async (axios, MemoryStorage) => {
 };
 
 // ipports -> array of string port value
-const httpRequestFluxConnections = async (axios, ipports) => {
-  const response = await axios.post('http://localhost:8123/fluxconnections', { ips: ipports }, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    timeout: Number.MAX_VALUE,
-  });
-  return response.data;
-};
+async function httpRequestFluxConnections(axios, ipports) {
+  console.log(ipports);
+  try {
+    const ret = [];
+    const ips = ipports;
+    const datain = [];
+    const dataout = [];
+
+    await ips.map((item) => {
+      ret.push({
+        ip: item,
+        in: [],
+        out: [],
+      });
+      return item;
+    });
+
+    await Promise.all(
+      ret.map(async (item) => {
+        const value = item;
+        const ipval = value.ip;
+        if (!ipval) {
+          return value;
+        }
+        try {
+          let response1 = '';
+          let response2 = '';
+          if (ipval.includes(':')) {
+            response1 = await axios.get(`http://${ipval.split(':')[0]}:${ipval.split(':')[1]}/flux/incomingconnectionsinfo`, { timeout: 2000 });
+            response2 = await axios.get(`http://${ipval.split(':')[0]}:${ipval.split(':')[1]}/flux/connectedpeersinfo`, { timeout: 2000 });
+          } else {
+            response1 = await axios.get(`http://${ipval}:16127/flux/incomingconnectionsinfo`, { timeout: 2000 });
+            response2 = await axios.get(`http://${ipval}:16127/flux/connectedpeersinfo`, { timeout: 2000 });
+          }
+          if (response1) {
+            await response1.data.data.map((i) => {
+              datain.push(i.ip.split(':')[3]);
+              return i;
+            });
+          }
+          if (response2) {
+            await response2.data.data.map((i) => {
+              dataout.push(i.ip);
+              return i;
+            });
+          }
+          value.in = datain;
+          value.out = dataout;
+          return value;
+        } catch (e) {
+          return value;
+        }
+      }),
+    );
+
+    return ret;
+  } catch (e) {
+    return [];
+  }
+}
 
 module.exports = {
   httpRequestFluxInfo,

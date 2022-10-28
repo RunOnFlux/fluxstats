@@ -86,10 +86,11 @@ const processChildren = async (node, info, axios, httpRequestFluxConnections) =>
   await getConnectionData(info, node.connectionout, axios, httpRequestFluxConnections);
 };
 
-const getDataVisualization = async (axios, MemoryStorage, httpRequestFluxConnections, iptosearch) => {
+const getDataVisualization = async (rateLimit, axios, MemoryStorage, httpRequestFluxConnections, iptosearch) => {
+  const httpFluxConnection = rateLimit(axios.create(), { maxRequests: 50, perMilliseconds: 10000 });
   const info = MemoryStorage.get('fluxinfo');
   const rootNode = await populateNode(iptosearch, info);
-  const rootNodeProcessed = await getConnectionData(info, rootNode, axios, httpRequestFluxConnections);
+  const rootNodeProcessed = await getConnectionData(info, rootNode, httpFluxConnection, httpRequestFluxConnections);
   await Promise.all(
     rootNodeProcessed.map(async (i) => {
       await processChildren(i, info, axios, httpRequestFluxConnections);
