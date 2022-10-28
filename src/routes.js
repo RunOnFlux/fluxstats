@@ -37,11 +37,6 @@ module.exports = (app) => {
     fluxService.fluxNodesHistoryStats(req, res);
   });
 
-  // get all connection in and out from ip
-  app.post('/fluxconnections', (req, res) => {
-    fluxService.getAllConnections(req, res);
-  });
-
   app.get('/kadena/nodes', cache('1 minute'), (req, res) => {
     kadenaService.getKadenaNodes(req, res);
   });

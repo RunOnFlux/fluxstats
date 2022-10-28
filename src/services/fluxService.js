@@ -13,7 +13,6 @@ const explorerTimeout = 10000;
 const httpFluxInfo = rateLimit(axios.create(), { maxRequests: 20, perMilliseconds: 1000 });
 const httpGeo = rateLimit(axios.create(), { maxRequests: 1, perMilliseconds: 1500 });
 const httpGeoBatch = rateLimit(axios.create(), { maxRequests: 1, perMilliseconds: 3950 });
-const httpFluxConnection = rateLimit(axios.create(), { maxRequests: 50, perMilliseconds: 10000 });
 
 // default cache
 const LRUoptions = {
@@ -1290,72 +1289,6 @@ async function start() {
   }
 }
 
-async function getAllConnections (req, res) {
-  try {
-    let ret = [];
-    let ips = req.body.ips;
-    let datain = [];
-    let dataout = [];
-
-    await ips.map((item) => {
-      ret.push({
-        ip: item,
-        in: [],
-        out: [],
-      });
-    });
-
-    await Promise.all(
-      ret.map(async (item) => {
-        const value = item;
-        const ip = value.ip;
-        if (!ip) {
-          return value;
-        }
-        try {
-          let response1 = '';
-          let response2 = '';
-          if (ip.includes(':')) {
-            response1 = await httpFluxConnection.get(`http://${ip.split(':')[0]}:${ip.split(':')[1]}/flux/incomingconnectionsinfo`, { timeout: 2000 });
-            response2 = await httpFluxConnection.get(`http://${ip.split(':')[0]}:${ip.split(':')[1]}/flux/connectedpeersinfo`, { timeout: 2000 });
-          } else {
-            response1 = await httpFluxConnection.get(`http://${ip}:16127/flux/incomingconnectionsinfo`, { timeout: 2000 });
-            response2 = await httpFluxConnection.get(`http://${ip}:16127/flux/connectedpeersinfo`, { timeout: 2000 });
-          }
-
-          if (response1) {
-            await response1.data.data.map((i) => {
-              datain.push(i.ip.split(':')[3]);
-              return i;
-            });
-          }
-
-          if (response2) {
-            await response2.data.data.map((i) => {
-              dataout.push(i.ip);
-              return i;
-            });
-          }
-
-          value.in = datain;
-          value.out = dataout;
-
-          return value;
-        } catch (e) {
-          log.error('Error in getting connections from: ' + ip);
-          return value;
-        }
-      })
-    );
-
-    log.info('Finished getting all in and out connections');
-    res.json(ret);
-  } catch (e) {
-    log.error('Error getting all in and out connections');
-    res.json({message:"Error getting all in and out connections"});
-  }
-}
-
 module.exports = {
   start,
   getFluxNodeIPs,
@@ -1380,5 +1313,4 @@ module.exports = {
   getGeolocationInBatchAndRefreshDatabase,
   processFluxNodes,
   getLastRound,
-  getAllConnections,
 };
