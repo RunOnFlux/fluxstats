@@ -655,5 +655,55 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "Host your Dogecoin Full Node on the Flux Network",
+    "price": 2.3,
+    "category": "Crypto",
+    "version": 4,
+    "name": "DogecoinNode",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "dogenode",
+        "description": "The Dogecoin Node container",
+        "repotag": "bigmandave/doge-node:latest",
+        "containerPorts": [
+          22556
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": ["/wowmuchdocker/dogecoin-node/bin/dogecoind","-conf=/etc/doge/dogecoin.conf","-datadir=/etc/doge","-printtoconsole"],
+        "containerData": "/etc/doge/",
+        "tiered": false,
+        "cpu": 1.0,
+        "ram": 3000,
+        "hdd": 100,
+        "cpubasic": 1.0,
+        "cpusuper": 1.0,
+        "cpubamf": 1.0,
+        "rambasic": 3000,
+        "ramsuper": 3000,
+        "rambamf": 3000,
+        "hddbasic": 100,
+        "hddsuper": 100,
+        "hddbamf": 100,
+        "portSpecs": [
+          "33400-33600"
+        ],
+        "ports": [34203],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
