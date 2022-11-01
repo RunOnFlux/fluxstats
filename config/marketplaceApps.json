@@ -675,7 +675,7 @@
           ""
         ],
         "environmentParameters": [],
-        "commands": ["wowmuchdocker/dogecoin-node/bin/dogecoind","-conf=/etc/doge/dogecoin.conf","-datadir=/etc/doge","-printtoconsole"],
+        "commands": ["/wowmuchdocker/dogecoin-node/bin/dogecoind","-conf=/etc/doge/dogecoin.conf","-datadir=/etc/doge","-printtoconsole"],
         "containerData": "/etc/doge/",
         "tiered": false,
         "cpu": 1.0,
