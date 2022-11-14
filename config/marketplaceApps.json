@@ -705,5 +705,255 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "Host your Sushiswap Frontend on the Flux Cloud",
+    "price": 1.0,
+    "category": "Crypto",
+    "version": 4,
+    "name": "SushiswapUI",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "sushiswapui",
+        "description": "The Sushiswap UI container",
+        "repotag": "runonflux/sushiswap-interface:latest",
+        "containerPorts": [
+          3000
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/tmp",
+        "tiered": false,
+        "cpu": 1.0,
+        "ram": 1000,
+        "hdd": 5.0,
+        "cpubasic": 1.0,
+        "cpusuper": 1.0,
+        "cpubamf": 1.0,
+        "rambasic": 1000,
+        "ramsuper": 1000,
+        "rambamf": 1000,
+        "hddbasic": 5.0,
+        "hddsuper": 5.0,
+        "hddbamf": 5.0,
+        "portSpecs": [
+          "35000-35200"
+        ],
+        "ports": [35000],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Yearn Finance Frontend on the Flux Cloud",
+    "price": 1.0,
+    "category": "Crypto",
+    "version": 4,
+    "name": "YearnUI",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "yearnui",
+        "description": "The Yearn Finance UI container",
+        "repotag": "runonflux/yearn-finance-v3:latest",
+        "containerPorts": [
+          80
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/tmp",
+        "tiered": false,
+        "cpu": 1.0,
+        "ram": 1000,
+        "hdd": 5.0,
+        "cpubasic": 1.0,
+        "cpusuper": 1.0,
+        "cpubamf": 1.0,
+        "rambasic": 1000,
+        "ramsuper": 1000,
+        "rambamf": 1000,
+        "hddbasic": 5.0,
+        "hddsuper": 5.0,
+        "hddbamf": 5.0,
+        "portSpecs": [
+          "35000-35200"
+        ],
+        "ports": [35001],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your GMX.io Frontend on the Flux Cloud",
+    "price": 1.0,
+    "category": "Crypto",
+    "version": 4,
+    "name": "GmxUI",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "gmxui",
+        "description": "The GMX UI container",
+        "repotag": "runonflux/gmx-interface:latest",
+        "containerPorts": [
+          3000
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/tmp",
+        "tiered": false,
+        "cpu": 1.0,
+        "ram": 1000,
+        "hdd": 5.0,
+        "cpubasic": 1.0,
+        "cpusuper": 1.0,
+        "cpubamf": 1.0,
+        "rambasic": 1000,
+        "ramsuper": 1000,
+        "rambamf": 1000,
+        "hddbasic": 5.0,
+        "hddsuper": 5.0,
+        "hddbamf": 5.0,
+        "portSpecs": [
+          "35000-35200"
+        ],
+        "ports": [35002],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Dopex.io Frontend on the Flux Cloud",
+    "price": 1.0,
+    "category": "Crypto",
+    "version": 4,
+    "name": "DopexUI",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "dopexui",
+        "description": "The Dopex UI container",
+        "repotag": "runonflux/dopex-site:latest",
+        "containerPorts": [
+          3000
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/tmp",
+        "tiered": false,
+        "cpu": 1.0,
+        "ram": 1000,
+        "hdd": 5.0,
+        "cpubasic": 1.0,
+        "cpusuper": 1.0,
+        "cpubamf": 1.0,
+        "rambasic": 1000,
+        "ramsuper": 1000,
+        "rambamf": 1000,
+        "hddbasic": 5.0,
+        "hddsuper": 5.0,
+        "hddbamf": 5.0,
+        "portSpecs": [
+          "35000-35200"
+        ],
+        "ports": [35003],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Pangolin Frontend on the Flux Cloud",
+    "price": 1.0,
+    "category": "Crypto",
+    "version": 4,
+    "name": "PangolinUI",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "pangolinui",
+        "description": "The Pangolin UI container",
+        "repotag": "runonflux/pangolindex-interface:latest",
+        "containerPorts": [
+          3000
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/tmp",
+        "tiered": false,
+        "cpu": 1.0,
+        "ram": 1000,
+        "hdd": 5.0,
+        "cpubasic": 1.0,
+        "cpusuper": 1.0,
+        "cpubamf": 1.0,
+        "rambasic": 1000,
+        "ramsuper": 1000,
+        "rambamf": 1000,
+        "hddbasic": 5.0,
+        "hddsuper": 5.0,
+        "hddbamf": 5.0,
+        "portSpecs": [
+          "35000-35200"
+        ],
+        "ports": [35003],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
