@@ -955,5 +955,115 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "Host your Liquity Frontend on the Flux Cloud",
+    "price": 1.0,
+    "category": "Crypto",
+    "version": 4,
+    "name": "Liquity",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "liquityui",
+        "description": "The Liquity UI container",
+        "repotag": "liquity/dev-frontend:latest",
+        "containerPorts": [
+          80
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/tmp",
+        "tiered": false,
+        "cpu": 1.0,
+        "ram": 1000,
+        "hdd": 5.0,
+        "cpubasic": 1.0,
+        "cpusuper": 1.0,
+        "cpubamf": 1.0,
+        "rambasic": 1000,
+        "ramsuper": 1000,
+        "rambamf": 1000,
+        "hddbasic": 5.0,
+        "hddsuper": 5.0,
+        "hddbamf": 5.0,
+        "portSpecs": [
+          "35000-35200"
+        ],
+        "ports": [35004],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Balancer Finance Frontend on the Flux Cloud",
+    "price": 1.0,
+    "category": "Crypto",
+    "version": 4,
+    "name": "Balancer",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "balancerui",
+        "description": "The Balancer Finance UI container",
+        "repotag": "balancerfi/frontend-v2:latest",
+        "containerPorts": [
+          80
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": ["/bin/sh","/docker-init.sh"],
+        "containerData": "/app",
+        "tiered": false,
+        "cpu": 1.0,
+        "ram": 1000,
+        "hdd": 5.0,
+        "cpubasic": 1.0,
+        "cpusuper": 1.0,
+        "cpubamf": 1.0,
+        "rambasic": 1000,
+        "ramsuper": 1000,
+        "rambamf": 1000,
+        "hddbasic": 5.0,
+        "hddsuper": 5.0,
+        "hddbamf": 5.0,
+        "portSpecs": [
+          "35000-35200"
+        ],
+        "ports": [35005],
+        "userEnvironmentParameters": [
+          {
+            "name": "INFURA_PROJECT_ID",
+            "description": "Your Infura API Key. Keep in mind that this value will be public",
+            "placeholder": "Enter your API Key here"
+          },
+          {
+            "name": "ALCHEMY_KEY",
+            "description": "Your Alchemy API Key. Keep in mind that this value will be public",
+            "placeholder": "Enter your API Key here"
+          },
+          {
+            "name": "BLOCKNATIVE_DAPP_ID",
+            "description": "Your Blocknative API Key. Keep in mind that this value will be public",
+            "placeholder": "Enter your API Key here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
