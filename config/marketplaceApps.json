@@ -711,7 +711,7 @@
     "price": 1.0,
     "category": "Crypto",
     "version": 4,
-    "name": "SushiswapUI",
+    "name": "Sushiswap",
     "instances": 3,
     "compose": [
       {
@@ -761,7 +761,7 @@
     "price": 1.0,
     "category": "Crypto",
     "version": 4,
-    "name": "YearnUI",
+    "name": "Yearn",
     "instances": 3,
     "compose": [
       {
@@ -811,7 +811,7 @@
     "price": 1.0,
     "category": "Crypto",
     "version": 4,
-    "name": "GmxUI",
+    "name": "Gmx",
     "instances": 3,
     "compose": [
       {
@@ -861,7 +861,7 @@
     "price": 1.0,
     "category": "Crypto",
     "version": 4,
-    "name": "DopexUI",
+    "name": "Dopex",
     "instances": 3,
     "compose": [
       {
@@ -911,7 +911,7 @@
     "price": 1.0,
     "category": "Crypto",
     "version": 4,
-    "name": "PangolinUI",
+    "name": "Pangolin",
     "instances": 3,
     "compose": [
       {
@@ -1059,6 +1059,56 @@
             "name": "BLOCKNATIVE_DAPP_ID",
             "description": "Your Blocknative API Key. Keep in mind that this value will be public",
             "placeholder": "Enter your API Key here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Osmosis Frontend on the Flux Cloud",
+    "price": 1.0,
+    "category": "Crypto",
+    "version": 4,
+    "name": "Osmosis",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "osmosisui",
+        "description": "The Osmosis UI container",
+        "repotag": "osmolabs/osmosis-frontend:latest",
+        "containerPorts": [
+          3000
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/tmp",
+        "tiered": false,
+        "cpu": 1.0,
+        "ram": 1000,
+        "hdd": 5.0,
+        "cpubasic": 1.0,
+        "cpusuper": 1.0,
+        "cpubamf": 1.0,
+        "rambasic": 1000,
+        "ramsuper": 1000,
+        "rambamf": 1000,
+        "hddbasic": 5.0,
+        "hddsuper": 5.0,
+        "hddbamf": 5.0,
+        "portSpecs": [
+          "35000-35200"
+        ],
+        "ports": [35006],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
           }
         ]
       }
