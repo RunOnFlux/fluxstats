@@ -1115,5 +1115,55 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "Host your Alephium Full Node on the Flux Cloud",
+    "price": 1.4,
+    "category": "Crypto",
+    "version": 4,
+    "name": "AlephiumNode",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "alephiumnode",
+        "description": "The Alephium Full Node container",
+        "repotag": "touilleio/alephium-standalone:latest-root",
+        "containerPorts": [
+          39973
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/data",
+        "tiered": false,
+        "cpu": 0.5,
+        "ram": 1000,
+        "hdd": 80.0,
+        "cpubasic": 0.5,
+        "cpusuper": 0.5,
+        "cpubamf": 0.5,
+        "rambasic": 1000,
+        "ramsuper": 1000,
+        "rambamf": 1000,
+        "hddbasic": 80,
+        "hddsuper": 80,
+        "hddbamf": 80,
+        "portSpecs": [
+          "39000-39999"
+        ],
+        "ports": [39973],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
