@@ -1234,7 +1234,7 @@
         "domains": [
           ""
         ],
-        "environmentParameters": ["COIN=flux","BLOCKBOOK_PORT=9158","RPC_PORT=16124","FETCH_FILE=fetch-params.sh","BOOTSTRAP=1","EXTRACONFIG="addnode=explorer.zelcash.online"","RPC_URL_PROTOCOL=http"],
+        "environmentParameters": ["COIN=flux","BLOCKBOOK_PORT=9158","RPC_PORT=16124","FETCH_FILE=fetch-params.sh","BOOTSTRAP=1","EXTRACONFIG=\"addnode=explorer.zelcash.online\""],
         "commands": [],
         "containerData": "/root",
         "tiered": false,
