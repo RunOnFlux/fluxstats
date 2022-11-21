@@ -408,26 +408,26 @@ export default {
       let indata = '';
       let outdata = '';
       // Tentative implementation on IPs in and out
-      // if (this.tierFilter.default.includes('2ND LEVEL DATA')) {
-      //   let count = 0;
-      //   node.connectionin.map((i) => {
-      //     indata += `${i.ip},`;
-      //     if (count % 3 === 0 && Object.keys(node.connectionin).length - 1 > count) {
-      //       indata += '\n';
-      //     }
-      //     count += 1;
-      //     return i;
-      //   });
-      //   count = 0;
-      //   node.connectionout.map((i) => {
-      //     outdata += `${i.ip},`;
-      //     if (count % 3 === 0 && Object.keys(node.connectionout).length - 1 > count) {
-      //       outdata += '\n';
-      //     }
-      //     count += 1;
-      //     return i;
-      //   });
-      // }
+      if (this.tierFilter.default.includes('2ND LEVEL DATA')) {
+        let count = 0;
+        node.connectionin.map((i) => {
+          indata += `${i.ip},`;
+          if (count % 3 === 0 && Object.keys(node.connectionin).length - 1 > count) {
+            indata += '\n';
+          }
+          count += 1;
+          return i;
+        });
+        count = 0;
+        node.connectionout.map((i) => {
+          outdata += `${i.ip},`;
+          if (count % 3 === 0 && Object.keys(node.connectionout).length - 1 > count) {
+            outdata += '\n';
+          }
+          count += 1;
+          return i;
+        });
+      }
       this.$notify({
         title: 'Node Information',
         message: `ip: ${node.ip}\ncountry: ${node.country}\ncontinent: ${node.continent}\norg: ${node.org}\nzelId: ${node.zelId}\npayment address: ${node.paymentAddress}\nconnection in: ${indata}\nconnection out: ${outdata}`,
