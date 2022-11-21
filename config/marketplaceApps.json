@@ -1165,5 +1165,255 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "Host your Blockbook for Ethereum Classic on the Flux Cloud",
+    "price": 3.6,
+    "category": "Crypto",
+    "version": 4,
+    "name": "BlockbookETC",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "blockbookethereumclassic",
+        "description": "Blockbook for Ethereum Classic",
+        "repotag": "runonflux/blockbook-docker:latest",
+        "containerPorts": [
+          9137
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": ["COIN=ethereum-classic","BLOCKBOOK_PORT=9137","RPC_URL_PROTOCOL=ws","RPC_PORT=9138"],
+        "commands": [],
+        "containerData": "/root",
+        "tiered": false,
+        "cpu": 2.0,
+        "ram": 8000,
+        "hdd": 70.0,
+        "cpubasic": 2.0,
+        "cpusuper": 2.0,
+        "cpubamf": 2.0,
+        "rambasic": 8000,
+        "ramsuper": 8000,
+        "rambamf": 8000,
+        "hddbasic": 70,
+        "hddsuper": 70,
+        "hddbamf": 70,
+        "portSpecs": [
+          "34000-34500"
+        ],
+        "ports": [34142],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Blockbook for Flux on the Flux Cloud",
+    "price": 4.1,
+    "category": "Crypto",
+    "version": 4,
+    "name": "BlockbookFLUX",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "blockbookflux",
+        "description": "Blockbook for Flux",
+        "repotag": "runonflux/blockbook-docker:latest",
+        "containerPorts": [
+          9158
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": ["COIN=flux","BLOCKBOOK_PORT=9158","RPC_PORT=16124","FETCH_FILE=fetch-params.sh","BOOTSTRAP=1","EXTRACONFIG="addnode=explorer.zelcash.online"","RPC_URL_PROTOCOL=http"],
+        "commands": [],
+        "containerData": "/root",
+        "tiered": false,
+        "cpu": 3.0,
+        "ram": 8000,
+        "hdd": 60.0,
+        "cpubasic": 3.0,
+        "cpusuper": 3.0,
+        "cpubamf": 3.0,
+        "rambasic": 8000,
+        "ramsuper": 8000,
+        "rambamf": 8000,
+        "hddbasic": 60,
+        "hddsuper": 60,
+        "hddbamf": 60,
+        "portSpecs": [
+          "34000-34500"
+        ],
+        "ports": [34142],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Blockbook for Litecoin on the Flux Cloud",
+    "price": 3.6,
+    "category": "Crypto",
+    "version": 4,
+    "name": "BlockbookLTC",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "blockbooklitecoin",
+        "description": "Blockbook for Litecoin",
+        "repotag": "runonflux/blockbook-docker:latest",
+        "containerPorts": [
+          9134
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": ["COIN=litecoin","BLOCKBOOK_PORT=9134","RPC_PORT=9135"],
+        "commands": [],
+        "containerData": "/root",
+        "tiered": false,
+        "cpu": 2.5,
+        "ram": 4000,
+        "hdd": 120.0,
+        "cpubasic": 2.5,
+        "cpusuper": 2.5,
+        "cpubamf": 2.5,
+        "rambasic": 4000,
+        "ramsuper": 4000,
+        "rambamf": 4000,
+        "hddbasic": 120,
+        "hddsuper": 120,
+        "hddbamf": 120,
+        "portSpecs": [
+          "34000-34500"
+        ],
+        "ports": [34139],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Blockbook for Firo on the Flux Cloud",
+    "price": 2.1,
+    "category": "Crypto",
+    "version": 4,
+    "name": "BlockbookFIRO",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "blockbookfiro",
+        "description": "Blockbook for Firo",
+        "repotag": "runonflux/blockbook-docker:latest",
+        "containerPorts": [
+          9150
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": ["COIN=firo","BLOCKBOOK_PORT=9150","RPC_PORT=9151","GOLANG_VERSION=go1.17.1","ROCKSDB_VERSION=v6.22.1","BLOCKBOOKGIT_URL=https://github.com/firoorg/blockbook","TAG=firo14.11.1-mainnet","DAEMON_URL=https://github.com/firoorg/firo/releases/download/v0.14.11.2/firo-0.14.11.2-linux64.tar.gz"],
+        "commands": [],
+        "containerData": "/root",
+        "tiered": false,
+        "cpu": 2.0,
+        "ram": 2000,
+        "hdd": 40.0,
+        "cpubasic": 2.0,
+        "cpusuper": 2.0,
+        "cpubamf": 2.0,
+        "rambasic": 2000,
+        "ramsuper": 2000,
+        "rambamf": 2000,
+        "hddbasic": 40,
+        "hddsuper": 40,
+        "hddbamf": 40,
+        "portSpecs": [
+          "34000-34500"
+        ],
+        "ports": [34155],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Blockbook for Groestlcoin on the Flux Cloud",
+    "price": 2.7,
+    "category": "Crypto",
+    "version": 4,
+    "name": "BlockbookGRS",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "blockbookgroestlcoin",
+        "description": "Blockbook for Groestlcoin",
+        "repotag": "runonflux/blockbook-docker:latest",
+        "containerPorts": [
+          9145
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": ["COIN=groestlcoin","BLOCKBOOK_PORT=9145","RPC_PORT=9146"],
+        "commands": [],
+        "containerData": "/root",
+        "tiered": false,
+        "cpu": 2.0,
+        "ram": 3000,
+        "hdd": 85.0,
+        "cpubasic": 2.0,
+        "cpusuper": 2.0,
+        "cpubamf": 2.0,
+        "rambasic": 3000,
+        "ramsuper": 3000,
+        "rambamf": 3000,
+        "hddbasic": 85,
+        "hddsuper": 85,
+        "hddbamf": 85,
+        "portSpecs": [
+          "34000-34500"
+        ],
+        "ports": [34150],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
