@@ -14,6 +14,17 @@ class NodeTree {
 
 const getConnections = async (axios, httpRequestFluxConnections, allips) => httpRequestFluxConnections(axios, allips);
 
+const populateNodeTree = async (entry, node) => {
+  const nodetree = new NodeTree(entry);
+  nodetree.tier = !node[0].node.status.tier ? '' : node[0].node.status.tier;
+  nodetree.zelId = !node[0].flux.zelid ? '' : node[0].flux.zelid;
+  nodetree.continent = !node[0].geolocation.continent ? '' : node[0].geolocation.continent;
+  nodetree.country = !node[0].geolocation.country ? '' : node[0].geolocation.country;
+  nodetree.org = !node[0].geolocation.org ? '' : node[0].geolocation.org;
+  nodetree.paymentAddress = !node[0].node.status.payment_address ? '' : node[0].node.status.payment_address;
+  return nodetree;
+};
+
 const getConnectionData = async (info, nodes, axios, httpRequestFluxConnections) => {
   await Promise.all(
     nodes.map(async (el) => {
@@ -33,9 +44,7 @@ const getConnectionData = async (info, nodes, axios, httpRequestFluxConnections)
           return entry;
         }
 
-        const nodetree = new NodeTree(entry);
-        nodetree.tier = !node[0].node.status.tier ? '' : node[0].node.status.tier;
-        tempin.push(nodetree);
+        tempin.push(await populateNodeTree(entry, node));
 
         return entry;
       });
@@ -47,9 +56,7 @@ const getConnectionData = async (info, nodes, axios, httpRequestFluxConnections)
           return entry;
         }
 
-        const nodetree = new NodeTree(entry);
-        nodetree.tier = !node[0].node.status.tier ? '' : node[0].node.status.tier;
-        tempout.push(nodetree);
+        tempout.push(await populateNodeTree(entry, node));
 
         return entry;
       });
@@ -74,7 +81,7 @@ const populateNode = async (iptosearch, info) => {
     node.continent = !item[0].geolocation.continent ? '' : item[0].geolocation.continent;
     node.country = !item[0].geolocation.country ? '' : item[0].geolocation.country;
     node.org = !item[0].geolocation.org ? '' : item[0].geolocation.org;
-    node.paymentaddress = !item[0].node.status.payment_address ? '' : item[0].node.status.payment_address;
+    node.paymentAddress = !item[0].node.status.payment_address ? '' : item[0].node.status.payment_address;
     ret.push(node);
   }
 
@@ -86,17 +93,21 @@ const processChildren = async (node, info, axios, httpRequestFluxConnections) =>
   await getConnectionData(info, node.connectionout, axios, httpRequestFluxConnections);
 };
 
-const getDataVisualization = async (rateLimit, axios, MemoryStorage, httpRequestFluxConnections, iptosearch) => {
+const getDataVisualization = async (rateLimit, axios, MemoryStorage, httpRequestFluxConnections, iptosearch, tierFilter) => {
   const httpFluxConnection = rateLimit(axios.create(), { maxRequests: 50, perMilliseconds: 10000 });
   const info = MemoryStorage.get('fluxinfo');
   const rootNode = await populateNode(iptosearch, info);
   const rootNodeProcessed = await getConnectionData(info, rootNode, httpFluxConnection, httpRequestFluxConnections);
-  await Promise.all(
-    rootNodeProcessed.map(async (i) => {
-      await processChildren(i, info, axios, httpRequestFluxConnections);
-      return i;
-    }),
-  );
+
+  if (tierFilter.includes('2ND LEVEL DATA')) {
+    await Promise.all(
+      rootNodeProcessed.map(async (i) => {
+        await processChildren(i, info, axios, httpRequestFluxConnections);
+        return i;
+      }),
+    );
+  }
+
   return rootNodeProcessed;
 };
 

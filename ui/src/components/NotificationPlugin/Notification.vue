@@ -35,7 +35,7 @@
         v-if="title"
         class="title"
       ><b>{{ title }}<br></b></span>
-      <div>{{ message }}</div>
+      <div style="white-space: pre-wrap;">{{ message }}</div>
       <span />
       <content-render
         v-if="!message && component"
