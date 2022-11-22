@@ -1415,5 +1415,855 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "PrivateBin is a minimalist, open source online pastebin where the server has zero knowledge of pasted data. Data is encrypted and decrypted in the browser using 256bit AES",
+    "price": 0.2,
+    "category": "Productivity",
+    "version": 4,
+    "name": "PrivateBin",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "privatebin",
+        "description": "The PrivateBin Container",
+        "repotag": "littlestache/privatebin:latest",
+        "containerPorts": [
+          80
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/app",
+        "tiered": false,
+        "cpu": 0.2,
+        "ram": 200,
+        "hdd": 2.0,
+        "cpubasic": 0.2,
+        "cpusuper": 0.2,
+        "cpubamf": 0.2,
+        "rambasic": 200,
+        "ramsuper": 200,
+        "rambamf": 200,
+        "hddbasic": 2,
+        "hddsuper": 2,
+        "hddbamf": 2,
+        "portSpecs": [
+          "31000-32000"
+        ],
+        "ports": [31791],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Streaming and chat platform",
+    "price": 5.0,
+    "category": "Productivity",
+    "version": 4,
+    "name": "Owncast",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "owncast",
+        "description": "The Owncast Container",
+        "repotag": "gabekangas/owncast:latest",
+        "containerPorts": [
+          8080,1935
+        ],
+        "domains": [
+          "",""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/owncast",
+        "tiered": false,
+        "cpu": 3.0,
+        "ram": 8000,
+        "hdd": 150,
+        "cpubasic": 3.0,
+        "cpusuper": 3.0,
+        "cpubamf": 3.0,
+        "rambasic": 8000,
+        "ramsuper": 8000,
+        "rambamf": 8000,
+        "hddbasic": 150,
+        "hddsuper": 150,
+        "hddbamf": 150,
+        "portSpecs": [
+          "34600-34800"
+        ],
+        "ports": [34673,34674],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Synchronized video viewing with chat and other features",
+    "price": 5.0,
+    "category": "Productivity",
+    "version": 4,
+    "name": "SyncTube",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "synctube",
+        "description": "The SyncTube Container",
+        "repotag": "littlestache/synctube:latest",
+        "containerPorts": [
+          4200
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/synctube",
+        "tiered": false,
+        "cpu": 1.0,
+        "ram": 2000,
+        "hdd": 15,
+        "cpubasic": 1.0,
+        "cpusuper": 1.0,
+        "cpubamf": 1.0,
+        "rambasic": 2000,
+        "ramsuper": 2000,
+        "rambamf": 2000,
+        "hddbasic": 15,
+        "hddsuper": 15,
+        "hddbamf": 15,
+        "portSpecs": [
+          "32900-33000"
+        ],
+        "ports": [32944],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Synchronized video viewing with chat and other features",
+    "price": 1.2,
+    "category": "Productivity",
+    "version": 4,
+    "name": "SyncTube",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "synctube",
+        "description": "The SyncTube Container",
+        "repotag": "littlestache/synctube:latest",
+        "containerPorts": [
+          4200
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/synctube",
+        "tiered": false,
+        "cpu": 1.0,
+        "ram": 2000,
+        "hdd": 15,
+        "cpubasic": 1.0,
+        "cpusuper": 1.0,
+        "cpubamf": 1.0,
+        "rambasic": 2000,
+        "ramsuper": 2000,
+        "rambamf": 2000,
+        "hddbasic": 15,
+        "hddsuper": 15,
+        "hddbamf": 15,
+        "portSpecs": [
+          "32900-33000"
+        ],
+        "ports": [32944],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Grocy is a web-based self-hosted groceries & household management solution for your home",
+    "price": 1.0,
+    "category": "Productivity",
+    "version": 4,
+    "name": "Grocy",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "grocy",
+        "description": "The Grocy Container",
+        "repotag": "linuxserver/grocy:latest",
+        "containerPorts": [
+          80
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": ["PUID=1000","PGID=1000","TZ=Europe/London"],
+        "commands": [],
+        "containerData": "/groc",
+        "tiered": false,
+        "cpu": 1.0,
+        "ram": 1000,
+        "hdd": 10,
+        "cpubasic": 1.0,
+        "cpusuper": 1.0,
+        "cpubamf": 1.0,
+        "rambasic": 1000,
+        "ramsuper": 1000,
+        "rambamf": 1000,
+        "hddbasic": 10,
+        "hddsuper": 10,
+        "hddbamf": 10,
+        "portSpecs": [
+          "36300-36400"
+        ],
+        "ports": [36377],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "An open source voxel game engine",
+    "price": 1.2,
+    "category": "Productivity",
+    "version": 4,
+    "name": "MineTest",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "minetest",
+        "description": "The MineTest Container",
+        "repotag": "linuxserver/minetest:latest",
+        "containerPorts": [
+          30000
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": ["PUID=1000","PGID=1000","TZ=Europe/London"],
+        "commands": [],
+        "containerData": "/mine",
+        "tiered": false,
+        "cpu": 1.0,
+        "ram": 1000,
+        "hdd": 10,
+        "cpubasic": 1.0,
+        "cpusuper": 1.0,
+        "cpubamf": 1.0,
+        "rambasic": 2000,
+        "ramsuper": 2000,
+        "rambamf": 2000,
+        "hddbasic": 10,
+        "hddsuper": 10,
+        "hddbamf": 10,
+        "portSpecs": [
+          "32000-32100"
+        ],
+        "ports": [32000],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Get Google search results, but without any ads, javascript, AMP links, cookies, or IP address tracking",
+    "price": 1.0,
+    "category": "Productivity",
+    "version": 4,
+    "name": "Whoogle",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "whoogle",
+        "description": "The Whoogle Container",
+        "repotag": "benbusby/whoogle-search:latest",
+        "containerPorts": [
+          5000
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/app",
+        "tiered": false,
+        "cpu": 1.0,
+        "ram": 1000,
+        "hdd": 5,
+        "cpubasic": 1.0,
+        "cpusuper": 1.0,
+        "cpubamf": 1.0,
+        "rambasic": 1000,
+        "ramsuper": 1000,
+        "rambamf": 1000,
+        "hddbasic": 5,
+        "hddsuper": 5,
+        "hddbamf": 5,
+        "portSpecs": [
+          "35400-35500"
+        ],
+        "ports": [35420],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "WBO is an online collaborative whiteboard that allows many users to draw simultaneously on a large virtual board",
+    "price": 1.0,
+    "category": "Productivity",
+    "version": 4,
+    "name": "WBO",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "wbo",
+        "description": "The WBO Container",
+        "repotag": "lovasoa/wbo:latest",
+        "containerPorts": [
+          80
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/tmpwbo",
+        "tiered": false,
+        "cpu": 1.0,
+        "ram": 1000,
+        "hdd": 5,
+        "cpubasic": 1.0,
+        "cpusuper": 1.0,
+        "cpubamf": 1.0,
+        "rambasic": 1000,
+        "ramsuper": 1000,
+        "rambamf": 1000,
+        "hddbasic": 5,
+        "hddsuper": 5,
+        "hddbamf": 5,
+        "portSpecs": [
+          "33900-34000"
+        ],
+        "ports": [33929],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "The Open-Source IO Shooter is an open-source multiplayer game in the browser (desktop or browser)",
+    "price": 1.0,
+    "category": "Games",
+    "version": 4,
+    "name": "Tosios",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "tosios",
+        "description": "The Tosios Container",
+        "repotag": "littlestache/tosios:latest",
+        "containerPorts": [
+          3001
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/tmptosios",
+        "tiered": false,
+        "cpu": 1.0,
+        "ram": 1000,
+        "hdd": 5,
+        "cpubasic": 1.0,
+        "cpusuper": 1.0,
+        "cpubamf": 1.0,
+        "rambasic": 1000,
+        "ramsuper": 1000,
+        "rambamf": 1000,
+        "hddbasic": 5,
+        "hddsuper": 5,
+        "hddbamf": 5,
+        "portSpecs": [
+          "37400-37500"
+        ],
+        "ports": [37481],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "A fun incremental clicker game simulating the life of a developer",
+    "price": 0.2,
+    "category": "Games",
+    "version": 4,
+    "name": "Devlife",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "devlife",
+        "description": "The Devlife Container",
+        "repotag": "littlestache/devlife:latest",
+        "containerPorts": [
+          80
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/tmptosios",
+        "tiered": false,
+        "cpu": 0.2,
+        "ram": 200,
+        "hdd": 2,
+        "cpubasic": 0.2,
+        "cpusuper": 0.2,
+        "cpubamf": 0.2,
+        "rambasic": 200,
+        "ramsuper": 200,
+        "rambamf": 200,
+        "hddbasic": 2,
+        "hddsuper": 2,
+        "hddbamf": 2,
+        "portSpecs": [
+          "39200-39300"
+        ],
+        "ports": [39252],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "A multiplayer geography game using Websockets",
+    "price": 0.2,
+    "category": "Games",
+    "version": 4,
+    "name": "Posio",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "posio",
+        "description": "The Posio Container",
+        "repotag": "littlestache/posio:latest",
+        "containerPorts": [
+          5000
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": ["POSIO_SETTINGS=/app/config.py"],
+        "commands": [],
+        "containerData": "/tmpposio",
+        "tiered": false,
+        "cpu": 0.2,
+        "ram": 200,
+        "hdd": 2,
+        "cpubasic": 0.2,
+        "cpusuper": 0.2,
+        "cpubamf": 0.2,
+        "rambasic": 200,
+        "ramsuper": 200,
+        "rambamf": 200,
+        "hddbasic": 2,
+        "hddsuper": 2,
+        "hddbamf": 2,
+        "portSpecs": [
+          "34200-34300"
+        ],
+        "ports": [34260],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "An alternative private front-end to Reddit",
+    "price": 0.2,
+    "category": "Productivity",
+    "version": 4,
+    "name": "Libreddit",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "libreddit",
+        "description": "The Posio Container",
+        "repotag": "spikecodes/libreddit:latest",
+        "containerPorts": [
+          8080
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/tmplib",
+        "tiered": false,
+        "cpu": 0.2,
+        "ram": 200,
+        "hdd": 2,
+        "cpubasic": 0.2,
+        "cpusuper": 0.2,
+        "cpubamf": 0.2,
+        "rambasic": 200,
+        "ramsuper": 200,
+        "rambamf": 200,
+        "hddbasic": 2,
+        "hddsuper": 2,
+        "hddbamf": 2,
+        "portSpecs": [
+          "34600-34700"
+        ],
+        "ports": [34638],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Focalboard is an open source, self-hosted project management tool. It helps define, organize, track and manage work across individuals and teams",
+    "price": 0.2,
+    "category": "Productivity",
+    "version": 4,
+    "name": "Focalboard",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "focalboard",
+        "description": "The Focalboard Container",
+        "repotag": "mattermost/focalboard:latest",
+        "containerPorts": [
+          8000
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/tmpfocal",
+        "tiered": false,
+        "cpu": 0.2,
+        "ram": 200,
+        "hdd": 2,
+        "cpubasic": 0.2,
+        "cpusuper": 0.2,
+        "cpubamf": 0.2,
+        "rambasic": 200,
+        "ramsuper": 200,
+        "rambamf": 200,
+        "hddbasic": 2,
+        "hddsuper": 2,
+        "hddbamf": 2,
+        "portSpecs": [
+          "31600-31700"
+        ],
+        "ports": [31654],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "You're Santa, it's Christmas, and you have 6 billion gifts to deliver. Will you make it in time?",
+    "price": 0.2,
+    "category": "Games",
+    "version": 4,
+    "name": "Giftrun",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "giftrun",
+        "description": "The Giftrun Container",
+        "repotag": "littlestache/giftrun:latest",
+        "containerPorts": [
+          80
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/tmpgift",
+        "tiered": false,
+        "cpu": 0.2,
+        "ram": 200,
+        "hdd": 2,
+        "cpubasic": 0.2,
+        "cpusuper": 0.2,
+        "cpubamf": 0.2,
+        "rambasic": 200,
+        "ramsuper": 200,
+        "rambamf": 200,
+        "hddbasic": 2,
+        "hddsuper": 2,
+        "hddbamf": 2,
+        "portSpecs": [
+          "32600-32700"
+        ],
+        "ports": [32649],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Element (formerly known as Vector and Riot) is a Matrix web client built using the Matrix React SDK",
+    "price": 0.2,
+    "category": "Productivity",
+    "version": 4,
+    "name": "Element",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "element",
+        "description": "The Element Container",
+        "repotag": "vectorim/element-web:latest",
+        "containerPorts": [
+          80
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/tmpele",
+        "tiered": false,
+        "cpu": 0.2,
+        "ram": 200,
+        "hdd": 2,
+        "cpubasic": 0.2,
+        "cpusuper": 0.2,
+        "cpubamf": 0.2,
+        "rambasic": 200,
+        "ramsuper": 200,
+        "rambamf": 200,
+        "hddbasic": 2,
+        "hddsuper": 2,
+        "hddbamf": 2,
+        "portSpecs": [
+          "34200-34300"
+        ],
+        "ports": [34253],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Rustpad is an efficient and minimal open-source collaborative text editor",
+    "price": 0.2,
+    "category": "Productivity",
+    "version": 4,
+    "name": "Rustpad",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "rustpad",
+        "description": "The Rustpad Container",
+        "repotag": "ekzhang/rustpad:latest",
+        "containerPorts": [
+          3030
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/tmprustpad",
+        "tiered": false,
+        "cpu": 0.2,
+        "ram": 200,
+        "hdd": 2,
+        "cpubasic": 0.2,
+        "cpusuper": 0.2,
+        "cpubamf": 0.2,
+        "rambasic": 200,
+        "ramsuper": 200,
+        "rambamf": 200,
+        "hddbasic": 2,
+        "hddsuper": 2,
+        "hddbamf": 2,
+        "portSpecs": [
+          "38100-38200"
+        ],
+        "ports": [38144],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Bibliogram is a website that takes data from Instagram's public profile views and puts it into a friendlier page that loads faster, gives downloadable images, eliminates ads, generates RSS feeds, and doesn't urge you to sign up",
+    "price": 0.2,
+    "category": "Productivity",
+    "version": 4,
+    "name": "Bibliogram",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "bibliogram",
+        "description": "The Bibliogram Container",
+        "repotag": "cloudrac3r/bibliogram:latest",
+        "containerPorts": [
+          10407
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/tmpbib",
+        "tiered": false,
+        "cpu": 0.2,
+        "ram": 200,
+        "hdd": 2,
+        "cpubasic": 0.2,
+        "cpusuper": 0.2,
+        "cpubamf": 0.2,
+        "rambasic": 200,
+        "ramsuper": 200,
+        "rambamf": 200,
+        "hddbasic": 2,
+        "hddsuper": 2,
+        "hddbamf": 2,
+        "portSpecs": [
+          "35600-35700"
+        ],
+        "ports": [35691],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Do not put any value here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
