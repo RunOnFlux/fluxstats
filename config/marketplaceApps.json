@@ -1404,13 +1404,7 @@
           "34000-34500"
         ],
         "ports": [34150],
-        "userEnvironmentParameters": [
-          {
-            "name": "KEY",
-            "description": "The key of your masternode",
-            "placeholder": "Do not put any value here"
-          }
-        ]
+        "userEnvironmentParameters": []
       }
     ],
     "visible": true,
@@ -1454,13 +1448,7 @@
           "31000-32000"
         ],
         "ports": [31791],
-        "userEnvironmentParameters": [
-          {
-            "name": "KEY",
-            "description": "The key of your masternode",
-            "placeholder": "Do not put any value here"
-          }
-        ]
+        "userEnvironmentParameters": []
       }
     ],
     "visible": true,
@@ -1504,13 +1492,7 @@
           "34600-34800"
         ],
         "ports": [34673,34674],
-        "userEnvironmentParameters": [
-          {
-            "name": "KEY",
-            "description": "The key of your masternode",
-            "placeholder": "Do not put any value here"
-          }
-        ]
+        "userEnvironmentParameters": []
       }
     ],
     "visible": true,
@@ -1554,13 +1536,7 @@
           "32900-33000"
         ],
         "ports": [32944],
-        "userEnvironmentParameters": [
-          {
-            "name": "KEY",
-            "description": "The key of your masternode",
-            "placeholder": "Do not put any value here"
-          }
-        ]
+        "userEnvironmentParameters": []
       }
     ],
     "visible": true,
@@ -1604,13 +1580,7 @@
           "32900-33000"
         ],
         "ports": [32944],
-        "userEnvironmentParameters": [
-          {
-            "name": "KEY",
-            "description": "The key of your masternode",
-            "placeholder": "Do not put any value here"
-          }
-        ]
+        "userEnvironmentParameters": []
       }
     ],
     "visible": true,
@@ -1654,13 +1624,7 @@
           "36300-36400"
         ],
         "ports": [36377],
-        "userEnvironmentParameters": [
-          {
-            "name": "KEY",
-            "description": "The key of your masternode",
-            "placeholder": "Do not put any value here"
-          }
-        ]
+        "userEnvironmentParameters": []
       }
     ],
     "visible": true,
@@ -1704,13 +1668,7 @@
           "32000-32100"
         ],
         "ports": [32000],
-        "userEnvironmentParameters": [
-          {
-            "name": "KEY",
-            "description": "The key of your masternode",
-            "placeholder": "Do not put any value here"
-          }
-        ]
+        "userEnvironmentParameters": []
       }
     ],
     "visible": true,
@@ -1754,13 +1712,7 @@
           "35400-35500"
         ],
         "ports": [35420],
-        "userEnvironmentParameters": [
-          {
-            "name": "KEY",
-            "description": "The key of your masternode",
-            "placeholder": "Do not put any value here"
-          }
-        ]
+        "userEnvironmentParameters": []
       }
     ],
     "visible": true,
@@ -1804,13 +1756,7 @@
           "33900-34000"
         ],
         "ports": [33929],
-        "userEnvironmentParameters": [
-          {
-            "name": "KEY",
-            "description": "The key of your masternode",
-            "placeholder": "Do not put any value here"
-          }
-        ]
+        "userEnvironmentParameters": []
       }
     ],
     "visible": true,
@@ -1854,13 +1800,7 @@
           "37400-37500"
         ],
         "ports": [37481],
-        "userEnvironmentParameters": [
-          {
-            "name": "KEY",
-            "description": "The key of your masternode",
-            "placeholder": "Do not put any value here"
-          }
-        ]
+        "userEnvironmentParameters": []
       }
     ],
     "visible": true,
@@ -1904,13 +1844,7 @@
           "39200-39300"
         ],
         "ports": [39252],
-        "userEnvironmentParameters": [
-          {
-            "name": "KEY",
-            "description": "The key of your masternode",
-            "placeholder": "Do not put any value here"
-          }
-        ]
+        "userEnvironmentParameters": []
       }
     ],
     "visible": true,
@@ -1954,13 +1888,7 @@
           "34200-34300"
         ],
         "ports": [34260],
-        "userEnvironmentParameters": [
-          {
-            "name": "KEY",
-            "description": "The key of your masternode",
-            "placeholder": "Do not put any value here"
-          }
-        ]
+        "userEnvironmentParameters": []
       }
     ],
     "visible": true,
@@ -2004,13 +1932,7 @@
           "34600-34700"
         ],
         "ports": [34638],
-        "userEnvironmentParameters": [
-          {
-            "name": "KEY",
-            "description": "The key of your masternode",
-            "placeholder": "Do not put any value here"
-          }
-        ]
+        "userEnvironmentParameters": []
       }
     ],
     "visible": true,
@@ -2054,13 +1976,7 @@
           "31600-31700"
         ],
         "ports": [31654],
-        "userEnvironmentParameters": [
-          {
-            "name": "KEY",
-            "description": "The key of your masternode",
-            "placeholder": "Do not put any value here"
-          }
-        ]
+        "userEnvironmentParameters": []
       }
     ],
     "visible": true,
@@ -2104,13 +2020,7 @@
           "32600-32700"
         ],
         "ports": [32649],
-        "userEnvironmentParameters": [
-          {
-            "name": "KEY",
-            "description": "The key of your masternode",
-            "placeholder": "Do not put any value here"
-          }
-        ]
+        "userEnvironmentParameters": []
       }
     ],
     "visible": true,
@@ -2154,13 +2064,7 @@
           "34200-34300"
         ],
         "ports": [34253],
-        "userEnvironmentParameters": [
-          {
-            "name": "KEY",
-            "description": "The key of your masternode",
-            "placeholder": "Do not put any value here"
-          }
-        ]
+        "userEnvironmentParameters": []
       }
     ],
     "visible": true,
@@ -2204,13 +2108,7 @@
           "38100-38200"
         ],
         "ports": [38144],
-        "userEnvironmentParameters": [
-          {
-            "name": "KEY",
-            "description": "The key of your masternode",
-            "placeholder": "Do not put any value here"
-          }
-        ]
+        "userEnvironmentParameters": []
       }
     ],
     "visible": true,
@@ -2254,13 +2152,7 @@
           "35600-35700"
         ],
         "ports": [35691],
-        "userEnvironmentParameters": [
-          {
-            "name": "KEY",
-            "description": "The key of your masternode",
-            "placeholder": "Do not put any value here"
-          }
-        ]
+        "userEnvironmentParameters": []
       }
     ],
     "visible": true,
