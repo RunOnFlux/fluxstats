@@ -1513,7 +1513,7 @@
   {
     "description": "An open source voxel game engine",
     "price": 1.2,
-    "category": "Productivity",
+    "category": "Games",
     "version": 4,
     "name": "MineTest",
     "instances": 3,
@@ -2039,6 +2039,303 @@
     "enabled": true
   },
   {
+    "description": "With TeamSpeak there are no centralized servers and no harvesting of personal data. Your chat, your data, your choice. With TeamSpeak, your team rules!",
+    "price": 0.6,
+    "category": "Hosting",
+    "version": 4,
+    "name": "Teamspeak",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "teamspeak",
+        "description": "The Teamspeak Container",
+        "repotag": "teamspeak:latest",
+        "containerPorts": [
+          9987,10011,30033
+        ],
+        "domains": [
+          "","",""
+        ],
+        "environmentParameters": ["TS3SERVER_LICENSE=accept"],
+        "commands": [],
+        "containerData": "/teams",
+        "tiered": false,
+        "cpu": 0.5,
+        "ram": 1000,
+        "hdd": 1,
+        "cpubasic": 0.5,
+        "cpusuper": 0.5,
+        "cpubamf": 0.5,
+        "rambasic": 1000,
+        "ramsuper": 1000,
+        "rambamf": 1000,
+        "hddbasic": 1,
+        "hddsuper": 1,
+        "hddbamf": 1,
+        "portSpecs": [
+          "38880-39000"
+        ],
+        "ports": [38895,38896,38897],
+        "userEnvironmentParameters": []
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "A brutal exploration and survival game for 1-10 players, set in a procedurally-generated purgatory inspired by viking culture. Battle, build, and conquer your way to a saga worthy of Odin’s patronage!",
+    "price": 2.45,
+    "category": "Games",
+    "version": 4,
+    "name": "Valheim",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "valheim",
+        "description": "The Valheim Container - Use Server Port 39870 to Connect!",
+        "repotag": "mbround18/valheim:latest",
+        "containerPorts": [
+          2456,2457,2458
+        ],
+        "domains": [
+          "","",""
+        ],
+        "environmentParameters": [,
+        "commands": [],
+        "containerData": "/val",
+        "tiered": false,
+        "cpu": 2.5,
+        "ram": 3500,
+        "hdd": 20,
+        "cpubasic": 2.5,
+        "cpusuper": 2,5,
+        "cpubamf": 2.5,
+        "rambasic": 3500,
+        "ramsuper": 3500,
+        "rambamf": 3500,
+        "hddbasic": 20,
+        "hddsuper": 20,
+        "hddbamf": 20,
+        "portSpecs": [
+          "39850-39900"
+        ],
+        "ports": [39870,39871,39872],
+        "userEnvironmentParameters": [
+          {
+            "name": "NAME",
+            "description": "The name of your Valheim server",
+            "placeholder": "Enter your name here"
+          },
+          {
+            "name": "PASSWORD",
+            "description": "The password of your Valheim server",
+            "placeholder": "Enter your password here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Terraria servers on Flux!",
+    "price": 2.0,
+    "category": "Games",
+    "version": 4,
+    "name": "Terraria",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "terraria",
+        "description": "The Terraria Container - In the game client use server port 33333 to connect",
+        "repotag": "littlestache/terraria:latest",
+        "containerPorts": [
+          7777,8080
+        ],
+        "domains": [
+          "",""
+        ],
+        "environmentParameters": ["GAME_PARAM=-config serverconfig.txt","UID=99","GID=100"],
+        "commands": [],
+        "containerData": "/ter",
+        "tiered": false,
+        "cpu": 2.0,
+        "ram": 3000,
+        "hdd": 10,
+        "cpubasic": 2.0,
+        "cpusuper": 2.0,
+        "cpubamf": 2.0,
+        "rambasic": 3000,
+        "ramsuper": 3000,
+        "rambamf": 3000,
+        "hddbasic": 10,
+        "hddsuper": 10,
+        "hddbamf": 10,
+        "portSpecs": [
+          "34200-36800"
+        ],
+        "ports": [34250,36735],
+        "userEnvironmentParameters": []
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "diagrams.net (formerly draw.io) is free online diagram software. You can use it as a flowchart maker, network diagram software, to design database schema, and more.",
+    "price": 0.5,
+    "category": "Productivity",
+    "version": 4,
+    "name": "Diagrams.net",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "drawio",
+        "description": "The Drawio Container",
+        "repotag": "jgraph/drawio:latest",
+        "containerPorts": [
+          8080,8443
+        ],
+        "domains": [
+          "",""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/tmpdraw",
+        "tiered": false,
+        "cpu": 0.4,
+        "ram": 1000,
+        "hdd": 4,
+        "cpubasic": 0.4,
+        "cpusuper": 0.4,
+        "cpubamf": 0.4,
+        "rambasic": 1000,
+        "ramsuper": 1000,
+        "rambamf": 1000,
+        "hddbasic": 4,
+        "hddsuper": 4,
+        "hddbamf": 4,
+        "portSpecs": [
+          "33250-33260"
+        ],
+        "ports": [33253,33254],
+        "userEnvironmentParameters": []
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Teeworlds servers deployed on Flux.",
+    "price": 0.4,
+    "category": "Games",
+    "version": 4,
+    "name": "Teeworlds",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "teeworlds",
+        "description": "The Teeworlds Container",
+        "repotag": "riftbit/teeworlds:latest",
+        "containerPorts": [
+          32913,8304
+        ],
+        "domains": [
+          "",""
+        ],
+        "environmentParameters": ["TW_sv_register=1","TW_sv_port=32913"],
+        "commands": [],
+        "containerData": "/tmptee",
+        "tiered": false,
+        "cpu": 0.3,
+        "ram": 600,
+        "hdd": 2,
+        "cpubasic": 0.3,
+        "cpusuper": 0.3,
+        "cpubamf": 0.3,
+        "rambasic": 600,
+        "ramsuper": 600,
+        "rambamf": 600,
+        "hddbasic": 2,
+        "hddsuper": 2,
+        "hddbamf": 2,
+        "portSpecs": [
+          "32900-36550"
+        ],
+        "ports": [32913,36521],
+        "userEnvironmentParameters": [
+          {
+            "name": "TW_sv_name",
+            "description": "The name of your Teeworld server",
+            "placeholder": "Enter your name here"
+          },
+          {
+            "name": "TW_sv_motd",
+            "description": "The motd of your Teeworld server",
+            "placeholder": "Enter your server name again here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Ark: Survival Evolved Server on Flux",
+    "price": 3.5,
+    "category": "Games",
+    "version": 4,
+    "name": "Ark: Survival Evolved",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "ark",
+        "description": "The Ark Container",
+        "repotag": "thmhoag/arkserver:latest",
+        "containerPorts": [
+          36479,36480,36481
+        ],
+        "domains": [
+          "","",""
+        ],
+        "environmentParameters": ["am_ark_QueryPort=36479","am_ark_Port=36481"],
+        "commands": [],
+        "containerData": "/arktmp",
+        "tiered": false,
+        "cpu": 2.0,
+        "ram": 8000,
+        "hdd": 60,
+        "cpubasic": 2.0,
+        "cpusuper": 2.0,
+        "cpubamf": 2.0,
+        "rambasic": 8000,
+        "ramsuper": 8000,
+        "rambamf": 8000,
+        "hddbasic": 60,
+        "hddsuper": 60,
+        "hddbamf": 60,
+        "portSpecs": [
+          "36450-36500"
+        ],
+        "ports": [36479,36480,36481],
+        "userEnvironmentParameters": [
+          {
+            "name": "am_ark_SessionName",
+            "description": "The name of your Ark: Survival Evolved server",
+            "placeholder": "Enter your name here"
+          },
+          {
+            "name": "ark_MaxPlayers",
+            "description": "The Maximum of players you want to allow on your server",
+            "placeholder": "Put your max limit here, e.g 40"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
     "description": "Host your Blockbook for Viacoin on the Flux Cloud",
     "price": 5.5,
     "category": "Blockbook",
@@ -2083,6 +2380,50 @@
     "enabled": true
   },
   {
+    "description": "The YaCy search engine software provides results from a network of independent peers, instead of a central server. It is a distributed network where no single entity decides what to list or order it appears in.",
+    "price": 1.5,
+    "category": "Productivity",
+    "version": 4,
+    "name": "YaCy",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "yacy",
+        "description": "The YaCy Container",
+        "repotag": "luccioman/yacy:latest-alpine",
+        "containerPorts": [
+          8090,8443
+        ],
+        "domains": [
+          "",""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/tmpyacy",
+        "tiered": false,
+        "cpu": 1.0,
+        "ram": 1200,
+        "hdd": 60,
+        "cpubasic": 1.0,
+        "cpusuper": 1.0,
+        "cpubamf": 1.0,
+        "rambasic": 1200,
+        "ramsuper": 1200,
+        "rambamf": 1200,
+        "hddbasic": 60,
+        "hddsuper": 60,
+        "hddbamf": 60,
+        "portSpecs": [
+          "33400-33500"
+        ],
+        "ports": [33437,33438],
+        "userEnvironmentParameters": []
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
     "description": "Host your Blockbook for Vertcoin on the Flux Cloud",
     "price": 3.0,
     "category": "Blockbook",
@@ -2120,6 +2461,50 @@
           "34100-34200"
         ],
         "ports": [34145],
+        "userEnvironmentParameters": []
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Collaborative Spreadsheet with built-in Redis backend.",
+    "price": 0.15,
+    "category": "Productivity",
+    "version": 4,
+    "name": "EtherCalc",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "ethercalc",
+        "description": "The EtherCalc Container",
+        "repotag": "audreyt/ethercalc:latest",
+        "containerPorts": [
+          8000
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/tmpredis",
+        "tiered": false,
+        "cpu": 0.1,
+        "ram": 200,
+        "hdd": 2,
+        "cpubasic": 0.1,
+        "cpusuper": 0.1,
+        "cpubamf": 0.1,
+        "rambasic": 200,
+        "ramsuper": 200,
+        "rambamf": 200,
+        "hddbasic": 2,
+        "hddsuper": 2,
+        "hddbamf": 2,
+        "portSpecs": [
+          "33600-33700"
+        ],
+        "ports": [33661],
         "userEnvironmentParameters": []
       }
     ],
