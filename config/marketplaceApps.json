@@ -2100,7 +2100,7 @@
         "domains": [
           "","",""
         ],
-        "environmentParameters": [,
+        "environmentParameters": [],
         "commands": [],
         "containerData": "/val",
         "tiered": false,
@@ -2108,7 +2108,7 @@
         "ram": 3500,
         "hdd": 20,
         "cpubasic": 2.5,
-        "cpusuper": 2,5,
+        "cpusuper": 2.5,
         "cpubamf": 2.5,
         "rambasic": 3500,
         "ramsuper": 3500,
