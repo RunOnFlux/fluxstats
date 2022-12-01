@@ -661,7 +661,7 @@
   {
     "description": "Host your Sushiswap Frontend on the Flux Cloud",
     "price": 1.0,
-    "category": "Crypto",
+    "category": "Front-end",
     "version": 4,
     "name": "Sushiswap",
     "instances": 3,
@@ -705,7 +705,7 @@
   {
     "description": "Host your Yearn Finance Frontend on the Flux Cloud",
     "price": 1.0,
-    "category": "Crypto",
+    "category": "Front-end",
     "version": 4,
     "name": "Yearn",
     "instances": 3,
@@ -749,7 +749,7 @@
   {
     "description": "Host your GMX.io Frontend on the Flux Cloud",
     "price": 1.0,
-    "category": "Crypto",
+    "category": "Front-end",
     "version": 4,
     "name": "Gmx",
     "instances": 3,
@@ -793,7 +793,7 @@
   {
     "description": "Host your Dopex.io Frontend on the Flux Cloud",
     "price": 1.0,
-    "category": "Crypto",
+    "category": "Front-end",
     "version": 4,
     "name": "Dopex",
     "instances": 3,
@@ -837,7 +837,7 @@
   {
     "description": "Host your Pangolin Frontend on the Flux Cloud",
     "price": 1.0,
-    "category": "Crypto",
+    "category": "Front-end",
     "version": 4,
     "name": "Pangolin",
     "instances": 3,
@@ -881,7 +881,7 @@
   {
     "description": "Host your Liquity Frontend on the Flux Cloud",
     "price": 1.0,
-    "category": "Crypto",
+    "category": "Front-end",
     "version": 4,
     "name": "Liquity",
     "instances": 3,
@@ -925,7 +925,7 @@
   {
     "description": "Host your Balancer Finance Frontend on the Flux Cloud",
     "price": 1.0,
-    "category": "Crypto",
+    "category": "Front-end",
     "version": 4,
     "name": "Balancer",
     "instances": 3,
@@ -985,7 +985,7 @@
   {
     "description": "Host your Osmosis Frontend on the Flux Cloud",
     "price": 1.0,
-    "category": "Crypto",
+    "category": "Front-end",
     "version": 4,
     "name": "Osmosis",
     "instances": 3,
@@ -1073,7 +1073,7 @@
   {
     "description": "Host your Blockbook for Ethereum Classic on the Flux Cloud",
     "price": 3.6,
-    "category": "Crypto",
+    "category": "Blockbook",
     "version": 4,
     "name": "BlockbookETC",
     "instances": 3,
@@ -1117,7 +1117,7 @@
   {
     "description": "Host your Blockbook for Flux on the Flux Cloud",
     "price": 4.1,
-    "category": "Crypto",
+    "category": "Blockbook",
     "version": 4,
     "name": "BlockbookFLUX",
     "instances": 3,
@@ -1161,7 +1161,7 @@
   {
     "description": "Host your Blockbook for Litecoin on the Flux Cloud",
     "price": 3.6,
-    "category": "Crypto",
+    "category": "Blockbook",
     "version": 4,
     "name": "BlockbookLTC",
     "instances": 3,
@@ -1205,7 +1205,7 @@
   {
     "description": "Host your Blockbook for Firo on the Flux Cloud",
     "price": 2.1,
-    "category": "Crypto",
+    "category": "Blockbook",
     "version": 4,
     "name": "BlockbookFIRO",
     "instances": 3,
@@ -1249,7 +1249,7 @@
   {
     "description": "Host your Blockbook for Groestlcoin on the Flux Cloud",
     "price": 2.7,
-    "category": "Crypto",
+    "category": "Blockbook",
     "version": 4,
     "name": "BlockbookGRS",
     "instances": 3,
@@ -2032,6 +2032,138 @@
           "35600-35700"
         ],
         "ports": [35691],
+        "userEnvironmentParameters": []
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Blockbook for Viacoin on the Flux Cloud",
+    "price": 5.5,
+    "category": "Blockbook",
+    "version": 4,
+    "name": "BlockbookVIA",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "blockbookviacoin",
+        "description": "Blockbook for Viacoin",
+        "repotag": "runonflux/blockbook-docker:latest",
+        "containerPorts": [
+          9155
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": ["COIN=viacoin","BLOCKBOOK_PORT=9155","RPC_PORT=9156"],
+        "commands": [],
+        "containerData": "/root",
+        "tiered": false,
+        "cpu": 3.0,
+        "ram": 8000,
+        "hdd": 200,
+        "cpubasic": 3.0,
+        "cpusuper": 3.0,
+        "cpubamf": 3.0,
+        "rambasic": 8000,
+        "ramsuper": 8000,
+        "rambamf": 8000,
+        "hddbasic": 200,
+        "hddsuper": 200,
+        "hddbamf": 200,
+        "portSpecs": [
+          "34100-34200"
+        ],
+        "ports": [34160],
+        "userEnvironmentParameters": []
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Blockbook for Vertcoin on the Flux Cloud",
+    "price": 3.0,
+    "category": "Blockbook",
+    "version": 4,
+    "name": "BlockbookVTC",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "blockbookvertcoin",
+        "description": "Blockbook for Vertcoin",
+        "repotag": "runonflux/blockbook-docker:latest",
+        "containerPorts": [
+          9140
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": ["COIN=vertcoin","BLOCKBOOK_PORT=9140","RPC_PORT=9141"],
+        "commands": [],
+        "containerData": "/root",
+        "tiered": false,
+        "cpu": 2.6,
+        "ram": 4500,
+        "hdd": 40,
+        "cpubasic": 2.6,
+        "cpusuper": 2.6,
+        "cpubamf": 2.6,
+        "rambasic": 4500,
+        "ramsuper": 4500,
+        "rambamf": 4500,
+        "hddbasic": 40,
+        "hddsuper": 40,
+        "hddbamf": 40,
+        "portSpecs": [
+          "34100-34200"
+        ],
+        "ports": [34145],
+        "userEnvironmentParameters": []
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Blockbook for Qtum on the Flux Cloud",
+    "price": 3.0,
+    "category": "Blockbook",
+    "version": 4,
+    "name": "BlockbookQTUM",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "blockbookqtum",
+        "description": "Blockbook for Qtum",
+        "repotag": "runonflux/blockbook-docker:latest",
+        "containerPorts": [
+          9188
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": ["COIN=qtum","BLOCKBOOK_PORT=9188"],
+        "commands": [],
+        "containerData": "/root",
+        "tiered": false,
+        "cpu": 2.0,
+        "ram": 4000,
+        "hdd": 100,
+        "cpubasic": 2.0,
+        "cpusuper": 2.0,
+        "cpubamf": 2.0,
+        "rambasic": 4000,
+        "ramsuper": 4000,
+        "rambamf": 4000,
+        "hddbasic": 100,
+        "hddsuper": 100,
+        "hddbamf": 100,
+        "portSpecs": [
+          "34100-34200"
+        ],
+        "ports": [34193],
         "userEnvironmentParameters": []
       }
     ],
