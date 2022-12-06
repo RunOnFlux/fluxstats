@@ -2554,5 +2554,49 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "Host a Online Compiler for C,C++,JAVA,Python,JavaScript on the Flux Cloud",
+    "price": 0.8,
+    "category": "Productivity",
+    "version": 4,
+    "name": "Compiler",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "onlinecompiler",
+        "description": "Online Compiler",
+        "repotag": "sidpro/compiler:latest",
+        "containerPorts": [
+          80
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/tmp",
+        "tiered": false,
+        "cpu": 0.5,
+        "ram": 2000,
+        "hdd": 5,
+        "cpubasic": 0.5,
+        "cpusuper": 0.5,
+        "cpubamf": 0.5,
+        "rambasic": 2000,
+        "ramsuper": 2000,
+        "rambamf": 2000,
+        "hddbasic": 5,
+        "hddsuper": 5,
+        "hddbamf": 5,
+        "portSpecs": [
+          "36000-36100"
+        ],
+        "ports": [36001],
+        "userEnvironmentParameters": []
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
