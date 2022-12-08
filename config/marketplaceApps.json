@@ -2554,5 +2554,181 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "Host a Online Compiler for C,C++,JAVA,Python,JavaScript on the Flux Cloud",
+    "price": 0.8,
+    "category": "Productivity",
+    "version": 4,
+    "name": "Compiler",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "onlinecompiler",
+        "description": "Online Compiler",
+        "repotag": "sidpro/compiler:latest",
+        "containerPorts": [
+          80
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/tmp",
+        "tiered": false,
+        "cpu": 0.5,
+        "ram": 2000,
+        "hdd": 5,
+        "cpubasic": 0.5,
+        "cpusuper": 0.5,
+        "cpubamf": 0.5,
+        "rambasic": 2000,
+        "ramsuper": 2000,
+        "rambamf": 2000,
+        "hddbasic": 5,
+        "hddsuper": 5,
+        "hddbamf": 5,
+        "portSpecs": [
+          "36000-36100"
+        ],
+        "ports": [36001],
+        "userEnvironmentParameters": []
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Blockbook for Dash on the Flux Cloud",
+    "price": 3.0,
+    "category": "Blockbook",
+    "version": 4,
+    "name": "BlockbookDASH",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "blockbookdash",
+        "description": "Blockbook for Dash",
+        "repotag": "runonflux/blockbook-docker:latest",
+        "containerPorts": [
+          9133
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": ["COIN=dash","BLOCKBOOK_PORT=9133"],
+        "commands": [],
+        "containerData": "/root",
+        "tiered": false,
+        "cpu": 2.0,
+        "ram": 4000,
+        "hdd": 85,
+        "cpubasic": 2.0,
+        "cpusuper": 2.0,
+        "cpubamf": 2.0,
+        "rambasic": 4000,
+        "ramsuper": 4000,
+        "rambamf": 4000,
+        "hddbasic": 85,
+        "hddsuper": 85,
+        "hddbamf": 85,
+        "portSpecs": [
+          "35600-35700"
+        ],
+        "ports": [35660],
+        "userEnvironmentParameters": []
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Blockbook for Divi on the Flux Cloud",
+    "price": 2.6,
+    "category": "Blockbook",
+    "version": 4,
+    "name": "BlockbookDIVI",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "blockbookdivi",
+        "description": "Blockbook for Divi",
+        "repotag": "runonflux/blockbook-docker:latest",
+        "containerPorts": [
+          9189
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": ["COIN=divi","BLOCKBOOK_PORT=9189","RPC_PORT=9190","DAEMON_URL=https://github.com/DiviProject/Divi/releases/download/v2.5.1/divi-2.5.1-x86_64-linux.tar.gz"],
+        "commands": [],
+        "containerData": "/root",
+        "tiered": false,
+        "cpu": 2.0,
+        "ram": 4000,
+        "hdd": 50,
+        "cpubasic": 2.0,
+        "cpusuper": 2.0,
+        "cpubamf": 2.0,
+        "rambasic": 4000,
+        "ramsuper": 4000,
+        "rambamf": 4000,
+        "hddbasic": 50,
+        "hddsuper": 50,
+        "hddbamf": 50,
+        "portSpecs": [
+          "35600-35700"
+        ],
+        "ports": [35670],
+        "userEnvironmentParameters": []
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Blockbook for Decred on the Flux Cloud",
+    "price": 2.6,
+    "category": "Blockbook",
+    "version": 4,
+    "name": "BlockbookDCR",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "blockbookdecred",
+        "description": "Blockbook for Decred",
+        "repotag": "runonflux/blockbook-docker:latest",
+        "containerPorts": [
+          9161
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": ["COIN=decred","BLOCKBOOK_PORT=9161","DAEMON_URL=https://github.com/decred/decred-binaries/releases/download/v1.7.6/decrediton-v1.7.6.tar.gz"],
+        "commands": [],
+        "containerData": "/root",
+        "tiered": false,
+        "cpu": 2.0,
+        "ram": 4000,
+        "hdd": 50,
+        "cpubasic": 2.0,
+        "cpusuper": 2.0,
+        "cpubamf": 2.0,
+        "rambasic": 4000,
+        "ramsuper": 4000,
+        "rambamf": 4000,
+        "hddbasic": 50,
+        "hddsuper": 50,
+        "hddbamf": 50,
+        "portSpecs": [
+          "35600-35700"
+        ],
+        "ports": [35680],
+        "userEnvironmentParameters": []
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
