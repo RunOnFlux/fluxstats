@@ -2784,7 +2784,7 @@
         "portSpecs": [
           "35700-35750"
         ],
-        "ports": [35700],
+        "ports": [35700,35701],
         "userEnvironmentParameters": []
       }
     ],
