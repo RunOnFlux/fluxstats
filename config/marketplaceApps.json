@@ -2086,7 +2086,7 @@
             "name": "PASSWORD",
             "description": "The password of your Valheim server",
             "placeholder": "Enter your password here"
-          },
+          }
         ]
       }
     ],
