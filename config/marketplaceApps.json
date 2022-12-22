@@ -2056,7 +2056,7 @@
         "domains": [
           "","",""
         ],
-        "environmentParameters": [],
+        "environmentParameters": ["AUTO_UPDATE=1","AUTO_UPDATE_SCHEDULE=0 1 * * *","AUTO_UPDATE_PAUSE_WITH_PLAYERS=1"],
         "commands": [],
         "containerData": "/val",
         "tiered": false,
@@ -2086,7 +2086,7 @@
             "name": "PASSWORD",
             "description": "The password of your Valheim server",
             "placeholder": "Enter your password here"
-          }
+          },
         ]
       }
     ],
