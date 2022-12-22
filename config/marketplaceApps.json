@@ -2746,5 +2746,49 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "Host your Meowcoin Full Node on the Flux Cloud",
+    "price": 7.3,
+    "category": "Crypto",
+    "version": 4,
+    "name": "MeowcoinNode",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "meowcoinnode",
+        "description": "The Meowcoin Node Container",
+        "repotag": "rvnminersaandn/meowcoin-core:latest",
+        "containerPorts": [
+          8788,9766
+        ],
+        "domains": [
+          "",""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/root",
+        "tiered": false,
+        "cpu": 2.0,
+        "ram": 6000,
+        "hdd": 60,
+        "cpubasic": 2.0,
+        "cpusuper": 2.0,
+        "cpubamf": 2.0,
+        "rambasic": 6000,
+        "ramsuper": 6000,
+        "rambamf": 6000,
+        "hddbasic": 60,
+        "hddsuper": 60,
+        "hddbamf": 60,
+        "portSpecs": [
+          "35700-35750"
+        ],
+        "ports": [35700],
+        "userEnvironmentParameters": []
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
