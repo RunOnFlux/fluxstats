@@ -161,6 +161,7 @@
                     <p><b>Last Confirmed Height:</b> {{ props.row.node.status.last_confirmed_height }}</p>
                     <p><b>Last Paid Height:</b> {{ props.row.node.status.last_paid_height }}</p>
                     <p><b>Payment Address:</b> {{ props.row.node.status.payment_address }}</p>
+                    <p><b>Pub Key:</b> {{ props.row.node.status.pubkey }}</p>
                     <p><b>Zel ID:</b> {{ props.row.flux.zelid }}</p>
                     <p><b>Active Since:</b> {{ props.row.node.status.activesince }}</p>
                     <p><b>Active Since Converted:</b> {{ new Date(parseInt(props.row.node.status.activesince * 1000, 10)).toLocaleString() }}</p>
@@ -556,6 +557,7 @@ export default {
           lastConfirmedHeight: !item.node.status.last_confirmed_height ? '' : item.node.status.last_confirmed_height,
           lastPaidHeight: !item.node.status.last_paid_height ? '' : item.node.status.last_paid_height,
           paymentAddress: !item.node.status.payment_address ? '' : item.node.status.payment_address,
+          pubKey: !item.node.status.pubkey ? '' : item.node.status.pubkey,
           zelId: !item.flux.zelid ? '' : item.flux.zelid,
           activeSince: !item.node.status.activesince ? '' : item.node.status.activesince,
           activeSinceConverted: !item.node.status.activesince ? '' : new Date(parseInt(item.node.status.activesince * 1000, 10)).toLocaleString(),
@@ -597,6 +599,7 @@ export default {
           'Last Confirmed Height',
           'Last Paid Height',
           'Payment Address',
+          'Pub Key',
           'Zel ID',
           'Active Since',
           'Active Since Converted',

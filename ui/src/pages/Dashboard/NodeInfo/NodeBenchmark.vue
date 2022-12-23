@@ -188,6 +188,7 @@
                     <p><b>Disk Size:</b> {{ props.row.benchmark.bench.disksinfo.size }}</p>
                     <p><b>Disk Write Speed:</b> {{ props.row.benchmark.bench.disksinfo.writespeed }}</p>
                     <p><b>EPS:</b> {{ props.row.benchmark.bench.eps }}</p>
+                    <p><b>Thunder:</b> {{ props.row.benchmark.bench.thunder }}</p>
                     <p><b class="text-danger">Errors:</b> {{ props.row.benchmark.bench.error }}</p>
                     <p><b class="text-warning">Needed To Fix Issues:</b> {{ props.row.benchmark.issues }} </p>
                   </template>
@@ -813,6 +814,7 @@ export default {
           diskSize: !item.benchmark.bench.disksinfo.size ? '' : item.benchmark.bench.disksinfo.size,
           diskWriteSpeed: !item.benchmark.bench.disksinfo.writespeed ? '' : item.benchmark.bench.disksinfo.writespeed,
           eps: !item.benchmark.bench.eps ? '' : item.benchmark.bench.eps,
+          thunder: item.benchmark.bench.thunder,
           errors: !item.benchmark.bench.error ? '' : item.benchmark.bench.error,
           neededToFixIssues: !item.benchmark.issues ? '' : item.benchmark.issues,
         });
@@ -860,6 +862,7 @@ export default {
           'Disk Size',
           'Disk Write Speed',
           'EPS',
+          'Thunder',
           'Errors',
           'Needed To Fix Issues',
         ],

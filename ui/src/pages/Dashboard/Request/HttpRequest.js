@@ -27,7 +27,6 @@ const httpRequestFluxHistoryStats = async (axios, MemoryStorage) => {
 
 // ipports -> array of string port value
 async function httpRequestFluxConnections(axios, ipports) {
-  console.log(ipports);
   try {
     const ret = [];
     const ips = ipports;
