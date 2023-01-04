@@ -1220,7 +1220,7 @@
         "domains": [
           ""
         ],
-        "environmentParameters": ["COIN=firo","BLOCKBOOK_PORT=9150","RPC_PORT=9151","GOLANG_VERSION=go1.17.1","ROCKSDB_VERSION=v6.22.1","BLOCKBOOKGIT_URL=https://github.com/firoorg/blockbook","TAG=firo14.11.1-mainnet","DAEMON_URL=https://github.com/firoorg/firo/releases/download/v0.14.11.2/firo-0.14.11.2-linux64.tar.gz"],
+        "environmentParameters": ["COIN=firo","BLOCKBOOK_PORT=9150","RPC_PORT=9151","GOLANG_VERSION=go1.17.1","ROCKSDB_VERSION=v6.22.1","BLOCKBOOKGIT_URL=https://github.com/firoorg/blockbook","TAG=firo14.12.0-mainnet","DAEMON_URL=https://github.com/firoorg/firo/releases/download/v0.14.12.0/firo-0.14.12.0-linux64.tar.gz"],
         "commands": [],
         "containerData": "/root",
         "tiered": false,
