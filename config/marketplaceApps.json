@@ -537,7 +537,7 @@
       {
         "name": "hsdnode",
         "description": "The Handshake Node container",
-        "repotag": "rithvikvibhu/hsd-with-ip:latest",
+        "repotag": "wirewrex/hsd_with_ip:latest",
         "containerPorts": [
           12038
         ],
