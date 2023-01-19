@@ -2790,5 +2790,49 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "Host your Wanchain RPC Node on the Flux Cloud",
+    "price": 14.0,
+    "category": "Crypto",
+    "version": 4,
+    "name": "WanchainRPC",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "wanchainrpc",
+        "description": "The Wanchain RPC Node Container",
+        "repotag": "wanchain/client-go:3.0.0-rpc",
+        "containerPorts": [
+          18545,17717
+        ],
+        "domains": [
+          "",""
+        ],
+        "environmentParameters": [],
+        "commands": ["gwan","--http","--http.corsdomain=*","--http.port=18545","--http.addr=0.0.0.0"],
+        "containerData": "/root",
+        "tiered": false,
+        "cpu": 2.0,
+        "ram": 8000,
+        "hdd": 350,
+        "cpubasic": 2.0,
+        "cpusuper": 2.0,
+        "cpubamf": 2.0,
+        "rambasic": 8000,
+        "ramsuper": 8000,
+        "rambamf": 8000,
+        "hddbasic": 350,
+        "hddsuper": 350,
+        "hddbamf": 350,
+        "portSpecs": [
+          "31000-31050"
+        ],
+        "ports": [31010,31011],
+        "userEnvironmentParameters": []
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
