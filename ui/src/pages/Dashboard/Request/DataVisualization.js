@@ -97,15 +97,20 @@ const getDataVisualization = async (rateLimit, axios, MemoryStorage, httpRequest
   const httpFluxConnection = rateLimit(axios.create(), { maxRequests: 50, perMilliseconds: 10000 });
   const info = MemoryStorage.get('fluxinfo');
   const rootNode = await populateNode(iptosearch, info);
-  const rootNodeProcessed = await getConnectionData(info, rootNode, httpFluxConnection, httpRequestFluxConnections);
-
+  let rootNodeProcessed = await getConnectionData(info, rootNode, httpFluxConnection, httpRequestFluxConnections);
   if (tierFilter.includes('2ND LEVEL DATA')) {
-    await Promise.all(
-      rootNodeProcessed.map(async (i) => {
-        await processChildren(i, info, axios, httpRequestFluxConnections);
-        return i;
-      }),
-    );
+    const result = MemoryStorage.get(`2nd Level - ${iptosearch}`);
+    if (!result) {
+      await Promise.all(
+        rootNodeProcessed.map(async (i) => {
+          await processChildren(i, info, axios, httpRequestFluxConnections);
+          return i;
+        }),
+      );
+      await MemoryStorage.put(`2nd Level - ${iptosearch}`, rootNodeProcessed);
+    } else {
+      rootNodeProcessed = result;
+    }
   }
 
   return rootNodeProcessed;

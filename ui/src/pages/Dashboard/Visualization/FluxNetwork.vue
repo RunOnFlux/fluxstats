@@ -27,6 +27,7 @@
             style="margin-right: 10px;"
             size="sm"
             :class="{active: btn.state}"
+            :title="tierFilter.titles[idx]"
             @click="processFilters(btn.name)"
           >
             {{ btn.name }}
@@ -41,6 +42,17 @@
       <p class="category" />
       <div class="col-12">
         <card>
+          <div
+            class="pull-right"
+            style="padding:20px;"
+          >
+            <l-button
+              title="Download CSV"
+              @click="downloadCsvFile(queriedData)"
+            >
+              <i class="nc-icon nc-cloud-download-93" />
+            </l-button>
+          </div>
           <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap" style="margin-top: 50px;">
             <el-select
               v-model="tierFilter.default"
@@ -154,6 +166,7 @@ import { VueEllipseProgress } from 'vue-ellipse-progress';
 import axios from 'axios';
 import rateLimit from 'axios-rate-limit';
 import { MemoryStorage } from 'ttl-localstorage';
+import { ExportToCsv } from 'export-to-csv';
 import { getDataVisualization } from '../Request/DataVisualization';
 import FluxNetwork from '../Components/FluxNetwork.vue';
 import FluxConnection from '../Components/FluxConnection.vue';
@@ -181,8 +194,15 @@ export default {
       },
       tierFilter: {
         default: [],
-        others: ['CUMULUS', 'NIMBUS', 'STRATUS', 'IN', 'OUT', '2ND LEVEL DATA', 'TIER ASSOCIATION'],
+        others: ['CUMULUS', 'NIMBUS', 'STRATUS', 'IN', 'OUT', '2ND LEVEL DATA',
+          'TIER ASSOCIATION', 'COUNTRY ASSOCIATION', 'CONTINENT ASSOCIATION',
+          'ORGANIZATION ASSOCIATION', 'ZEL ID ASSOCIATION', 'PAYMENT ADDRESS ASSOCIATION',
+          'CONNECTION IN ASSOCIATION', 'CONNECTION OUT ASSOCIATION'],
         states: [],
+        titles: ['Filter Cumulus Nodes', 'Filter Nimbus Nodes', 'Filter Stratus Nodes', 'Filter Connection Type In', 'Filter Connection Type Out', 'Enable 2nd Level Data of Nodes',
+          'Enable Node Tier Association', 'Enable Node Country Association', 'Enable Node Continent Association',
+          'Enable Node Organization Association', 'Enable Node Zel Id Association', 'Enable Node Payment Address Association',
+          'Enable Node Connection In Association', 'Enable Node Connection Out Association'],
       },
       tierFilterOthers: {
         default: [],
@@ -322,8 +342,12 @@ export default {
           org: item.org,
           paymentAddress: item.paymentAddress,
           tier: item.tier,
+          connectionin: item.connectionin,
+          connectionout: item.connectionout,
           _color: this.processColorsByTier('root'),
         });
+
+        this.onClick(undefined, nodemap[0]);
 
         await item.connectionin.map(async (cin) => {
           if (Object.keys(this.tierFilter.default).length > 0) {
@@ -439,6 +463,34 @@ export default {
           this.processTierAssociation(nodemap, line);
         }
 
+        if (this.tierFilter.default.includes('COUNTRY ASSOCIATION')) {
+          this.processCountryAssociation(nodemap, line);
+        }
+
+        if (this.tierFilter.default.includes('CONTINENT ASSOCIATION')) {
+          this.processContinentAssociation(nodemap, line);
+        }
+
+        if (this.tierFilter.default.includes('ORGANIZATION ASSOCIATION')) {
+          this.processOrganizationAssociation(nodemap, line);
+        }
+
+        if (this.tierFilter.default.includes('ZEL ID ASSOCIATION')) {
+          this.processZelIdAssociation(nodemap, line);
+        }
+
+        if (this.tierFilter.default.includes('PAYMENT ADDRESS ASSOCIATION')) {
+          this.processPaymentAddressAssociation(nodemap, line);
+        }
+
+        if (this.tierFilter.default.includes('CONNECTION IN ASSOCIATION')) {
+          this.processConnectionInAssociation(nodemap, line);
+        }
+
+        if (this.tierFilter.default.includes('CONNECTION OUT ASSOCIATION')) {
+          this.processConnectionOutAssociation(nodemap, line);
+        }
+
         nodemap = [];
         rootNodeId += 1;
         return item;
@@ -466,6 +518,126 @@ export default {
         this.links.push({
           tid: stratus[c].id,
           sid: stratus[c + 1 < Object.keys(stratus).length ? c + 1 : c].id,
+          _color: line,
+        });
+      }
+    },
+    async processCountryAssociation(nodemap, line) {
+      const countries = [];
+      nodemap.map((i) => {
+        if (!countries.includes(i.country)) {
+          countries.push(i.country);
+        }
+        return i;
+      });
+      countries.map((i) => {
+        const filtered = nodemap.filter((j) => j.country === i);
+        for (let c = 0; c < Object.keys(filtered).length; c += 1) {
+          this.links.push({
+            tid: filtered[c].id,
+            sid: filtered[c + 1 < Object.keys(filtered).length ? c + 1 : c].id,
+            _color: line,
+          });
+        }
+        return i;
+      });
+    },
+    async processContinentAssociation(nodemap, line) {
+      const continents = [];
+      nodemap.map((i) => {
+        if (!continents.includes(i.continent)) {
+          continents.push(i.continent);
+        }
+        return i;
+      });
+      continents.map((i) => {
+        const filtered = nodemap.filter((j) => j.continent === i);
+        for (let c = 0; c < Object.keys(filtered).length; c += 1) {
+          this.links.push({
+            tid: filtered[c].id,
+            sid: filtered[c + 1 < Object.keys(filtered).length ? c + 1 : c].id,
+            _color: line,
+          });
+        }
+        return i;
+      });
+    },
+    async processOrganizationAssociation(nodemap, line) {
+      const organization = [];
+      nodemap.map((i) => {
+        if (!organization.includes(i.org)) {
+          organization.push(i.org);
+        }
+        return i;
+      });
+      organization.map((i) => {
+        const filtered = nodemap.filter((j) => j.org === i);
+        for (let c = 0; c < Object.keys(filtered).length; c += 1) {
+          this.links.push({
+            tid: filtered[c].id,
+            sid: filtered[c + 1 < Object.keys(filtered).length ? c + 1 : c].id,
+            _color: line,
+          });
+        }
+        return i;
+      });
+    },
+    async processZelIdAssociation(nodemap, line) {
+      const zelIds = [];
+      nodemap.map((i) => {
+        if (!zelIds.includes(i.zelId)) {
+          zelIds.push(i.zelId);
+        }
+        return i;
+      });
+      zelIds.map((i) => {
+        const filtered = nodemap.filter((j) => j.zelId === i);
+        for (let c = 0; c < Object.keys(filtered).length; c += 1) {
+          this.links.push({
+            tid: filtered[c].id,
+            sid: filtered[c + 1 < Object.keys(filtered).length ? c + 1 : c].id,
+            _color: line,
+          });
+        }
+        return i;
+      });
+    },
+    async processPaymentAddressAssociation(nodemap, line) {
+      const paymentAddresses = [];
+      nodemap.map((i) => {
+        if (!paymentAddresses.includes(i.paymentAddress)) {
+          paymentAddresses.push(i.paymentAddress);
+        }
+        return i;
+      });
+      paymentAddresses.map((i) => {
+        const filtered = nodemap.filter((j) => j.paymentAddress === i);
+        for (let c = 0; c < Object.keys(filtered).length; c += 1) {
+          this.links.push({
+            tid: filtered[c].id,
+            sid: filtered[c + 1 < Object.keys(filtered).length ? c + 1 : c].id,
+            _color: line,
+          });
+        }
+        return i;
+      });
+    },
+    async processConnectionInAssociation(nodemap, line) {
+      const filtered = nodemap.filter((j) => j.connectionType === 'in');
+      for (let c = 0; c < Object.keys(filtered).length; c += 1) {
+        this.links.push({
+          tid: filtered[c].id,
+          sid: filtered[c + 1 < Object.keys(filtered).length ? c + 1 : c].id,
+          _color: line,
+        });
+      }
+    },
+    async processConnectionOutAssociation(nodemap, line) {
+      const filtered = nodemap.filter((j) => j.connectionType === 'out');
+      for (let c = 0; c < Object.keys(filtered).length; c += 1) {
+        this.links.push({
+          tid: filtered[c].id,
+          sid: filtered[c + 1 < Object.keys(filtered).length ? c + 1 : c].id,
           _color: line,
         });
       }
@@ -535,29 +707,27 @@ export default {
     async onClick(event, node) {
       let indata = '';
       let outdata = '';
-      // Tentative implementation on IPs in and out
-      if (this.tierFilter.default.includes('2ND LEVEL DATA')) {
-        let count = 0;
-        node.connectionin.map((i) => {
-          indata += `${i.ip},`;
-          if (count % 3 === 0 && Object.keys(node.connectionin).length - 1 > count) {
-            indata += '\n';
-          }
-          count += 1;
-          return i;
-        });
-        count = 0;
-        node.connectionout.map((i) => {
-          outdata += `${i.ip},`;
-          if (count % 3 === 0 && Object.keys(node.connectionout).length - 1 > count) {
-            outdata += '\n';
-          }
-          count += 1;
-          return i;
-        });
-      }
+      let count = 0;
+      node.connectionin.map((i) => {
+        indata += `${i.ip},`;
+        if (count % 3 === 0 && Object.keys(node.connectionin).length - 1 > count) {
+          indata += '\n';
+        }
+        count += 1;
+        return i;
+      });
+      count = 0;
+      node.connectionout.map((i) => {
+        outdata += `${i.ip},`;
+        if (count % 3 === 0 && Object.keys(node.connectionout).length - 1 > count) {
+          outdata += '\n';
+        }
+        count += 1;
+        return i;
+      });
       this.nodeData = [{
         ip: node.ip,
+        tier: node.tier,
         country: node.country,
         continent: node.continent,
         org: node.org,
@@ -566,6 +736,53 @@ export default {
         connectionIn: indata,
         connectionOut: outdata,
       }];
+    },
+    processDataForCsv(data) {
+      const values = [];
+      data.forEach((item) => {
+        values.push({
+          ip: !item.ip ? '' : item.ip,
+          tier: !item.tier ? '' : item.tier,
+          country: !item.country ? '' : item.country,
+          continent: !item.continent ? '' : item.continent,
+          org: !item.org ? '' : item.org,
+          zelId: !item.zelId ? '' : item.zelId,
+          paymentAddress: !item.paymentAddress ? '' : item.paymentAddress,
+          connectionin: !item.connectionIn ? '' : item.connectionIn,
+          connectionout: !item.connectionOut ? '' : item.connectionOut,
+        });
+      });
+      return values;
+    },
+    downloadCsvFile(data) {
+      const date = new Date();
+      const month = date.getMonth();
+      const day = date.getDate();
+      const year = date.getFullYear();
+      const options = {
+        filename: `Node_${month}${day}${year}`,
+        fieldSeparator: ',',
+        quoteStrings: '"',
+        decimalSeparator: '.',
+        showLabels: true,
+        showTitle: true,
+        title: `Node - ${month}/${day}/${year}`,
+        useTextFile: false,
+        useBom: true,
+        headers: [
+          'IP Address',
+          'Tier',
+          'Country',
+          'Continent',
+          'Organization',
+          'ZelId',
+          'PaymentAddress',
+          'Connection In',
+          'Connection Out',
+        ],
+      };
+      const csvExporter = new ExportToCsv(options);
+      csvExporter.generateCsv(this.processDataForCsv(data));
     },
   },
 };
