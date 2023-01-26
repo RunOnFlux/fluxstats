@@ -2870,9 +2870,9 @@
         "hddsuper": 40,
         "hddbamf": 40,
         "portSpecs": [
-          "390000-39100"
+          "37000-38000"
         ],
-        "ports": [39000,39001,39002,39003],
+        "ports": [37230,37231,37232,37233],
         "userEnvironmentParameters": []
       }
     ],
