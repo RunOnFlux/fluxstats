@@ -2834,5 +2834,49 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "Host your Nexa Node on the Flux Cloud",
+    "price": 3.8,
+    "category": "Crypto",
+    "version": 4,
+    "name": "NexaNode",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "nexanode",
+        "description": "The Nexa Node Container",
+        "repotag": "bchunlimited/nexa-1.1:ubuntu20.04",
+        "containerPorts": [
+          7228,7227,7229,7230
+        ],
+        "domains": [
+          "","","",""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/data",
+        "tiered": false,
+        "cpu": 1.0,
+        "ram": 3000,
+        "hdd": 40,
+        "cpubasic": 1.0,
+        "cpusuper": 1.0,
+        "cpubamf": 1.0,
+        "rambasic": 3000,
+        "ramsuper": 3000,
+        "rambamf": 3000,
+        "hddbasic": 40,
+        "hddsuper": 40,
+        "hddbamf": 40,
+        "portSpecs": [
+          "390000-39100"
+        ],
+        "ports": [39000,39001,39002,39003],
+        "userEnvironmentParameters": []
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
