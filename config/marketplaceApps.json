@@ -2878,5 +2878,49 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "Host your Radiant-ElectrumX on the Flux Cloud",
+    "price": 5.2,
+    "category": "Crypto",
+    "version": 4,
+    "name": "ElectrumXRXD",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "electrumxradiant",
+        "description": "The Radiant Electrumx Container",
+        "repotag": "radiantcommunity/electrumx_radiant_node:v1",
+        "containerPorts": [
+          50010,50012,8000
+        ],
+        "domains": [
+          "","",""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/root",
+        "tiered": false,
+        "cpu": 2.0,
+        "ram": 4000,
+        "hdd": 10,
+        "cpubasic": 2.0,
+        "cpusuper": 2.0,
+        "cpubamf": 2.0,
+        "rambasic": 4000,
+        "ramsuper": 4000,
+        "rambamf": 4000,
+        "hddbasic": 10,
+        "hddsuper": 10,
+        "hddbamf": 10,
+        "portSpecs": [
+          "38500-38550"
+        ],
+        "ports": [38501,38502,38503],
+        "userEnvironmentParameters": []
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
