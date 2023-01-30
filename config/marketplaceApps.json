@@ -2922,5 +2922,49 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "Host your Radiant Node on the Flux Cloud",
+    "price": 2.4,
+    "category": "Crypto",
+    "version": 4,
+    "name": "RadiantNode",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "radiantnode",
+        "description": "The Radiant Node Container",
+        "repotag": "radiantcommunity/radiant-node:latest",
+        "containerPorts": [
+          7332,7333
+        ],
+        "domains": [
+          "",""
+        ],
+        "environmentParameters": [],
+        "commands": ["-rpcworkqueue=32","-rpcthreads=16","-rest","-server","-rpcallowip=0.0.0.0/0","-txindex=1","-rpcuser=dockeruser","-rpcpassword=dockerpass"],
+        "containerData": "/root",
+        "tiered": false,
+        "cpu": 1.0,
+        "ram": 1500,
+        "hdd": 5,
+        "cpubasic": 1.0,
+        "cpusuper": 1.0,
+        "cpubamf": 1.0,
+        "rambasic": 1500,
+        "ramsuper": 1500,
+        "rambamf": 1500,
+        "hddbasic": 5,
+        "hddsuper": 5,
+        "hddbamf": 5,
+        "portSpecs": [
+          "38500-38550"
+        ],
+        "ports": [38510,38511],
+        "userEnvironmentParameters": []
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
