@@ -2966,5 +2966,49 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "A Simple Public IP Address API",
+    "price": 1.1,
+    "category": "Hosting",
+    "version": 4,
+    "name": "Ipify",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "ipify",
+        "description": "ipify-api",
+        "repotag": "wirewrex/ipify-api:latest",
+        "containerPorts": [
+          3000
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/tmp",
+        "tiered": false,
+        "cpu": 0.5,
+        "ram": 600,
+        "hdd": 1,
+        "cpubasic": 0.5,
+        "cpusuper": 0.5,
+        "cpubamf": 0.5,
+        "rambasic": 600,
+        "ramsuper": 600,
+        "rambamf": 600,
+        "hddbasic": 1,
+        "hddsuper": 1,
+        "hddbamf": 1,
+        "portSpecs": [
+          "34000-34020"
+        ],
+        "ports": [34010],
+        "userEnvironmentParameters": []
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
