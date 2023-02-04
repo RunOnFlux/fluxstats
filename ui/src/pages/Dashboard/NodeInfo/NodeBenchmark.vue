@@ -42,6 +42,42 @@
             {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
           </l-button>
           <l-button
+            v-if="btn.name.includes('upnp enabled - FALSE')"
+            style="margin-right: 10px;"
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
+          >
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+          </l-button>
+          <l-button
+            v-if="btn.name.includes('node tier - cumulus')"
+            style="margin-right: 10px;"
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
+          >
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+          </l-button>
+          <l-button
+            v-if="btn.name.includes('node tier - nimbus')"
+            style="margin-right: 10px;"
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
+          >
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+          </l-button>
+          <l-button
+            v-if="btn.name.includes('node tier - stratus')"
+            style="margin-right: 10px;"
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
+          >
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+          </l-button>
+          <l-button
             v-if="btn.name.includes('failed nodes')"
             style="margin-right: 10px;"
             size="sm"
