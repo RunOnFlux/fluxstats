@@ -3029,7 +3029,7 @@
         "domains": [
           ""
         ],
-        "environmentParameters": ["DESCRIPTION=no persistance","NAME=Flux Relay"],
+        "environmentParameters": [],
         "commands": [],
         "containerData": "/db",
         "tiered": false,
@@ -3050,6 +3050,16 @@
         ],
         "ports": [34428],
         "userEnvironmentParameters": [
+           {
+            "name": "NAME",
+            "description": "Add a custom name to your Nostr Relay",
+            "placeholder": "Please add your custom name here"
+          },
+          {
+            "name": "DESCRIPTION",
+            "description": "Add a description to your Nostr Relay",
+            "placeholder": "Please add your description here"
+          },
           {
             "name": "Relay_URL",
             "description": "If you want to add your custom domain to this Relay please do so.",
