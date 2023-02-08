@@ -3061,7 +3061,7 @@
             "placeholder": "Please add your description here"
           },
           {
-            "name": "Relay_URL",
+            "name": "RELAY_URL",
             "description": "If you want to add your custom domain to this Relay please do so.",
             "placeholder": "Please respect the WebSocket format, e.g wss://nostr.fluxrelax.com/"
           },
