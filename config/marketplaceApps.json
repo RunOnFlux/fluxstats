@@ -3082,16 +3082,16 @@
     "enabled": true
   },
   {
-    "description": "A ChatGBT Discord Bot hosted on the Flux Cloud",
+    "description": "A ChatGPT Discord Bot hosted on the Flux Cloud",
     "price": 4.1,
     "category": "Hosting",
     "version": 4,
-    "name": "ChatGBT",
+    "name": "ChatGPT",
     "instances": 3,
     "compose": [
       {
-        "name": "chatgbtdiscord",
-        "description": "The ChatGBT Discord Bot Container",
+        "name": "chatgptdiscord",
+        "description": "The ChatGPT Discord Bot Container",
         "repotag": "wirewrex/gptd:sharded",
         "containerPorts": [
           
@@ -3137,12 +3137,12 @@
           },
           {
             "name": "ALLOWED_SERVER_IDS",
-            "description": "Add your Server IDs to allow the ChatGBT bot to interact with [MANDATORY]",
+            "description": "Add your Server IDs to allow the ChatGPT bot to interact with [MANDATORY]",
             "placeholder": "Add your Server IDs here, e.g 1060068057426653478 (seperate with comma if multiple)"
           },
           {
             "name": "SERVER_TO_MODERATION_CHANNEL",
-            "description": "The Server/Channel where the ChatGBT interacts in",
+            "description": "The Server/Channel where the ChatGPT interacts in",
             "placeholder": "ServerID:ChannelID, e.g 1060068057426653478:1069065087422453481"
           },
           {
