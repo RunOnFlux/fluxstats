@@ -3092,7 +3092,7 @@
       {
         "name": "chatgptdiscord",
         "description": "The ChatGPT Discord Bot Container",
-        "repotag": "wirewrex/gptd:sharded",
+        "repotag": "wirewrex/chatgpt-discord-bot:latest",
         "containerPorts": [
           
         ],
