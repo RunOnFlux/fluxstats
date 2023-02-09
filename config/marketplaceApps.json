@@ -3158,7 +3158,7 @@
           {
             "name": "REDIS_HOST",
             "description": "Your Redis Database IP Address",
-            "placeholder": "Enter your Redis Database IP Address here"
+            "placeholder": "Enter your Redis Database Hostname here"
           }
         ]
       }
