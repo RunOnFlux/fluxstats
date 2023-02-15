@@ -2794,7 +2794,7 @@
   {
     "description": "Host your Wanchain RPC Node on the Flux Cloud",
     "price": 14.0,
-    "category": "Crypto",
+    "category": "RPC Node",
     "version": 4,
     "name": "WanchainRPC",
     "instances": 3,
@@ -3161,6 +3161,94 @@
             "placeholder": "Enter your Redis Database Hostname here"
           }
         ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Bitgert RPC Node on the Flux Cloud",
+    "price": 14.0,
+    "category": "RPC Node",
+    "version": 4,
+    "name": "BitgertRPC",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "bitgertrpc",
+        "description": "The Bitgert RPC Node Container",
+        "repotag": "bitgert/brise-node-flux:latest",
+        "containerPorts": [
+          3545,40605
+        ],
+        "domains": [
+          "",""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/root",
+        "tiered": false,
+        "cpu": 4.0,
+        "ram": 8000,
+        "hdd": 200,
+        "cpubasic": 4.0,
+        "cpusuper": 4.0,
+        "cpubamf": 4.0,
+        "rambasic": 8000,
+        "ramsuper": 8000,
+        "rambamf": 8000,
+        "hddbasic": 200,
+        "hddsuper": 200,
+        "hddbamf": 200,
+        "portSpecs": [
+          "32200-32400"
+        ],
+        "ports": [32300,32301],
+        "userEnvironmentParameters": []
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Celo RPC Node on the Flux Cloud",
+    "price": 16.5,
+    "category": "RPC Node",
+    "version": 4,
+    "name": "CeloRPC",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "celorpc",
+        "description": "The Celo RPC Node Container",
+        "repotag": "runonflux/celo-blockchain:latest",
+        "containerPorts": [
+          8545,8546,30303
+        ],
+        "domains": [
+          "","",""
+        ],
+        "environmentParameters": [],
+        "commands": ["--verbosity=3","--syncmode=full","--http","--http.addr=0.0.0.0","--http.api=eth,net,web3,debug,admin,personal","--light.serve=90","--light.maxpeers=1000","--maxpeers=1100","--datadir=/root/.celo"],
+        "containerData": "/root/.celo",
+        "tiered": false,
+        "cpu": 4.0,
+        "ram": 9000,
+        "hdd": 300,
+        "cpubasic": 4.0,
+        "cpusuper": 4.0,
+        "cpubamf": 4.0,
+        "rambasic": 9000,
+        "ramsuper": 9000,
+        "rambamf": 9000,
+        "hddbasic": 300,
+        "hddsuper": 300,
+        "hddbamf": 300,
+        "portSpecs": [
+          "35000-35100"
+        ],
+        "ports": [35000,35001,35002],
+        "userEnvironmentParameters": []
       }
     ],
     "visible": true,
