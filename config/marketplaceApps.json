@@ -3253,5 +3253,49 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "Host your Fuse RPC Node on the Flux Cloud",
+    "price": 9.0,
+    "category": "RPC Node",
+    "version": 4,
+    "name": "FuseRPC",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "fuserpc",
+        "description": "The Fuse RPC Node Container",
+        "repotag": "fusenet/node:latest",
+        "containerPorts": [
+          8545,30300,8546
+        ],
+        "domains": [
+          "","",""
+        ],
+        "environmentParameters": [],
+        "commands": ["--config","fuse","--Init.WebSocketsEnabled","true","--HealthChecks.Enabled","true","--HealthChecks.Slug,/api/health"],
+        "containerData": "/data",
+        "tiered": false,
+        "cpu": 2.0,
+        "ram": 8000,
+        "hdd": 100,
+        "cpubasic": 2.0,
+        "cpusuper": 2.0,
+        "cpubamf": 2.0,
+        "rambasic": 8000,
+        "ramsuper": 8000,
+        "rambamf": 8000,
+        "hddbasic": 100,
+        "hddsuper": 100,
+        "hddbamf": 100,
+        "portSpecs": [
+          "38000-39000"
+        ],
+        "ports": [38545,38303,38456],
+        "userEnvironmentParameters": []
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
