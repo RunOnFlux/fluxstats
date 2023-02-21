@@ -3322,7 +3322,7 @@
         "tiered": false,
         "cpu": 1.0,
         "ram": 1000,
-        "hdd": 10,
+        "hdd": 1,
         "cpubasic": 1.0,
         "cpusuper": 1.0,
         "cpubamf": 1.0,
