@@ -482,7 +482,8 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
   try {
     const database = db.db(config.database.local.database);
     fluxInfo = await getFluxInformation(fluxnode.ip, timeout);
-    if (!fluxInfo) {
+    if (!fluxInfo) { // is false now
+      fluxInfo = dummyData; // reassign dummy data
       if (retry) {
         throw new Error(`Retry processFluxNode for the FluxNode ip: ${fluxnode.ip}`);
       } else {
