@@ -8,7 +8,7 @@ const serviceHelper = require('./serviceHelper');
 
 const defaultTimeout = 5000;
 
-const explorerTimeout = 10000;
+const explorerTimeout = 20000;
 
 const httpFluxInfo = rateLimit(axios.create(), { maxRequests: 20, perMilliseconds: 1000 });
 const httpGeo = rateLimit(axios.create(), { maxRequests: 1, perMilliseconds: 1500 });
@@ -270,16 +270,15 @@ async function getFluxInformation(ip, timeout) {
       cancelToken: source.token,
       timeout,
     });
-    myCacheProcessingIp.delete(ip);
     if (fluxRes.data.status === 'success') {
+      myCacheProcessingIp.delete(ip);
       return fluxRes.data.data;
     }
-    log.warn(`Flux information of IP ${ip} is bad`);
-    return false;
+    throw new Error(fluxRes.data.data || fluxRes.data.message);
   } catch (e) {
     myCacheProcessingIp.delete(ip);
     log.error(`Flux information of IP ${ip} error: ${e}`);
-    return false;
+    throw new Error(e.message || e);
   }
 }
 
@@ -481,16 +480,7 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
   let fluxInfo = dummyData;
   try {
     const database = db.db(config.database.local.database);
-    fluxInfo = await getFluxInformation(fluxnode.ip, timeout);
-    if (!fluxInfo) { // is false now
-      fluxInfo = dummyData; // reassign dummy data
-      if (retry) {
-        throw new Error(`Retry processFluxNode for the FluxNode ip: ${fluxnode.ip}`);
-      } else {
-        fluxNodesWithError.push(fluxnode);
-        return;
-      }
-    }
+    fluxInfo = await getFluxInformation(fluxnode.ip, timeout); // either correct fluxInfo or this has thrown error
     if (!fluxInfo.apps.hashes && !fluxInfo.appsHashesTotal && !fluxInfo.hashesPresent) {
       const appsHashes = await getFluxAppsHashes(fluxnode.ip, timeout * 3);
       const hashesOk = appsHashes.filter((data) => data.height >= 694000);
@@ -605,6 +595,10 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
     log.error(error);
     log.error(fluxnode.ip);
     log.error(fluxnode);
+    if (!retry) {
+      fluxNodesWithError.push(fluxnode);
+      return;
+    }
     const curTime = new Date().getTime();
     fluxInfo.ip = fluxnode.ip;
     log.error('1');
