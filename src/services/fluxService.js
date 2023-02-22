@@ -40,6 +40,7 @@ const completedRoundsCollection = config.database.local.collections.completedRou
 
 let currentFluxNodeIps = [];
 let fluxNodesWithError = [];
+let fluxNodesWithErrorB = [];
 
 let firstExecution = true;
 let processedFluxNodes = [];
@@ -599,6 +600,7 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
       fluxNodesWithError.push(fluxnode);
       return;
     }
+    fluxNodesWithErrorB.push(fluxnode);
     const curTime = new Date().getTime();
     fluxInfo.ip = fluxnode.ip;
     log.error('1');
@@ -755,6 +757,7 @@ async function getGeolocationInBatchAndRefreshDatabase() {
 async function processFluxNodes() {
   const startRefresh = new Date().getTime();
   try {
+    fluxNodesWithErrorB = [];
     fluxNodesWithError = [];
     processedFluxNodes = [];
     const database = db.db(config.database.local.database);
@@ -801,8 +804,6 @@ async function processFluxNodes() {
       // eslint-disable-next-line no-restricted-syntax
       for (let i = 0; i < fluxNodesWithError.length; i += 1) {
         const fluxnode = fluxNodesWithError[i];
-        const index = fluxNodesWithError.indexOf(fluxnode);
-        fluxNodesWithError.splice(index, 1);
         promiseArray.push(processFluxNode(fluxnode, currentRoundTime, explorerTimeout, true));
         if ((i + 1) % 20 === 0) {
           await Promise.allSettled(promiseArray);
@@ -825,7 +826,8 @@ async function processFluxNodes() {
         processedFluxNodes = [];
       }
       log.info(`Processing of ${currentRoundTime} finished.`);
-      log.info(`Finalized with total Nodes with errors: ${fluxNodesWithError.length}`);
+      log.info(`Finalized with total Nodes with errors: ${fluxNodesWithErrorB.length}`);
+      fluxNodesWithErrorB = [];
       fluxNodesWithError = [];
       processedFluxNodes = [];
       const crt = {
