@@ -57,48 +57,48 @@
     "enabled": true
   },
   {
-    "description": "Host your Firo Node on the Flux Network",
-    "price": 9,
+    "description": "The Streamr Broker Node hosted via the Flux Cloud",
+    "price": 2.1,
     "category": "Crypto",
     "version": 4,
-    "name": "FiroNode",
+    "name": "BrokerNode",
     "instances": 3,
     "compose": [
       {
-        "name": "node",
-        "description": "The Firo Node container",
-        "repotag": "runonflux/fironode:latest",
+        "name": "streamrbroker",
+        "description": "The Streamr Broker Node Container",
+        "repotag": "streamr/broker-node:latest",
         "containerPorts": [
-          8168
+          1883,7170,7171
         ],
         "domains": [
-          ""
+          "","",""
         ],
         "environmentParameters": [],
         "commands": [],
-        "containerData": "/root/.firo",
+        "containerData": "/home/streamr/.streamr",
         "tiered": false,
-        "cpu": 1,
-        "ram": 2000,
-        "hdd": 10,
-        "cpubasic": 1,
-        "cpusuper": 1,
-        "cpubamf": 1,
-        "rambasic": 2000,
-        "ramsuper": 2000,
-        "rambamf": 2000,
-        "hddbasic": 10,
-        "hddsuper": 10,
-        "hddbamf": 10,
+        "cpu": 1.0,
+        "ram": 1000,
+        "hdd": 1,
+        "cpubasic": 1.0,
+        "cpusuper": 1.0,
+        "cpubamf": 1.0,
+        "rambasic": 1000,
+        "ramsuper": 1000,
+        "rambamf": 1000,
+        "hddbasic": 1,
+        "hddsuper": 1,
+        "hddbamf": 1,
         "portSpecs": [
-          "38000-38999"
+          "31100-31200"
         ],
-        "ports": [38000],
+        "ports": [31111,31112,31113],
         "userEnvironmentParameters": [
           {
-            "name": "KEY",
-            "description": "The key of your masternode",
-            "placeholder": "Enter your key here"
+            "name": "STREAMR__BROKER__PLUGINS__BRUBECK_MINER__BENEFICIARY_ADDRESS",
+            "description": "Your Beneficiary Address",
+            "placeholder": "Enter your Polygon Address here"
           }
         ]
       }
@@ -149,6 +149,56 @@
             "name": "REGISTRATION_CODE",
             "description": "Your node registration code",
             "placeholder": "Enter your code here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Firo Node on the Flux Network",
+    "price": 9,
+    "category": "Crypto",
+    "version": 4,
+    "name": "FiroNode",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "node",
+        "description": "The Firo Node container",
+        "repotag": "runonflux/fironode:latest",
+        "containerPorts": [
+          8168
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/root/.firo",
+        "tiered": false,
+        "cpu": 1,
+        "ram": 2000,
+        "hdd": 10,
+        "cpubasic": 1,
+        "cpusuper": 1,
+        "cpubamf": 1,
+        "rambasic": 2000,
+        "ramsuper": 2000,
+        "rambamf": 2000,
+        "hddbasic": 10,
+        "hddsuper": 10,
+        "hddbamf": 10,
+        "portSpecs": [
+          "38000-38999"
+        ],
+        "ports": [38000],
+        "userEnvironmentParameters": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Enter your key here"
           }
         ]
       }
@@ -3293,56 +3343,6 @@
         ],
         "ports": [38545,38303,38456],
         "userEnvironmentParameters": []
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
-    "description": "The Streamr Broker Node hosted via the Flux Cloud",
-    "price": 2.1,
-    "category": "Crypto",
-    "version": 4,
-    "name": "BrokerNode",
-    "instances": 3,
-    "compose": [
-      {
-        "name": "streamrbroker",
-        "description": "The Streamr Broker Node Container",
-        "repotag": "streamr/broker-node:latest",
-        "containerPorts": [
-          1883,7170,7171
-        ],
-        "domains": [
-          "","",""
-        ],
-        "environmentParameters": [],
-        "commands": [],
-        "containerData": "/home/streamr/.streamr",
-        "tiered": false,
-        "cpu": 1.0,
-        "ram": 1000,
-        "hdd": 1,
-        "cpubasic": 1.0,
-        "cpusuper": 1.0,
-        "cpubamf": 1.0,
-        "rambasic": 1000,
-        "ramsuper": 1000,
-        "rambamf": 1000,
-        "hddbasic": 1,
-        "hddsuper": 1,
-        "hddbamf": 1,
-        "portSpecs": [
-          "31100-31200"
-        ],
-        "ports": [31111,31112,31113],
-        "userEnvironmentParameters": [
-          {
-            "name": "STREAMR__BROKER__PLUGINS__BRUBECK_MINER__BENEFICIARY_ADDRESS",
-            "description": "Your Beneficiary Address",
-            "placeholder": "Enter your Polygon Address here"
-          }
-        ]
       }
     ],
     "visible": true,
