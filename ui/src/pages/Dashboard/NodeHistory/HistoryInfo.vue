@@ -41,6 +41,15 @@
           >
             {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name)[0].roundTime }}
           </l-button>
+          <l-button
+            v-if="btn.name.includes('round time - ')"
+            style="margin-right: 10px;"
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
+          >
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+          </l-button>
         </div>
       </div>
       <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
@@ -344,23 +353,34 @@ export default {
       this.tableData.map((value) => {
         let temp;
         const values = value;
+        const totalvalue = values.total;
+        const dateround = values.roundTimeConverted.split(', ')[0];
+        const monthround = dateround.split('/')[0];
+        const yearround = dateround.split('/')[2];
+        const roundtime = `${monthround}/${yearround}`;
         temp = [];
-        if (!this.filter.has('highest node count roundtime') && hTotal < values.total) {
+        if (!this.filter.has('highest node count roundtime') && hTotal < totalvalue) {
           this.filterValue.push('highest node count roundtime');
         }
-        if (hTotal < values.total) {
+        if (hTotal < totalvalue) {
           temp.push(values);
           this.filter.set('highest node count roundtime', temp);
         }
         temp = [];
-        if (!this.filter.has('highest node count') && hTotal < values.total) {
+        if (!this.filter.has('highest node count') && hTotal < totalvalue) {
           this.filterValue.push('highest node count');
         }
-        if (hTotal < values.total) {
+        if (hTotal < totalvalue) {
           temp.push(values);
           this.filter.set('highest node count', temp);
-          hTotal = values.total;
+          hTotal = totalvalue;
         }
+        temp = this.filter.has(`round time - ${roundtime}`) ? this.filter.get(`round time - ${roundtime}`) : [];
+        if (!this.filter.has(`round time - ${roundtime}`)) {
+          this.filterValue.push(`round time - ${roundtime}`);
+        }
+        temp.push(values);
+        this.filter.set(`round time - ${roundtime}`, temp);
         return values;
       });
       this.filters.others = this.filterValue.sort();

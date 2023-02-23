@@ -32,6 +32,15 @@
           >
             {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
           </l-button>
+          <l-button
+            v-if="btn.name.includes('data collected at')"
+            style="margin-right: 10px;"
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
+          >
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+          </l-button>
         </div>
       </div>
       <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
@@ -335,16 +344,26 @@ export default {
       });
       this.tableData.map((el) => {
         const values = el;
-        const date = values.activeSinceConverted.split(', ')[0];
-        const month = date.split('/')[0];
-        const year = date.split('/')[2];
-        const activesince = `${month}/${year}`;
-        const temp = this.filter.has(`active since - ${activesince}`) ? this.filter.get(`active since - ${activesince}`) : [];
+        const dateactive = values.activeSinceConverted.split(', ')[0];
+        const monthactive = dateactive.split('/')[0];
+        const yearactive = dateactive.split('/')[2];
+        const activesince = `${monthactive}/${yearactive}`;
+        const datedata = values.dataCollectedAtConverted.split(', ')[0];
+        const monthdata = datedata.split('/')[0];
+        const yeardata = datedata.split('/')[2];
+        const datacollectedat = `${monthdata}/${yeardata}`;
+        let temp = this.filter.has(`active since - ${activesince}`) ? this.filter.get(`active since - ${activesince}`) : [];
         if (!this.filter.has(`active since - ${activesince}`)) {
           this.filterValue.push(`active since - ${activesince}`);
         }
         temp.push(values);
         this.filter.set(`active since - ${activesince}`, temp);
+        temp = this.filter.has(`data collected at - ${datacollectedat}`) ? this.filter.get(`data collected at - ${datacollectedat}`) : [];
+        if (!this.filter.has(`data collected at - ${datacollectedat}`)) {
+          this.filterValue.push(`data collected at - ${datacollectedat}`);
+        }
+        temp.push(values);
+        this.filter.set(`data collected at - ${datacollectedat}`, temp);
         return values;
       });
       this.filters.others = this.filterValue.sort();

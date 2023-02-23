@@ -144,6 +144,38 @@
             </template>
           </stats-card>
         </div>
+        <div class="col-xl-3 col-md-6">
+          <stats-card
+            :title="totalCumulusFractus.toString()"
+            sub-title="Total Cumulus Fractus"
+          >
+            <div
+              slot="header"
+              class="icon-success"
+            >
+              <i class="nc-icon nc-chart-bar-32 text-success" />
+            </div>
+            <template slot="footer">
+              Total Cumulus Node With Thunder Enabled
+            </template>
+          </stats-card>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <stats-card
+            :title="totalCumulusFractusSSD.toString()"
+            sub-title="Cumulus Fractus TB SSD"
+          >
+            <div
+              slot="header"
+              class="icon-info"
+            >
+              <i class="nc-icon nc-chart-bar-32 text-info" />
+            </div>
+            <template slot="footer">
+              Total Cumulus Fractus Available Storage
+            </template>
+          </stats-card>
+        </div>
       </div>
       <div class="row">
         <div class="col-md-7 card"
@@ -168,7 +200,7 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-11 card"
+        <div class="col-md-7 card"
              style="margin-left: 15px;margin-right: 30px;"
         >
           <apexchart
@@ -176,6 +208,16 @@
             height="500"
             :options="lineChart.data.chartOptions"
             :series="lineChart.data.series"
+          />
+        </div>
+        <div class="col-md-4 card"
+             style="margin-right: 30px;"
+        >
+          <apexchart
+            type="pie"
+            height="600"
+            :options="pieChart1.data.chartOptions"
+            :series="pieChart1.data.series"
           />
         </div>
       </div>
@@ -294,7 +336,52 @@ export default {
               },
             },
             subtitle: {
-              text: 'Tier Percentage Based From Total Nodes',
+              text: 'Tier Percentages Based From Total Nodes',
+              margin: 70,
+              style: {
+                fontSize: '12px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            responsive: [
+              {
+                breakpoint: 480,
+                options: {
+                  chart: {
+                    width: 200,
+                  },
+                  legend: {
+                    position: 'bottom',
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+      pieChart1: {
+        data: {
+          series: [],
+          chartOptions: {
+            chart: {
+              width: '500',
+              type: 'pie',
+            },
+            labels: ['Cumulus', 'Cumulus Fractus'],
+            title: {
+              text: 'Cumulus Node Statistics',
+              margin: 50,
+              style: {
+                fontSize: '22px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            subtitle: {
+              text: 'Percentages Based From Total Cumulus Nodes',
               margin: 70,
               style: {
                 fontSize: '12px',
@@ -859,6 +946,8 @@ export default {
       totalVCores: 0,
       totalTBRAM: 0,
       latestFluxVersion: '0.0.0',
+      totalCumulusFractus: 0,
+      totalCumulusFractusSSD: 0,
       myProgress: 0,
       statsLength: 0,
       values: [],
@@ -929,6 +1018,8 @@ export default {
         const versioncriteria2 = data.flux.version.split('.')[1] >= this.latestFluxVersion.split('.')[0];
         const versioncriteria3 = data.flux.version.split('.')[2] >= this.latestFluxVersion.split('.')[0];
         this.latestFluxVersion = versioncriteria1 && versioncriteria2 && versioncriteria3 ? data.flux.version : this.latestFluxVersion;
+        this.totalCumulusFractus = data.benchmark.bench.thunder ? this.totalCumulusFractus + 1 : this.totalCumulusFractus;
+        this.totalCumulusFractusSSD += data.benchmark.bench.thunder ? data.benchmark.bench.ssd : 0;
         this.totalNumberOfCumulus = data.tier === 'CUMULUS' ? this.totalNumberOfCumulus + 1 : this.totalNumberOfCumulus;
         this.totalNumberOfNimbus = data.tier === 'NIMBUS' ? this.totalNumberOfNimbus + 1 : this.totalNumberOfNimbus;
         this.totalNumberOfStratus = data.tier === 'STRATUS' ? this.totalNumberOfStratus + 1 : this.totalNumberOfStratus;
@@ -980,10 +1071,12 @@ export default {
         this.activeSinceStratus.set(datevalue, data.tier === 'STRATUS' ? this.activeSinceStratus.get(datevalue) + 1 : this.activeSinceStratus.get(datevalue));
         return data;
       });
+      this.pieChart1.data.series = [this.totalNumberOfCumulus, this.totalCumulusFractus];
       for (const entry of new Map([...this.map.entries()]).entries()) {
         this.worldMap.data.chartData.push([entry[0], entry[1]]);
       }
       this.totalTBSSD = Number(this.totalTBSSD / 1000).toFixed(2);
+      this.totalCumulusFractusSSD = Number(this.totalCumulusFractusSSD / 1000).toFixed(2);
       this.totalTBRAM = Number(this.totalTBRAM / 1000).toFixed(2);
       this.pieChart.data.series = [this.totalNumberOfCumulus, this.totalNumberOfNimbus, this.totalNumberOfStratus];
       let idx = 0;

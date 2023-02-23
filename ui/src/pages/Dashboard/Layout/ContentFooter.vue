@@ -4,7 +4,7 @@
       <nav>
         <ul class="footer-menu">
           <li>
-            <router-link :to="{path:'/'}">
+            <router-link :to="{path:''}">
               Flux, Your Gateway to a Decentralized World
             </router-link>
           </li>

@@ -59,6 +59,33 @@
           >
             {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
           </l-button>
+          <l-button
+            v-if="btn.name.includes('node tier')"
+            style="margin-right: 10px;"
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
+          >
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+          </l-button>
+          <l-button
+            v-if="btn.name.includes('active since')"
+            style="margin-right: 10px;"
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
+          >
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+          </l-button>
+          <l-button
+            v-if="btn.name.includes('last paid')"
+            style="margin-right: 10px;"
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
+          >
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+          </l-button>
         </div>
       </div>
       <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
@@ -157,6 +184,7 @@
                     <p><b>Collateral:</b> {{ props.row.node.status.collateral }} </p>
                     <p><b>Txn Hash:</b> {{ props.row.node.status.txhash }}</p>
                     <p><b>Added Height:</b> {{ props.row.node.status.added_height }}</p>
+                    <p><b>Out Idx:</b> {{ props.row.node.status.outidx }}</p>
                     <p><b>Confirmed Height:</b> {{ props.row.node.status.confirmed_height }}</p>
                     <p><b>Last Confirmed Height:</b> {{ props.row.node.status.last_confirmed_height }}</p>
                     <p><b>Last Paid Height:</b> {{ props.row.node.status.last_paid_height }}</p>
@@ -385,11 +413,40 @@ export default {
         let temp;
         const values = el;
         const ipaddress = values.node.status.ip;
+        const tiervalue = values.node.status.tier;
         const fluxversion = values.flux.version;
         const apphashtotal = values.appsHashesTotal;
         const nodestatus = values.node.status.status;
+        const activeSinceConverted = new Date(parseInt(values.node.status.activesince * 1000, 10)).toLocaleString();
+        const dateactive = activeSinceConverted.split(', ')[0];
+        const monthactive = dateactive.split('/')[0];
+        const yearactive = dateactive.split('/')[2];
+        const activesince = `${monthactive}/${yearactive}`;
+        const lastPaidConverted = new Date(parseInt(values.node.status.lastpaid * 1000, 10)).toLocaleString();
+        const datelast = lastPaidConverted.split(', ')[0];
+        const monthlast = datelast.split('/')[0];
+        const yearlast = datelast.split('/')[2];
+        const lastpaid = `${monthlast}/${yearlast}`;
         values.node.status.network = 'ipv4';
         values.node.status.rank = !this.ranks.get(ipaddress) ? 0 : this.ranks.get(ipaddress);
+        temp = this.filter.has(`last paid - ${lastpaid}`) ? this.filter.get(`last paid - ${lastpaid}`) : [];
+        if (!this.filter.has(`last paid - ${lastpaid}`)) {
+          this.filterValue.push(`last paid - ${lastpaid}`);
+        }
+        temp.push(values);
+        this.filter.set(`last paid - ${lastpaid}`, temp);
+        temp = this.filter.has(`active since - ${activesince}`) ? this.filter.get(`active since - ${activesince}`) : [];
+        if (!this.filter.has(`active since - ${activesince}`)) {
+          this.filterValue.push(`active since - ${activesince}`);
+        }
+        temp.push(values);
+        this.filter.set(`active since - ${activesince}`, temp);
+        temp = this.filter.has(`node tier - ${tiervalue}`) ? this.filter.get(`node tier - ${tiervalue}`) : [];
+        if (!this.filter.has(`node tier - ${tiervalue}`)) {
+          this.filterValue.push(`node tier - ${tiervalue}`);
+        }
+        temp.push(values);
+        this.filter.set(`node tier - ${tiervalue}`, temp);
         temp = this.filter.has(`node version - ${fluxversion}`) ? this.filter.get(`node version - ${fluxversion}`) : [];
         if (!this.filter.has(`node version - ${fluxversion}`)) {
           this.filterValue.push(`node version - ${fluxversion}`);
@@ -553,6 +610,7 @@ export default {
           collateral: !item.node.status.collateral ? '' : item.node.status.collateral,
           txnHash: !item.node.status.txhash ? '' : item.node.status.txhash,
           addedHeight: !item.node.status.added_height ? '' : item.node.status.added_height,
+          outIdx: !item.node.status.outidx ? '' : item.node.status.outidx,
           confirmedHeight: !item.node.status.confirmed_height ? '' : item.node.status.confirmed_height,
           lastConfirmedHeight: !item.node.status.last_confirmed_height ? '' : item.node.status.last_confirmed_height,
           lastPaidHeight: !item.node.status.last_paid_height ? '' : item.node.status.last_paid_height,
@@ -595,6 +653,7 @@ export default {
           'Collateral',
           'Txn Hash',
           'Added Height',
+          'Out Idx',
           'Confirmed Height',
           'Last Confirmed Height',
           'Last Paid Height',

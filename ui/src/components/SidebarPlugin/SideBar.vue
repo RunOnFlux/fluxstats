@@ -86,7 +86,7 @@ export default {
     },
     backgroundImage: {
       type: String,
-      default: 'static/img/fluxlabs_backg1-p-800.png',
+      default: '/static/img/fluxlabs_backg1-p-800.png',
     },
     activeColor: {
       type: String,
@@ -98,7 +98,7 @@ export default {
     },
     logo: {
       type: String,
-      default: 'static/img/logo.png',
+      default: '/static/img/logo.png',
     },
     sidebarLinks: {
       type: Array,

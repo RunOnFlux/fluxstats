@@ -51,6 +51,15 @@
             {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
           </l-button>
           <l-button
+            v-if="btn.name.includes('testnet')"
+            style="margin-right: 10px;"
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
+          >
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+          </l-button>
+          <l-button
             v-if="btn.name.includes('bench version')"
             style="margin-right: 10px;"
             size="sm"
@@ -396,48 +405,62 @@ export default {
       this.values.map((value) => {
         let temp;
         const values = value;
-        temp = this.filter.has(`daemon version - ${values.daemon.info.version}`) ? this.filter.get(`daemon version - ${values.daemon.info.version}`) : [];
-        if (!this.filter.has(`daemon version - ${values.daemon.info.version}`)) {
-          this.filterValue.push(`daemon version - ${values.daemon.info.version}`);
+        const infoversion = values.daemon.info.version;
+        const fluxversion = values.flux.version;
+        const benchmarkinfoversion = values.benchmark.info.version;
+        const benchversion = values.benchmark.bench.bench_version;
+        const speedversion = values.benchmark.bench.speed_version;
+        const infoprotocolversion = values.daemon.info.protocolversion;
+        const infowalletversion = values.daemon.info.walletversion;
+        const infotestnet = values.daemon.info.testnet;
+        temp = this.filter.has(`daemon version - ${infoversion}`) ? this.filter.get(`daemon version - ${infoversion}`) : [];
+        if (!this.filter.has(`daemon version - ${infoversion}`)) {
+          this.filterValue.push(`daemon version - ${infoversion}`);
         }
         temp.push(values);
-        this.filter.set(`daemon version - ${values.daemon.info.version}`, temp);
-        temp = this.filter.has(`flux version - ${values.flux.version}`) ? this.filter.get(`flux version - ${values.flux.version}`) : [];
-        if (!this.filter.has(`flux version - ${values.flux.version}`)) {
-          this.filterValue.push(`flux version - ${values.flux.version}`);
+        this.filter.set(`daemon version - ${infoversion}`, temp);
+        temp = this.filter.has(`flux version - ${fluxversion}`) ? this.filter.get(`flux version - ${fluxversion}`) : [];
+        if (!this.filter.has(`flux version - ${fluxversion}`)) {
+          this.filterValue.push(`flux version - ${fluxversion}`);
         }
         temp.push(values);
-        this.filter.set(`flux version - ${values.flux.version}`, temp);
-        temp = this.filter.has(`benchmark version - ${values.benchmark.info.version}`) ? this.filter.get(`benchmark version - ${values.benchmark.info.version}`) : [];
-        if (!this.filter.has(`benchmark version - ${values.benchmark.info.version}`)) {
-          this.filterValue.push(`benchmark version - ${values.benchmark.info.version}`);
+        this.filter.set(`flux version - ${fluxversion}`, temp);
+        temp = this.filter.has(`benchmark version - ${benchmarkinfoversion}`) ? this.filter.get(`benchmark version - ${benchmarkinfoversion}`) : [];
+        if (!this.filter.has(`benchmark version - ${benchmarkinfoversion}`)) {
+          this.filterValue.push(`benchmark version - ${benchmarkinfoversion}`);
         }
         temp.push(values);
-        this.filter.set(`benchmark version - ${values.benchmark.info.version}`, temp);
-        temp = this.filter.has(`bench version - ${values.benchmark.bench.bench_version}`) ? this.filter.get(`bench version - ${values.benchmark.bench.bench_version}`) : [];
-        if (!this.filter.has(`bench version - ${values.benchmark.bench.bench_version}`)) {
-          this.filterValue.push(`bench version - ${values.benchmark.bench.bench_version}`);
+        this.filter.set(`benchmark version - ${benchmarkinfoversion}`, temp);
+        temp = this.filter.has(`bench version - ${benchversion}`) ? this.filter.get(`bench version - ${benchversion}`) : [];
+        if (!this.filter.has(`bench version - ${benchversion}`)) {
+          this.filterValue.push(`bench version - ${benchversion}`);
         }
         temp.push(values);
-        this.filter.set(`bench version - ${values.benchmark.bench.bench_version}`, temp);
-        temp = this.filter.has(`bench speed version - ${values.benchmark.bench.speed_version}`) ? this.filter.get(`bench speed version - ${values.benchmark.bench.speed_version}`) : [];
-        if (!this.filter.has(`bench speed version - ${values.benchmark.bench.speed_version}`)) {
-          this.filterValue.push(`bench speed version - ${values.benchmark.bench.speed_version}`);
+        this.filter.set(`bench version - ${benchversion}`, temp);
+        temp = this.filter.has(`bench speed version - ${speedversion}`) ? this.filter.get(`bench speed version - ${speedversion}`) : [];
+        if (!this.filter.has(`bench speed version - ${speedversion}`)) {
+          this.filterValue.push(`bench speed version - ${speedversion}`);
         }
         temp.push(values);
-        this.filter.set(`bench speed version - ${values.benchmark.bench.speed_version}`, temp);
-        temp = this.filter.has(`protocol version - ${values.daemon.info.protocolversion}`) ? this.filter.get(`protocol version - ${values.daemon.info.protocolversion}`) : [];
-        if (!this.filter.has(`protocol version - ${values.daemon.info.protocolversion}`)) {
-          this.filterValue.push(`protocol version - ${values.daemon.info.protocolversion}`);
+        this.filter.set(`bench speed version - ${speedversion}`, temp);
+        temp = this.filter.has(`protocol version - ${infoprotocolversion}`) ? this.filter.get(`protocol version - ${infoprotocolversion}`) : [];
+        if (!this.filter.has(`protocol version - ${infoprotocolversion}`)) {
+          this.filterValue.push(`protocol version - ${infoprotocolversion}`);
         }
         temp.push(values);
-        this.filter.set(`protocol version - ${values.daemon.info.protocolversion}`, temp);
-        temp = this.filter.has(`wallet version - ${values.daemon.info.walletversion}`) ? this.filter.get(`wallet version - ${values.daemon.info.walletversion}`) : [];
-        if (!this.filter.has(`wallet version - ${values.daemon.info.walletversion}`)) {
-          this.filterValue.push(`wallet version - ${values.daemon.info.walletversion}`);
+        this.filter.set(`protocol version - ${infoprotocolversion}`, temp);
+        temp = this.filter.has(`wallet version - ${infowalletversion}`) ? this.filter.get(`wallet version - ${infowalletversion}`) : [];
+        if (!this.filter.has(`wallet version - ${infowalletversion}`)) {
+          this.filterValue.push(`wallet version - ${infowalletversion}`);
         }
         temp.push(values);
-        this.filter.set(`wallet version - ${values.daemon.info.walletversion}`, temp);
+        this.filter.set(`wallet version - ${infowalletversion}`, temp);
+        temp = this.filter.has(`testnet - ${infotestnet}`) ? this.filter.get(`testnet - ${infotestnet}`) : [];
+        if (!this.filter.has(`testnet - ${infotestnet}`)) {
+          this.filterValue.push(`testnet - ${infotestnet}`);
+        }
+        temp.push(values);
+        this.filter.set(`testnet - ${infotestnet}`, temp);
         return values;
       });
       this.filters.others = this.filterValue.sort();
