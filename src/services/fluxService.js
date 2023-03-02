@@ -799,17 +799,17 @@ async function processFluxNodes() {
         });
         processedFluxNodes = [];
       }
-
+      myCacheProcessingIp.clear();
       log.info(`Found ${fluxNodesWithError.length} FluxNodes with errors.`);
       // eslint-disable-next-line no-restricted-syntax
-      for (let i = 0; i < fluxNodesWithError.length; i += 1) {
-        const fluxnode = fluxNodesWithError[i];
+      for (const [i, fluxnode] of fluxNodesWithError.entries()) {
         promiseArray.push(processFluxNode(fluxnode, currentRoundTime, explorerTimeout, true));
         if ((i + 1) % 20 === 0) {
           await Promise.allSettled(promiseArray);
           promiseArray = [];
           myCacheProcessingIp.clear();
-          log.error(processedFluxNodes);
+          log.info('Inserting failed nodes');
+          log.info(processedFluxNodes);
           await serviceHelper.insertManyToDatabase(database, currentCollectionName, processedFluxNodes).catch((error) => {
             log.error(`Error inserting in ${currentCollectionName} db: ${error}`);
           });
