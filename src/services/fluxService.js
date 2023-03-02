@@ -760,6 +760,7 @@ async function processFluxNodes() {
     fluxNodesWithErrorB = [];
     fluxNodesWithError = [];
     processedFluxNodes = [];
+    let totalProcessedNodes = 0;
     const database = db.db(config.database.local.database);
     const currentRoundTime = new Date().getTime();
     const currentCollectionName = `fluxes${currentRoundTime}`;
@@ -786,8 +787,12 @@ async function processFluxNodes() {
           await serviceHelper.insertManyToDatabase(database, currentCollectionName, processedFluxNodes).catch((error) => {
             log.error(`Error inserting in ${currentCollectionName} db: ${error}`);
           });
+          totalProcessedNodes += processedFluxNodes.length;
+          log.info(`total processed: ${totalProcessedNodes}`);
           processedFluxNodes = [];
-          log.info(`Flux Nodes Processed: ${i + 1}`);
+          const result = await serviceHelper.collectionStats(database, currentCollectionName);
+          log.info(processFluxNodes.length);
+          log.info(`Flux Nodes Processed: ${i + 1}; Stats: ${result.size}, ${result.count}, ${result.avgObjSize}`);
         }
       }
       if (promiseArray.length > 0) {
@@ -797,6 +802,11 @@ async function processFluxNodes() {
         await serviceHelper.insertManyToDatabase(database, currentCollectionName, processedFluxNodes).catch((error) => {
           log.error(`Error inserting in ${currentCollectionName} db: ${error}`);
         });
+        log.info(processFluxNodes.length);
+        totalProcessedNodes += processedFluxNodes.length;
+        log.info(`total processed: ${totalProcessedNodes}`);
+        const result = await serviceHelper.collectionStats(database, currentCollectionName);
+        log.info(`Stats: ${result.size}, ${result.count}, ${result.avgObjSize}`);
         processedFluxNodes = [];
       }
       myCacheProcessingIp.clear();
@@ -810,9 +820,14 @@ async function processFluxNodes() {
           myCacheProcessingIp.clear();
           log.info('Inserting failed nodes');
           log.info(processedFluxNodes);
+          totalProcessedNodes += processedFluxNodes.length;
+          log.info(`total processed: ${totalProcessedNodes}`);
           await serviceHelper.insertManyToDatabase(database, currentCollectionName, processedFluxNodes).catch((error) => {
             log.error(`Error inserting in ${currentCollectionName} db: ${error}`);
           });
+          log.info(processFluxNodes.length);
+          const result = await serviceHelper.collectionStats(database, currentCollectionName);
+          log.info(`Stats: ${result.size}, ${result.count}, ${result.avgObjSize}`);
           processedFluxNodes = [];
         }
       }
@@ -820,16 +835,19 @@ async function processFluxNodes() {
         await Promise.allSettled(promiseArray);
         promiseArray = [];
         myCacheProcessingIp.clear();
+        totalProcessedNodes += processedFluxNodes.length;
+        log.info(`total processed: ${totalProcessedNodes}`);
         await serviceHelper.insertManyToDatabase(database, currentCollectionName, processedFluxNodes).catch((error) => {
           log.error(`Error inserting in ${currentCollectionName} db: ${error}`);
         });
+        const result = await serviceHelper.collectionStats(database, currentCollectionName);
+        log.info(`Stats: ${result.size}, ${result.count}, ${result.avgObjSize}`);
         processedFluxNodes = [];
       }
+      const result = await serviceHelper.collectionStats(database, currentCollectionName);
+      log.info(`Finalized Stats: ${result.size}, ${result.count}, ${result.avgObjSize}`);
       log.info(`Processing of ${currentRoundTime} finished.`);
       log.info(`Finalized with total Nodes with errors: ${fluxNodesWithErrorB.length}`);
-      fluxNodesWithErrorB = [];
-      fluxNodesWithError = [];
-      processedFluxNodes = [];
       const crt = {
         timestamp: currentRoundTime,
       };
