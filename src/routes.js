@@ -30,7 +30,7 @@ module.exports = (app) => {
     fluxService.getCompletedRoundsTimestamps(req, res);
   });
   app.get('/fluxlocationsnow', cache('5 minutes'), (req, res) => {
-    fluxService.getAllFluxGeolocationNow(req, res);
+    fluxService.getAllFluxGeolocation(req, res);
   });
   // get last month of history stats
   app.get('/fluxhistorystats', cache('15 minutes'), (req, res) => {

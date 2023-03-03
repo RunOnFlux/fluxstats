@@ -1,6 +1,7 @@
 /* eslint-disable no-await-in-loop */
 const axios = require('axios');
 const config = require('config');
+const LRU = require('lru-cache');
 const log = require('../lib/log');
 const serviceHelper = require('./serviceHelper');
 const generalService = require('./generalService');
@@ -21,6 +22,13 @@ let db = null;
 const databaseLink = config.database.proposals.database;
 const proposalsCollection = config.database.proposals.collections.proposals;
 const votingCollection = config.database.proposals.collections.voting;
+
+const LRUoptionsShort = {
+  max: 20, // store 20 values, we shall not have more values at any period
+  ttl: 1000 * 60 * 5, // 5 mins
+};
+
+const myCacheShort = new LRU(LRUoptionsShort);
 
 function getLastProposalTxs(transactions) {
   const myAddress = proposalAddress;
@@ -248,19 +256,33 @@ async function checkOpenProposals() {
   }
 }
 
-async function listProposals(req, res) {
+let runninglistProposals = false;
+async function listProposals(req, res, i = 0) {
   try {
-    const database = db.db(databaseLink);
-    const query = {};
-    const projection = {
-      projection: {
-        _id: 0, // all except id
-      },
-    };
-    const results = await serviceHelper.findInDatabase(database, proposalsCollection, query, projection);
-    const resMessage = serviceHelper.createDataMessage(results);
+    let list = myCacheShort.get('listProposals');
+    if (!list) {
+      if (runninglistProposals) {
+        await serviceHelper.timeout(1000);
+        if (i < 300) {
+          listProposals(req, res, i + 1);
+        }
+        throw new Error('Internal error. Try again later');
+      }
+      runninglistProposals = true;
+      const database = db.db(databaseLink);
+      const query = {};
+      const projection = {
+        projection: {
+          _id: 0, // all except id
+        },
+      };
+      list = await serviceHelper.findInDatabase(database, proposalsCollection, query, projection);
+      runninglistProposals = false;
+    }
+    const resMessage = serviceHelper.createDataMessage(list);
     res.json(resMessage);
   } catch (error) {
+    runninglistProposals = false;
     const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
     res.json(errMessage);
     log.error(error);
@@ -390,13 +412,11 @@ async function votePower(zelid, hash) {
   }
 
   const p = {};
-  const fluxcollection = config.database.local.collections.fluxes;
   const completedRoundsCollection = config.database.local.collections.completedRounds;
   const lastRound = await serviceHelper.findOneInDatabaseReverse(database, completedRoundsCollection, q, p);
   const lastCompletedRound = lastRound ? lastRound.timestamp : 0;
-  const query = {
-    roundTime: lastCompletedRound, // may not contain completely accurate list which is 'ok'
-  };
+  const currentCollectionName = `fluxes${lastCompletedRound}`;
+  const query = {};
   const projection = {
     projection: {
       _id: 0,
@@ -405,7 +425,7 @@ async function votePower(zelid, hash) {
     },
   };
   // return latest fluxnode round
-  const results = await serviceHelper.findInDatabase(database, fluxcollection, query, projection);
+  const results = await serviceHelper.findInDatabase(database, currentCollectionName, query, projection);
   const nodes = [];
   let votepowa = 0;
   // eslint-disable-next-line no-restricted-syntax
@@ -730,4 +750,8 @@ module.exports = {
   getVotePower,
   submitProposal,
   voteProposal,
+  getLastProposalTxs,
+  checkForMissingTransactions,
+  checkOpenProposals,
+  votePower,
 };

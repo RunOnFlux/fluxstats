@@ -1,317 +1,856 @@
 <template>
   <div>
-    <div>
-      <loading
-        :active.sync="isLoading"
-        :can-cancel="false"
+    <div
+      v-if="myProgress < 100"
+      class="row"
+      style="position: absolute; left: 45%; top: 40%;"
+    >
+      <vue-ellipse-progress
+        :half="false"
+        :progress="myProgress"
+        line-mode="in 10"
+        color="Silver"
+        :gap="10"
+        fontSize="3rem"
       />
     </div>
-
-    <div
-      v-if="!isFetching"
-      class="row"
-    >
-      <div class="col-xl-3 col-md-6">
-        <stats-card
-          :title="totalNumberOfNodes.toString()"
-          sub-title="Total Nodes"
-        >
-          <div
-            slot="header"
-            class="icon-success"
+    <div v-if="myProgress >= 100">
+      <div class="row">
+        <div class="col-xl-3 col-md-6">
+          <stats-card
+            :title="totalNumberOfNodes.toString()"
+            sub-title="Total Nodes"
           >
-            <i class="nc-icon nc-chart text-success" />
-          </div>
-          <template slot="footer">
-            Cumulus + Nimbus + Stratus
-          </template>
-        </stats-card>
-      </div>
-      <div class="col-xl-3 col-md-6">
-        <stats-card
-          :title="totalNumberOfCumulus.toString()"
-          sub-title="Cumulus"
-        >
-          <div
-            slot="header"
-            class="icon-info"
-          >
-            <i class="nc-icon nc-chart text-info" />
-          </div>
-          <template slot="footer">
-            1,000 Flux
-          </template>
-        </stats-card>
-      </div>
-      <div class="col-xl-3 col-md-6">
-        <stats-card
-          :title="totalNumberOfNimbus.toString()"
-          sub-title="Nimbus"
-        >
-          <div
-            slot="header"
-            class="icon-danger"
-          >
-            <i class="nc-icon nc-chart text-danger" />
-          </div>
-          <template slot="footer">
-            12,500 Flux
-          </template>
-        </stats-card>
-      </div>
-      <div class="col-xl-3 col-md-6">
-        <stats-card
-          :title="totalNumberOfStratus.toString()"
-          sub-title="Stratus"
-        >
-          <div
-            slot="header"
-            class="icon-warning"
-          >
-            <i class="nc-icon nc-chart text-warning" />
-          </div>
-          <template slot="footer">
-            40,000 Flux
-          </template>
-        </stats-card>
-      </div>
-      <div class="col-xl-3 col-md-6">
-        <stats-card
-          :title="totalTBSSD.toString()"
-          sub-title="TB SSD"
-        >
-          <div
-            slot="header"
-            class="icon-success"
-          >
-            <i class="nc-icon nc-chart-bar-32 text-success" />
-          </div>
-          <template slot="footer">
-            Total Number of Available Storage
-          </template>
-        </stats-card>
-      </div>
-      <div class="col-xl-3 col-md-6">
-        <stats-card
-          :title="totalVCores.toString()"
-          sub-title="VCORES"
-        >
-          <div
-            slot="header"
-            class="icon-info"
-          >
-            <i class="nc-icon nc-chart-bar-32 text-info" />
-          </div>
-          <template slot="footer">
-            Total Number of Available Cores
-          </template>
-        </stats-card>
-      </div>
-      <div class="col-xl-3 col-md-6">
-        <stats-card
-          :title="totalTBRAM.toString()"
-          sub-title="TB RAM"
-        >
-          <div
-            slot="header"
-            class="icon-danger"
-          >
-            <i class="nc-icon nc-chart-bar-32 text-danger" />
-          </div>
-          <template slot="footer">
-            Total Number of Available RAM
-          </template>
-        </stats-card>
-      </div>
-    </div>
-
-    <div
-      v-if="!isFetching"
-      class="row"
-    >
-      <div class="col-md-4">
-        <chart-card
-          :chart-data="pieChart.data"
-          chart-type="Pie"
-        >
-          <template slot="header">
-            <h4 class="card-title">
-              Nodes Statistics
-            </h4>
-          </template>
-          <template slot="footer">
-            <div class="legend">
-              <i class="fa fa-circle text-info" /> Cumulus
-              <i class="fa fa-circle text-danger" /> Nimbus
-              <i class="fa fa-circle text-warning" /> Stratus
+            <div
+              slot="header"
+              class="icon-success"
+            >
+              <i class="nc-icon nc-chart text-success" />
             </div>
-            <hr>
-          </template>
-        </chart-card>
-      </div>
-      <div class="col-md-8">
-        <chart-card
-          :chart-data="lineChart.data"
-          :chart-options="lineChart.options"
-          :responsive-options="lineChart.responsiveOptions"
-        >
-          <template slot="header">
-            <h4 class="card-title">
-              Nodes History
-            </h4>
-            <p class="card-category">
-              Last 5 Round Time
-            </p>
-          </template>
-          <template slot="footer">
-            <div class="legend">
-              <i class="fa fa-circle text-info" /> Cumulus
-              <i class="fa fa-circle text-danger" /> Nimbus
-              <i class="fa fa-circle text-warning" /> Stratus
-            </div>
-            <hr>
-            <div class="stats" />
-          </template>
-        </chart-card>
-      </div>
-    </div>
-
-    <div
-      v-if="!isFetching"
-      class="row"
-    >
-      <div class="col-md-6">
-        <chart-card
-          :chart-data="barChart.data"
-          :chart-options="barChart.options"
-          :chart-responsive-options="barChart.responsiveOptions"
-          chart-type="Bar"
-        >
-          <template slot="header">
-            <h4 class="card-title">
-              Top 10 Node Location
-            </h4>
-            <p class="card-category">
-              Countries With Highest Node Count
-            </p>
-          </template>
-          <template slot="footer">
-            <div class="legend">
-              <i class="fa fa-circle text-info" /> Cumulus
-              <i class="fa fa-circle text-danger" /> Nimbus
-              <i class="fa fa-circle text-warning" /> Stratus
-              <i class="fa fa-circle text-success" /> Total Nodes
-            </div>
-            <hr>
-            <div class="stats" />
-          </template>
-        </chart-card>
-      </div>
-      <div class="col-md-6">
-        <card
-          class="card-tasks"
-          title="Top 5 Organizations"
-          sub-title="Organizations With Highest Node Count"
-        >
-          <l-table :data="tableData2.data">
-            <template slot-scope="{row}">
-              <td>{{ row.title }}</td>
-              <td class="td-actions d-flex justify-content-end" />
+            <template slot="footer">
+              Cumulus + Nimbus + Stratus
             </template>
-          </l-table>
-          <div
-            slot="footer"
-            class="stats"
+          </stats-card>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <stats-card
+            :title="totalNumberOfCumulus.toString()"
+            sub-title="Cumulus"
+          >
+            <div
+              slot="header"
+              class="icon-info"
+            >
+              <i class="nc-icon nc-chart text-info" />
+            </div>
+            <template slot="footer">
+              1,000 Flux
+            </template>
+          </stats-card>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <stats-card
+            :title="totalNumberOfNimbus.toString()"
+            sub-title="Nimbus"
+          >
+            <div
+              slot="header"
+              class="icon-danger"
+            >
+              <i class="nc-icon nc-chart text-danger" />
+            </div>
+            <template slot="footer">
+              12,500 Flux
+            </template>
+          </stats-card>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <stats-card
+            :title="totalNumberOfStratus.toString()"
+            sub-title="Stratus"
+          >
+            <div
+              slot="header"
+              class="icon-warning"
+            >
+              <i class="nc-icon nc-chart text-warning" />
+            </div>
+            <template slot="footer">
+              40,000 Flux
+            </template>
+          </stats-card>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <stats-card
+            :title="totalTBSSD.toString()"
+            sub-title="TB SSD"
+          >
+            <div
+              slot="header"
+              class="icon-success"
+            >
+              <i class="nc-icon nc-chart-bar-32 text-success" />
+            </div>
+            <template slot="footer">
+              Total Number of Available Storage
+            </template>
+          </stats-card>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <stats-card
+            :title="totalVCores.toString()"
+            sub-title="VCORES"
+          >
+            <div
+              slot="header"
+              class="icon-info"
+            >
+              <i class="nc-icon nc-chart-bar-32 text-info" />
+            </div>
+            <template slot="footer">
+              Total Number of Available Cores
+            </template>
+          </stats-card>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <stats-card
+            :title="totalTBRAM.toString()"
+            sub-title="TB RAM"
+          >
+            <div
+              slot="header"
+              class="icon-danger"
+            >
+              <i class="nc-icon nc-chart-bar-32 text-danger" />
+            </div>
+            <template slot="footer">
+              Total Number of Available RAM
+            </template>
+          </stats-card>
+        </div>
+        <div class="col-xl-3 col-md-6">
+          <stats-card
+            :title="latestFluxVersion.toString()"
+            sub-title="Flux Version"
+          >
+            <div
+              slot="header"
+              class="icon-danger"
+            >
+              <i class="nc-icon nc-chart-bar-32 text-warning" />
+            </div>
+            <template slot="footer">
+              Latest Flux Version Being Used
+            </template>
+          </stats-card>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-7 card"
+             style="margin-left: 15px;margin-right: 30px;"
+        >
+          <GChart
+            :settings="{ packages: ['geochart'] }"
+            type="GeoChart"
+            :data="worldMap.data.chartData"
+            :options="worldMap.data.chartOptions"
           />
-        </card>
+        </div>
+        <div class="col-md-4 card"
+             style="margin-right: 30px;"
+        >
+          <apexchart
+            type="pie"
+            height="600"
+            :options="pieChart.data.chartOptions"
+            :series="pieChart.data.series"
+          />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-11 card"
+             style="margin-left: 15px;margin-right: 30px;"
+        >
+          <apexchart
+            type="area"
+            height="500"
+            :options="lineChart.data.chartOptions"
+            :series="lineChart.data.series"
+          />
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-6 card"
+             style="margin-left: 15px;margin-right: 30px;"
+        >
+          <apexchart
+            type="bar"
+            height="500"
+            :options="barChart1.data.chartOptions"
+            :series="barChart1.data.series"
+          />
+        </div>
+        <div class="col-md-5 card">
+          <apexchart
+            type="bar"
+            height="500"
+            :options="barChart2.data.chartOptions"
+            :series="barChart2.data.series"
+          />
+        </div>
+        <div class="col-md-6 card"
+             style="margin-left: 15px;margin-right: 30px;"
+        >
+          <apexchart
+            type="bar"
+            height="500"
+            :options="barChart3.data.chartOptions"
+            :series="barChart3.data.series"
+          />
+        </div>
+        <div class="col-md-5 card">
+          <apexchart
+            type="bar"
+            height="500"
+            :options="barChart4.data.chartOptions"
+            :series="barChart4.data.series"
+          />
+        </div>
+        <div class="col-md-6 card"
+             style="margin-left: 15px;margin-right: 30px;"
+        >
+          <apexchart
+            type="bar"
+            height="500"
+            :options="barChart5.data.chartOptions"
+            :series="barChart5.data.series"
+          />
+        </div>
+        <div class="col-md-5 card">
+          <apexchart
+            type="bar"
+            height="500"
+            :options="barChart6.data.chartOptions"
+            :series="barChart6.data.series"
+          />
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import {
-  ChartCard, StatsCard, Card, Table as LTable,
-} from 'src/components/index';
+import VueApexCharts from 'vue-apexcharts';
+import { StatsCard } from 'src/components/index';
 import axios from 'axios';
-import Loading from 'vue-loading-overlay';
-import 'vue-loading-overlay/dist/vue-loading.css';
+import { VueEllipseProgress } from 'vue-ellipse-progress';
+import { MemoryStorage } from 'ttl-localstorage';
+import { GChart } from 'vue-google-charts/legacy';
+import {
+  httpRequestFluxInfo,
+  httpRequestDaemonInfo,
+  httpRequestFluxHistoryStats,
+} from '../Request/HttpRequest';
 
 export default {
   components: {
-    ChartCard,
     StatsCard,
-    Loading,
-    LTable,
-    Card,
+    VueEllipseProgress,
+    GChart,
+    apexchart: VueApexCharts,
   },
   data() {
     return {
+      worldMap: {
+        data: {
+          chartData: [
+            ['Country', 'Nodes'],
+          ],
+          chartOptions: {
+            colorAxis: { colors: ['#EBF5FB', '#1B4F72'] },
+            backgroundColor: '#EAECEE',
+            keepAspectRatio: false,
+            legend: { textStyle: { color: '#959392', fontSize: 12 } },
+            tooltip: { textStyle: { color: '#959392' }, showColorCode: true },
+          },
+        },
+      },
       pieChart: {
         data: {
-          labels: [],
           series: [],
+          chartOptions: {
+            chart: {
+              width: '500',
+              type: 'pie',
+            },
+            labels: ['Cumulus', 'Nimbus', 'Stratus'],
+            title: {
+              text: 'Node Statistics',
+              margin: 50,
+              style: {
+                fontSize: '22px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            subtitle: {
+              text: 'Tier Percentage Based From Total Nodes',
+              margin: 70,
+              style: {
+                fontSize: '12px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            responsive: [
+              {
+                breakpoint: 480,
+                options: {
+                  chart: {
+                    width: 200,
+                  },
+                  legend: {
+                    position: 'bottom',
+                  },
+                },
+              },
+            ],
+          },
         },
       },
       lineChart: {
         data: {
-          labels: [],
-          series: [],
-        },
-        options: {
-          low: 0,
-          high: 10000,
-          showArea: false,
-          height: '245px',
-          axisX: {
-            showGrid: false,
-          },
-          lineSmooth: true,
-          showLine: true,
-          showPoint: true,
-          fullWidth: true,
-          chartPadding: {
-            right: 50,
-          },
-        },
-        responsiveOptions: [
-          ['screen and (max-width: 640px)', {
-            axisX: {
-              labelInterpolationFnc(value) {
-                return value[0];
+          series: [
+            {
+              name: 'Cumulus',
+              data: [],
+            },
+            {
+              name: 'Nimbus',
+              data: [],
+            },
+            {
+              name: 'Stratus',
+              data: [],
+            },
+            {
+              name: 'Total',
+              data: [],
+            },
+          ],
+          chartOptions: {
+            chart: {
+              type: 'area',
+              stacked: false,
+              width: 900,
+              zoom: {
+                type: 'x',
+                enabled: true,
+                autoScaleYaxis: true,
+              },
+              toolbar: {
+                autoSelected: 'zoom',
               },
             },
-          }],
-        ],
+            dataLabels: {
+              enabled: false,
+            },
+            markers: {
+              size: 0,
+            },
+            title: {
+              text: 'Node History',
+              margin: 50,
+              style: {
+                fontSize: '22px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            subtitle: {
+              text: 'Tier Node Count History',
+              margin: 70,
+              style: {
+                fontSize: '12px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            fill: {
+              type: 'gradient',
+              gradient: {
+                shadeIntensity: 1,
+                inverseColors: false,
+                opacityFrom: 0.5,
+                opacityTo: 0,
+                stops: [0, 90, 100],
+              },
+            },
+            yaxis: {
+              title: {
+                text: 'Node Count',
+              },
+            },
+            xaxis: {
+              type: 'datetime',
+            },
+            tooltip: {
+              shared: false,
+            },
+            responsive: [
+              {
+                options: {
+                  chart: {
+                    width: 600,
+                  },
+                },
+              },
+            ],
+          },
+        },
       },
-      barChart: {
+      barChart1: {
         data: {
-          labels: [],
-          series: [],
-        },
-        options: {
-          seriesBarDistance: 10,
-          axisX: {
-            showGrid: false,
-          },
-          height: '245px',
-        },
-        responsiveOptions: [
-          ['screen and (max-width: 640px)', {
-            seriesBarDistance: 5,
-            axisX: {
-              labelInterpolationFnc(value) {
-                return value[0];
+          series: [{
+            name: 'Cumulus',
+            data: [],
+          }, {
+            name: 'Nimbus',
+            data: [],
+          }, {
+            name: 'Stratus',
+            data: [],
+          }],
+          chartOptions: {
+            chart: {
+              type: 'bar',
+              width: 300,
+              stacked: true,
+              toolbar: {
+                show: true,
+              },
+              zoom: {
+                enabled: true,
               },
             },
+            title: {
+              text: 'Top 10 Node Location',
+              margin: 50,
+              style: {
+                fontSize: '22px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            subtitle: {
+              text: 'Countries With Highest Node Count',
+              margin: 70,
+              style: {
+                fontSize: '12px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            responsive: [
+              {
+                options: {
+                  chart: {
+                    width: 150,
+                  },
+                },
+              },
+            ],
+            plotOptions: {
+              bar: {
+                horizontal: false,
+                borderRadius: 10,
+              },
+            },
+            xaxis: {
+              categories: [],
+            },
+            yaxis: {
+              title: {
+                text: 'Node Count',
+              },
+            },
+            legend: {
+              position: 'right',
+              offsetY: 40,
+            },
+            fill: {
+              opacity: 1,
+            },
+          },
+        },
+      },
+      barChart2: {
+        data: {
+          series: [{
+            name: 'Upload Speed',
+            data: [],
+          }, {
+            name: 'Download Speed',
+            data: [],
           }],
-        ],
+          chartOptions: {
+            chart: {
+              type: 'bar',
+              height: 350,
+            },
+            plotOptions: {
+              bar: {
+                horizontal: false,
+                columnWidth: '55%',
+                endingShape: 'rounded',
+              },
+            },
+            dataLabels: {
+              enabled: false,
+            },
+            stroke: {
+              show: true,
+              width: 2,
+              colors: ['transparent'],
+            },
+            xaxis: {
+              categories: ['Cumulus', 'Nimbus', 'Stratus'],
+            },
+            yaxis: {
+              title: {
+                text: 'Internet Speed (Mbps)',
+              },
+            },
+            fill: {
+              opacity: 1,
+            },
+            title: {
+              text: 'Network Speed Per Tier',
+              margin: 50,
+              style: {
+                fontSize: '22px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            subtitle: {
+              text: 'Average Upload And Download Speed Per Tier',
+              margin: 70,
+              style: {
+                fontSize: '12px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+          },
+        },
+      },
+      barChart3: {
+        data: {
+          series: [{
+            name: 'Cumulus',
+            data: [],
+          }, {
+            name: 'Nimbus',
+            data: [],
+          }, {
+            name: 'Stratus',
+            data: [],
+          }],
+          chartOptions: {
+            chart: {
+              type: 'bar',
+              width: 300,
+              stacked: true,
+              toolbar: {
+                show: true,
+              },
+              zoom: {
+                enabled: true,
+              },
+            },
+            title: {
+              text: 'Top 5 Organizations',
+              margin: 50,
+              style: {
+                fontSize: '22px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            subtitle: {
+              text: 'Organizations With Highest Node Count',
+              margin: 70,
+              style: {
+                fontSize: '12px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            responsive: [
+              {
+                options: {
+                  chart: {
+                    width: 150,
+                  },
+                },
+              },
+            ],
+            plotOptions: {
+              bar: {
+                horizontal: false,
+                borderRadius: 10,
+              },
+            },
+            xaxis: {
+              categories: [],
+            },
+            legend: {
+              position: 'right',
+              offsetY: 40,
+            },
+            yaxis: {
+              title: {
+                text: 'Node Count',
+              },
+            },
+            fill: {
+              opacity: 1,
+            },
+          },
+        },
+      },
+      barChart4: {
+        data: {
+          series: [{
+            name: 'Cumulus',
+            data: [],
+          }, {
+            name: 'Nimbus',
+            data: [],
+          }, {
+            name: 'Stratus',
+            data: [],
+          }],
+          chartOptions: {
+            chart: {
+              type: 'bar',
+              width: 300,
+              stacked: true,
+              toolbar: {
+                show: true,
+              },
+              zoom: {
+                enabled: true,
+              },
+            },
+            title: {
+              text: 'Top 5 Node Operator',
+              margin: 50,
+              style: {
+                fontSize: '22px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            subtitle: {
+              text: 'Zel IDs With Highest Node Count',
+              margin: 70,
+              style: {
+                fontSize: '12px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            responsive: [
+              {
+                options: {
+                  chart: {
+                    width: 150,
+                  },
+                },
+              },
+            ],
+            plotOptions: {
+              bar: {
+                horizontal: false,
+                borderRadius: 10,
+              },
+            },
+            xaxis: {
+              categories: [],
+              labels: {
+                show: false,
+              },
+            },
+            yaxis: {
+              title: {
+                text: 'Node Count',
+              },
+            },
+            legend: {
+              position: 'right',
+              offsetY: 40,
+            },
+            fill: {
+              opacity: 1,
+            },
+          },
+        },
+      },
+      barChart5: {
+        data: {
+          series: [{
+            name: 'Cumulus',
+            data: [],
+          }, {
+            name: 'Nimbus',
+            data: [],
+          }, {
+            name: 'Stratus',
+            data: [],
+          }],
+          chartOptions: {
+            chart: {
+              type: 'bar',
+              height: 350,
+              stacked: true,
+            },
+            plotOptions: {
+              bar: {
+                horizontal: true,
+              },
+            },
+            stroke: {
+              width: 1,
+              colors: ['#fff'],
+            },
+            xaxis: {
+              categories: [],
+              title: {
+                text: 'Node Count',
+              },
+            },
+            title: {
+              text: 'Active Since Information',
+              margin: 50,
+              style: {
+                fontSize: '22px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            subtitle: {
+              text: 'Total Nodes Based On Starting Month And Year',
+              margin: 70,
+              style: {
+                fontSize: '12px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            fill: {
+              opacity: 1,
+            },
+            legend: {
+              position: 'right',
+              offsetY: 40,
+            },
+          },
+        },
+      },
+      barChart6: {
+        data: {
+          series: [{
+            name: 'Cumulus',
+            data: [],
+          }, {
+            name: 'Nimbus',
+            data: [],
+          }, {
+            name: 'Stratus',
+            data: [],
+          }, {
+            name: 'Total',
+            data: [],
+          }],
+          chartOptions: {
+            chart: {
+              type: 'bar',
+              height: 430,
+            },
+            plotOptions: {
+              bar: {
+                horizontal: true,
+                dataLabels: {
+                  position: 'top',
+                },
+              },
+            },
+            dataLabels: {
+              enabled: true,
+              offsetX: -6,
+              style: {
+                fontSize: '12px',
+                colors: ['#fff'],
+              },
+            },
+            stroke: {
+              show: true,
+              width: 1,
+              colors: ['#fff'],
+            },
+            tooltip: {
+              shared: true,
+              intersect: false,
+            },
+            xaxis: {
+              categories: [],
+              title: {
+                text: 'Node Count',
+              },
+            },
+            title: {
+              text: 'Top 5 Highest Node Count Round Time',
+              margin: 50,
+              style: {
+                fontSize: '22px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            subtitle: {
+              text: 'Total Nodes Based On Round Time',
+              margin: 70,
+              style: {
+                fontSize: '12px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            legend: {
+              position: 'right',
+              offsetY: 40,
+            },
+          },
+        },
       },
       tableData: [],
-      tableData1: [],
-      tableData2: {
-        data: [
-        ],
-      },
       totalNumberOfNodes: 0,
       totalNumberOfCumulus: 0,
       totalNumberOfNimbus: 0,
@@ -319,187 +858,295 @@ export default {
       totalTBSSD: 0,
       totalVCores: 0,
       totalTBRAM: 0,
-      isLoading: true,
+      latestFluxVersion: '0.0.0',
+      myProgress: 0,
       statsLength: 0,
-      isFetching: true,
+      values: [],
+      paymentAddress: new Map(),
+      organization: new Map(),
+      totalNodes: new Map(),
+      totalCumulus: new Map(),
+      totalStratus: new Map(),
+      totalNimbus: new Map(),
+      averageUploadSpeedCumulus: 0,
+      averageDownloadSpeedCumulus: 0,
+      averageUploadSpeedNimbus: 0,
+      averageDownloadSpeedNimbus: 0,
+      averageUploadSpeedStratus: 0,
+      averageDownloadSpeedStratus: 0,
+      map: new Map(),
+      mapCumulus: new Map(),
+      mapNimbus: new Map(),
+      mapStratus: new Map(),
+      mapOrganizations: new Map(),
+      mapOrganizationsCumulus: new Map(),
+      mapOrganizationsNimbus: new Map(),
+      mapOrganizationsStratus: new Map(),
+      activeSince: new Map(),
+      activeSinceCumulus: new Map(),
+      activeSinceNimbus: new Map(),
+      activeSinceStratus: new Map(),
+      roundTime: new Map(),
+      roundTimeCumulus: new Map(),
+      roundTimeNimbus: new Map(),
+      roundTimeStratus: new Map(),
+      zelids: [],
+      statsValues: [],
     };
   },
   async created() {
-    this.isLoading = true;
-    const map = new Map();
-    const mapCumulus = new Map();
-    const mapNimbus = new Map();
-    const mapStratus = new Map();
-    const mapOrganizations = new Map();
-
-    axios
-      .get('https://stats.runonflux.io/fluxinfo?projection=ip,tier,geolocation,benchmark')
-      .then((response) => {
-        this.totalNumberOfNodes = Object.keys(response.data.data).length;
-        this.totalNumberOfCumulus = 0;
-        this.totalNumberOfNimbus = 0;
-        this.totalNumberOfStratus = 0;
-        this.tableData = response.data.data;
-        this.tableData.forEach((data) => {
-          if (data.tier === 'CUMULUS') {
-            this.totalNumberOfCumulus += 1;
-          } else if (data.tier === 'NIMBUS') {
-            this.totalNumberOfNimbus += 1;
-          } else if (data.tier === 'STRATUS') {
-            this.totalNumberOfStratus += 1;
-          }
-
-          this.totalVCores += data.benchmark.bench.cores;
-          this.totalTBSSD += data.benchmark.bench.ssd;
-          this.totalTBRAM += data.benchmark.bench.ram;
-
-          if (mapOrganizations.has(data.geolocation.org)) {
-            mapOrganizations.set(data.geolocation.org, mapOrganizations.get(data.geolocation.org) + 1);
-          } else {
-            mapOrganizations.set(data.geolocation.org, 1);
-          }
-
-          if (map.has(data.geolocation.country)) {
-            map.set(data.geolocation.country, map.get(data.geolocation.country) + 1);
-          } else {
-            map.set(data.geolocation.country, 1);
-            mapCumulus.set(data.geolocation.country, 0);
-            mapNimbus.set(data.geolocation.country, 0);
-            mapStratus.set(data.geolocation.country, 0);
-          }
-
-          if (data.tier === 'CUMULUS') {
-            mapCumulus.set(data.geolocation.country, mapCumulus.get(data.geolocation.country) + 1);
-          } else if (data.tier === 'NIMBUS') {
-            mapNimbus.set(data.geolocation.country, mapNimbus.get(data.geolocation.country) + 1);
-          } else if (data.tier === 'STRATUS') {
-            mapStratus.set(data.geolocation.country, mapStratus.get(data.geolocation.country) + 1);
-          }
+    try {
+      this.initialize();
+      this.myProgress = await httpRequestFluxInfo(axios, MemoryStorage);
+      this.myProgress = await httpRequestDaemonInfo(axios, MemoryStorage);
+      this.myProgress = await httpRequestFluxHistoryStats(axios, MemoryStorage);
+      await this.getFluxInfo();
+      await this.processFluxInfo();
+      await this.getFluxStats();
+      await this.processFluxStats();
+      this.stopProcessing();
+    } catch (e) {
+      this.$router.push('/flux/maintenance/error').catch(() => {});
+    }
+  },
+  methods: {
+    async initialize() {
+      this.myProgress = 20;
+    },
+    async stopProcessing() {
+      this.myProgress = 100;
+    },
+    async getFluxInfo() {
+      // Projection being used in this page are ip,tier,geolocation,benchmark,node,flux
+      const lsdata = MemoryStorage.get('fluxinfo');
+      this.values = lsdata;
+      this.totalNumberOfNodes = Object.keys(lsdata).length;
+      this.tableData = lsdata;
+    },
+    async processFluxInfo() {
+      this.tableData.map((data) => {
+        const versioncriteria1 = data.flux.version.split('.')[0] >= this.latestFluxVersion.split('.')[0];
+        const versioncriteria2 = data.flux.version.split('.')[1] >= this.latestFluxVersion.split('.')[0];
+        const versioncriteria3 = data.flux.version.split('.')[2] >= this.latestFluxVersion.split('.')[0];
+        this.latestFluxVersion = versioncriteria1 && versioncriteria2 && versioncriteria3 ? data.flux.version : this.latestFluxVersion;
+        this.totalNumberOfCumulus = data.tier === 'CUMULUS' ? this.totalNumberOfCumulus + 1 : this.totalNumberOfCumulus;
+        this.totalNumberOfNimbus = data.tier === 'NIMBUS' ? this.totalNumberOfNimbus + 1 : this.totalNumberOfNimbus;
+        this.totalNumberOfStratus = data.tier === 'STRATUS' ? this.totalNumberOfStratus + 1 : this.totalNumberOfStratus;
+        this.totalVCores += data.benchmark.bench.cores;
+        this.totalTBSSD += data.benchmark.bench.ssd;
+        this.totalTBRAM += data.benchmark.bench.ram;
+        if (!this.mapOrganizations.has(data.geolocation.org)) {
+          this.mapOrganizations.set(data.geolocation.org, 0);
+          this.mapOrganizationsCumulus.set(data.geolocation.org, 0);
+          this.mapOrganizationsNimbus.set(data.geolocation.org, 0);
+          this.mapOrganizationsStratus.set(data.geolocation.org, 0);
+        }
+        this.mapOrganizations.set(data.geolocation.org, this.mapOrganizations.has(data.geolocation.org) ? this.mapOrganizations.get(data.geolocation.org) + 1 : this.mapOrganizations.get(data.geolocation.org));
+        this.mapOrganizationsCumulus.set(data.geolocation.org, data.tier === 'CUMULUS' ? this.mapOrganizationsCumulus.get(data.geolocation.org) + 1 : this.mapOrganizationsCumulus.get(data.geolocation.org));
+        this.mapOrganizationsNimbus.set(data.geolocation.org, data.tier === 'NIMBUS' ? this.mapOrganizationsNimbus.get(data.geolocation.org) + 1 : this.mapOrganizationsNimbus.get(data.geolocation.org));
+        this.mapOrganizationsStratus.set(data.geolocation.org, data.tier === 'STRATUS' ? this.mapOrganizationsStratus.get(data.geolocation.org) + 1 : this.mapOrganizationsStratus.get(data.geolocation.org));
+        if (!this.map.has(data.geolocation.country)) {
+          this.map.set(data.geolocation.country, 0);
+          this.mapCumulus.set(data.geolocation.country, 0);
+          this.mapNimbus.set(data.geolocation.country, 0);
+          this.mapStratus.set(data.geolocation.country, 0);
+        }
+        this.map.set(data.geolocation.country, this.map.has(data.geolocation.country) ? this.map.get(data.geolocation.country) + 1 : this.map.get(data.geolocation.country));
+        this.mapCumulus.set(data.geolocation.country, data.tier === 'CUMULUS' ? this.mapCumulus.get(data.geolocation.country) + 1 : this.mapCumulus.get(data.geolocation.country));
+        this.mapNimbus.set(data.geolocation.country, data.tier === 'NIMBUS' ? this.mapNimbus.get(data.geolocation.country) + 1 : this.mapNimbus.get(data.geolocation.country));
+        this.mapStratus.set(data.geolocation.country, data.tier === 'STRATUS' ? this.mapStratus.get(data.geolocation.country) + 1 : this.mapStratus.get(data.geolocation.country));
+        const uploadSpeed = Number.isNaN(data.benchmark.bench.upload_speed) || data.benchmark.bench.upload_speed === undefined ? 0 : parseFloat(data.benchmark.bench.upload_speed).toFixed(2);
+        const downloadSpeed = Number.isNaN(data.benchmark.bench.download_speed) || data.benchmark.bench.download_speed === undefined ? 0 : parseFloat(data.benchmark.bench.download_speed).toFixed(2);
+        this.averageUploadSpeedCumulus = data.tier === 'CUMULUS' ? (parseFloat(this.averageUploadSpeedCumulus) + parseFloat(uploadSpeed)).toFixed(2) : this.averageUploadSpeedCumulus;
+        this.averageUploadSpeedNimbus = data.tier === 'NIMBUS' ? (parseFloat(this.averageUploadSpeedNimbus) + parseFloat(uploadSpeed)).toFixed(2) : this.averageUploadSpeedNimbus;
+        this.averageUploadSpeedStratus = data.tier === 'STRATUS' ? (parseFloat(this.averageUploadSpeedStratus) + parseFloat(uploadSpeed)).toFixed(2) : this.averageUploadSpeedStratus;
+        this.averageDownloadSpeedCumulus = data.tier === 'CUMULUS' ? (parseFloat(this.averageDownloadSpeedCumulus) + parseFloat(downloadSpeed)).toFixed(2) : this.averageDownloadSpeedCumulus;
+        this.averageDownloadSpeedNimbus = data.tier === 'NIMBUS' ? (parseFloat(this.averageDownloadSpeedNimbus) + parseFloat(downloadSpeed)).toFixed(2) : this.averageDownloadSpeedNimbus;
+        this.averageDownloadSpeedStratus = data.tier === 'STRATUS' ? (parseFloat(this.averageDownloadSpeedStratus) + parseFloat(downloadSpeed)).toFixed(2) : this.averageDownloadSpeedStratus;
+        const as = new Date(parseInt(data.activeSince * 1000, 10)).toLocaleString();
+        const date = as.split(', ')[0];
+        const month = date.split('/')[0];
+        const year = date.split('/')[2];
+        const datevalue = `${month}/${year}`;
+        if (!this.activeSince.has(datevalue)) {
+          this.activeSince.set(datevalue, 0);
+          this.activeSinceCumulus.set(datevalue, 0);
+          this.activeSinceNimbus.set(datevalue, 0);
+          this.activeSinceStratus.set(datevalue, 0);
+        }
+        this.activeSince.set(datevalue, this.activeSince.has(datevalue) ? this.activeSince.get(datevalue) + 1 : this.activeSince.get(datevalue));
+        this.activeSinceCumulus.set(datevalue, data.tier === 'CUMULUS' ? this.activeSinceCumulus.get(datevalue) + 1 : this.activeSinceCumulus.get(datevalue));
+        this.activeSinceNimbus.set(datevalue, data.tier === 'NIMBUS' ? this.activeSinceNimbus.get(datevalue) + 1 : this.activeSinceNimbus.get(datevalue));
+        this.activeSinceStratus.set(datevalue, data.tier === 'STRATUS' ? this.activeSinceStratus.get(datevalue) + 1 : this.activeSinceStratus.get(datevalue));
+        return data;
+      });
+      for (const entry of new Map([...this.map.entries()]).entries()) {
+        this.worldMap.data.chartData.push([entry[0], entry[1]]);
+      }
+      this.totalTBSSD = Number(this.totalTBSSD / 1000).toFixed(2);
+      this.totalTBRAM = Number(this.totalTBRAM / 1000).toFixed(2);
+      this.pieChart.data.series = [this.totalNumberOfCumulus, this.totalNumberOfNimbus, this.totalNumberOfStratus];
+      let idx = 0;
+      let ent = [];
+      for (const entry of new Map([...this.map.entries()].sort((a, b) => b[1] - a[1])).entries()) {
+        const key = entry[0];
+        const value = entry[1];
+        ent.push({
+          name: key,
+          total: value,
         });
-
-        this.totalTBSSD = Number(this.totalTBSSD / 1000).toFixed(2);
-        this.totalTBRAM = Number(this.totalTBRAM / 1000).toFixed(2);
-
-        const pieChartPercentageCumulus = ((this.totalNumberOfCumulus / this.totalNumberOfNodes) * 100).toFixed(2);
-        const pieChartPercentageNimbus = ((this.totalNumberOfNimbus / this.totalNumberOfNodes) * 100).toFixed(2);
-        const pieChartPercentageStratus = ((this.totalNumberOfStratus / this.totalNumberOfNodes) * 100).toFixed(2);
-        this.pieChart.data.labels = [`${pieChartPercentageCumulus} %`, `${pieChartPercentageNimbus} %`, `${pieChartPercentageStratus} %`];
-        this.pieChart.data.series = [pieChartPercentageCumulus, pieChartPercentageNimbus, pieChartPercentageStratus];
-
-        let idx = 0;
-        let ent = [];
-        for (const entry of new Map([...map.entries()].sort((a, b) => b[1] - a[1])).entries()) {
-          const key = entry[0];
-          const value = entry[1];
-
+        if (idx < 9) {
+          idx += 1;
+        } else {
+          break;
+        }
+      }
+      for (let i = 0; i < 10; i += 1) {
+        this.barChart1.data.chartOptions.xaxis.categories.push(ent[i].name);
+        this.barChart1.data.series[0].data.push(this.mapCumulus.get(ent[i].name));
+        this.barChart1.data.series[1].data.push(this.mapNimbus.get(ent[i].name));
+        this.barChart1.data.series[2].data.push(this.mapStratus.get(ent[i].name));
+      }
+      idx = 0;
+      ent = [];
+      for (const entry of new Map([...this.mapOrganizations.entries()].sort((a, b) => b[1] - a[1])).entries()) {
+        const key = entry[0];
+        if (key !== '') {
           ent.push({
             name: key,
-            total: value,
+            cumulus: this.mapOrganizationsCumulus.get(key),
+            nimbus: this.mapOrganizationsNimbus.get(key),
+            stratus: this.mapOrganizationsStratus.get(key),
           });
-
-          if (idx < 9) {
+          if (idx < 5) {
             idx += 1;
           } else {
             break;
           }
         }
-
-        this.barChart.data.labels = [ent[0].name, ent[1].name, ent[2].name, ent[3].name, ent[4].name,
-          ent[5].name, ent[6].name, ent[7].name, ent[8].name, ent[9].name];
-
-        this.barChart.data.series = [
-          [mapCumulus.get(ent[0].name), mapCumulus.get(ent[1].name), mapCumulus.get(ent[2].name), mapCumulus.get(ent[3].name), mapCumulus.get(ent[4].name),
-            mapCumulus.get(ent[5].name), mapCumulus.get(ent[6].name), mapCumulus.get(ent[7].name), mapCumulus.get(ent[8].name), mapCumulus.get(ent[9].name)],
-          [mapNimbus.get(ent[0].name), mapNimbus.get(ent[1].name), mapNimbus.get(ent[2].name), mapNimbus.get(ent[3].name), mapNimbus.get(ent[4].name),
-            mapNimbus.get(ent[5].name), mapNimbus.get(ent[6].name), mapNimbus.get(ent[7].name), mapNimbus.get(ent[8].name), mapNimbus.get(ent[9].name)],
-          [mapStratus.get(ent[0].name), mapStratus.get(ent[1].name), mapStratus.get(ent[2].name), mapStratus.get(ent[3].name), mapStratus.get(ent[4].name),
-            mapStratus.get(ent[5].name), mapStratus.get(ent[6].name), mapStratus.get(ent[7].name), mapStratus.get(ent[8].name), mapStratus.get(ent[9].name)],
-          [ent[0].total, ent[1].total, ent[2].total, ent[3].total, ent[4].total, ent[5].total, ent[6].total, ent[7].total, ent[8].total, ent[9].total],
-        ];
-
-        idx = 0;
-        ent = [];
-        for (const entry of new Map([...mapOrganizations.entries()].sort((a, b) => b[1] - a[1])).entries()) {
-          const key = entry[0];
-          const value = entry[1];
-
-          if (key !== '') {
-            ent.push({
-              name: key,
-              total: value,
-            });
-
-            if (idx < 9) {
-              idx += 1;
-            } else {
-              break;
-            }
+      }
+      for (let i = 0; i < 5; i += 1) {
+        this.barChart3.data.chartOptions.xaxis.categories.push(ent[i].name);
+        this.barChart3.data.series[0].data.push(ent[i].cumulus);
+        this.barChart3.data.series[1].data.push(ent[i].nimbus);
+        this.barChart3.data.series[2].data.push(ent[i].stratus);
+      }
+      this.values.map((data) => {
+        if (this.paymentAddress.get(data.flux.zelid) !== undefined) {
+          this.totalNodes.set(data.flux.zelid, this.totalNodes.get(data.flux.zelid) + 1);
+          this.totalCumulus.set(data.flux.zelid, data.tier === 'CUMULUS' ? this.totalCumulus.get(data.flux.zelid) + 1 : this.totalCumulus.get(data.flux.zelid));
+          this.totalNimbus.set(data.flux.zelid, data.tier === 'NIMBUS' ? this.totalNimbus.get(data.flux.zelid) + 1 : this.totalNimbus.get(data.flux.zelid));
+          this.totalStratus.set(data.flux.zelid, data.tier === 'STRATUS' ? this.totalStratus.get(data.flux.zelid) + 1 : this.totalStratus.get(data.flux.zelid));
+        } else {
+          this.totalNodes.set(data.flux.zelid, 1);
+          this.totalCumulus.set(data.flux.zelid, data.tier === 'CUMULUS' ? 1 : 0);
+          this.totalNimbus.set(data.flux.zelid, data.tier === 'NIMBUS' ? 1 : 0);
+          this.totalStratus.set(data.flux.zelid, data.tier === 'STRATUS' ? 1 : 0);
+          try {
+            this.paymentAddress.set(data.flux.zelid, data.node.status.payment_address);
+          } catch (ex) {
+            this.paymentAddress.set(data.flux.zelid, '');
+          }
+          try {
+            this.organization.set(data.flux.zelid, data.geolocation.org);
+          } catch (ex) {
+            this.organization.set(data.flux.zelid, '');
           }
         }
-
-        this.tableData2.data.push({ title: `1. ${ent[0].name} - ${ent[0].total} Nodes` });
-        this.tableData2.data.push({ title: `2. ${ent[1].name} - ${ent[1].total} Nodes` });
-        this.tableData2.data.push({ title: `3. ${ent[2].name} - ${ent[2].total} Nodes` });
-        this.tableData2.data.push({ title: `4. ${ent[3].name} - ${ent[3].total} Nodes` });
-        this.tableData2.data.push({ title: `5. ${ent[4].name} - ${ent[4].total} Nodes` });
-      }).then(() => {
-        axios
-          .get('https://stats.runonflux.io/fluxhistorystats')
-          .then((response) => {
-            for (const [key, value] of Object.entries(response.data.data)) {
-              this.tableData1.push({
-                roundTime: key,
-                cumulus: value.cumulus,
-                nimbus: value.nimbus,
-                stratus: value.stratus,
-              });
-            }
-            const statsLength = Object.keys(response.data.data).length;
-            const item1 = new Date(parseInt(this.tableData1[statsLength - 1].roundTime, 10));
-            const item2 = new Date(parseInt(this.tableData1[statsLength - 2].roundTime, 10));
-            const item3 = new Date(parseInt(this.tableData1[statsLength - 3].roundTime, 10));
-            const item4 = new Date(parseInt(this.tableData1[statsLength - 4].roundTime, 10));
-            const item5 = new Date(parseInt(this.tableData1[statsLength - 5].roundTime, 10));
-
-            this.lineChart.data.series = [
-              [
-                this.tableData1[statsLength - 1].cumulus,
-                this.tableData1[statsLength - 2].cumulus,
-                this.tableData1[statsLength - 3].cumulus,
-                this.tableData1[statsLength - 4].cumulus,
-                this.tableData1[statsLength - 5].cumulus,
-                this.tableData1[statsLength - 6].cumulus,
-              ],
-              [
-                this.tableData1[statsLength - 1].nimbus,
-                this.tableData1[statsLength - 2].nimbus,
-                this.tableData1[statsLength - 3].nimbus,
-                this.tableData1[statsLength - 4].nimbus,
-                this.tableData1[statsLength - 5].nimbus,
-                this.tableData1[statsLength - 6].nimbus,
-              ],
-              [
-                this.tableData1[statsLength - 1].stratus,
-                this.tableData1[statsLength - 2].stratus,
-                this.tableData1[statsLength - 3].stratus,
-                this.tableData1[statsLength - 4].stratus,
-                this.tableData1[statsLength - 5].stratus,
-                this.tableData1[statsLength - 6].stratus,
-              ],
-            ];
-
-            this.lineChart.data.labels = [
-              `${item1.toLocaleDateString()} ${item1.toLocaleTimeString()}`,
-              `${item2.toLocaleDateString()} ${item2.toLocaleTimeString()}`,
-              `${item3.toLocaleDateString()} ${item3.toLocaleTimeString()}`,
-              `${item4.toLocaleDateString()} ${item4.toLocaleTimeString()}`,
-              `${item5.toLocaleDateString()} ${item5.toLocaleTimeString()}`,
-            ];
-          }).then(() => {
-            this.isLoading = false;
-            this.isFetching = false;
-          });
+        return data;
       });
+      idx = 0;
+      ent = [];
+      for (const entry of new Map([...this.totalNodes.entries()].sort((a, b) => b[1] - a[1])).entries()) {
+        const key = entry[0];
+        const value = entry[1];
+        if (key !== '') {
+          ent.push({
+            zelId: key,
+            paymentId: value,
+          });
+          if (idx < 5) {
+            idx += 1;
+          } else {
+            break;
+          }
+        }
+      }
+      for (let i = 0; i < 5; i += 1) {
+        this.barChart4.data.chartOptions.xaxis.categories.push(ent[i].zelId);
+        this.barChart4.data.series[0].data.push(this.totalCumulus.get(ent[i].zelId));
+        this.barChart4.data.series[1].data.push(this.totalNimbus.get(ent[i].zelId));
+        this.barChart4.data.series[2].data.push(this.totalStratus.get(ent[i].zelId));
+      }
+      idx = 0;
+      ent = [];
+      for (const entry of new Map([...this.activeSince.entries()].sort()).entries()) {
+        const key = entry[0];
+        const value = entry[1];
+        if (key !== '') {
+          ent.push({
+            date: key,
+            total: value,
+          });
+        }
+      }
+      for (let i = 0; i < Object.keys(ent).length; i += 1) {
+        this.barChart5.data.chartOptions.xaxis.categories.push(ent[i].date);
+        this.barChart5.data.series[0].data.push(this.activeSinceCumulus.get(ent[i].date));
+        this.barChart5.data.series[1].data.push(this.activeSinceNimbus.get(ent[i].date));
+        this.barChart5.data.series[2].data.push(this.activeSinceStratus.get(ent[i].date));
+      }
+      this.barChart2.data.series[0].data = [
+        parseFloat(this.averageUploadSpeedCumulus / this.totalNumberOfCumulus).toFixed(2),
+        parseFloat(this.averageUploadSpeedNimbus / this.totalNumberOfNimbus).toFixed(2),
+        parseFloat(this.averageUploadSpeedStratus / this.totalNumberOfStratus).toFixed(2),
+      ];
+      this.barChart2.data.series[1].data = [
+        parseFloat(this.averageDownloadSpeedCumulus / this.totalNumberOfCumulus).toFixed(2),
+        parseFloat(this.averageDownloadSpeedNimbus / this.totalNumberOfNimbus).toFixed(2),
+        parseFloat(this.averageDownloadSpeedStratus / this.totalNumberOfStratus).toFixed(2),
+      ];
+    },
+    async getFluxStats() {
+      const lsdata = MemoryStorage.get('fluxhistorystats');
+      this.statsValues = lsdata;
+    },
+    async processFluxStats() {
+      for (const [key, value] of Object.entries(this.statsValues)) {
+        this.lineChart.data.series[0].data.push([parseInt(key, 10), value.cumulus]);
+        this.lineChart.data.series[1].data.push([parseInt(key, 10), value.nimbus]);
+        this.lineChart.data.series[2].data.push([parseInt(key, 10), value.stratus]);
+        this.lineChart.data.series[3].data.push([parseInt(key, 10), value.cumulus + value.nimbus + value.stratus]);
+        this.roundTimeCumulus.set(key, value.cumulus);
+        this.roundTimeNimbus.set(key, value.nimbus);
+        this.roundTimeStratus.set(key, value.stratus);
+        this.roundTime.set(key, value.cumulus + value.nimbus + value.stratus);
+      }
+      let idx = 0;
+      const ent = [];
+      for (const entry of new Map([...this.roundTime.entries()].sort((a, b) => b[1] - a[1])).entries()) {
+        const key = entry[0];
+        const value = entry[1];
+        if (key !== '') {
+          ent.push({
+            roundTime: key,
+            total: value,
+          });
+          if (idx < 5) {
+            idx += 1;
+          } else {
+            break;
+          }
+        }
+      }
+      for (let i = 0; i < 5; i += 1) {
+        this.barChart6.data.chartOptions.xaxis.categories.push(ent[i].roundTime);
+        this.barChart6.data.series[0].data.push(this.roundTimeCumulus.get(ent[i].roundTime));
+        this.barChart6.data.series[1].data.push(this.roundTimeNimbus.get(ent[i].roundTime));
+        this.barChart6.data.series[2].data.push(this.roundTimeStratus.get(ent[i].roundTime));
+        this.barChart6.data.series[3].data.push(ent[i].total);
+      }
+    },
   },
 };
 </script>

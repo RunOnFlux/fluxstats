@@ -14,7 +14,7 @@ let processedKDAnodes = [];
 let processingStatus = 0;
 
 async function kadenaAppLocationsNode() { // chainwebnode only
-  const apps = ['nonExistingApp'];
+  const apps = ['KadenaNode', 'KadenaNode2', 'KadenaNode3', 'KadenaNode4', 'KadenaNode5'];
   let locations = [];
   try {
     // eslint-disable-next-line no-restricted-syntax
@@ -53,6 +53,26 @@ async function kadenaAppLocations() { // chainwebdata
   }
 }
 
+async function MOKAppLocations() { // MOK only
+  const apps = ['themok', 'themok2', 'themok3', 'themok4', 'themok5', 'themok6'];
+  let locations = [];
+  try {
+    // eslint-disable-next-line no-restricted-syntax
+    for (const app of apps) {
+      const res = await http.get(`https://api.runonflux.io/apps/location/${app}`);
+      if (res.data.status === 'success') {
+        locations = locations.concat(res.data.data);
+      } else {
+        throw new Error(res.data.data);
+      }
+    }
+    return locations;
+  } catch (e) {
+    log.error(e);
+    return locations;
+  }
+}
+
 async function getNodes() {
   try {
     const res = await http.get('https://api.runonflux.io/daemon/viewdeterministiczelnodelist');
@@ -73,7 +93,8 @@ async function processKDA() {
     let nodes = await getNodes();
     const kdaRunningNodes = await kadenaAppLocations();
     const kdaRunningNodesChainweb = await kadenaAppLocationsNode();
-    nodes = nodes.filter((node) => node.tier !== 'CUMULUS' && node.last_paid_height); // only nodes that are longer on the network
+    const mokRunningNodes = await MOKAppLocations();
+    nodes = nodes.filter((node) => node.last_paid_height); // only nodes that are longer on the network
     const nodesWithKDAset = [];
     const time = new Date().getTime();
     let i = 0;
@@ -132,6 +153,15 @@ async function processKDA() {
         nodesWithKDAset.push(chainwebDataNode);
       }
     }
+    // eslint-disable-next-line no-restricted-syntax
+    for (const kdaNode of mokRunningNodes) {
+      const nodeExists = nodesWithKDAset.find((node) => node.ip === kdaNode.ip);
+      if (nodeExists) {
+        const mokNode = JSON.parse(JSON.stringify(nodeExists));
+        mokNode.tier = 'mok';
+        nodesWithKDAset.push(mokNode);
+      }
+    }
     processedKDAnodes = nodesWithKDAset;
   } catch (e) {
     log.error(e);
@@ -169,4 +199,8 @@ async function getKadenaNodes(req, res) {
 module.exports = {
   processKDA,
   getKadenaNodes,
+  getNodes,
+  kadenaAppLocations,
+  kadenaAppLocationsNode,
+  MOKAppLocations,
 };

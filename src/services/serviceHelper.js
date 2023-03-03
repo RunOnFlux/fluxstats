@@ -3,7 +3,6 @@ const config = require('config');
 const qs = require('qs');
 
 const { MongoClient } = mongodb;
-const mongoUrl = `mongodb://${config.database.url}:${config.database.port}/`;
 
 function timeout(ms) {
   return new Promise((resolve) => {
@@ -89,7 +88,7 @@ function ensureString(parameter) {
 
 // MongoDB functions
 async function connectMongoDb(url) {
-  const connectUrl = url || mongoUrl;
+  const connectUrl = url || `mongodb://${config.database.url}:${config.database.port}/`;
   const mongoSettings = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -167,6 +166,11 @@ async function removeDocumentsFromCollection(database, collection, query) {
   return result;
 }
 
+async function listCollections(database) {
+  const result = await database.listCollections().toArray();
+  return result;
+}
+
 async function dropCollection(database, collection) {
   const result = await database.collection(collection).drop().catch((error) => { throw error; });
   return result;
@@ -180,6 +184,11 @@ async function createCollection(database, collection) {
 async function collectionStats(database, collection) {
   // to remove all documents from collection, the query is just {}
   const result = await database.collection(collection).stats().catch((error) => { throw error; });
+  return result;
+}
+
+async function countInDatabase(database, collection, query) {
+  const result = await database.collection(collection).count(query).catch((error) => { throw error; });
   return result;
 }
 
@@ -207,4 +216,6 @@ module.exports = {
   createSuccessMessage,
   createWarningMessage,
   createErrorMessage,
+  countInDatabase,
+  listCollections,
 };

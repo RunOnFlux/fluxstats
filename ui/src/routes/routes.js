@@ -5,15 +5,21 @@ import Overview from 'src/pages/Dashboard/Dashboard/Overview.vue';
 
 // NodeInfo pages
 const Node = () => import('@/pages/Dashboard/NodeInfo/Node.vue');
-const NodeVersion = () => import('@/pages/Dashboard/NodeInfo/NodeVersion.vue');
+const NodeDaemon = () => import('@/pages/Dashboard/NodeInfo/NodeDaemon.vue');
 const NodeLocation = () => import('@/pages/Dashboard/NodeInfo/NodeLocation.vue');
 const NodeUptime = () => import('@/pages/Dashboard/NodeInfo/NodeUptime.vue');
 const NodeApp = () => import('@/pages/Dashboard/NodeInfo/NodeApp.vue');
 const NodeAppHash = () => import('@/pages/Dashboard/NodeInfo/NodeAppHash.vue');
 const NodeConnection = () => import('@/pages/Dashboard/NodeInfo/NodeConnection.vue');
+const NodeAddressInfo = () => import('@/pages/Dashboard/NodeInfo/NodeAddressInfo.vue');
+const NodeBenchmark = () => import('@/pages/Dashboard/NodeInfo/NodeBenchmark.vue');
+const FluxNetwork = () => import('@/pages/Dashboard/Visualization/FluxNetwork.vue');
 
 // NodeHistory pages
 const HistoryInfo = () => import('@/pages/Dashboard/NodeHistory/HistoryInfo.vue');
+
+// Maintenance pages
+const Error = () => import('@/pages/Dashboard/Maintenance/Error.vue');
 
 const nodeInfo = {
   path: '/flux/nodeinfo',
@@ -36,9 +42,9 @@ const nodeInfo = {
       component: Node,
     },
     {
-      path: 'version',
-      name: 'Version',
-      component: NodeVersion,
+      path: 'daemon',
+      name: 'Daemon',
+      component: NodeDaemon,
     },
     {
       path: 'app',
@@ -54,6 +60,16 @@ const nodeInfo = {
       path: 'location',
       name: 'Location',
       component: NodeLocation,
+    },
+    {
+      path: 'address',
+      name: 'AddressInfo',
+      component: NodeAddressInfo,
+    },
+    {
+      path: 'benchmark',
+      name: 'Benchmark',
+      component: NodeBenchmark,
     }],
 };
 
@@ -69,6 +85,25 @@ const nodeHistory = {
     }],
 };
 
+const maintenance = {
+  path: '/flux/maintenance/error',
+  component: Error,
+};
+
+const fluxnetwork = {
+  path: '/flux/network/',
+  component: DashboardLayout,
+  name: 'fluxnetwork',
+  redirect: '/flux/network/visualization',
+  children: [
+    {
+      path: 'visualization',
+      name: 'visualization',
+      component: FluxNetwork,
+    },
+  ],
+};
+
 const routes = [
   {
     path: '/',
@@ -76,6 +111,7 @@ const routes = [
   },
   nodeInfo,
   nodeHistory,
+  maintenance,
   {
     path: '/flux/dashboard',
     component: DashboardLayout,
@@ -88,6 +124,7 @@ const routes = [
       },
     ],
   },
+  fluxnetwork,
   { path: '*', redirect: '/flux/dashboard/overview' },
 ];
 

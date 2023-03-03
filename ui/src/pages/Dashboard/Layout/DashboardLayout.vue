@@ -7,14 +7,17 @@
     <side-bar>
       <template slot="links">
         <sidebar-item :link="{name: 'Dashboard', icon: 'nc-icon nc-chart-pie-35', path: '/flux/dashboard/overview'}" />
+        <sidebar-item :link="{name: 'Flux Network', icon: 'nc-icon nc-grid-45', path: '/flux/network/visualization'}" />
         <sidebar-item :link="{name: 'Node Info', icon: 'nc-icon nc-app'}">
           <sidebar-item :link="{name: 'Node', path: '/flux/nodeinfo/node'}" />
+          <sidebar-item :link="{name: 'Benchmark', path: '/flux/nodeinfo/benchmark'}" />
           <sidebar-item :link="{name: 'Application', path: '/flux/nodeinfo/app'}" />
           <sidebar-item :link="{name: 'Hashes', path: '/flux/nodeinfo/hashes'}" />
-          <sidebar-item :link="{name: 'Location', path: '/flux/nodeinfo/location'}" />
+          <sidebar-item :link="{name: 'Address Info', path: '/flux/nodeinfo/address'}" />
+          <sidebar-item :link="{name: 'Geolocation', path: '/flux/nodeinfo/location'}" />
           <sidebar-item :link="{name: 'Connection', path: '/flux/nodeinfo/connection'}" />
-          <sidebar-item :link="{name: 'UpTime', path: '/flux/nodeinfo/uptime'}" />
-          <sidebar-item :link="{name: 'Version', path: '/flux/nodeinfo/version'}" />
+          <sidebar-item :link="{name: 'Up Time', path: '/flux/nodeinfo/uptime'}" />
+          <sidebar-item :link="{name: 'Daemon', path: '/flux/nodeinfo/daemon'}" />
         </sidebar-item>
         <sidebar-item :link="{name: 'History', icon: 'nc-icon nc-notes'}">
           <sidebar-item :link="{name: 'Info', path: '/flux/nodehistory/historyinfo'}" />

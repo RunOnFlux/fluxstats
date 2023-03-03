@@ -10,10 +10,10 @@ module.exports = {
       database: 'testfluxapi2',
       collections: {
         // Array of round of flux/info calls + geolocation.
-        fluxes: 'fluxes',
+        fluxes: 'fluxes', // WARNING replaced with 'fluxes-timestamp' for performance
         // geolocations of ip addresses belonging to flux instances
         geolocation: 'geolocation',
-        // timestamp of completed full rounds
+        // timestamp of completed full rounds that determines flux collections
         completedRounds: 'completedrounds',
       },
     },
