@@ -31,6 +31,15 @@
           >
             {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
           </l-button>
+          <l-button
+            v-if="btn.name.includes('tier')"
+            style="margin-right: 10px;"
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
+          >
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+          </l-button>
         </div>
       </div>
       <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
@@ -212,6 +221,16 @@ export default {
           minWidth: 150,
         },
         {
+          prop: 'geolocation.region',
+          label: 'Region',
+          minWidth: 200,
+        },
+        {
+          prop: 'geolocation.regionName',
+          label: 'Region Name',
+          minWidth: 150,
+        },
+        {
           prop: 'geolocation.lat',
           label: 'Latitude',
           minWidth: 100,
@@ -229,6 +248,7 @@ export default {
       ],
       tableData: [],
       filterValue: [],
+      filterValueStates: [],
       filter: new Map(),
       originalData: null,
       fuseSearch: null,
@@ -322,24 +342,60 @@ export default {
     async processFluxInfo() {
       this.values.map((value) => {
         const values = value;
-        const tierval = values.node.status.tier;
-        const temp1 = this.filter.has(values.geolocation.country) ? this.filter.get(values.geolocation.country) : [];
-        const temp2 = this.filter.has(`${values.geolocation.country} - ${tierval}`) ? this.filter.get(`${values.geolocation.country} - ${tierval}`) : [];
-        if (!this.filter.has(values.geolocation.country)) {
-          this.filterValue.push(values.geolocation.country);
+        const statustier = values.node.status.tier;
+        const geolocationcountrycode = values.geolocation.countryCode;
+        const geolocationcountry = values.geolocation.country;
+        const geolocationregion = values.geolocation.region;
+        const geolocationregionname = values.geolocation.regionName === '' || values.geolocation.region === '' || !values.geolocation.regionName || !values.geolocation.region ? 'no region' : `region name - ${values.geolocation.regionName}`;
+        let temp = this.filter.has(geolocationcountry) ? this.filter.get(geolocationcountry) : [];
+        if (!this.filter.has(geolocationcountry)) {
+          this.filterValue.push(geolocationcountry);
+          this.filterValueStates.push(geolocationcountry);
         }
-        temp1.push(values);
-        this.filter.set(values.geolocation.country, temp1);
-        if (!this.filter.has(`${values.geolocation.country} - ${tierval}`)) {
-          this.filterValue.push(`${values.geolocation.country} - ${tierval}`);
+        temp.push(values);
+        this.filter.set(geolocationcountry, temp);
+        temp = this.filter.has(`tier - ${statustier}`) ? this.filter.get(`tier - ${statustier}`) : [];
+        if (!this.filter.has(`tier - ${statustier}`)) {
+          this.filterValue.push(`tier - ${statustier}`);
         }
-        temp2.push(values);
-        this.filter.set(`${values.geolocation.country} - ${tierval}`, temp2);
+        temp.push(values);
+        this.filter.set(`tier - ${statustier}`, temp);
+        temp = this.filter.has(`country code - ${geolocationcountrycode}`) ? this.filter.get(`country code - ${geolocationcountrycode}`) : [];
+        if (!this.filter.has(`country code - ${geolocationcountrycode}`)) {
+          this.filterValue.push(`country code - ${geolocationcountrycode}`);
+        }
+        temp.push(values);
+        this.filter.set(`country code - ${geolocationcountrycode}`, temp);
+        temp = this.filter.has(`region - ${geolocationregion}`) ? this.filter.get(`region - ${geolocationregion}`) : [];
+        if (!this.filter.has(`region - ${geolocationregion}`)) {
+          this.filterValue.push(`region - ${geolocationregion}`);
+        }
+        temp.push(values);
+        this.filter.set(`region - ${geolocationregion}`, temp);
+        temp = this.filter.has(`${geolocationcountry} - ${statustier}`) ? this.filter.get(`${geolocationcountry} - ${statustier}`) : [];
+        if (!this.filter.has(`${geolocationcountry} - ${statustier}`)) {
+          this.filterValue.push(`${geolocationcountry} - ${statustier}`);
+          this.filterValueStates.push(`${geolocationcountry} - ${statustier}`);
+        }
+        temp.push(values);
+        this.filter.set(`${geolocationcountry} - ${statustier}`, temp);
+        temp = this.filter.has(geolocationregionname) ? this.filter.get(geolocationregionname) : [];
+        if (!this.filter.has(geolocationregionname)) {
+          this.filterValue.push(geolocationregionname);
+        }
+        temp.push(values);
+        this.filter.set(geolocationregionname, temp);
+        temp = this.filter.has(`${geolocationregionname} - ${statustier}`) ? this.filter.get(`${geolocationregionname} - ${statustier}`) : [];
+        if (!this.filter.has(`${geolocationregionname} - ${statustier}`)) {
+          this.filterValue.push(`${geolocationregionname} - ${statustier}`);
+        }
+        temp.push(values);
+        this.filter.set(`${geolocationregionname} - ${statustier}`, temp);
         return values;
       });
       this.filters.others = this.filterValue.sort();
       this.tableData = this.values;
-      this.filterValue.forEach((value) => {
+      this.filterValueStates.forEach((value) => {
         if (!value.includes('-')) {
           this.filters.states.push({
             name: value,
@@ -413,6 +469,46 @@ export default {
           if (a.geolocation.countryCode < b.geolocation.countryCode) {
             val = 1;
           } else if (a.geolocation.countryCode > b.geolocation.countryCode) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Region' && sortProps.column.order === 'ascending') {
+        data.sort((a, b) => {
+          let val = 0;
+          if (a.geolocation.region > b.geolocation.region) {
+            val = 1;
+          } else if (a.geolocation.region < b.geolocation.region) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Region' && sortProps.column.order === 'descending') {
+        data.sort((a, b) => {
+          let val = 0;
+          if (a.geolocation.region < b.geolocation.region) {
+            val = 1;
+          } else if (a.geolocation.region > b.geolocation.region) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Region Name' && sortProps.column.order === 'ascending') {
+        data.sort((a, b) => {
+          let val = 0;
+          if (a.geolocation.regionName > b.geolocation.regionName) {
+            val = 1;
+          } else if (a.geolocation.regionName < b.geolocation.regionName) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Region Name' && sortProps.column.order === 'descending') {
+        data.sort((a, b) => {
+          let val = 0;
+          if (a.geolocation.regionName < b.geolocation.regionName) {
+            val = 1;
+          } else if (a.geolocation.regionName > b.geolocation.regionName) {
             val = -1;
           }
           return val;
@@ -509,6 +605,8 @@ export default {
           ip: !item.geolocation.ip ? '' : item.geolocation.ip,
           country: !item.geolocation.country ? '' : item.geolocation.country,
           countryCode: !item.geolocation.countryCode ? '' : item.geolocation.countryCode,
+          region: !item.geolocation.region ? '' : item.geolocation.region,
+          regionName: !item.geolocation.regionName ? '' : item.geolocation.regionName,
           latitude: !item.geolocation.lat ? '' : item.geolocation.lat,
           longtitude: !item.geolocation.lon ? '' : item.geolocation.lon,
           tier: !item.node.status.tier ? '' : item.node.status.tier,
@@ -535,6 +633,8 @@ export default {
           'IP Address',
           'Country',
           'Country Code',
+          'Region',
+          'Region Name',
           'Latitude',
           'Longitude',
           'Tier',

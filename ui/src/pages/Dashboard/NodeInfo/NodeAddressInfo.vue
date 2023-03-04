@@ -32,6 +32,42 @@
           >
             {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
           </l-button>
+          <l-button
+            v-if="btn.name === 'total cumulus - 0'"
+            style="margin-right: 10px;"
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
+          >
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+          </l-button>
+          <l-button
+            v-if="btn.name === 'total nimbus - 0'"
+            style="margin-right: 10px;"
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
+          >
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+          </l-button>
+          <l-button
+            v-if="btn.name === 'total stratus - 0'"
+            style="margin-right: 10px;"
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
+          >
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+          </l-button>
+          <l-button
+            v-if="btn.name === 'total nodes - 0'"
+            style="margin-right: 10px;"
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
+          >
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+          </l-button>
         </div>
       </div>
       <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
@@ -363,12 +399,40 @@ export default {
       this.zelids.map((value) => {
         const values = value;
         const org = values.org.length > 30 ? `${values.org.slice(0, 30)}...` : values.org;
-        const temp = this.filter.has(`organization - ${org}`) ? this.filter.get(`organization - ${org}`) : [];
+        const cumulus = values.totalCumulus;
+        const nimbus = values.totalNimbus;
+        const stratus = values.totalStratus;
+        const total = values.totalNodes;
+        let temp = this.filter.has(`organization - ${org}`) ? this.filter.get(`organization - ${org}`) : [];
         if (!this.filter.has(`organization - ${org}`)) {
           this.filterValue.push(`organization - ${org}`);
         }
         temp.push(values);
         this.filter.set(`organization - ${org}`, temp);
+        temp = this.filter.has(`total cumulus - ${cumulus}`) ? this.filter.get(`total cumulus - ${cumulus}`) : [];
+        if (!this.filter.has(`total cumulus - ${cumulus}`)) {
+          this.filterValue.push(`total cumulus - ${cumulus}`);
+        }
+        temp.push(values);
+        this.filter.set(`total cumulus - ${cumulus}`, temp);
+        temp = this.filter.has(`total nimbus - ${nimbus}`) ? this.filter.get(`total nimbus - ${nimbus}`) : [];
+        if (!this.filter.has(`total nimbus - ${nimbus}`)) {
+          this.filterValue.push(`total nimbus - ${nimbus}`);
+        }
+        temp.push(values);
+        this.filter.set(`total nimbus - ${nimbus}`, temp);
+        temp = this.filter.has(`total stratus - ${stratus}`) ? this.filter.get(`total stratus - ${stratus}`) : [];
+        if (!this.filter.has(`total stratus - ${stratus}`)) {
+          this.filterValue.push(`total stratus - ${stratus}`);
+        }
+        temp.push(values);
+        this.filter.set(`total stratus - ${stratus}`, temp);
+        temp = this.filter.has(`total nodes - ${total}`) ? this.filter.get(`total nodes - ${total}`) : [];
+        if (!this.filter.has(`total nodes - ${total}`)) {
+          this.filterValue.push(`total nodes - ${total}`);
+        }
+        temp.push(values);
+        this.filter.set(`total nodes - ${total}`, temp);
         return values;
       });
       this.filters.others = this.filterValue.sort();

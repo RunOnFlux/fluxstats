@@ -33,6 +33,15 @@
             {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
           </l-button>
           <l-button
+            v-if="btn.name.includes('>=')"
+            style="margin-right: 10px;"
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
+          >
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+          </l-button>
+          <l-button
             v-if="btn.name.includes('upnp enabled - TRUE')"
             style="margin-right: 10px;"
             size="sm"
@@ -43,6 +52,24 @@
           </l-button>
           <l-button
             v-if="btn.name.includes('upnp enabled - FALSE')"
+            style="margin-right: 10px;"
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
+          >
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+          </l-button>
+          <l-button
+            v-if="btn.name.includes('thunder enabled - TRUE')"
+            style="margin-right: 10px;"
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
+          >
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+          </l-button>
+          <l-button
+            v-if="btn.name.includes('thunder enabled - FALSE')"
             style="margin-right: 10px;"
             size="sm"
             :class="{active: btn.state}"
@@ -96,7 +123,34 @@
             {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
           </l-button>
           <l-button
-            v-if="btn.name === 'organization - '"
+            v-if="btn.name === 'organization'"
+            style="margin-right: 10px;"
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
+          >
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+          </l-button>
+          <l-button
+            v-if="btn.name.includes('rpc port')"
+            style="margin-right: 10px;"
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
+          >
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+          </l-button>
+          <l-button
+            v-if="btn.name.includes('architecture')"
+            style="margin-right: 10px;"
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
+          >
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+          </l-button>
+          <l-button
+            v-if="btn.name.includes('status')"
             style="margin-right: 10px;"
             size="sm"
             :class="{active: btn.state}"
@@ -218,13 +272,12 @@
                     <p><b>Real Cores:</b> {{ props.row.benchmark.bench.real_cores }}</p>
                     <p><b>Cores:</b> {{ props.row.benchmark.bench.cores }}</p>
                     <p><b>RAM:</b> {{ props.row.benchmark.bench.ram }}</p>
+                    <p><b>SSD:</b> {{ props.row.benchmark.bench.ssd }}</p>
                     <p><b>HDD:</b> {{ props.row.benchmark.bench.hdd }}</p>
                     <p><b>Total Storage:</b> {{ props.row.benchmark.bench.totalstorage }}</p>
-                    <p><b>Disk:</b> {{ props.row.benchmark.bench.disksinfo.disk }}</p>
-                    <p><b>Disk Size:</b> {{ props.row.benchmark.bench.disksinfo.size }}</p>
+                    <p><b>Disk:</b> {{ props.row.benchmark.bench.disksinfo }}</p>
                     <p><b>Disk Write Speed:</b> {{ props.row.benchmark.bench.disksinfo.writespeed }}</p>
                     <p><b>EPS:</b> {{ props.row.benchmark.bench.eps }}</p>
-                    <p><b>Thunder:</b> {{ props.row.benchmark.bench.thunder }}</p>
                     <p><b class="text-danger">Errors:</b> {{ props.row.benchmark.bench.error }}</p>
                     <p><b class="text-warning">Needed To Fix Issues:</b> {{ props.row.benchmark.issues }} </p>
                   </template>
@@ -344,7 +397,12 @@ export default {
         {
           prop: 'apps.count',
           label: 'Total Application Running',
-          minWidth: 140,
+          minWidth: 100,
+        },
+        {
+          prop: 'benchmark.thunder',
+          label: 'Thunder Enabled',
+          minWidth: 100,
         },
       ],
       tableData: [],
@@ -450,6 +508,8 @@ export default {
         const benchmarkstatus = values.benchmark.status.benchmarking;
         const nodestatus = values.benchmark.status.status;
         const bencherror = values.benchmark.bench.error;
+        const inforpcpport = values.benchmark.info.rpcport;
+        const bencharchitecture = values.benchmark.bench.architecture;
         const tier = values.node.status.tier ? values.node.status.tier.toLowerCase() : 'no tier';
         const org = values.geolocation.org.length > 30 ? `${values.geolocation.org.slice(0, 30)}...` : values.geolocation.org;
         const filtered = values.apps.runningapps.filter((item) => item.Image !== 'containrrr/watchtower');
@@ -457,7 +517,9 @@ export default {
         values.apps.runningapps = filtered;
         values.apps.count = filtered.length || filtered.length !== 0 ? filtered.length : 0;
         values.benchmark.upnp = values.benchmark.bench.ipaddress.includes(':') ? 'TRUE' : 'FALSE';
+        values.benchmark.thunder = values.benchmark.bench.thunder ? 'TRUE' : 'FALSE';
         const upnpstatus = values.benchmark.upnp;
+        const thunderstatus = values.benchmark.thunder;
         temp = this.filter.has(`status - ${nodestatus}`) ? this.filter.get(`status - ${nodestatus}`) : [];
         if (!this.filter.has(`status - ${nodestatus}`)) {
           this.filterValue.push(`status - ${nodestatus}`);
@@ -496,12 +558,30 @@ export default {
         }
         temp.push(values);
         this.filter.set(`organization - ${org}`, temp);
+        temp = this.filter.has(`rpc port - ${inforpcpport}`) ? this.filter.get(`rpc port - ${inforpcpport}`) : [];
+        if (!this.filter.has(`rpc port - ${inforpcpport}`)) {
+          this.filterValue.push(`rpc port - ${inforpcpport}`);
+        }
+        temp.push(values);
+        this.filter.set(`rpc port - ${inforpcpport}`, temp);
+        temp = this.filter.has(`architecture - ${bencharchitecture}`) ? this.filter.get(`architecture - ${bencharchitecture}`) : [];
+        if (!this.filter.has(`architecture - ${bencharchitecture}`)) {
+          this.filterValue.push(`architecture - ${bencharchitecture}`);
+        }
+        temp.push(values);
+        this.filter.set(`architecture - ${bencharchitecture}`, temp);
         temp = this.filter.has(`upnp enabled - ${upnpstatus}`) ? this.filter.get(`upnp enabled - ${upnpstatus}`) : [];
         if (!this.filter.has(`upnp enabled - ${upnpstatus}`)) {
           this.filterValue.push(`upnp enabled - ${upnpstatus}`);
         }
         temp.push(values);
         this.filter.set(`upnp enabled - ${upnpstatus}`, temp);
+        temp = this.filter.has(`thunder enabled - ${thunderstatus}`) ? this.filter.get(`thunder enabled - ${thunderstatus}`) : [];
+        if (!this.filter.has(`thunder enabled - ${thunderstatus}`)) {
+          this.filterValue.push(`thunder enabled - ${thunderstatus}`);
+        }
+        temp.push(values);
+        this.filter.set(`thunder enabled - ${thunderstatus}`, temp);
         temp = this.filter.has(`upnp ip address - ${ipaddress}`) ? this.filter.get(`upnp ip address - ${ipaddress}`) : [];
         if (upnpstatus === 'TRUE' && !this.filter.has(`upnp ip address - ${ipaddress}`)) {
           this.filterValue.push(`upnp ip address - ${ipaddress}`);
@@ -509,6 +589,33 @@ export default {
         if (upnpstatus === 'TRUE') {
           temp.push(values);
           this.filter.set(`upnp ip address - ${ipaddress}`, temp);
+        }
+        label = 'ping < 1';
+        temp = this.filter.has(label) ? this.filter.get(label) : [];
+        if (values.benchmark.bench.ping < 1 && !this.filter.has(label)) {
+          this.filterValue.push(label);
+        }
+        if (values.benchmark.bench.ping < 1) {
+          temp.push(values);
+          this.filter.set(label, temp);
+        }
+        label = 'ping >= 1';
+        temp = this.filter.has(label) ? this.filter.get(label) : [];
+        if (values.benchmark.bench.ping >= 1 && !this.filter.has(label)) {
+          this.filterValue.push(label);
+        }
+        if (values.benchmark.bench.ping >= 1) {
+          temp.push(values);
+          this.filter.set(label, temp);
+        }
+        label = 'ping >= 100';
+        temp = this.filter.has(label) ? this.filter.get(label) : [];
+        if (values.benchmark.bench.ping >= 100 && !this.filter.has(label)) {
+          this.filterValue.push(label);
+        }
+        if (values.benchmark.bench.ping >= 100) {
+          temp.push(values);
+          this.filter.set(label, temp);
         }
         label = 'network - cumulus upload speed < 25';
         temp = this.filter.has(label) ? this.filter.get(label) : [];
@@ -816,6 +923,46 @@ export default {
           }
           return val;
         });
+      } else if (sortProps.column.label === 'Thunder Enabled' && sortProps.column.order === 'ascending') {
+        data.sort((a, b) => {
+          let val = 0;
+          if (a.benchmark.bench.thunder > b.benchmark.bench.thunder) {
+            val = 1;
+          } else if (a.benchmark.bench.thunder < b.benchmark.bench.thunder) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'Thunder Enabled' && sortProps.column.order === 'descending') {
+        data.sort((a, b) => {
+          let val = 0;
+          if (a.benchmark.bench.thunder < b.benchmark.bench.thunder) {
+            val = 1;
+          } else if (a.benchmark.bench.thunder > b.benchmark.bench.thunder) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'UPnP Enabled' && sortProps.column.order === 'ascending') {
+        data.sort((a, b) => {
+          let val = 0;
+          if (a.benchmark.upnp > b.benchmark.upnp) {
+            val = 1;
+          } else if (a.benchmark.upnp < b.benchmark.upnp) {
+            val = -1;
+          }
+          return val;
+        });
+      } else if (sortProps.column.label === 'UPnP Enabled' && sortProps.column.order === 'descending') {
+        data.sort((a, b) => {
+          let val = 0;
+          if (a.benchmark.upnp < b.benchmark.upnp) {
+            val = 1;
+          } else if (a.benchmark.upnp > b.benchmark.upnp) {
+            val = -1;
+          }
+          return val;
+        });
       } else {
         this.tableData = JSON.parse(this.originalData);
       }
@@ -844,6 +991,7 @@ export default {
           realCores: !item.benchmark.bench.real_cores ? '' : item.benchmark.bench.real_cores,
           cores: !item.benchmark.bench.cores ? '' : item.benchmark.bench.cores,
           ram: !item.benchmark.bench.ram ? '' : item.benchmark.bench.ram,
+          ssd: !item.benchmark.bench.ssd ? '' : item.benchmark.bench.ssd,
           hdd: !item.benchmark.bench.hdd ? '' : item.benchmark.bench.hdd,
           totalStorage: !item.benchmark.bench.totalstorage ? '' : item.benchmark.bench.totalstorage,
           disk: !item.benchmark.bench.disksinfo.disk ? '' : item.benchmark.bench.disksinfo.disk,
@@ -892,6 +1040,7 @@ export default {
           'Real Cores',
           'Cores',
           'RAM',
+          'SSD',
           'HDD',
           'Total Storage',
           'Disk',

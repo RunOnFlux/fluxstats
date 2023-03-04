@@ -24,6 +24,15 @@
           :key="idx"
         >
           <l-button
+            v-if="btn.name.includes('>=')"
+            style="margin-right: 10px;"
+            size="sm"
+            :class="{active: btn.state}"
+            @click="processFilters(btn.name)"
+          >
+            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+          </l-button>
+          <l-button
             v-if="btn.name === 'total incoming - 0'"
             style="margin-right: 10px;"
             size="sm"
@@ -336,6 +345,7 @@ export default {
     async processFluxInfo() {
       this.values.map((el) => {
         let temp;
+        let label;
         const values = el;
         const totalincoming = values.flux.numberOfConnectionsIn;
         const totaloutgoing = values.connectionsOut;
@@ -351,6 +361,24 @@ export default {
         }
         temp.push(values);
         this.filter.set(`total outgoing - ${totaloutgoing}`, temp);
+        label = 'total incoming >= 1';
+        temp = this.filter.has(label) ? this.filter.get(label) : [];
+        if (totalincoming >= 1 && !this.filter.has(label)) {
+          this.filterValue.push(label);
+        }
+        if (totalincoming >= 1) {
+          temp.push(values);
+          this.filter.set(label, temp);
+        }
+        label = 'total outgoing >= 1';
+        temp = this.filter.has(label) ? this.filter.get(label) : [];
+        if (totaloutgoing >= 1 && !this.filter.has(label)) {
+          this.filterValue.push(label);
+        }
+        if (totaloutgoing >= 1) {
+          temp.push(values);
+          this.filter.set(label, temp);
+        }
         return values;
       });
       this.filters.others = this.filterValue.sort();

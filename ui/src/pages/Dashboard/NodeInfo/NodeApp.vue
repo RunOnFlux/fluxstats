@@ -362,18 +362,20 @@ export default {
         values.apps.runningapps = filtered;
         values.apps.fluxtower = filtered.length !== undefined || filtered.length !== 0 ? 'TRUE' : 'FALSE';
         values.apps.count = filtered.length !== undefined || filtered.length !== 0 ? filtered.length : 0;
-        temp = this.filter.has(`application running - ${values.apps.count}`) ? this.filter.get(`application running - ${values.apps.count}`) : [];
-        if (!this.filter.has(`application running - ${values.apps.count}`)) {
-          this.filterValue.push(`application running - ${values.apps.count}`);
+        const appscount = values.apps.count;
+        const appsfluxtower = values.apps.fluxtower;
+        temp = this.filter.has(`application running - ${appscount}`) ? this.filter.get(`application running - ${appscount}`) : [];
+        if (!this.filter.has(`application running - ${appscount}`)) {
+          this.filterValue.push(`application running - ${appscount}`);
         }
         temp.push(values);
-        this.filter.set(`application running - ${values.apps.count}`, temp);
-        temp = this.filter.has(`flux watch tower installed - ${values.apps.fluxtower}`) ? this.filter.get(`flux watch tower installed - ${values.apps.fluxtower}`) : [];
-        if (!this.filter.has(`flux watch tower installed - ${values.apps.fluxtower}`)) {
-          this.filterValue.push(`flux watch tower installed - ${values.apps.fluxtower}`);
+        this.filter.set(`application running - ${appscount}`, temp);
+        temp = this.filter.has(`flux watch tower installed - ${appsfluxtower}`) ? this.filter.get(`flux watch tower installed - ${appsfluxtower}`) : [];
+        if (!this.filter.has(`flux watch tower installed - ${appsfluxtower}`)) {
+          this.filterValue.push(`flux watch tower installed - ${appsfluxtower}`);
         }
         temp.push(values);
-        this.filter.set(`flux watch tower installed - ${values.apps.fluxtower}`, temp);
+        this.filter.set(`flux watch tower installed - ${appsfluxtower}`, temp);
         return values;
       });
       this.filters.others = this.filterValue.sort();
