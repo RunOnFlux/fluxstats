@@ -5,6 +5,7 @@ const kadenaService = require('./services/kadenaService');
 const proposalService = require('./services/proposalService');
 const generalService = require('./services/generalService');
 const marketplaceService = require('./services/marketplaceService');
+const thunderService = require('./services/thunderService');
 
 const cache = apicache.middleware;
 
@@ -76,5 +77,9 @@ module.exports = (app) => {
 
   app.get('/marketplace/listapps', cache('1 minute'), (req, res) => {
     marketplaceService.listApps(req, res);
+  });
+
+  app.get('/thunder/nodes', cache('1 minute'), (req, res) => {
+    thunderService.getThunderNodes(req, res);
   });
 };
