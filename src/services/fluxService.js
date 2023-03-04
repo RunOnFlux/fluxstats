@@ -478,7 +478,7 @@ async function createHistoryStats() {
 }
 
 async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = false) {
-  let fluxInfo = dummyData;
+  let fluxInfo = JSON.parse(JSON.stringify(dummyData));
   try {
     const database = db.db(config.database.local.database);
     fluxInfo = await getFluxInformation(fluxnode.ip, timeout); // either correct fluxInfo or this has thrown error
@@ -791,7 +791,7 @@ async function processFluxNodes() {
           log.info(`total processed: ${totalProcessedNodes}`);
           processedFluxNodes = [];
           const result = await serviceHelper.collectionStats(database, currentCollectionName);
-          log.info(processFluxNodes.length);
+          log.info(processedFluxNodes.length);
           log.info(`Flux Nodes Processed: ${i + 1}; Stats: ${result.size}, ${result.count}, ${result.avgObjSize}`);
         }
       }
@@ -802,7 +802,7 @@ async function processFluxNodes() {
         await serviceHelper.insertManyToDatabase(database, currentCollectionName, processedFluxNodes).catch((error) => {
           log.error(`Error inserting in ${currentCollectionName} db: ${error}`);
         });
-        log.info(processFluxNodes.length);
+        log.info(processedFluxNodes.length);
         totalProcessedNodes += processedFluxNodes.length;
         log.info(`total processed: ${totalProcessedNodes}`);
         const result = await serviceHelper.collectionStats(database, currentCollectionName);
@@ -825,7 +825,7 @@ async function processFluxNodes() {
           await serviceHelper.insertManyToDatabase(database, currentCollectionName, processedFluxNodes).catch((error) => {
             log.error(`Error inserting in ${currentCollectionName} db: ${error}`);
           });
-          log.info(processFluxNodes.length);
+          log.info(processedFluxNodes.length);
           const result = await serviceHelper.collectionStats(database, currentCollectionName);
           log.info(`Stats: ${result.size}, ${result.count}, ${result.avgObjSize}`);
           processedFluxNodes = [];
