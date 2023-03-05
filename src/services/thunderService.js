@@ -125,10 +125,6 @@ async function processThunderNodes() {
   } finally {
     const endRefresh = new Date().getTime() - startRefresh;
     log.info(`Execution time of processThunder: ${endRefresh} ms`);
-    setTimeout(() => {
-      processThunder();
-    }, 8 * 60 * 60 * 1000);
-    // Executions in 8h interval
   }
 }
 
@@ -140,7 +136,6 @@ async function getThunderNodes(req, res) {
     }
     const yesterday = new Date().getTime() - 86400000;
     if (results[0].time < yesterday) {
-      processedThundernodes = [];
       processThunderNodes();
       throw new Error('Information with more than one day, beginning new processing');
     }
