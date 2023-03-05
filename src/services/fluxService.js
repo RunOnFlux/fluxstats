@@ -595,7 +595,6 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
   } catch (error) {
     log.error(error);
     log.error(fluxnode.ip);
-    log.error(fluxnode);
     if (!retry) {
       fluxNodesWithError.push(fluxnode);
       return;
@@ -603,33 +602,19 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
     fluxNodesWithErrorB.push(fluxnode);
     const curTime = new Date().getTime();
     fluxInfo.ip = fluxnode.ip;
-    log.error('1');
     fluxInfo.addedHeight = fluxnode.added_height;
-    log.error('2');
     fluxInfo.confirmedHeight = fluxnode.confirmed_height;
-    log.error('3');
     fluxInfo.lastConfirmedHeight = fluxnode.last_confirmed_height;
-    log.error('4');
     fluxInfo.lastPaidHeight = fluxnode.last_paid_height;
-    log.error('5');
     fluxInfo.tier = fluxnode.tier;
-    log.error('6');
     fluxInfo.paymentAddress = fluxnode.payment_address;
-    log.error('7');
     fluxInfo.activeSince = fluxnode.activesince;
-    log.error('8');
     fluxInfo.collateralHash = getCollateralInfo(fluxnode.collateral).txhash;
-    log.error('9');
     fluxInfo.collateralIndex = getCollateralInfo(fluxnode.collateral).txindex;
-    log.error('10');
     fluxInfo.roundTime = currentRoundTime;
-    log.error('11');
     fluxInfo.dataCollectedAt = curTime;
-    log.error('12');
     fluxInfo.error = error;
-    log.error('13');
     processedFluxNodes.push(fluxInfo);
-    log.error('14');
   }
 }
 
@@ -791,7 +776,6 @@ async function processFluxNodes() {
           log.info(`total processed: ${totalProcessedNodes}`);
           processedFluxNodes = [];
           const result = await serviceHelper.collectionStats(database, currentCollectionName);
-          log.info(processedFluxNodes.length);
           log.info(`Flux Nodes Processed: ${i + 1}; Stats: ${result.size}, ${result.count}, ${result.avgObjSize}`);
         }
       }
@@ -802,7 +786,6 @@ async function processFluxNodes() {
         await serviceHelper.insertManyToDatabase(database, currentCollectionName, processedFluxNodes).catch((error) => {
           log.error(`Error inserting in ${currentCollectionName} db: ${error}`);
         });
-        log.info(processedFluxNodes.length);
         totalProcessedNodes += processedFluxNodes.length;
         log.info(`total processed: ${totalProcessedNodes}`);
         const result = await serviceHelper.collectionStats(database, currentCollectionName);
@@ -819,13 +802,11 @@ async function processFluxNodes() {
           promiseArray = [];
           myCacheProcessingIp.clear();
           log.info('Inserting failed nodes');
-          log.info(processedFluxNodes);
           totalProcessedNodes += processedFluxNodes.length;
           log.info(`total processed: ${totalProcessedNodes}`);
           await serviceHelper.insertManyToDatabase(database, currentCollectionName, processedFluxNodes).catch((error) => {
             log.error(`Error inserting in ${currentCollectionName} db: ${error}`);
           });
-          log.info(processedFluxNodes.length);
           const result = await serviceHelper.collectionStats(database, currentCollectionName);
           log.info(`Stats: ${result.size}, ${result.count}, ${result.avgObjSize}`);
           processedFluxNodes = [];
