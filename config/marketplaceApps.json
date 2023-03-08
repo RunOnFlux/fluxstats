@@ -2755,7 +2755,7 @@
         "domains": [
           ""
         ],
-        "environmentParameters": ["EULA=true"],
+        "environmentParameters": ["EULA=TRUE"],
         "commands": [],
         "containerData": "s:/data",
         "tiered": false,
