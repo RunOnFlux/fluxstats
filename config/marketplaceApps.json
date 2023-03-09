@@ -3323,7 +3323,7 @@
           "","",""
         ],
         "environmentParameters": [],
-        "commands": ["--config","fuse","--Init.WebSocketsEnabled","true","--HealthChecks.Enabled","true","--HealthChecks.Slug,/api/health"],
+        "commands": ["--config","fuse","--Init.WebSocketsEnabled","true","--HealthChecks.Enabled","true","--HealthChecks.Slug","/api/health"],
         "containerData": "/data",
         "tiered": false,
         "cpu": 2.0,
