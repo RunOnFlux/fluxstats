@@ -61,7 +61,7 @@
     "price": 2.1,
     "category": "Crypto",
     "version": 4,
-    "name": "BrokerNode",
+    "name": "StreamrNode",
     "instances": 3,
     "compose": [
       {
