@@ -23,7 +23,7 @@
     },
     {
       "name": "Simon Jewell",
-      "email": "simon@sygem.com"
+      "email": "simon@runonflux.io"
     },
     {
       "name": "Robert Andrew Andasan"
@@ -55,6 +55,7 @@
     "element-ui": "^2.15.8",
     "export-to-csv": "^0.2.1",
     "express": "^4.17.3",
+    "firebase-admin": "^11.5.0",
     "fuse.js": "^6.5.3",
     "google-maps": "^4.3.3",
     "inquirer": "^8.2.2",

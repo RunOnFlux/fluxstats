@@ -6,6 +6,8 @@ const log = require('../lib/log');
 const serviceHelper = require('./serviceHelper');
 const generalService = require('./generalService');
 
+const { firebase } = require('../firebase');
+
 const satoshisRequired = 20000000000; // 200 flux
 const proposalAddress = 't1Mzja9iJcEYeW5B4m4s1tJG8M42odFZ16A'; // flux team proposal wallet
 const expirationPeriod = 3600000; // 60 mins, after that unpaid proposals are expired => Rejected Unpaid
@@ -144,6 +146,26 @@ async function checkForMissingTransactions() {
         const update = { $set: { status: 'Open', txid: isPaid.txid } };
         const options = {};
         await serviceHelper.updateOneInDatabase(database, proposalsCollection, queryUpdate, update, options);
+        // send a push notification
+        const message = {
+          data: {
+            type: 'warning',
+            title: 'XDAO',
+            message: `There is a new XDAO proposal available for voting: '${proposal.topic}'`,
+          },
+          topic: "xdao_proposals",
+        };
+        
+        firebase
+          .messaging()
+          .send(message)
+          .then((response) => {
+          log.debug("Successfully sent message:", response);
+        })
+        .catch((error) => {
+          log.error(error);
+        });
+
       } else {
         // check if its Rejected Unapid
         const maxTime = new Date().getTime() - expirationPeriod;
