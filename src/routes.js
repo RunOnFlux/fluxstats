@@ -6,6 +6,7 @@ const proposalService = require('./services/proposalService');
 const generalService = require('./services/generalService');
 const marketplaceService = require('./services/marketplaceService');
 const thunderService = require('./services/thunderService');
+const permanentMessages = require('./services/permanentMessagesService');
 
 const cache = apicache.middleware;
 
@@ -36,6 +37,9 @@ module.exports = (app) => {
   // get last month of history stats
   app.get('/fluxhistorystats', cache('15 minutes'), (req, res) => {
     fluxService.fluxNodesHistoryStats(req, res);
+  });
+  app.get('/fluxmessages', cache('15 minutes'), (req, res) => {
+    permanentMessages.apiAllMessages(req, res);
   });
 
   app.get('/kadena/nodes', cache('1 minute'), (req, res) => {

@@ -17,6 +17,12 @@ module.exports = {
         completedRounds: 'completedrounds',
       },
     },
+    flux: {
+      database: 'flux',
+      collections: {
+        messages: 'messages',
+      },
+    },
     kadena: {
       database: 'kadena',
       collections: {

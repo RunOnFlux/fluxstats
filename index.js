@@ -8,6 +8,7 @@ const kadenaService = require('./src/services/kadenaService');
 const proposalService = require('./src/services/proposalService');
 const generalService = require('./src/services/generalService');
 const thunderService = require('./src/services/thunderService');
+const permanentMessages = require('./src/services/permanentMessagesService');
 
 const server = http.createServer(app);
 
@@ -18,4 +19,5 @@ server.listen(config.server.port, () => {
   proposalService.start();
   generalService.start();
   thunderService.processThunderNodes();
+  permanentMessages.start();
 });
