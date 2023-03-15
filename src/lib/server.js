@@ -14,6 +14,7 @@ if (nodeEnv !== 'test') {
 app.use(cors({ origin: '*' }));
 const fluxStatsUI = path.join(__dirname, '../../ui/dist');
 app.use(express.static(fluxStatsUI));
+app.use('/flux/*', express.static(fluxStatsUI));
 require('../routes')(app);
 
 module.exports = app;
