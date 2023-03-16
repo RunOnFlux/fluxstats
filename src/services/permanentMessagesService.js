@@ -40,11 +40,16 @@ async function processMessages() {
   try {
     const database = db.db(config.database.flux.database);
     const hashes = await getHashes();
+    const trueMes = hashes.filter((m) => m.message === true);
+    const totalHashes = hashes.length;
+    log.info(`Obtained hashees: ${totalHashes}`);
+    log.info(`Expected messages: ${trueMes.length}`);
     const messages = await getPermanentMessages();
+    log.info(`Obtained message: ${messages.length}`);
     for (const hash of hashes) {
       const queryUpdate = { hash: hash.hash };
       const exists = serviceHelper.findOneInDatabase(database, collection, queryUpdate);
-      if (!exists || exists.message) {
+      if (!exists || !exists.message) { // not present in db or present in db but does not have message
         const value = hash;
         const mesExists = messages.find((m) => m.hash === hash.hash);
         if (mesExists) {
@@ -54,6 +59,7 @@ async function processMessages() {
         const options = {
           upsert: true,
         };
+        console.log(update);
         // eslint-disable-next-line no-await-in-loop
         await serviceHelper.updateOneInDatabase(database, collection, queryUpdate, update, options);
       }
