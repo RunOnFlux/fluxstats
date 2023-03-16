@@ -77,7 +77,7 @@ async function processMessages() {
 
 async function apiAllMessages(req, res) {
   try {
-    const database = db.db(config.database.local.database);
+    const database = db.db(config.database.flux.database);
     const query = {};
     const projection = {
       projection: {
@@ -87,6 +87,56 @@ async function apiAllMessages(req, res) {
       // return latest fluxnode round
     const response = await serviceHelper.findInDatabase(database, collection, query, projection);
     const resMessage = serviceHelper.createDataMessage(response);
+    res.json(resMessage);
+  } catch (error) {
+    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+    res.json(errMessage);
+    log.error(error);
+  }
+}
+
+async function apiMissingMessages(req, res) {
+  try {
+    const database = db.db(config.database.flux.database);
+    const query = {
+      message: false,
+    };
+    const projection = {
+      projection: {
+        _id: 0,
+      },
+    };
+      // return latest fluxnode round
+    const response = await serviceHelper.findInDatabase(database, collection, query, projection);
+    const resMessage = serviceHelper.createDataMessage(response);
+    res.json(resMessage);
+  } catch (error) {
+    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+    res.json(errMessage);
+    log.error(error);
+  }
+}
+
+async function apiStatsMessages(req, res) {
+  try {
+    const database = db.db(config.database.flux.database);
+    const query = {};
+    const projection = {
+      projection: {
+        _id: 0,
+      },
+    };
+      // return latest fluxnode round
+    const response = await serviceHelper.findInDatabase(database, collection, query, projection);
+    const totalMessage = response.length;
+    const missingMessages = response.filter((m) => m.message === false);
+    const okMessages = totalMessage - missingMessages;
+    const resp = {
+      total: totalMessage,
+      missing: missingMessages,
+      ok: okMessages,
+    };
+    const resMessage = serviceHelper.createDataMessage(resp);
     res.json(resMessage);
   } catch (error) {
     const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
@@ -127,4 +177,6 @@ module.exports = {
   processMessages,
   start,
   apiAllMessages,
+  apiMissingMessages,
+  apiStatsMessages,
 };

@@ -38,8 +38,14 @@ module.exports = (app) => {
   app.get('/fluxhistorystats', cache('15 minutes'), (req, res) => {
     fluxService.fluxNodesHistoryStats(req, res);
   });
-  app.get('/fluxmessages', cache('15 minutes'), (req, res) => {
+  app.get('/fluxmessages/all', cache('15 minutes'), (req, res) => {
     permanentMessages.apiAllMessages(req, res);
+  });
+  app.get('/fluxmessages/missing', cache('15 minutes'), (req, res) => {
+    permanentMessages.apiAllMessages(req, res);
+  });
+  app.get('/fluxmessages/stats', cache('15 minutes'), (req, res) => {
+    permanentMessages.apiStatsMessages(req, res);
   });
 
   app.get('/kadena/nodes', cache('1 minute'), (req, res) => {
