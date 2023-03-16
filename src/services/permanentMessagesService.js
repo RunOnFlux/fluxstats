@@ -130,10 +130,11 @@ async function apiStatsMessages(req, res) {
     const response = await serviceHelper.findInDatabase(database, collection, query, projection);
     const totalMessage = response.length;
     const missingMessages = response.filter((m) => m.message === false);
-    const okMessages = totalMessage - missingMessages;
+    const misMesTotal = missingMessages.length;
+    const okMessages = totalMessage - misMesTotal;
     const resp = {
       total: totalMessage,
-      missing: missingMessages,
+      missing: misMesTotal,
       ok: okMessages,
     };
     const resMessage = serviceHelper.createDataMessage(resp);

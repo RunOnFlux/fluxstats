@@ -42,7 +42,7 @@ module.exports = (app) => {
     permanentMessages.apiAllMessages(req, res);
   });
   app.get('/fluxmessages/missing', cache('15 minutes'), (req, res) => {
-    permanentMessages.apiAllMessages(req, res);
+    permanentMessages.apiMissingMessages(req, res);
   });
   app.get('/fluxmessages/stats', cache('15 minutes'), (req, res) => {
     permanentMessages.apiStatsMessages(req, res);
