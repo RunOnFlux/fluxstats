@@ -146,25 +146,27 @@ async function checkForMissingTransactions() {
         const update = { $set: { status: 'Open', txid: isPaid.txid } };
         const options = {};
         await serviceHelper.updateOneInDatabase(database, proposalsCollection, queryUpdate, update, options);
-        // send a push notification
-        const message = {
-          data: {
-            type: 'warning',
-            title: 'XDAO',
-            message: `There is a new XDAO proposal available for voting: '${proposal.topic}'`,
-          },
-          topic: "xdao_proposals",
-        };
-        
-        firebase
-          .messaging()
-          .send(message)
-          .then((response) => {
-          log.debug("Successfully sent message:", response);
-        })
-        .catch((error) => {
-          log.error(error);
-        });
+        if (firebase) {
+          // send a push notification
+          const message = {
+            data: {
+              type: 'warning',
+              title: 'XDAO',
+              message: `There is a new XDAO proposal available for voting: '${proposal.topic}'`,
+            },
+            topic: "xdao_proposals",
+          };
+          
+          firebase
+            .messaging()
+            .send(message)
+            .then((response) => {
+            log.debug("Successfully sent message:", response);
+          })
+          .catch((error) => {
+            log.error(error);
+          });
+        }
 
       } else {
         // check if its Rejected Unapid
