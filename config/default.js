@@ -3,6 +3,7 @@ module.exports = {
     port: 8123,
   },
   explorer: 'https://explorer.runonflux.io',
+  firebase: false,
   database: {
     url: '127.0.0.1',
     port: 27017,
