@@ -1,152 +1,98 @@
 <template>
   <div>
-    <div
-      v-if="myProgress < 100"
-      class="row"
-      style="position: absolute; left: 45%; top: 40%;"
-    >
-      <vue-ellipse-progress
-        :half="false"
-        :progress="myProgress"
-        line-mode="in 10"
-        color="Silver"
-        :gap="10"
-        fontSize="3rem"
-      />
-    </div>
-    <div
-      v-if="myProgress >= 100"
-      class="row"
-    >
-      <div class="col-12 d-flex flex-wrap">
-        <div
-          v-for="(btn, idx) in filters.states"
-          :key="idx"
+    <div class="col-12 d-flex flex-wrap">
+      <div
+        v-for="(btn, idx) in filters.states"
+        :key="idx"
+      >
+        <l-button
+          v-if="btn.name.includes('active since')"
+          style="margin-right: 10px;"
+          size="sm"
+          :class="{active: btn.state}"
+          @click="processFilters(btn.name)"
         >
-          <l-button
-            v-if="btn.name.includes('active since')"
-            style="margin-right: 10px;"
-            size="sm"
-            :class="{active: btn.state}"
-            @click="processFilters(btn.name)"
-          >
-            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
-          </l-button>
-          <l-button
-            v-if="btn.name.includes('data collected at')"
-            style="margin-right: 10px;"
-            size="sm"
-            :class="{active: btn.state}"
-            @click="processFilters(btn.name)"
-          >
-            {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
-          </l-button>
-        </div>
+          {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+        </l-button>
+        <l-button
+          v-if="btn.name.includes('data collected at')"
+          style="margin-right: 10px;"
+          size="sm"
+          :class="{active: btn.state}"
+          @click="processFilters(btn.name)"
+        >
+          {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
+        </l-button>
       </div>
-      <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
-        <h2 class="title">
-          Up Time
-        </h2>
-      </div>
-      <p class="category" />
-      <div class="col-12">
-        <card>
-          <div>
-            <div
-              class="pull-right"
-              style="padding:20px;"
+    </div>
+    <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
+      <h2 class="title">
+        Up Time
+      </h2>
+    </div>
+    <p class="category" />
+    <div class="col-12">
+      <card>
+        <div>
+          <div
+            class="pull-right"
+            style="padding:20px;"
+          >
+            <l-button
+              title="Download CSV"
+              @click="downloadCsvFile(dataFilters)"
             >
-              <l-button
-                title="Download CSV"
-                @click="downloadCsvFile(dataFilters)"
-              >
-                <i class="nc-icon nc-cloud-download-93" />
-              </l-button>
-            </div>
-            <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
+              <i class="nc-icon nc-cloud-download-93" />
+            </l-button>
+          </div>
+          <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
+            <el-select
+              v-model="pagination.perPage"
+              class="select-default mb-3"
+              style="width: 200px"
+              placeholder="Per page"
+            >
+              <el-option
+                v-for="item in pagination.perPageOptions"
+                :key="item"
+                class="select-default"
+                :label="item"
+                :value="item"
+              />
+            </el-select>
+            <div
+              col-md-6
+              offset-md-3
+            >
               <el-select
-                v-model="pagination.perPage"
+                v-model="filters.default"
                 class="select-default mb-3"
-                style="width: 200px"
-                placeholder="Per page"
+                style="width: 450px"
+                multiple
+                collapse-tags
+                filterable
+                placeholder="Filters"
               >
                 <el-option
-                  v-for="item in pagination.perPageOptions"
+                  v-for="item in filters.others"
                   :key="item"
                   class="select-default"
                   :label="item"
                   :value="item"
                 />
               </el-select>
-              <div
-                col-md-6
-                offset-md-3
-              >
-                <el-select
-                  v-model="filters.default"
-                  class="select-default mb-3"
-                  style="width: 450px"
-                  multiple
-                  collapse-tags
-                  filterable
-                  placeholder="Filters"
-                >
-                  <el-option
-                    v-for="item in filters.others"
-                    :key="item"
-                    class="select-default"
-                    :label="item"
-                    :value="item"
-                  />
-                </el-select>
-              </div>
-              <el-input
-                v-model="searchQuery"
-                type="search"
-                class="mb-3"
-                style="width: 200px"
-                placeholder="Search IP"
-                aria-controls="datatables"
-              />
             </div>
-            <div
-              slot="header"
-              class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
-              style="padding:20px;"
-            >
-              <div class="">
-                <p class="card-category">
-                  Showing {{ from + 1 }} to {{ to }} of {{ total }} entries
-                </p>
-              </div>
-              <l-pagination
-                v-model="pagination.currentPage"
-                class="pagination-no-border"
-                :per-page="pagination.perPage"
-                :total="pagination.total"
-              />
-            </div>
-            <div class="col-sm-12">
-              <el-table
-                stripe
-                style="width: 100%;"
-                :data="queriedData"
-                border
-                @sort-change="sortChange"
-              >
-                <el-table-column
-                  v-for="column in tableColumns"
-                  :key="column.label"
-                  :min-width="column.minWidth"
-                  :prop="column.prop"
-                  :label="column.label"
-                  sortable
-                />
-              </el-table>
-            </div>
+            <el-input
+              v-model="searchQuery"
+              type="search"
+              class="mb-3"
+              style="width: 200px"
+              placeholder="Search IP"
+              aria-controls="datatables"
+            />
           </div>
           <div
-            slot="footer"
+            slot="header"
             class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
             style="padding:20px;"
           >
@@ -162,8 +108,44 @@
               :total="pagination.total"
             />
           </div>
-        </card>
-      </div>
+          <div class="col-sm-12">
+            <el-table
+              stripe
+              style="width: 100%;"
+              :data="queriedData"
+              border
+              @sort-change="sortChange"
+            >
+              <el-table-column
+                v-for="column in tableColumns"
+                :key="column.label"
+                :min-width="column.minWidth"
+                :prop="column.prop"
+                :label="column.label"
+                sortable
+              />
+            </el-table>
+          </div>
+        </div>
+        <div
+          slot="footer"
+          class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
+          style="padding:20px;"
+        >
+          <div class="">
+            <p class="card-category">
+              Showing {{ from + 1 }} to {{ to }} of {{ total }} entries
+            </p>
+          </div>
+          <l-pagination
+            v-model="pagination.currentPage"
+            class="pagination-no-border"
+            :per-page="pagination.perPage"
+            :total="pagination.total"
+          />
+        </div>
+        <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+      </card>
     </div>
   </div>
 </template>
@@ -174,9 +156,9 @@ import {
 import { Pagination as LPagination } from 'src/components/index';
 import Fuse from 'fuse.js';
 import axios from 'axios';
-import { VueEllipseProgress } from 'vue-ellipse-progress';
 import { MemoryStorage } from 'ttl-localstorage';
 import { ExportToCsv } from 'export-to-csv';
+import VueElementLoading from 'vue-element-loading';
 import {
   httpRequestFluxInfo, httpRequestDaemonInfo, httpRequestFluxHistoryStats,
 } from '../Request/HttpRequest';
@@ -188,7 +170,7 @@ export default {
     [Option.name]: Option,
     [Table.name]: Table,
     [TableColumn.name]: TableColumn,
-    VueEllipseProgress,
+    VueElementLoading,
   },
   data() {
     return {
@@ -243,8 +225,8 @@ export default {
       originalData: null,
       values: [],
       fuseSearch: null,
-      myProgress: 0,
       dataFilters: [],
+      isLoading: true,
     };
   },
   computed: {
@@ -269,13 +251,13 @@ export default {
   },
   async mounted() {
     try {
-      this.initialize();
-      this.myProgress = await httpRequestFluxInfo(axios, MemoryStorage);
-      this.myProgress = await httpRequestDaemonInfo(axios, MemoryStorage);
-      this.myProgress = await httpRequestFluxHistoryStats(axios, MemoryStorage);
+      await httpRequestFluxInfo(axios, MemoryStorage);
+      await httpRequestDaemonInfo(axios, MemoryStorage);
+      await httpRequestFluxHistoryStats(axios, MemoryStorage);
       await this.getFluxInfo();
       await this.processFluxInfo();
       this.setSearch();
+      this.isLoading = false;
     } catch (e) {
       this.$router.push('/flux/maintenance/error').catch(() => {});
     }
@@ -286,9 +268,6 @@ export default {
     },
     setDataFilters(data) {
       this.dataFilters = data;
-    },
-    async initialize() {
-      this.myProgress = 20;
     },
     processData(sortProps, isProcessingState) {
       let result;
@@ -377,7 +356,6 @@ export default {
     setSearch() {
       this.originalData = JSON.stringify(this.tableData);
       this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
-      this.myProgress = 100;
     },
     sortChange(sortProps) {
       this.processData(sortProps, true);

@@ -1,22 +1,8 @@
 <template>
   <div>
-    <div
-      v-if="myProgress < 100"
-      class="row"
-      style="position: absolute; left: 45%; top: 40%;"
-    >
-      <vue-ellipse-progress
-        :half="false"
-        :progress="myProgress"
-        line-mode="in 10"
-        color="Silver"
-        :gap="10"
-        fontSize="3rem"
-      />
-    </div>
-    <div v-if="myProgress >= 100">
-      <div class="row">
-        <div class="col-xl-3 col-md-6">
+    <div class="row">
+      <div class="col-xl-3 col-md-6">
+        <div>
           <stats-card
             :title="totalNumberOfNodes.toString()"
             sub-title="Total Nodes"
@@ -31,8 +17,11 @@
               Cumulus + Nimbus + Stratus
             </template>
           </stats-card>
+          <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
         </div>
-        <div class="col-xl-3 col-md-6">
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div>
           <stats-card
             :title="totalNumberOfCumulus.toString()"
             sub-title="Cumulus"
@@ -47,8 +36,11 @@
               1,000 Flux
             </template>
           </stats-card>
+          <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
         </div>
-        <div class="col-xl-3 col-md-6">
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div>
           <stats-card
             :title="totalNumberOfNimbus.toString()"
             sub-title="Nimbus"
@@ -63,8 +55,11 @@
               12,500 Flux
             </template>
           </stats-card>
+          <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
         </div>
-        <div class="col-xl-3 col-md-6">
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div>
           <stats-card
             :title="totalNumberOfStratus.toString()"
             sub-title="Stratus"
@@ -79,8 +74,11 @@
               40,000 Flux
             </template>
           </stats-card>
+          <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
         </div>
-        <div class="col-xl-3 col-md-6">
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div>
           <stats-card
             :title="totalTBSSD.toString()"
             sub-title="TB SSD"
@@ -95,8 +93,11 @@
               Total Number of Available Storage
             </template>
           </stats-card>
+          <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
         </div>
-        <div class="col-xl-3 col-md-6">
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div>
           <stats-card
             :title="totalVCores.toString()"
             sub-title="VCORES"
@@ -111,8 +112,11 @@
               Total Number of Available Cores
             </template>
           </stats-card>
+          <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
         </div>
-        <div class="col-xl-3 col-md-6">
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div>
           <stats-card
             :title="totalTBRAM.toString()"
             sub-title="TB RAM"
@@ -127,8 +131,11 @@
               Total Number of Available RAM
             </template>
           </stats-card>
+          <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
         </div>
-        <div class="col-xl-3 col-md-6">
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div>
           <stats-card
             :title="latestFluxVersion.toString()"
             sub-title="Flux Version"
@@ -143,8 +150,11 @@
               Latest Flux Version Being Used
             </template>
           </stats-card>
+          <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
         </div>
-        <div class="col-xl-3 col-md-6">
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div>
           <stats-card
             :title="totalCumulusFractus.toString()"
             sub-title="Total Cumulus Fractus"
@@ -153,14 +163,17 @@
               slot="header"
               class="icon-success"
             >
-              <i class="nc-icon nc-chart-bar-32 text-success" />
+              <i class="nc-icon nc-chart text-success" />
             </div>
             <template slot="footer">
               Total Cumulus Node With Thunder Enabled
             </template>
           </stats-card>
+          <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
         </div>
-        <div class="col-xl-3 col-md-6">
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div>
           <stats-card
             :title="totalCumulusFractusSSD.toString()"
             sub-title="Cumulus Fractus TB SSD"
@@ -169,135 +182,198 @@
               slot="header"
               class="icon-info"
             >
-              <i class="nc-icon nc-chart-bar-32 text-info" />
+              <i class="nc-icon nc-chart text-info" />
             </div>
             <template slot="footer">
               Total Cumulus Fractus Available Storage
             </template>
           </stats-card>
+          <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
         </div>
       </div>
-      <div class="row">
-        <div class="col-md-7 card"
-             style="margin-left: 15px;margin-right: 30px;"
-        >
-          <GChart
-            :settings="{ packages: ['geochart'] }"
-            type="GeoChart"
-            :data="worldMap.data.chartData"
-            :options="worldMap.data.chartOptions"
-          />
-        </div>
-        <div class="col-md-4 card"
-             style="margin-right: 30px;"
-        >
-          <apexchart
-            type="pie"
-            height="600"
-            :options="pieChart.data.chartOptions"
-            :series="pieChart.data.series"
-          />
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-7 card"
-             style="margin-left: 15px;margin-right: 30px;"
-        >
-          <apexchart
-            type="area"
-            height="500"
-            :options="lineChart.data.chartOptions"
-            :series="lineChart.data.series"
-          />
-        </div>
-        <div class="col-md-4 card"
-             style="margin-right: 30px;"
-        >
-          <apexchart
-            type="pie"
-            height="600"
-            :options="pieChart1.data.chartOptions"
-            :series="pieChart1.data.series"
-          />
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-6 card"
-             style="margin-left: 15px;margin-right: 30px;"
-        >
-          <apexchart
-            type="bar"
-            height="500"
-            :options="barChart1.data.chartOptions"
-            :series="barChart1.data.series"
-          />
-        </div>
-        <div class="col-md-5 card">
-          <apexchart
-            type="bar"
-            height="500"
-            :options="barChart2.data.chartOptions"
-            :series="barChart2.data.series"
-          />
-        </div>
-        <div class="col-md-6 card"
-             style="margin-left: 15px;margin-right: 30px;"
-        >
-          <apexchart
-            type="bar"
-            height="500"
-            :options="barChart3.data.chartOptions"
-            :series="barChart3.data.series"
-          />
-        </div>
-        <div class="col-md-5 card">
-          <apexchart
-            type="bar"
-            height="500"
-            :options="barChart4.data.chartOptions"
-            :series="barChart4.data.series"
-          />
-        </div>
-        <div class="col-md-6 card"
-             style="margin-left: 15px;margin-right: 30px;"
-        >
-          <apexchart
-            type="bar"
-            height="500"
-            :options="barChart5.data.chartOptions"
-            :series="barChart5.data.series"
-          />
-        </div>
-        <div class="col-md-5 card">
-          <apexchart
-            type="bar"
-            height="500"
-            :options="barChart6.data.chartOptions"
-            :series="barChart6.data.series"
-          />
+      <div class="col-xl-3 col-md-6">
+        <div>
+          <stats-card
+            :title="totalCountries.toString()"
+            sub-title="Total Countries"
+          >
+            <div
+              slot="header"
+              class="icon-info"
+            >
+              <i class="nc-icon nc-chart text-danger" />
+            </div>
+            <template slot="footer">
+              Total Countries On Flux Network
+            </template>
+          </stats-card>
+          <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
         </div>
       </div>
     </div>
+    <card>
+      <div class="row">
+        <div class="col-md-9"
+             style="margin: auto;padding: 30px;"
+        >
+          <div v-if="!isLoading">
+            <GChart
+              :settings="{ packages: ['geochart'] }"
+              type="GeoChart"
+              :data="worldMap.data.chartData"
+              :options="worldMap.data.chartOptions"
+            />
+          </div>
+        </div>
+      </div>
+      <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+    </card>
+    <card>
+      <div class="row">
+        <div class="col-md-5"
+              style="margin: auto;padding: 50px;"
+        >
+          <div v-if="!isLoading">
+            <apexchart
+              type="pie"
+              height="500"
+              :options="pieChart1.data.chartOptions"
+              :series="pieChart1.data.series"
+            />
+          </div>
+        </div>
+        <div class="col-md-5"
+              style="margin: auto;padding: 50px;"
+        >
+          <div v-if="!isLoading">
+            <apexchart
+              type="area"
+              height="500"
+              :options="lineChart1.data.chartOptions"
+              :series="lineChart1.data.series"
+            />
+          </div>
+        </div>
+        <div class="col-md-5"
+              style="margin: auto;padding: 50px;"
+        >
+          <div v-if="!isLoading">
+            <apexchart
+              type="area"
+              height="500"
+              :options="lineChart2.data.chartOptions"
+              :series="lineChart2.data.series"
+            />
+          </div>
+        </div>
+        <div class="col-md-5"
+              style="margin: auto;padding: 50px;"
+        >
+          <div v-if="!isLoading">
+            <apexchart
+              type="pie"
+              height="500"
+              :options="pieChart2.data.chartOptions"
+              :series="pieChart2.data.series"
+            />
+          </div>
+        </div>
+        <div class="col-md-5"
+              style="margin: auto;padding: 50px;"
+        >
+          <div v-if="!isLoading">
+            <apexchart
+              type="bar"
+              height="500"
+              :options="barChart1.data.chartOptions"
+              :series="barChart1.data.series"
+            />
+          </div>
+        </div>
+        <div class="col-md-5"
+              style="margin: auto;padding: 50px;"
+        >
+          <div v-if="!isLoading">
+            <apexchart
+              type="bar"
+              height="500"
+              :options="barChart2.data.chartOptions"
+              :series="barChart2.data.series"
+            />
+          </div>
+        </div>
+        <div class="col-md-5"
+              style="margin: auto;padding: 50px;"
+        >
+          <div v-if="!isLoading">
+            <apexchart
+              type="bar"
+              height="500"
+              :options="barChart3.data.chartOptions"
+              :series="barChart3.data.series"
+            />
+          </div>
+        </div>
+        <div class="col-md-5"
+              style="margin: auto;padding: 50px;"
+        >
+          <div v-if="!isLoading">
+            <apexchart
+              type="bar"
+              height="500"
+              :options="barChart4.data.chartOptions"
+              :series="barChart4.data.series"
+            />
+          </div>
+        </div>
+        <div class="col-md-5"
+              style="margin: auto;padding: 50px;"
+        >
+          <div v-if="!isLoading">
+            <apexchart
+              type="bar"
+              height="500"
+              :options="barChart5.data.chartOptions"
+              :series="barChart5.data.series"
+            />
+          </div>
+        </div>
+        <div class="col-md-5"
+              style="margin: auto;padding: 50px;"
+        >
+          <div v-if="!isLoading">
+            <apexchart
+              type="bar"
+              height="500"
+              :options="barChart6.data.chartOptions"
+              :series="barChart6.data.series"
+            />
+          </div>
+        </div>
+      </div>
+      <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+    </card>
   </div>
 </template>
 <script>
 import VueApexCharts from 'vue-apexcharts';
 import { StatsCard } from 'src/components/index';
 import axios from 'axios';
-import { VueEllipseProgress } from 'vue-ellipse-progress';
 import { MemoryStorage } from 'ttl-localstorage';
 import { GChart } from 'vue-google-charts/legacy';
+import VueElementLoading from 'vue-element-loading';
 import {
   httpRequestFluxInfo,
   httpRequestDaemonInfo,
   httpRequestFluxHistoryStats,
+  httpRequestFluxPriceHistory,
 } from '../Request/HttpRequest';
 
 export default {
   components: {
     StatsCard,
-    VueEllipseProgress,
     GChart,
+    VueElementLoading,
     apexchart: VueApexCharts,
   },
   data() {
@@ -313,12 +389,13 @@ export default {
             keepAspectRatio: false,
             legend: { textStyle: { color: '#959392', fontSize: 12 } },
             tooltip: { textStyle: { color: '#959392' }, showColorCode: true },
+            height: 605,
           },
         },
       },
-      pieChart: {
+      pieChart1: {
         data: {
-          series: [],
+          series: [0, 0, 0],
           chartOptions: {
             chart: {
               width: '500',
@@ -361,9 +438,9 @@ export default {
           },
         },
       },
-      pieChart1: {
+      pieChart2: {
         data: {
-          series: [],
+          series: [0, 0],
           chartOptions: {
             chart: {
               width: '500',
@@ -406,7 +483,7 @@ export default {
           },
         },
       },
-      lineChart: {
+      lineChart1: {
         data: {
           series: [
             {
@@ -479,6 +556,87 @@ export default {
             yaxis: {
               title: {
                 text: 'Node Count',
+              },
+            },
+            xaxis: {
+              type: 'datetime',
+            },
+            tooltip: {
+              shared: false,
+            },
+            responsive: [
+              {
+                options: {
+                  chart: {
+                    width: 600,
+                  },
+                },
+              },
+            ],
+          },
+        },
+      },
+      lineChart2: {
+        data: {
+          series: [
+            {
+              name: 'Price',
+              data: [],
+            },
+          ],
+          chartOptions: {
+            chart: {
+              type: 'area',
+              stacked: false,
+              width: 900,
+              zoom: {
+                type: 'x',
+                enabled: true,
+                autoScaleYaxis: true,
+              },
+              toolbar: {
+                autoSelected: 'zoom',
+              },
+            },
+            dataLabels: {
+              enabled: false,
+            },
+            markers: {
+              size: 0,
+            },
+            title: {
+              text: 'Flux Price History',
+              margin: 50,
+              style: {
+                fontSize: '22px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            subtitle: {
+              text: 'Flux Price Within 30 Days',
+              margin: 70,
+              style: {
+                fontSize: '12px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            fill: {
+              type: 'gradient',
+              gradient: {
+                shadeIntensity: 1,
+                inverseColors: false,
+                opacityFrom: 0.5,
+                opacityTo: 0,
+                stops: [0, 90, 100],
+              },
+            },
+            yaxis: {
+              title: {
+                text: 'Price (USD)',
               },
             },
             xaxis: {
@@ -948,11 +1106,11 @@ export default {
       latestFluxVersion: '0.0.0',
       totalCumulusFractus: 0,
       totalCumulusFractusSSD: 0,
-      myProgress: 0,
       statsLength: 0,
       values: [],
       paymentAddress: new Map(),
       organization: new Map(),
+      totalCountries: 0,
       totalNodes: new Map(),
       totalCumulus: new Map(),
       totalStratus: new Map(),
@@ -981,30 +1139,29 @@ export default {
       roundTimeStratus: new Map(),
       zelids: [],
       statsValues: [],
+      priceHistoryValues: [],
+      isLoading: true,
     };
   },
   async created() {
     try {
-      this.initialize();
-      this.myProgress = await httpRequestFluxInfo(axios, MemoryStorage);
-      this.myProgress = await httpRequestDaemonInfo(axios, MemoryStorage);
-      this.myProgress = await httpRequestFluxHistoryStats(axios, MemoryStorage);
+      await httpRequestFluxInfo(axios, MemoryStorage);
+      await httpRequestDaemonInfo(axios, MemoryStorage);
+      await httpRequestFluxPriceHistory(axios, MemoryStorage);
+      await httpRequestFluxHistoryStats(axios, MemoryStorage);
       await this.getFluxInfo();
       await this.processFluxInfo();
+      await this.getFluxPriceHistory();
+      await this.processFluxPriceHistory();
       await this.getFluxStats();
       await this.processFluxStats();
-      this.stopProcessing();
+      this.isLoading = false;
+      // window.dispatchEvent(new Event('resize'));
     } catch (e) {
       this.$router.push('/flux/maintenance/error').catch(() => {});
     }
   },
   methods: {
-    async initialize() {
-      this.myProgress = 20;
-    },
-    async stopProcessing() {
-      this.myProgress = 100;
-    },
     async getFluxInfo() {
       // Projection being used in this page are ip,tier,geolocation,benchmark,node,flux
       const lsdata = MemoryStorage.get('fluxinfo');
@@ -1041,6 +1198,7 @@ export default {
           this.mapCumulus.set(data.geolocation.country, 0);
           this.mapNimbus.set(data.geolocation.country, 0);
           this.mapStratus.set(data.geolocation.country, 0);
+          this.totalCountries += 1;
         }
         this.map.set(data.geolocation.country, this.map.has(data.geolocation.country) ? this.map.get(data.geolocation.country) + 1 : this.map.get(data.geolocation.country));
         this.mapCumulus.set(data.geolocation.country, data.tier === 'CUMULUS' ? this.mapCumulus.get(data.geolocation.country) + 1 : this.mapCumulus.get(data.geolocation.country));
@@ -1071,14 +1229,14 @@ export default {
         this.activeSinceStratus.set(datevalue, data.tier === 'STRATUS' ? this.activeSinceStratus.get(datevalue) + 1 : this.activeSinceStratus.get(datevalue));
         return data;
       });
-      this.pieChart1.data.series = [this.totalNumberOfCumulus, this.totalCumulusFractus];
+      this.pieChart2.data.series = [this.totalNumberOfCumulus, this.totalCumulusFractus];
       for (const entry of new Map([...this.map.entries()]).entries()) {
         this.worldMap.data.chartData.push([entry[0], entry[1]]);
       }
       this.totalTBSSD = Number(this.totalTBSSD / 1000).toFixed(2);
       this.totalCumulusFractusSSD = Number(this.totalCumulusFractusSSD / 1000).toFixed(2);
       this.totalTBRAM = Number(this.totalTBRAM / 1000).toFixed(2);
-      this.pieChart.data.series = [this.totalNumberOfCumulus, this.totalNumberOfNimbus, this.totalNumberOfStratus];
+      this.pieChart1.data.series = [this.totalNumberOfCumulus, this.totalNumberOfNimbus, this.totalNumberOfStratus];
       let idx = 0;
       let ent = [];
       for (const entry of new Map([...this.map.entries()].sort((a, b) => b[1] - a[1])).entries()) {
@@ -1200,16 +1358,26 @@ export default {
         parseFloat(this.averageDownloadSpeedStratus / this.totalNumberOfStratus).toFixed(2),
       ];
     },
+    async getFluxPriceHistory() {
+      const lsdata = MemoryStorage.get('fluxpricehistory');
+      this.priceHistoryValues = lsdata;
+    },
+    async processFluxPriceHistory() {
+      this.priceHistoryValues.map((item) => {
+        this.lineChart2.data.series[0].data.push([parseInt(item[0], 10), item[1]]);
+        return item;
+      });
+    },
     async getFluxStats() {
       const lsdata = MemoryStorage.get('fluxhistorystats');
       this.statsValues = lsdata;
     },
     async processFluxStats() {
       for (const [key, value] of Object.entries(this.statsValues)) {
-        this.lineChart.data.series[0].data.push([parseInt(key, 10), value.cumulus]);
-        this.lineChart.data.series[1].data.push([parseInt(key, 10), value.nimbus]);
-        this.lineChart.data.series[2].data.push([parseInt(key, 10), value.stratus]);
-        this.lineChart.data.series[3].data.push([parseInt(key, 10), value.cumulus + value.nimbus + value.stratus]);
+        this.lineChart1.data.series[0].data.push([parseInt(key, 10), value.cumulus]);
+        this.lineChart1.data.series[1].data.push([parseInt(key, 10), value.nimbus]);
+        this.lineChart1.data.series[2].data.push([parseInt(key, 10), value.stratus]);
+        this.lineChart1.data.series[3].data.push([parseInt(key, 10), value.cumulus + value.nimbus + value.stratus]);
         this.roundTimeCumulus.set(key, value.cumulus);
         this.roundTimeNimbus.set(key, value.nimbus);
         this.roundTimeStratus.set(key, value.stratus);

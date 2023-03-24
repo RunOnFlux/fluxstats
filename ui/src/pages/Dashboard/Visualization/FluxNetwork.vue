@@ -1,156 +1,155 @@
 <template>
   <div>
-    <div
-      v-if="myProgress < 100"
-      class="row"
-      style="position: absolute; left: 45%; top: 40%;"
-    >
-      <vue-ellipse-progress
-        :half="false"
-        :progress="myProgress"
-        line-mode="in 10"
-        color="Silver"
-        :gap="10"
-        fontSize="3rem"
-      />
-    </div>
-    <div
-      v-if="myProgress >= 100"
-      class="row"
-    >
     <div class="col-12 d-flex flex-wrap">
+      <div
+        v-for="(btn, idx) in tierFilter.states"
+        :key="idx"
+      >
+        <l-button
+          style="margin-right: 10px;"
+          size="sm"
+          :class="{active: btn.state}"
+          :title="tierFilter.titles[idx]"
+          @click="processFilters(btn.name)"
+        >
+          {{ btn.name }}
+        </l-button>
+      </div>
+    </div>
+    <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
+      <h2 class="title">
+        Flux Network
+      </h2>
+    </div>
+    <p class="category" />
+    <div class="col-12">
+      <card>
         <div
-          v-for="(btn, idx) in tierFilter.states"
-          :key="idx"
+          class="pull-right"
+          style="padding:20px;"
         >
           <l-button
-            style="margin-right: 10px;"
-            size="sm"
-            :class="{active: btn.state}"
-            :title="tierFilter.titles[idx]"
-            @click="processFilters(btn.name)"
+            title="Download CSV"
+            @click="downloadCsvFile(queriedData)"
           >
-            {{ btn.name }}
+            <i class="nc-icon nc-cloud-download-93" />
           </l-button>
         </div>
-      </div>
-      <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
-        <h2 class="title">
-          Flux Network
-        </h2>
-      </div>
-      <p class="category" />
-      <div class="col-12">
-        <card>
-          <div
-            class="pull-right"
-            style="padding:20px;"
+        <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap" style="margin-top: 50px;">
+          <el-select
+            v-model="tierFilter.default"
+            class="select-default mb-3"
+            style="width: 220px"
+            placeholder="Primary Filters and Links"
+            multiple
+            collapse-tags
+            filterable
+            @change="processQueriedData"
           >
-            <l-button
-              title="Download CSV"
-              @click="downloadCsvFile(queriedData)"
-            >
-              <i class="nc-icon nc-cloud-download-93" />
-            </l-button>
-          </div>
-          <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap" style="margin-top: 50px;">
+            <el-option
+              v-for="item in tierFilter.others"
+              :key="item"
+              class="select-default"
+              :label="item"
+              :value="item"
+            />
+          </el-select>
+          <el-select
+            v-model="tierFilterOthers.default"
+            class="select-default mb-3"
+            style="width: 400px"
+            placeholder="Secondary Filters"
+            multiple
+            collapse-tags
+            filterable
+            @change="processQueriedData"
+          >
+            <el-option
+              v-for="item in tierFilterOthers.others"
+              :key="item"
+              class="select-default"
+              :label="item"
+              :value="item"
+            />
+          </el-select>
+          <div
+            col-md-6
+            offset-md-3
+          >
             <el-select
-              v-model="tierFilter.default"
+              v-model="searchQuery.default"
               class="select-default mb-3"
               style="width: 200px"
-              placeholder="Select Filters"
-              multiple
-              collapse-tags
               filterable
+              clearable
+              placeholder="Search IP"
               @change="processQueriedData"
             >
               <el-option
-                v-for="item in tierFilter.others"
+                v-for="item in searchQuery.others"
                 :key="item"
                 class="select-default"
                 :label="item"
                 :value="item"
               />
             </el-select>
-            <el-select
-              v-model="tierFilterOthers.default"
-              class="select-default mb-3"
-              style="width: 400px"
-              placeholder="Select Other Filters"
-              multiple
-              collapse-tags
-              filterable
-              @change="processQueriedData"
-            >
-              <el-option
-                v-for="item in tierFilterOthers.others"
-                :key="item"
-                class="select-default"
-                :label="item"
-                :value="item"
-              />
-            </el-select>
-            <div
-              col-md-6
-              offset-md-3
-            >
-              <el-select
-                v-model="searchQuery.default"
-                class="select-default mb-3"
-                style="width: 200px"
-                filterable
-                clearable
-                placeholder="Search IP"
-                @change="processQueriedData"
-              >
-                <el-option
-                  v-for="item in searchQuery.others"
-                  :key="item"
-                  class="select-default"
-                  :label="item"
-                  :value="item"
-                />
-              </el-select>
-            </div>
           </div>
-          <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
-            <el-table
-              stripe
-              style="width: 100%;"
-              :data="queriedData"
-            >
-            message: `ip: ${node.ip}\ncountry: ${node.country}\ncontinent: ${node.continent}\norg: ${node.org}\nzelId: ${node.zelId}\npayment address: ${node.paymentAddress}\nconnection in: ${indata}\nconnection out: ${outdata}`,
-              <el-table-column type="expand">
-                <template slot-scope="props">
-                  <p><b>IP Address:</b> {{ props.row.ip }} </p>
-                  <p><b>Country:</b> {{ props.row.country }} </p>
-                  <p><b>Continent:</b> {{ props.row.continent }} </p>
-                  <p><b>Organization:</b> {{ props.row.org }} </p>
-                  <p><b>Zel ID:</b> {{ props.row.zelId }} </p>
-                  <p><b>Payment Address:</b> {{ props.row.paymentAddress }} </p>
-                  <p><b>Connection In:</b> {{ props.row.connectionIn }} </p>
-                  <p><b>Connection Out:</b> {{ props.row.connectionOut }}</p>
-                </template>
-              </el-table-column>
-              <el-table-column
-                v-for="column in tableColumns"
-                :key="column.label"
-                :min-width="column.minWidth"
-                :prop="column.prop"
-                :label="column.label"
-              />
-            </el-table>
-          </div>
-          <div style="background-color: #E5E8E8; margin-left: 15px;margin-right: 30px;margin-top: 20px;">
-            <d3-network
-              :net-nodes="nodes"
-              :net-links="links"
-              :options="options"
-              @node-click="onClick"
+        </div>
+        <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
+          <el-table
+            stripe
+            style="width: 100%;"
+            :data="queriedData"
+          >
+          message: `ip: ${node.ip}\ncountry: ${node.country}\ncontinent: ${node.continent}\norg: ${node.org}\nzelId: ${node.zelId}\npayment address: ${node.paymentAddress}\nconnection in: ${indata}\nconnection out: ${outdata}`,
+            <el-table-column type="expand">
+              <template slot-scope="props">
+                <p><b>IP Address:</b> {{ props.row.ip }} </p>
+                <p><b>Country:</b> {{ props.row.country }} </p>
+                <p><b>Continent:</b> {{ props.row.continent }} </p>
+                <p><b>Organization:</b> {{ props.row.org }} </p>
+                <p><b>Zel ID:</b> {{ props.row.zelId }} </p>
+                <p><b>Payment Address:</b> {{ props.row.paymentAddress }} </p>
+                <p><b>Connection In:</b> {{ props.row.connectionIn }} </p>
+                <p><b>Connection Out:</b> {{ props.row.connectionOut }}</p>
+              </template>
+            </el-table-column>
+            <el-table-column
+              v-for="column in tableColumns"
+              :key="column.label"
+              :min-width="column.minWidth"
+              :prop="column.prop"
+              :label="column.label"
             />
-          </div>
-        </card>
-      </div>
+            <el-table-column
+              fixed="right"
+              label="Actions"
+              width="120">
+              <template slot-scope="scope">
+                <el-button
+                  @click="setNode(scope.$index, queriedData)"
+                  type="primary"
+                  size="small">
+                  Set
+                </el-button>
+              </template>
+            </el-table-column>
+          </el-table>
+        </div>
+        <div class="col-12 d-flex flex-wrap" style="margin-top: 30px;">
+          <el-input-number v-model="offsetX" :step="50" size="mini" :min="-1000" :max="1000"></el-input-number>
+          <el-input-number v-model="offsetY" :step="50" controls-position="right" size="mini" :min="-1000" :max="1000"></el-input-number>
+        </div>
+        <div id="workspace" style="background-color: #E5E8E8; margin-left: 15px;margin-right: 15px;margin-top: 20px;margin-bottom: 20px;">
+          <d3-network
+            :net-nodes="nodes"
+            :net-links="links"
+            :options="options"
+            @node-click="onClick"
+          />
+        </div>
+        <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+      </card>
     </div>
   </div>
 </template>
@@ -162,11 +161,11 @@ import {
   Option,
 } from 'element-ui';
 import D3Network from 'vue-d3-network';
-import { VueEllipseProgress } from 'vue-ellipse-progress';
 import axios from 'axios';
 import rateLimit from 'axios-rate-limit';
 import { MemoryStorage } from 'ttl-localstorage';
 import { ExportToCsv } from 'export-to-csv';
+import VueElementLoading from 'vue-element-loading';
 import { getDataVisualization } from '../Request/DataVisualization';
 import FluxNetwork from '../Components/FluxNetwork.vue';
 import FluxConnection from '../Components/FluxConnection.vue';
@@ -179,15 +178,16 @@ import {
 export default {
   components: {
     D3Network,
-    VueEllipseProgress,
     [Select.name]: Select,
     [Option.name]: Option,
     [Table.name]: Table,
     [TableColumn.name]: TableColumn,
+    VueElementLoading,
   },
   data() {
     return {
-      myProgress: 0,
+      offsetX: 0,
+      offsetY: 0,
       searchQuery: {
         default: [],
         others: [],
@@ -195,9 +195,9 @@ export default {
       tierFilter: {
         default: [],
         others: ['CUMULUS', 'NIMBUS', 'STRATUS', 'IN', 'OUT', '2ND LEVEL DATA',
-          'TIER ASSOCIATION', 'COUNTRY ASSOCIATION', 'CONTINENT ASSOCIATION',
-          'ORGANIZATION ASSOCIATION', 'ZEL ID ASSOCIATION', 'PAYMENT ADDRESS ASSOCIATION',
-          'CONNECTION IN ASSOCIATION', 'CONNECTION OUT ASSOCIATION'],
+          'TIER', 'COUNTRY', 'CONTINENT',
+          'ORGANIZATION', 'ZEL ID', 'PAYMENT ADDRESS',
+          'CONNECTION IN', 'CONNECTION OUT'],
         states: [],
         titles: ['Filter Cumulus Nodes', 'Filter Nimbus Nodes', 'Filter Stratus Nodes', 'Filter Connection Type In', 'Filter Connection Type Out', 'Enable 2nd Level Data of Nodes',
           'Enable Node Tier Association', 'Enable Node Country Association', 'Enable Node Continent Association',
@@ -219,6 +219,7 @@ export default {
       nodes: [],
       links: [],
       nodeData: [],
+      isLoading: true,
     };
   },
   computed: {
@@ -233,12 +234,12 @@ export default {
         nodeLabels: true,
         fontSize: 8,
         canvas: false,
+        offset: { x: this.offsetX, y: this.offsetY },
       };
     },
   },
   async mounted() {
     try {
-      this.myProgress = 20;
       await httpRequestFluxInfo(axios, MemoryStorage);
       const info = MemoryStorage.get('fluxinfo');
       info.map((i) => {
@@ -259,7 +260,7 @@ export default {
           state: false,
         });
       });
-      this.myProgress = 100;
+      this.isLoading = false;
     } catch (e) {
       this.$router.push('/flux/maintenance/error').catch(() => {});
     }
@@ -320,6 +321,10 @@ export default {
           _color: '#2C3E50',
         });
       }
+    },
+    async setNode(index, data) {
+      this.searchQuery.default = data[index].ip;
+      await this.processQueriedData();
     },
     async assignData() {
       if (this.searchQuery !== '') {
@@ -459,35 +464,35 @@ export default {
           return i;
         });
 
-        if (this.tierFilter.default.includes('TIER ASSOCIATION')) {
+        if (this.tierFilter.default.includes('TIER')) {
           this.processTierAssociation(nodemap, line);
         }
 
-        if (this.tierFilter.default.includes('COUNTRY ASSOCIATION')) {
+        if (this.tierFilter.default.includes('COUNTRY')) {
           this.processCountryAssociation(nodemap, line);
         }
 
-        if (this.tierFilter.default.includes('CONTINENT ASSOCIATION')) {
+        if (this.tierFilter.default.includes('CONTINENT')) {
           this.processContinentAssociation(nodemap, line);
         }
 
-        if (this.tierFilter.default.includes('ORGANIZATION ASSOCIATION')) {
+        if (this.tierFilter.default.includes('ORGANIZATION')) {
           this.processOrganizationAssociation(nodemap, line);
         }
 
-        if (this.tierFilter.default.includes('ZEL ID ASSOCIATION')) {
+        if (this.tierFilter.default.includes('ZEL ID')) {
           this.processZelIdAssociation(nodemap, line);
         }
 
-        if (this.tierFilter.default.includes('PAYMENT ADDRESS ASSOCIATION')) {
+        if (this.tierFilter.default.includes('PAYMENT ADDRESS')) {
           this.processPaymentAddressAssociation(nodemap, line);
         }
 
-        if (this.tierFilter.default.includes('CONNECTION IN ASSOCIATION')) {
+        if (this.tierFilter.default.includes('CONNECTION IN')) {
           this.processConnectionInAssociation(nodemap, line);
         }
 
-        if (this.tierFilter.default.includes('CONNECTION OUT ASSOCIATION')) {
+        if (this.tierFilter.default.includes('CONNECTION OUT')) {
           this.processConnectionOutAssociation(nodemap, line);
         }
 

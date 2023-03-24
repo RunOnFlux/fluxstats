@@ -1,11 +1,13 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import LightBootstrap from './light-bootstrap-main';
+
 // Plugins
 import App from './App.vue';
 
 // router setup
 import routes from './routes/routes';
+
 // plugin setup
 Vue.use(VueRouter);
 Vue.use(LightBootstrap);
@@ -16,6 +18,9 @@ const router = new VueRouter({
   linkActiveClass: 'active',
   mode: 'history',
 });
+
+Vue.config.devtools = false;
+Vue.config.productionTip = false;
 
 /* eslint-disable no-new */
 new Vue({

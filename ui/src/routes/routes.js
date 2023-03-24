@@ -24,46 +24,47 @@ const Error = () => import('@/pages/Dashboard/Maintenance/Error.vue');
 const nodeInfo = {
   path: '/flux/nodeinfo',
   component: DashboardLayout,
-  redirect: '/flux/nodeinfo/active',
+  name: 'nodeinfo',
+  redirect: '/flux/nodeinfo/node',
   children: [
     {
       path: 'uptime',
-      name: 'UpTime',
+      name: 'uptime',
       component: NodeUptime,
     },
     {
       path: 'hashes',
-      name: 'Hashes',
+      name: 'hashes',
       component: NodeAppHash,
     },
     {
       path: 'node',
-      name: 'Node',
+      name: 'node',
       component: Node,
     },
     {
       path: 'daemon',
-      name: 'Daemon',
+      name: 'daemon',
       component: NodeDaemon,
     },
     {
       path: 'app',
-      name: 'App',
+      name: 'app',
       component: NodeApp,
     },
     {
       path: 'connection',
-      name: 'Connection',
+      name: 'connection',
       component: NodeConnection,
     },
     {
       path: 'location',
-      name: 'Location',
+      name: 'location',
       component: NodeLocation,
     },
     {
       path: 'address',
-      name: 'AddressInfo',
+      name: 'address',
       component: NodeAddressInfo,
     },
     {
@@ -76,11 +77,12 @@ const nodeInfo = {
 const nodeHistory = {
   path: '/flux/nodehistory',
   component: DashboardLayout,
+  name: 'nodehistory',
   redirect: '/flux/nodehistory/historyinfo',
   children: [
     {
       path: 'historyinfo',
-      name: 'History Info',
+      name: 'historyinfo',
       component: HistoryInfo,
     }],
 };
@@ -88,12 +90,13 @@ const nodeHistory = {
 const maintenance = {
   path: '/flux/maintenance/error',
   component: Error,
+  name: 'error',
 };
 
 const fluxnetwork = {
-  path: '/flux/network/',
+  path: '/flux/network',
   component: DashboardLayout,
-  name: 'fluxnetwork',
+  name: 'network',
   redirect: '/flux/network/visualization',
   children: [
     {
@@ -104,28 +107,33 @@ const fluxnetwork = {
   ],
 };
 
+const dashboard = {
+  path: '/flux/dashboard',
+  component: DashboardLayout,
+  redirect: '/flux/dashboard/overview',
+  name: 'overview',
+  children: [
+    {
+      path: 'overview',
+      name: 'overview',
+      component: Overview,
+    },
+  ],
+};
+
+const root = {
+  path: '/',
+  redirect: '/flux/dashboard/overview',
+  name: 'root',
+};
+
 const routes = [
-  {
-    path: '/',
-    redirect: '/flux/dashboard/overview',
-  },
   nodeInfo,
   nodeHistory,
   maintenance,
-  {
-    path: '/flux/dashboard',
-    component: DashboardLayout,
-    redirect: '/flux/dashboard/overview',
-    children: [
-      {
-        path: 'overview',
-        name: 'Overview',
-        component: Overview,
-      },
-    ],
-  },
+  dashboard,
   fluxnetwork,
-  { path: '*', redirect: '/flux/dashboard/overview' },
+  root,
 ];
 
 export default routes;
