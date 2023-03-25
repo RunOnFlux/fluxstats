@@ -9,3 +9,4 @@ logs/error.log
 logs/info.log
 logs/warn.log
 logs/debug.log
+src/serviceAccountKey.json
