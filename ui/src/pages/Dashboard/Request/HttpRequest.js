@@ -4,7 +4,6 @@ const httpRequestFluxInfo = async (axios, MemoryStorage) => {
     const response = await axios.get('https://stats.runonflux.io/fluxinfo');
     MemoryStorage.put('fluxinfo', response.data.data, 18000);
   }
-  return 60;
 };
 
 const httpRequestDaemonInfo = async (axios, MemoryStorage) => {
@@ -13,7 +12,14 @@ const httpRequestDaemonInfo = async (axios, MemoryStorage) => {
     const response = await axios.get('https://api.runonflux.io/daemon/viewdeterministiczelnodelist');
     MemoryStorage.put('daemon/viewdeterministiczelnodelist', response.data.data, 18000);
   }
-  return 80;
+};
+
+const httpRequestFluxPriceHistory = async (axios, MemoryStorage) => {
+  const lsdata = MemoryStorage.get('fluxpricehistory');
+  if (!lsdata) {
+    const response = await axios.get('https://api.coingecko.com/api/v3/coins/zelcash/market_chart?vs_currency=USD&days=30');
+    MemoryStorage.put('fluxpricehistory', response.data.prices, 18000);
+  }
 };
 
 const httpRequestFluxHistoryStats = async (axios, MemoryStorage) => {
@@ -22,7 +28,6 @@ const httpRequestFluxHistoryStats = async (axios, MemoryStorage) => {
     const response = await axios.get('https://stats.runonflux.io/fluxhistorystats');
     MemoryStorage.put('fluxhistorystats', response.data.data, 18000);
   }
-  return 95;
 };
 
 // ipports -> array of string port value
@@ -91,4 +96,5 @@ module.exports = {
   httpRequestDaemonInfo,
   httpRequestFluxHistoryStats,
   httpRequestFluxConnections,
+  httpRequestFluxPriceHistory,
 };
