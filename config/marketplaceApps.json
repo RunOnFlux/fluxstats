@@ -3356,5 +3356,55 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "Host your Algorand RPC Node on the Flux Cloud",
+    "price": 22.0,
+    "category": "RPC Node",
+    "version": 4,
+    "name": "AlgoRPC",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "algorandrpc",
+        "description": "The Algorand RPC Node Container",
+        "repotag": "runonflux/go-algorand:latest",
+        "containerPorts": [
+          8080
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": ["NETWORK=mainnet","FAST_CATCHUP=1"],
+        "commands": [],
+        "containerData": "/algod/data",
+        "tiered": false,
+        "cpu": 8.0,
+        "ram": 16000,
+        "hdd": 100,
+        "cpubasic": 8.0,
+        "cpusuper": 8.0,
+        "cpubamf": 8.0,
+        "rambasic": 16000,
+        "ramsuper": 16000,
+        "rambamf": 16000,
+        "hddbasic": 100,
+        "hddsuper": 100,
+        "hddbamf": 100,
+        "portSpecs": [
+          "38000-38100"
+        ],
+        "ports": [38080],
+        "userEnvironmentParameters": [
+          {
+            "name": "F_S_ENV",
+            "description": "Your Flux Storage Environment, containing the API token parameter",
+            "placeholder": "Enter your https link here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
