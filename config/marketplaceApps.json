@@ -124,7 +124,7 @@
         "domains": [
           ""
         ],
-        "environmentParameters": ["STAKE=disconnected:oldest,wallet:minimum", "ALLOW_DISCONNECTED_STAKE_TRANSFER_AFTER=30m", "TAGS=flux", "URL=https://home.runonflux.io"],
+        "environmentParameters": ["STAKE=disconnected:oldest#flux,wallet:minimum", "ALLOW_DISCONNECTED_STAKE_TRANSFER_AFTER=30m", "TAGS=flux", "URL=https://home.runonflux.io"],
         "commands": [],
         "containerData": "/app/node",
         "tiered": false,
