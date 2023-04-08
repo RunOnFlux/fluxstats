@@ -124,7 +124,7 @@
         "domains": [
           ""
         ],
-        "environmentParameters": ["STAKE=disconnected:oldest,wallet:minimum", "ALLOW_DISCONNECTED_STAKE_TRANSFER_AFTER=30m"],
+        "environmentParameters": ["STAKE=disconnected:oldest,wallet:minimum", "ALLOW_DISCONNECTED_STAKE_TRANSFER_AFTER=30m", "TAGS=flux", "URL=https://home.runonflux.io"],
         "commands": [],
         "containerData": "/app/node",
         "tiered": false,
@@ -149,6 +149,11 @@
             "name": "REGISTRATION_CODE",
             "description": "Your node registration code",
             "placeholder": "Enter your code here"
+          },
+          {
+            "name": "DESCRIPTION",
+            "description": "Optional description for your node",
+            "placeholder": "Enter your node description"
           }
         ]
       }
