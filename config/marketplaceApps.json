@@ -153,6 +153,7 @@
           {
             "name": "DESCRIPTION",
             "description": "Optional description for your node",
+            "value": "",
             "placeholder": "Enter your node description"
           }
         ]
@@ -208,7 +209,7 @@
           {
             "name": "DESCRIPTION",
             "description": "Optional description for your node",
-            "value": "test",
+            "value": "",
             "placeholder": "Enter your node description"
           }
         ]
