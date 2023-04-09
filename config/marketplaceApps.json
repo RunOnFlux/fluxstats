@@ -166,7 +166,7 @@
     "price": 4,
     "category": "Crypto",
     "version": 4,
-    "name": "PresearchNodePersistentTest",
+    "name": "PresearchNodeTest",
     "instances": 3,
     "compose": [
       {
