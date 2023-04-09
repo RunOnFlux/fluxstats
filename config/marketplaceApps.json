@@ -208,6 +208,7 @@
           {
             "name": "DESCRIPTION",
             "description": "Optional description for your node",
+            "value": "test",
             "placeholder": "Enter your node description"
           }
         ]
