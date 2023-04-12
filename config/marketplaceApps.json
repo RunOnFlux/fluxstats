@@ -124,63 +124,7 @@
         "domains": [
           ""
         ],
-        "environmentParameters": ["STAKE=disconnected:oldest#flux,wallet:minimum", "ALLOW_DISCONNECTED_STAKE_TRANSFER_AFTER=30m", "TAGS=flux", "URL=https://home.runonflux.io"],
-        "commands": [],
-        "containerData": "/app/node",
-        "tiered": false,
-        "cpu": 0.3,
-        "ram": 300,
-        "hdd": 2,
-        "cpubasic": 0.3,
-        "cpusuper": 0.3,
-        "cpubamf": 0.3,
-        "rambasic": 300,
-        "ramsuper": 300,
-        "rambamf": 300,
-        "hddbasic": 2,
-        "hddsuper": 2,
-        "hddbamf": 2,
-        "portSpecs": [
-          "39000-39999"
-        ],
-        "ports": [39000],
-        "userEnvironmentParameters": [
-          {
-            "name": "REGISTRATION_CODE",
-            "description": "Your node registration code",
-            "placeholder": "Enter your code here"
-          },
-          {
-            "name": "DESCRIPTION",
-            "description": "Optional description for your node",
-            "value": "",
-            "placeholder": "Enter your node description"
-          }
-        ]
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
-    "description": "THIS IS A TEST. DO NOT USE",
-    "price": 4,
-    "category": "Crypto",
-    "version": 4,
-    "name": "PresearchNodeTest",
-    "instances": 3,
-    "compose": [
-      {
-        "name": "node",
-        "description": "The Presearch node container",
-        "repotag": "presearch/node:latest",
-        "containerPorts": [
-          38253
-        ],
-        "domains": [
-          ""
-        ],
-        "environmentParameters": ["STAKE=disconnected:oldest#flux,wallet:minimum", "ALLOW_DISCONNECTED_STAKE_TRANSFER_AFTER=30m", "TAGS=flux", "F_S_ENV=https://storage.runonflux.io/v2/env/presearch"],
+        "environmentParameters": ["STAKE=disconnected:oldest#flux,wallet:minimum", "ALLOW_DISCONNECTED_STAKE_TRANSFER_AFTER=30m", "TAGS=flux", "URL=https://home.runonflux.io", "F_S_ENV=https://storage.runonflux.io/v2/env/presearch"],
         "commands": [],
         "containerData": "/app/node",
         "tiered": false,
