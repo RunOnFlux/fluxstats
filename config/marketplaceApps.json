@@ -111,7 +111,7 @@
     "price": 4,
     "category": "Crypto",
     "version": 4,
-    "name": "PresearchNode",
+    "name": "PresearchNode (Currently Full)",
     "instances": 3,
     "compose": [
       {
@@ -160,7 +160,7 @@
       }
     ],
     "visible": true,
-    "enabled": true
+    "enabled": false
   },
   {
     "description": "Host your Firo Node on the Flux Network",
