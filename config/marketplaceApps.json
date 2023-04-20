@@ -7,6 +7,7 @@
     "version": 4,
     "name": "HelloWorldParams",
     "instances": 3,
+    "lockedValues": ["instances"],
     "compose": [
       {
         "name": "helloworldparams",
