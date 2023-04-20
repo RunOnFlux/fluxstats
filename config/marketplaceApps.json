@@ -109,10 +109,12 @@
   {
     "description": "Presearch is a Decentralized Search Engine - Host your Presearch Node on the Flux Network",
     "price": 4,
+    "multiplier": 5,
     "category": "Crypto",
     "version": 4,
     "name": "PresearchNode (Currently Full)",
     "instances": 3,
+    "lockedValues": ["instances"],
     "compose": [
       {
         "name": "node",
