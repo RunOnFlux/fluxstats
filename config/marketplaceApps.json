@@ -57,6 +57,56 @@
     "enabled": true
   },
   {
+    "description": "The Timpi Collector Node hosted via the Flux Cloud",
+    "price": 2.3,
+    "category": "Crypto",
+    "version": 4,
+    "name": "TimpiCollector",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "timpicollector",
+        "description": "The Timpi Collector Node Container",
+        "repotag": "timpiltd/timpi-collector:latest",
+        "containerPorts": [
+          5015
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": ["package=collector"],
+        "commands": [],
+        "containerData": "/tmp",
+        "tiered": false,
+        "cpu": 1.0,
+        "ram": 1000,
+        "hdd": 10,
+        "cpubasic": 1.0,
+        "cpusuper": 1.0,
+        "cpubamf": 1.0,
+        "rambasic": 1000,
+        "ramsuper": 1000,
+        "rambamf": 1000,
+        "hddbasic": 10,
+        "hddsuper": 10,
+        "hddbamf": 10,
+        "portSpecs": [
+          "37500-37600"
+        ],
+        "ports": [37566],
+        "userEnvironmentParameters": [
+          {
+            "name": "F_S_ENV",
+            "description": "Your Flux Storage Environment, containing the ident and key parameters",
+            "placeholder": "Enter your https link here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
     "description": "The Streamr Broker Node hosted via the Flux Cloud",
     "price": 3.5,
     "category": "Crypto",
@@ -3310,56 +3360,6 @@
         ],
         "ports": [36011,36012,36013],
         "userEnvironmentParameters": []
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
-    "description": "The Timpi Collector Node hosted via the Flux Cloud",
-    "price": 2.3,
-    "category": "Crypto",
-    "version": 4,
-    "name": "TimpiCollector",
-    "instances": 3,
-    "compose": [
-      {
-        "name": "timpicollector",
-        "description": "The Timpi Collector Node Container",
-        "repotag": "timpiltd/timpi-collector:latest",
-        "containerPorts": [
-          5015
-        ],
-        "domains": [
-          ""
-        ],
-        "environmentParameters": ["package=collector"],
-        "commands": [],
-        "containerData": "/tmp",
-        "tiered": false,
-        "cpu": 1.0,
-        "ram": 1000,
-        "hdd": 10,
-        "cpubasic": 1.0,
-        "cpusuper": 1.0,
-        "cpubamf": 1.0,
-        "rambasic": 1000,
-        "ramsuper": 1000,
-        "rambamf": 1000,
-        "hddbasic": 10,
-        "hddsuper": 10,
-        "hddbamf": 10,
-        "portSpecs": [
-          "37500-37600"
-        ],
-        "ports": [37566],
-        "userEnvironmentParameters": [
-          {
-            "name": "F_S_ENV",
-            "description": "Your Flux Storage Environment, containing the ident and key parameters",
-            "placeholder": "Enter your https link here"
-          }
-        ]
       }
     ],
     "visible": true,
