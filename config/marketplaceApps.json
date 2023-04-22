@@ -162,8 +162,8 @@
   },
   {
     "description": "Presearch is a Decentralized Search Engine - Host your Presearch Node on the Flux Network",
-    "price": 4,
-    "multiplier": 6.25,
+    "price": 4.5,
+    "multiplier": 7.03,
     "category": "Crypto",
     "version": 4,
     "name": "PresearchNode",
@@ -215,7 +215,7 @@
       }
     ],
     "visible": true,
-    "enabled": false
+    "enabled": true
   },
   {
     "description": "Host your Firo Node on the Flux Network",
