@@ -168,6 +168,7 @@
     "version": 4,
     "name": "PresearchNode",
     "instances": 3,
+    "lockedValues": ["instances"],
     "compose": [
       {
         "name": "node",
