@@ -216,7 +216,7 @@
       }
     ],
     "visible": true,
-    "enabled": true
+    "enabled": false
   },
   {
     "description": "Host your Firo Node on the Flux Network",
