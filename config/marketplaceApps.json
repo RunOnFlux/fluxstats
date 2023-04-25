@@ -3406,10 +3406,10 @@
         "description": "The Algorand RPC Node Container",
         "repotag": "runonflux/go-algorand:latest",
         "containerPorts": [
-          8080
+          8080,1337
         ],
         "domains": [
-          ""
+          "",""
         ],
         "environmentParameters": ["NETWORK=mainnet","FAST_CATCHUP=1"],
         "commands": [],
@@ -3430,7 +3430,7 @@
         "portSpecs": [
           "38000-38100"
         ],
-        "ports": [38080],
+        "ports": [38080,38081],
         "userEnvironmentParameters": [
           {
             "name": "F_S_ENV",
