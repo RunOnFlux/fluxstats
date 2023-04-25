@@ -159,6 +159,10 @@ import axios from 'axios';
 import { MemoryStorage } from 'ttl-localstorage';
 import { ExportToCsv } from 'export-to-csv';
 import VueElementLoading from 'vue-element-loading';
+import CsvService from '../Service/CsvService';
+import SearchService from '../Service/SearchService';
+import TransformationService from '../Service/TransformationService';
+import SortService from '../Service/SortService';
 import {
   httpRequestFluxInfo, httpRequestDaemonInfo, httpRequestFluxHistoryStats,
 } from '../Request/HttpRequest';
@@ -272,25 +276,9 @@ export default {
     processData(sortProps, isProcessingState) {
       let result;
       if (this.searchQuery !== '') {
-        const temp = [];
-        result = this.fuseSearch.search(`=${this.searchQuery}`);
-        for (let i = 0; i < Object.keys(result).length; i += 1) {
-          temp.push(result[i].item);
-        }
-        result = temp;
+        result = SearchService.search(this.fuseSearch, this.searchQuery);
       } else if (this.filters.default.length) {
-        const arr = [];
-        const data = [];
-        this.filters.default.forEach((item) => {
-          const objs = this.filter.get(item);
-          objs.forEach((obj) => {
-            if (!arr.includes(`${obj.ip}${obj.activeSince}`)) {
-              arr.push(`${obj.ip}${obj.activeSince}`);
-              data.push(obj);
-            }
-          });
-        });
-        result = data;
+        result = TransformationService.processFilters(this.filters, this.filter, 'nodeuptime');
       } else {
         result = this.tableData;
       }
@@ -355,116 +343,15 @@ export default {
     },
     setSearch() {
       this.originalData = JSON.stringify(this.tableData);
-      this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
+      this.fuseSearch = SearchService.generateSearch(Fuse, this.tableData, ['ip']);
     },
     sortChange(sortProps) {
       this.processData(sortProps, true);
     },
     sorting(sortProps, data) {
-      if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.ip > b.ip) {
-            val = 1;
-          } else if (a.ip < b.ip) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.ip < b.ip) {
-            val = 1;
-          } else if (a.ip > b.ip) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Active Since' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.activeSince > b.activeSince) {
-            val = 1;
-          } else if (a.activeSince < b.activeSince) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Active Since' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.activeSince < b.activeSince) {
-            val = 1;
-          } else if (a.activeSince > b.activeSince) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Active Since Converted' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (new Date(a.activeSinceConverted).getTime() > new Date(b.activeSinceConverted).getTime()) {
-            val = 1;
-          } else if (new Date(a.activeSinceConverted).getTime() < new Date(b.activeSinceConverted).getTime()) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Active Since Converted' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (new Date(a.activeSinceConverted).getTime() < new Date(b.activeSinceConverted).getTime()) {
-            val = 1;
-          } else if (new Date(a.activeSinceConverted).getTime() > new Date(b.activeSinceConverted).getTime()) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Data Collected At' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.dataCollectedAt > b.dataCollectedAt) {
-            val = 1;
-          } else if (a.dataCollectedAt < b.dataCollectedAt) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Data Collected At' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.dataCollectedAt < b.dataCollectedAt) {
-            val = 1;
-          } else if (a.dataCollectedAt > b.dataCollectedAt) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Data Collected At Converted' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (new Date(a.dataCollectedAtConverted).getTime() > new Date(b.dataCollectedAtConverted).getTime()) {
-            val = 1;
-          } else if (new Date(a.dataCollectedAtConverted).getTime() < new Date(b.dataCollectedAtConverted).getTime()) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Data Collected At Converted' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (new Date(a.dataCollectedAtConverted).getTime() < new Date(b.dataCollectedAtConverted).getTime()) {
-            val = 1;
-          } else if (new Date(a.dataCollectedAtConverted).getTime() > new Date(b.dataCollectedAtConverted).getTime()) {
-            val = -1;
-          }
-          return val;
-        });
-      } else {
-        this.tableData = JSON.parse(this.originalData);
-      }
-      return data;
+      const ret = SortService.sortNodeUptime(data, sortProps, this.originalData);
+      this.tableData = Object.keys(ret.tableDatas).length > 0 ? ret.tableDatas : this.tableData;
+      return ret.datas;
     },
     processDataForCsv(data) {
       const values = [];
@@ -481,31 +368,16 @@ export default {
       return values;
     },
     downloadCsvFile(data) {
-      const date = new Date();
-      const month = date.getMonth();
-      const day = date.getDate();
-      const year = date.getFullYear();
-      const options = {
-        filename: `Node_Up_Time_${month}${day}${year}`,
-        fieldSeparator: ',',
-        quoteStrings: '"',
-        decimalSeparator: '.',
-        showLabels: true,
-        showTitle: true,
-        title: `Node Up Time - ${month}/${day}/${year}`,
-        useTextFile: false,
-        useBom: true,
-        headers: [
-          'IP Address',
-          'Tier',
-          'Active Since',
-          'Active Since Converted',
-          'Data Collected At',
-          'Data Collected At Converted',
-        ],
-      };
-      const csvExporter = new ExportToCsv(options);
-      csvExporter.generateCsv(this.processDataForCsv(data));
+      const module = 'Node_Up_Time';
+      const headers = [
+        'IP Address',
+        'Tier',
+        'Active Since',
+        'Active Since Converted',
+        'Data Collected At',
+        'Data Collected At Converted',
+      ];
+      CsvService.Download(this.processDataForCsv(data), headers, module, ExportToCsv);
     },
     processFilters(key) {
       if (!this.filters.default.includes(key)) {
@@ -519,14 +391,7 @@ export default {
       return this.processData(false, false);
     },
     processState(keys) {
-      this.filters.states.map((item) => {
-        const values = item;
-        values.state = false;
-        if (keys.includes(values.name)) {
-          values.state = true;
-        }
-        return values;
-      });
+      this.filters = TransformationService.processState(keys, this.filters);
     },
   },
 };

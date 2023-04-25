@@ -166,6 +166,8 @@ import rateLimit from 'axios-rate-limit';
 import { MemoryStorage } from 'ttl-localstorage';
 import { ExportToCsv } from 'export-to-csv';
 import VueElementLoading from 'vue-element-loading';
+import CsvService from '../Service/CsvService';
+import TransformationService from '../Service/TransformationService';
 import { getDataVisualization } from '../Request/DataVisualization';
 import FluxNetwork from '../Components/FluxNetwork.vue';
 import FluxConnection from '../Components/FluxConnection.vue';
@@ -277,14 +279,7 @@ export default {
       await this.processQueriedData();
     },
     async processState(keys) {
-      this.tierFilter.states.map((item) => {
-        const values = item;
-        values.state = false;
-        if (keys.includes(values.name)) {
-          values.state = true;
-        }
-        return values;
-      });
+      this.tierFilter = TransformationService.processState(keys, this.tierFilter);
     },
     async processQueriedData() {
       try {
@@ -760,34 +755,19 @@ export default {
       return values;
     },
     downloadCsvFile(data) {
-      const date = new Date();
-      const month = date.getMonth();
-      const day = date.getDate();
-      const year = date.getFullYear();
-      const options = {
-        filename: `Node_${month}${day}${year}`,
-        fieldSeparator: ',',
-        quoteStrings: '"',
-        decimalSeparator: '.',
-        showLabels: true,
-        showTitle: true,
-        title: `Node - ${month}/${day}/${year}`,
-        useTextFile: false,
-        useBom: true,
-        headers: [
-          'IP Address',
-          'Tier',
-          'Country',
-          'Continent',
-          'Organization',
-          'ZelId',
-          'PaymentAddress',
-          'Connection In',
-          'Connection Out',
-        ],
-      };
-      const csvExporter = new ExportToCsv(options);
-      csvExporter.generateCsv(this.processDataForCsv(data));
+      const module = 'Node';
+      const headers = [
+        'IP Address',
+        'Tier',
+        'Country',
+        'Continent',
+        'Organization',
+        'ZelId',
+        'PaymentAddress',
+        'Connection In',
+        'Connection Out',
+      ];
+      CsvService.Download(this.processDataForCsv(data), headers, module, ExportToCsv);
     },
   },
 };

@@ -231,6 +231,10 @@ import axios from 'axios';
 import { MemoryStorage } from 'ttl-localstorage';
 import { ExportToCsv } from 'export-to-csv';
 import VueElementLoading from 'vue-element-loading';
+import CsvService from '../Service/CsvService';
+import SearchService from '../Service/SearchService';
+import TransformationService from '../Service/TransformationService';
+import SortService from '../Service/SortService';
 import {
   httpRequestFluxInfo, httpRequestDaemonInfo, httpRequestFluxHistoryStats,
 } from '../Request/HttpRequest';
@@ -343,25 +347,9 @@ export default {
     processData(sortProps, isProcessingState) {
       let result;
       if (this.searchQuery !== '') {
-        const temp = [];
-        result = this.fuseSearch.search(`=${this.searchQuery}`);
-        for (let i = 0; i < Object.keys(result).length; i += 1) {
-          temp.push(result[i].item);
-        }
-        result = temp;
+        result = SearchService.search(this.fuseSearch, this.searchQuery);
       } else if (this.filters.default.length) {
-        const arr = [];
-        const data = [];
-        this.filters.default.forEach((item) => {
-          const objs = this.filter.get(item);
-          objs.forEach((obj) => {
-            if (!arr.includes(`${obj.ip}${obj.daemon.info.blocks}`)) {
-              arr.push(`${obj.ip}${obj.daemon.info.blocks}`);
-              data.push(obj);
-            }
-          });
-        });
-        result = data;
+        result = TransformationService.processFilters(this.filters, this.filter, 'nodedaemon');
       } else {
         result = this.tableData;
       }
@@ -453,98 +441,15 @@ export default {
     },
     setSearch() {
       this.originalData = JSON.stringify(this.tableData);
-      this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['ip'] });
+      this.fuseSearch = SearchService.generateSearch(Fuse, this.tableData, ['ip']);
     },
     sortChange(sortProps) {
       this.processData(sortProps, true);
     },
     sorting(sortProps, data) {
-      if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val;
-          if (a.ip > b.ip) {
-            val = 1;
-          } else if (a.ip < b.ip) {
-            val = -1;
-          } else {
-            val = 0;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.ip < b.ip) {
-            val = 1;
-          } else if (a.ip > b.ip) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Daemon Version' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.daemon.info.version > b.daemon.info.version) {
-            val = 1;
-          } else if (a.daemon.info.version < b.daemon.info.version) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Daemon Version' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.daemon.info.version < b.daemon.info.version) {
-            val = 1;
-          } else if (a.daemon.info.version > b.daemon.info.version) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Benchmark Version' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.benchmark.info.version > b.benchmark.info.version) {
-            val = 1;
-          } else if (a.benchmark.info.version < b.benchmark.info.version) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Benchmark Version' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.benchmark.info.version < b.benchmark.info.version) {
-            val = 1;
-          } else if (a.benchmark.info.version > b.benchmark.info.version) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Flux Version' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.flux.version > b.flux.version) {
-            val = 1;
-          } else if (a.flux.version < b.flux.version) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Flux Version' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.flux.version < b.flux.version) {
-            val = 1;
-          } else if (a.flux.version > b.flux.version) {
-            val = -1;
-          }
-          return val;
-        });
-      } else {
-        this.tableData = JSON.parse(this.originalData);
-      }
-      return data;
+      const ret = SortService.sortNodeDaemon(data, sortProps, this.originalData);
+      this.tableData = Object.keys(ret.tableDatas).length > 0 ? ret.tableDatas : this.tableData;
+      return ret.datas;
     },
     processDataForCsv(data) {
       const values = [];
@@ -574,44 +479,29 @@ export default {
       return values;
     },
     downloadCsvFile(data) {
-      const date = new Date();
-      const month = date.getMonth();
-      const day = date.getDate();
-      const year = date.getFullYear();
-      const options = {
-        filename: `Node_Daemon_${month}${day}${year}`,
-        fieldSeparator: ',',
-        quoteStrings: '"',
-        decimalSeparator: '.',
-        showLabels: true,
-        showTitle: true,
-        title: `Node Daemon - ${month}/${day}/${year}`,
-        useTextFile: false,
-        useBom: true,
-        headers: [
-          'IP Address',
-          'Daemon Version',
-          'Flux Version',
-          'Benchmark Version',
-          'Bench Version',
-          'Bench Speed Version',
-          'Protocol Version',
-          'Wallet Version',
-          'Blocks',
-          'Time Offset',
-          'Connections',
-          'Proxy',
-          'Difficulty',
-          'Testnet',
-          'Key Pool Old Test',
-          'Key Pool Size',
-          'Pay Txn Fee',
-          'Relay Fee',
-          'Errors',
-        ],
-      };
-      const csvExporter = new ExportToCsv(options);
-      csvExporter.generateCsv(this.processDataForCsv(data));
+      const module = 'Node_Daemon';
+      const headers = [
+        'IP Address',
+        'Daemon Version',
+        'Flux Version',
+        'Benchmark Version',
+        'Bench Version',
+        'Bench Speed Version',
+        'Protocol Version',
+        'Wallet Version',
+        'Blocks',
+        'Time Offset',
+        'Connections',
+        'Proxy',
+        'Difficulty',
+        'Testnet',
+        'Key Pool Old Test',
+        'Key Pool Size',
+        'Pay Txn Fee',
+        'Relay Fee',
+        'Errors',
+      ];
+      CsvService.Download(this.processDataForCsv(data), headers, module, ExportToCsv);
     },
     processFilters(key) {
       if (!this.filters.default.includes(key)) {
@@ -625,14 +515,7 @@ export default {
       return this.processData(false, false);
     },
     processState(keys) {
-      this.filters.states.map((item) => {
-        const values = item;
-        values.state = false;
-        if (keys.includes(values.name)) {
-          values.state = true;
-        }
-        return values;
-      });
+      this.filters = TransformationService.processState(keys, this.filters);
     },
   },
 };
