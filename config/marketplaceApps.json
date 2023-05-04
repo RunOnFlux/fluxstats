@@ -219,6 +219,51 @@
     "enabled": false
   },
   {
+    "description": "An IronFish Full Node",
+    "price": 11.5,
+    "multiplier": 1,
+    "category": "Crypto",
+    "version": 4,
+    "name": "IronFishNode",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "ironfishnode",
+        "description": "The IronFish Node Container",
+        "repotag": "runonflux/iron-fish:latest",
+        "containerPorts": [
+          9033
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/root/.ironfish",
+        "tiered": false,
+        "cpu": 4.0,
+        "ram": 8000,
+        "hdd": 50,
+        "cpubasic": 4.0,
+        "cpusuper": 4.0,
+        "cpubamf": 4.0,
+        "rambasic": 8000,
+        "ramsuper": 8000,
+        "rambamf": 8000,
+        "hddbasic": 50,
+        "hddsuper": 50,
+        "hddbamf": 50,
+        "portSpecs": [
+          "39000-39999"
+        ],
+        "ports": [39010],
+        "userEnvironmentParameters": []
+      }
+    ],
+    "visible": true,
+    "enabled": false
+  },
+  {
     "description": "Host your Firo Node on the Flux Network",
     "price": 9,
 	"multiplier": 1,
