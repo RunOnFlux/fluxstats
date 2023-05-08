@@ -111,8 +111,8 @@
   },
   {
     "description": "The Streamr Broker Node hosted via the Flux Cloud",
-    "price": 3.5,
-	"multiplier": 1.73,
+    "price": 4.5,
+	"multiplier": 2.22,
     "category": "Crypto",
     "version": 4,
     "name": "StreamrNode",
@@ -162,8 +162,8 @@
   },
   {
     "description": "Presearch is a Decentralized Search Engine - Host your Presearch Node on the Flux Network",
-    "price": 4.5,
-    "multiplier": 7.03,
+    "price": 4.99,
+    "multiplier": 7.8,
     "category": "Crypto",
     "version": 4,
     "name": "PresearchNode",
@@ -216,7 +216,7 @@
       }
     ],
     "visible": true,
-    "enabled": false
+    "enabled": true
   },
   {
     "description": "An IronFish Full Node",
