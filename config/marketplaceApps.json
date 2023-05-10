@@ -3153,11 +3153,11 @@
     "price": 5.00,
     "category": "Hosting",
     "version": 4,
-    "name": "Website Screenshot API",
+    "name": "WebsiteScreenshotAPI",
     "instances": 3,
     "compose": [
       {
-        "name": "Website Screenshot API",
+        "name": "WebsiteScreenshotAPI",
         "description": "website-screenshot-api",
         "repotag": "wirewrex/cwa-flux:latest",
         "containerPorts": [
