@@ -161,7 +161,7 @@
     "enabled": true
   },
   {
-    "description": "Presearch is a Decentralized Search Engine - PresearchNodeLegacy on Flux Network works with 'GrandFather' Nodes but with limitations when Nodes disconnect",
+    "description": "Presearch is a Decentralized Search Engine - PresearchNodeLegacy on Flux Network works with 'GrandFather' Nodes but with auto staking limitations when Nodes disconnect",
     "price": 4.99,
     "multiplier": 7.8,
     "category": "Crypto",
@@ -213,7 +213,7 @@
     "enabled": true
   },
   {
-    "description": "Presearch is a Decentralized Search Engine - PresearchNode on Flux Network uses FluxStorage to build Private Keys and works without limitation when nodes disconnect, doesn't work with 'Grandfather' nodes.",
+    "description": "Presearch is a Decentralized Search Engine - PresearchNode on Flux Network uses FluxStorage to build Private Keys and works without auto staking limitation when Nodes disconnect, doesn't work with 'Grandfather' nodes.",
     "price": 4.99,
     "multiplier": 7.8,
     "category": "Crypto",
