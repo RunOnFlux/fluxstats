@@ -180,7 +180,7 @@
         "domains": [
           ""
         ],
-        "environmentParameters": ["STAKE=disconnected:oldest,wallet:minimum", "ALLOW_DISCONNECTED_STAKE_TRANSFER_AFTER=30m"],
+        "environmentParameters": ["STAKE=disconnected:oldest,wallet:minimum", "ALLOW_DISCONNECTED_STAKE_TRANSFER_AFTER=30m", "TAGS=flux"],
         "commands": [],
         "containerData": "/app/node",
         "tiered": false,
