@@ -61,7 +61,7 @@
   {
     "description": "The Timpi Collector Node hosted via the Flux Cloud",
     "price": 2.5,
-	"multiplier": 1.13,
+	  "multiplier": 1.13,
     "category": "Crypto",
     "version": 4,
     "name": "TimpiCollector",
@@ -112,7 +112,7 @@
   {
     "description": "The Streamr Broker Node hosted via the Flux Cloud",
     "price": 4,
-	"multiplier": 1.97,
+	  "multiplier": 1.97,
     "category": "Crypto",
     "version": 4,
     "name": "StreamrNode",
@@ -161,7 +161,59 @@
     "enabled": true
   },
   {
-    "description": "Presearch is a Decentralized Search Engine - Host your Presearch Node on the Flux Network",
+    "description": "Presearch is a Decentralized Search Engine - PresearchNodeLegacy on Flux Network works with 'GrandFather' Nodes but with limitations when Nodes disconnect",
+    "price": 4.99,
+    "multiplier": 7.8,
+    "category": "Crypto",
+    "version": 4,
+    "name": "PresearchNodeLegacy",
+    "instances": 3,
+    "lockedValues": ["instances"],
+    "compose": [
+      {
+        "name": "node",
+        "description": "The Presearch node container",
+        "repotag": "presearch/node:latest",
+        "containerPorts": [
+          38253
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": ["STAKE=disconnected:oldest,wallet:minimum", "ALLOW_DISCONNECTED_STAKE_TRANSFER_AFTER=30m"],
+        "commands": [],
+        "containerData": "/app/node",
+        "tiered": false,
+        "cpu": 0.3,
+        "ram": 300,
+        "hdd": 2,
+        "cpubasic": 0.3,
+        "cpusuper": 0.3,
+        "cpubamf": 0.3,
+        "rambasic": 300,
+        "ramsuper": 300,
+        "rambamf": 300,
+        "hddbasic": 2,
+        "hddsuper": 2,
+        "hddbamf": 2,
+        "portSpecs": [
+          "39000-39999"
+        ],
+        "ports": [39000],
+        "userEnvironmentParameters": [
+          {
+            "name": "REGISTRATION_CODE",
+            "description": "Your node registration code",
+            "placeholder": "Enter your code here"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Presearch is a Decentralized Search Engine - PresearchNode on Flux Network uses FluxStorage to build Private Keys and works without limitation when nodes disconnect, doesn't work with 'Grandfather' nodes.",
     "price": 4.99,
     "multiplier": 7.8,
     "category": "Crypto",
