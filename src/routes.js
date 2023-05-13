@@ -52,6 +52,10 @@ module.exports = (app) => {
     kadenaService.getKadenaNodes(req, res);
   });
 
+  app.get('/apps/multiplier', cache('1 minute'), (req, res) => {
+    fluxService.getMultiplier(req, res);
+  });
+
   app.get('/hashes', cache('1 minute'), (req, res) => {
     res.sendFile(path.join(__dirname, './fluxHashes'));
   });
