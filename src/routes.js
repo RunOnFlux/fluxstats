@@ -96,4 +96,7 @@ module.exports = (app) => {
   app.get('/thunder/nodes', cache('1 minute'), (req, res) => {
     thunderService.getThunderNodes(req, res);
   });
+  app.get('/fractus/nodes', cache('1 minute'), (req, res) => {
+    thunderService.getThunderNodes(req, res);
+  });
 };
