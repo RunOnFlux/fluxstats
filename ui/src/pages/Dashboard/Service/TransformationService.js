@@ -66,6 +66,11 @@ const processFilters = (filters, filter, module) => {
           arr.push(`${obj.ip}${obj.activeSince}`);
           data.push(obj);
         }
+      } else if (module === 'marketplace') {
+        if (!arr.includes(`${obj.ip}${obj.name}`)) {
+          arr.push(`${obj.ip}${obj.name}`);
+          data.push(obj);
+        }
       }
     });
   });

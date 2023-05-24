@@ -163,7 +163,10 @@
             :total="pagination.total"
           />
         </div>
-        <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+        <vue-element-loading
+          :active="isLoading"
+          spinner="bar-fade-scale"
+        />
       </card>
     </div>
   </div>
@@ -383,18 +386,7 @@ export default {
       return values;
     },
     downloadCsvFile(data) {
-      const module = 'Node_Application';
-      const headers = [
-        'IP Address',
-        'Total Application Running',
-        'Flux Tower Installed',
-        'Flux Usage',
-        'CPU Locked',
-        'RAM Locked',
-        'HDD Locked',
-        'Running Apps',
-      ];
-      CsvService.Download(this.processDataForCsv(data), headers, module, ExportToCsv);
+      CsvService.Download(this.processDataForCsv(data), CsvService.NodeAppHeaders, 'Node_Application', ExportToCsv);
     },
     processFilters(key) {
       if (!this.filters.default.includes(key)) {

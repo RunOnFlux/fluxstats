@@ -292,7 +292,10 @@
             :total="pagination.total"
           />
         </div>
-        <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+        <vue-element-loading
+          :active="isLoading"
+          spinner="bar-fade-scale"
+        />
       </card>
     </div>
   </div>
@@ -771,39 +774,7 @@ export default {
       return values;
     },
     downloadCsvFile(data) {
-      const module = 'Node_Benchmark';
-      const headers = [
-        'IP Address',
-        'Organization',
-        'Tier',
-        'Download Speed',
-        'Upload Speed',
-        'Ping',
-        'Status',
-        'UPnP Enabled',
-        'Total Application Running',
-        'RPC Port',
-        'Benchmarking',
-        'Flux',
-        'Architecture',
-        'Arm Board',
-        'Time',
-        'Converted Time',
-        'Real Cores',
-        'Cores',
-        'RAM',
-        'SSD',
-        'HDD',
-        'Total Storage',
-        'Disk',
-        'Disk Size',
-        'Disk Write Speed',
-        'EPS',
-        'Thunder',
-        'Errors',
-        'Needed To Fix Issues',
-      ];
-      CsvService.Download(this.processDataForCsv(data), headers, module, ExportToCsv);
+      CsvService.Download(this.processDataForCsv(data), CsvService.NodeBenchmarkHeaders, 'Node_Benchmark', ExportToCsv);
     },
     processFilters(key) {
       if (!this.filters.default.includes(key)) {

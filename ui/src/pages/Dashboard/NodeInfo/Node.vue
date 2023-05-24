@@ -211,7 +211,10 @@
             :total="pagination.total"
           />
         </div>
-        <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+        <vue-element-loading
+          :active="isLoading"
+          spinner="bar-fade-scale"
+        />
       </card>
     </div>
   </div>
@@ -496,33 +499,7 @@ export default {
       return values;
     },
     downloadCsvFile(data) {
-      const module = 'Node';
-      const headers = [
-        'IP Address',
-        'Network Protocol',
-        'Tier',
-        'Status',
-        'Payment Rank',
-        'Collateral',
-        'Txn Hash',
-        'Added Height',
-        'Out Idx',
-        'Confirmed Height',
-        'Last Confirmed Height',
-        'Last Paid Height',
-        'Payment Address',
-        'Pub Key',
-        'Zel ID',
-        'Active Since',
-        'Active Since Converted',
-        'Last Paid',
-        'Last Paid Converted',
-        'Amount',
-        'Crux ID',
-        'DOS State',
-        'DOS Message',
-      ];
-      CsvService.Download(this.processDataForCsv(data), headers, module, ExportToCsv);
+      CsvService.Download(this.processDataForCsv(data), CsvService.NodeHeaders, 'Node', ExportToCsv);
     },
     processFilters(key) {
       if (!this.filters.default.includes(key)) {

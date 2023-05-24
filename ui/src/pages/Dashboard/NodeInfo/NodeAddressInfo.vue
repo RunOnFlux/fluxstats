@@ -178,7 +178,10 @@
             :total="pagination.total"
           />
         </div>
-        <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+        <vue-element-loading
+          :active="isLoading"
+          spinner="bar-fade-scale"
+        />
       </card>
     </div>
   </div>
@@ -439,17 +442,7 @@ export default {
       return values;
     },
     downloadCsvFile(data) {
-      const module = 'Node_Address_Info';
-      const headers = [
-        'Zel ID',
-        'Payment ID',
-        'Organization',
-        'Total Nodes',
-        'Total Cumulus',
-        'Total Nimbus',
-        'Total Stratus',
-      ];
-      CsvService.Download(this.processDataForCsv(data), headers, module, ExportToCsv);
+      CsvService.Download(this.processDataForCsv(data), CsvService.NodeAddressInfoHeaders, 'Node_Address_Info', ExportToCsv);
     },
     processFilters(key) {
       if (!this.filters.default.includes(key)) {

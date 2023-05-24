@@ -18,6 +18,9 @@ const FluxNetwork = () => import('@/pages/Dashboard/Visualization/FluxNetwork.vu
 // NodeHistory pages
 const HistoryInfo = () => import('@/pages/Dashboard/NodeHistory/HistoryInfo.vue');
 
+// Marketplace
+const Marketplace = () => import('@/pages/Dashboard/Information/Marketplace.vue');
+
 // Maintenance pages
 const Error = () => import('@/pages/Dashboard/Maintenance/Error.vue');
 
@@ -87,6 +90,19 @@ const nodeHistory = {
     }],
 };
 
+const marketplace = {
+  path: '/flux/information',
+  component: DashboardLayout,
+  name: 'marketplace',
+  redirect: '/flux/information/marketplace',
+  children: [
+    {
+      path: 'marketplace',
+      name: 'marketplace',
+      component: Marketplace,
+    }],
+};
+
 const maintenance = {
   path: '/flux/maintenance/error',
   component: Error,
@@ -133,6 +149,7 @@ const routes = [
   maintenance,
   dashboard,
   fluxnetwork,
+  marketplace,
   root,
 ];
 

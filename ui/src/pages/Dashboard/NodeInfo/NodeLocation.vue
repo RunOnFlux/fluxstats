@@ -143,7 +143,10 @@
             :total="pagination.total"
           />
         </div>
-        <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+        <vue-element-loading
+          :active="isLoading"
+          spinner="bar-fade-scale"
+        />
       </card>
     </div>
   </div>
@@ -400,18 +403,7 @@ export default {
       return values;
     },
     downloadCsvFile(data) {
-      const module = 'Node_Geolocation';
-      const headers = [
-        'IP Address',
-        'Country',
-        'Country Code',
-        'Region',
-        'Region Name',
-        'Latitude',
-        'Longitude',
-        'Tier',
-      ];
-      CsvService.Download(this.processDataForCsv(data), headers, module, ExportToCsv);
+      CsvService.Download(this.processDataForCsv(data), CsvService.NodeLocationHeaders, 'Node_Geolocation', ExportToCsv);
     },
     processFilters(key) {
       if (!this.filters.default.includes(key)) {

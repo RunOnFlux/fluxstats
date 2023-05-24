@@ -144,7 +144,10 @@
             :total="pagination.total"
           />
         </div>
-        <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+        <vue-element-loading
+          :active="isLoading"
+          spinner="bar-fade-scale"
+        />
       </card>
     </div>
   </div>
@@ -368,16 +371,7 @@ export default {
       return values;
     },
     downloadCsvFile(data) {
-      const module = 'Node_Up_Time';
-      const headers = [
-        'IP Address',
-        'Tier',
-        'Active Since',
-        'Active Since Converted',
-        'Data Collected At',
-        'Data Collected At Converted',
-      ];
-      CsvService.Download(this.processDataForCsv(data), headers, module, ExportToCsv);
+      CsvService.Download(this.processDataForCsv(data), CsvService.NodeUptimeHeaders, 'Node_Up_Time', ExportToCsv);
     },
     processFilters(key) {
       if (!this.filters.default.includes(key)) {

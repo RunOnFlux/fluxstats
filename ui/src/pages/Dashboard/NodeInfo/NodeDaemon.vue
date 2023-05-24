@@ -216,7 +216,10 @@
             :total="pagination.total"
           />
         </div>
-        <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+        <vue-element-loading
+          :active="isLoading"
+          spinner="bar-fade-scale"
+        />
       </card>
     </div>
   </div>
@@ -479,29 +482,7 @@ export default {
       return values;
     },
     downloadCsvFile(data) {
-      const module = 'Node_Daemon';
-      const headers = [
-        'IP Address',
-        'Daemon Version',
-        'Flux Version',
-        'Benchmark Version',
-        'Bench Version',
-        'Bench Speed Version',
-        'Protocol Version',
-        'Wallet Version',
-        'Blocks',
-        'Time Offset',
-        'Connections',
-        'Proxy',
-        'Difficulty',
-        'Testnet',
-        'Key Pool Old Test',
-        'Key Pool Size',
-        'Pay Txn Fee',
-        'Relay Fee',
-        'Errors',
-      ];
-      CsvService.Download(this.processDataForCsv(data), headers, module, ExportToCsv);
+      CsvService.Download(this.processDataForCsv(data), CsvService.NodeDaemonHeaders, 'Node_Daemon', ExportToCsv);
     },
     processFilters(key) {
       if (!this.filters.default.includes(key)) {

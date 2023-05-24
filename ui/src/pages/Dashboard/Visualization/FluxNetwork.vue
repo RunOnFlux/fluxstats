@@ -35,7 +35,10 @@
             <i class="nc-icon nc-cloud-download-93" />
           </l-button>
         </div>
-        <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap" style="margin-top: 50px;">
+        <div
+          class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
+          style="margin-top: 50px;"
+        >
           <el-select
             v-model="tierFilter.default"
             class="select-default mb-3"
@@ -101,7 +104,7 @@
             style="width: 100%;"
             :data="queriedData"
           >
-          message: `ip: ${node.ip}\ncountry: ${node.country}\ncontinent: ${node.continent}\norg: ${node.org}\nzelId: ${node.zelId}\npayment address: ${node.paymentAddress}\nconnection in: ${indata}\nconnection out: ${outdata}`,
+            message: `ip: ${node.ip}\ncountry: ${node.country}\ncontinent: ${node.continent}\norg: ${node.org}\nzelId: ${node.zelId}\npayment address: ${node.paymentAddress}\nconnection in: ${indata}\nconnection out: ${outdata}`,
             <el-table-column type="expand">
               <template slot-scope="props">
                 <p><b>IP Address:</b> {{ props.row.ip }} </p>
@@ -124,23 +127,47 @@
             <el-table-column
               fixed="right"
               label="Actions"
-              width="120">
+              width="120"
+            >
               <template slot-scope="scope">
                 <el-button
-                  @click="setNode(scope.$index, queriedData)"
                   type="primary"
-                  size="small">
+                  size="small"
+                  @click="setNode(scope.$index, queriedData)"
+                >
                   Set
                 </el-button>
               </template>
             </el-table-column>
           </el-table>
         </div>
-        <div class="col-12 d-flex flex-wrap" style="margin-top: 30px;">
-          <el-input-number v-model="offsetX" :step="50" size="mini" :min="-1000" :max="1000"></el-input-number>
-          <el-input-number v-model="offsetY" :step="50" controls-position="right" size="mini" :min="-1000" :max="1000"></el-input-number>
+        <div
+          class="col-12 d-flex flex-wrap"
+          style="margin-top:
+          30px;"
+        >
+          <el-input-number
+            v-model="offsetX"
+            :step="50"
+            size="mini"
+            :min="-1000"
+            :max="1000"
+          >
+          </el-input-number>
+          <el-input-number
+            v-model="offsetY"
+            :step="50"
+            controls-position="right"
+            size="mini"
+            :min="-1000"
+            :max="1000"
+          >
+          </el-input-number>
         </div>
-        <div id="workspace" style="background-color: #E5E8E8; margin-left: 15px;margin-right: 15px;margin-top: 20px;margin-bottom: 20px;">
+        <div
+          id="workspace"
+          style="background-color: #E5E8E8; margin-left: 15px;margin-right: 15px;margin-top: 20px;margin-bottom: 20px;"
+        >
           <d3-network
             :net-nodes="nodes"
             :net-links="links"
@@ -148,7 +175,10 @@
             @node-click="onClick"
           />
         </div>
-        <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+        <vue-element-loading
+          :active="isLoading"
+          spinner="bar-fade-scale"
+        />
       </card>
     </div>
   </div>

@@ -1220,6 +1220,134 @@ const sortNodeUptime = (values, sortProps, originalData) => {
   return { datas: values, tableDatas: tableData };
 };
 
+const sortMarketplace = (values, sortProps, originalData) => {
+  let tableData = [];
+  if (sortProps.column.label === 'Name' && sortProps.column.order === 'ascending') {
+    values.sort((a, b) => {
+      let val = 0;
+      if (a.name > b.name) {
+        val = 1;
+      } else if (a.name < b.name) {
+        val = -1;
+      }
+      return val;
+    });
+  } else if (sortProps.column.label === 'Name' && sortProps.column.order === 'descending') {
+    values.sort((a, b) => {
+      let val = 0;
+      if (a.name < b.name) {
+        val = 1;
+      } else if (a.name > b.name) {
+        val = -1;
+      }
+      return val;
+    });
+  } else if (sortProps.column.label === 'Description' && sortProps.column.order === 'ascending') {
+    values.sort((a, b) => {
+      let val = 0;
+      if (a.description > b.description) {
+        val = 1;
+      } else if (a.description < b.description) {
+        val = -1;
+      }
+      return val;
+    });
+  } else if (sortProps.column.label === 'Description' && sortProps.column.order === 'descending') {
+    values.sort((a, b) => {
+      let val = 0;
+      if (a.description < b.description) {
+        val = 1;
+      } else if (a.description > b.description) {
+        val = -1;
+      }
+      return val;
+    });
+  } else if (sortProps.column.label === 'Category' && sortProps.column.order === 'ascending') {
+    values.sort((a, b) => {
+      let val = 0;
+      if (a.category > b.category) {
+        val = 1;
+      } else if (a.category < b.category) {
+        val = -1;
+      }
+      return val;
+    });
+  } else if (sortProps.column.label === 'Category' && sortProps.column.order === 'descending') {
+    values.sort((a, b) => {
+      let val = 0;
+      if (a.category < b.category) {
+        val = 1;
+      } else if (a.category > b.category) {
+        val = -1;
+      }
+      return val;
+    });
+  } else if (sortProps.column.label === 'Price' && sortProps.column.order === 'ascending') {
+    values.sort((a, b) => {
+      let val = 0;
+      if (a.price > b.price) {
+        val = 1;
+      } else if (a.price < b.price) {
+        val = -1;
+      }
+      return val;
+    });
+  } else if (sortProps.column.label === 'Price' && sortProps.column.order === 'descending') {
+    values.sort((a, b) => {
+      let val = 0;
+      if (a.price < b.price) {
+        val = 1;
+      } else if (a.price > b.price) {
+        val = -1;
+      }
+      return val;
+    });
+  } else if (sortProps.column.label === 'Visible' && sortProps.column.order === 'ascending') {
+    values.sort((a, b) => {
+      let val = 0;
+      if (a.visible > b.visible) {
+        val = 1;
+      } else if (a.visible < b.visible) {
+        val = -1;
+      }
+      return val;
+    });
+  } else if (sortProps.column.label === 'Visible' && sortProps.column.order === 'descending') {
+    values.sort((a, b) => {
+      let val = 0;
+      if (a.visible < b.visible) {
+        val = 1;
+      } else if (a.visible > b.visible) {
+        val = -1;
+      }
+      return val;
+    });
+  } else if (sortProps.column.label === 'Enabled' && sortProps.column.order === 'ascending') {
+    values.sort((a, b) => {
+      let val = 0;
+      if (a.enabled > b.enabled) {
+        val = 1;
+      } else if (a.enabled < b.enabled) {
+        val = -1;
+      }
+      return val;
+    });
+  } else if (sortProps.column.label === 'Enabled' && sortProps.column.order === 'descending') {
+    values.sort((a, b) => {
+      let val = 0;
+      if (a.enabled < b.enabled) {
+        val = 1;
+      } else if (a.enabled > b.enabled) {
+        val = -1;
+      }
+      return val;
+    });
+  } else {
+    tableData = JSON.parse(originalData);
+  }
+  return { datas: values, tableDatas: tableData };
+};
+
 module.exports = {
   sortHistoryInfo,
   sortNode,
@@ -1231,4 +1359,5 @@ module.exports = {
   sortNodeDaemon,
   sortNodeLocation,
   sortNodeUptime,
+  sortMarketplace,
 };

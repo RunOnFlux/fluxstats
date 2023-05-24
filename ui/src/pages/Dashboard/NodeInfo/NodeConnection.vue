@@ -171,7 +171,10 @@
             :total="pagination.total"
           />
         </div>
-        <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+        <vue-element-loading
+          :active="isLoading"
+          spinner="bar-fade-scale"
+        />
       </card>
     </div>
   </div>
@@ -381,13 +384,7 @@ export default {
       return values;
     },
     downloadCsvFile(data) {
-      const module = 'Node_Connection';
-      const headers = [
-        'IP Address',
-        'Total Connection In',
-        'Total Connection Out',
-      ];
-      CsvService.Download(this.processDataForCsv(data), headers, module, ExportToCsv);
+      CsvService.Download(this.processDataForCsv(data), CsvService.NodeConnectionHeaders, 'Node_Connection', ExportToCsv);
     },
     processFilters(key) {
       if (!this.filters.default.includes(key)) {

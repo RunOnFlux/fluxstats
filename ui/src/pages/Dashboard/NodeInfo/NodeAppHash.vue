@@ -144,7 +144,10 @@
             :total="pagination.total"
           />
         </div>
-        <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+        <vue-element-loading
+          :active="isLoading"
+          spinner="bar-fade-scale"
+        />
       </card>
     </div>
   </div>
@@ -348,14 +351,7 @@ export default {
       return values;
     },
     downloadCsvFile(data) {
-      const module = 'Node_Hashes';
-      const headers = [
-        'IP Address',
-        'Scanned Height',
-        'Hashes Present',
-        'App Hashes Total',
-      ];
-      CsvService.Download(this.processDataForCsv(data), headers, module, ExportToCsv);
+      CsvService.Download(this.processDataForCsv(data), CsvService.NodeAppHashHeaders, 'Node_Hashes', ExportToCsv);
     },
     processFilters(key) {
       if (!this.filters.default.includes(key)) {
