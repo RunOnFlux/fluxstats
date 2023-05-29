@@ -6,25 +6,25 @@
         :key="idx"
       >
         <l-button
-          v-if="btn.name === 'highest node count'"
+          v-if="btn.name.includes('category')"
           style="margin-right: 10px;"
           size="sm"
           :class="{active: btn.state}"
           @click="processFilters(btn.name)"
         >
-          {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name)[0].total }}
+          {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
         </l-button>
         <l-button
-          v-if="btn.name === 'highest node count roundtime'"
+          v-if="btn.name.includes('visible')"
           style="margin-right: 10px;"
           size="sm"
           :class="{active: btn.state}"
           @click="processFilters(btn.name)"
         >
-          {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name)[0].roundTime }}
+          {{ btn.name }}: {{ !filter.get(btn.name) ? 0 : filter.get(btn.name).length }}
         </l-button>
         <l-button
-          v-if="btn.name.includes('round time - ')"
+          v-if="btn.name.includes('enabled')"
           style="margin-right: 10px;"
           size="sm"
           :class="{active: btn.state}"
@@ -36,7 +36,7 @@
     </div>
     <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap">
       <h2 class="title">
-        Info
+        Marketplace
       </h2>
     </div>
     <p class="category" />
@@ -96,7 +96,7 @@
               type="search"
               class="mb-3"
               style="width: 200px"
-              placeholder="Search Round Time"
+              placeholder="Search Name"
               aria-controls="datatables"
             />
           </div>
@@ -125,13 +125,26 @@
               border
               @sort-change="sortChange"
             >
+              <el-table-column type="expand">
+                <template slot-scope="props">
+                  <p><b>Multiplier:</b> {{ props.row.multiplier }} </p>
+                  <p><b>Version:</b> {{ props.row.version }}</p>
+                  <p><b>Instances:</b> {{ props.row.instances }}</p>
+                  <p><b>CPU:</b> {{ props.row.compose[0].cpu }}</p>
+                  <p><b>RAM:</b> {{ props.row.compose[0].ram }}</p>
+                  <p><b>HDD:</b> {{ props.row.compose[0].hdd }}</p>
+                  <p><b>Ports:</b> {{ props.row.compose[0].ports }}</p>
+                  <p><b>Port Specs:</b> {{ props.row.compose[0].portSpecs }}</p>
+                  <p><b>Container Ports:</b> {{ props.row.compose[0].containerPorts }}</p>
+                </template>
+              </el-table-column>
               <el-table-column
                 v-for="column in tableColumns"
                 :key="column.label"
                 :min-width="column.minWidth"
                 :prop="column.prop"
                 :label="column.label"
-                sortable="@exclude('Round Time Converted')"
+                sortable
               />
             </el-table>
           </div>
@@ -176,7 +189,7 @@ import SearchService from '../Service/SearchService';
 import TransformationService from '../Service/TransformationService';
 import SortService from '../Service/SortService';
 import {
-  httpRequestFluxInfo, httpRequestDaemonInfo, httpRequestFluxHistoryStats,
+  httpRequestMarketPlace,
 } from '../Request/HttpRequest';
 
 export default {
@@ -202,37 +215,37 @@ export default {
         states: [],
       },
       searchQuery: '',
-      propsToSearch: ['roundTime'],
+      propsToSearch: ['name'],
       tableColumns: [
         {
-          prop: 'roundTime',
-          label: 'Round Time',
+          prop: 'name',
+          label: 'Name',
           minWidth: 200,
         },
         {
-          prop: 'roundTimeConverted',
-          label: 'Round Time Converted',
+          prop: 'description',
+          label: 'Description',
           minWidth: 200,
         },
         {
-          prop: 'cumulus',
-          label: 'Cumulus',
+          prop: 'category',
+          label: 'Category',
           minWidth: 250,
         },
         {
-          prop: 'nimbus',
-          label: 'Nimbus',
+          prop: 'price',
+          label: 'Price',
           minWidth: 100,
         },
         {
-          prop: 'stratus',
-          label: 'Stratus',
-          minWidth: 120,
+          prop: 'visible',
+          label: 'Visible',
+          minWidth: 100,
         },
         {
-          prop: 'total',
-          label: 'Total Nodes',
-          minWidth: 120,
+          prop: 'enabled',
+          label: 'Enabled',
+          minWidth: 100,
         },
       ],
       tableData: [],
@@ -267,11 +280,9 @@ export default {
   },
   async mounted() {
     try {
-      await httpRequestFluxInfo(axios, MemoryStorage);
-      await httpRequestDaemonInfo(axios, MemoryStorage);
-      await httpRequestFluxHistoryStats(axios, MemoryStorage);
-      await this.getFluxStats();
-      await this.processFluxStats();
+      await httpRequestMarketPlace(axios, MemoryStorage);
+      await this.getMarketplace();
+      await this.processMarketplace();
       this.setSearch();
       this.isLoading = false;
     } catch (e) {
@@ -290,7 +301,7 @@ export default {
       if (this.searchQuery !== '') {
         result = SearchService.search(this.fuseSearch, this.searchQuery);
       } else if (this.filters.default.length) {
-        result = TransformationService.processFilters(this.filters, this.filter, 'historyinfo');
+        result = TransformationService.processFilters(this.filters, this.filter, 'marketplace');
       } else {
         result = this.tableData;
       }
@@ -304,56 +315,104 @@ export default {
       this.paginationTotal(result.length);
       return result.slice(this.from, this.to);
     },
-    async getFluxStats() {
-      const lsdata = MemoryStorage.get('fluxhistorystats');
+    async getMarketplace() {
+      const lsdata = MemoryStorage.get('marketplace');
       this.values = lsdata;
     },
-    async processFluxStats() {
-      let hTotal = 0;
-      for (const [key, value] of Object.entries(this.values)) {
-        this.tableData.push({
-          roundTime: key,
-          roundTimeConverted: new Date(parseInt(key, 10)).toLocaleString(),
-          cumulus: value.cumulus,
-          nimbus: value.nimbus,
-          stratus: value.stratus,
-          total: value.cumulus + value.nimbus + value.stratus,
-        });
-      }
-      this.tableData.map((value) => {
+    async processMarketplace() {
+      this.values.map((el) => {
         let temp;
-        const values = value;
-        const totalvalue = values.total;
-        const dateround = values.roundTimeConverted.split(', ')[0];
-        const monthround = dateround.split('/')[0];
-        const yearround = dateround.split('/')[2];
-        const roundtime = `${monthround}/${yearround}`;
-        temp = [];
-        if (!this.filter.has('highest node count roundtime') && hTotal < totalvalue) {
-          this.filterValue.push('highest node count roundtime');
-        }
-        if (hTotal < totalvalue) {
-          temp.push(values);
-          this.filter.set('highest node count roundtime', temp);
-        }
-        temp = [];
-        if (!this.filter.has('highest node count') && hTotal < totalvalue) {
-          this.filterValue.push('highest node count');
-        }
-        if (hTotal < totalvalue) {
-          temp.push(values);
-          this.filter.set('highest node count', temp);
-          hTotal = totalvalue;
-        }
-        temp = this.filter.has(`round time - ${roundtime}`) ? this.filter.get(`round time - ${roundtime}`) : [];
-        if (!this.filter.has(`round time - ${roundtime}`)) {
-          this.filterValue.push(`round time - ${roundtime}`);
+        const values = el;
+        const descriptionValue = values.description.length > 30 ? `${values.description.slice(0, 30)}...` : values.description;
+        const priceValue = values.price;
+        const multiplierValue = values.multiplier;
+        const categoryValue = values.category;
+        const versionValue = values.version;
+        const nameValue = values.name;
+        const instancesValue = values.instances;
+        const cpuValue = values.compose[0].cpu;
+        const ramValue = values.compose[0].ram;
+        const hddValue = values.compose[0].hdd;
+        const visibleValue = values.visible;
+        const enabledValue = values.enabled;
+        values.visible = visibleValue ? 'true' : 'false';
+        values.enabled = enabledValue ? 'true' : 'false';
+        temp = this.filter.has(`description - ${descriptionValue}`) ? this.filter.get(`description - ${descriptionValue}`) : [];
+        if (!this.filter.has(`description - ${descriptionValue}`)) {
+          this.filterValue.push(`description - ${descriptionValue}`);
         }
         temp.push(values);
-        this.filter.set(`round time - ${roundtime}`, temp);
+        this.filter.set(`description - ${descriptionValue}`, temp);
+        temp = this.filter.has(`price - ${priceValue}`) ? this.filter.get(`price - ${priceValue}`) : [];
+        if (!this.filter.has(`price - ${priceValue}`)) {
+          this.filterValue.push(`price - ${priceValue}`);
+        }
+        temp.push(values);
+        this.filter.set(`price - ${priceValue}`, temp);
+        temp = this.filter.has(`multiplier - ${multiplierValue}`) ? this.filter.get(`multiplier - ${multiplierValue}`) : [];
+        if (!this.filter.has(`multiplier - ${multiplierValue}`)) {
+          this.filterValue.push(`multiplier - ${multiplierValue}`);
+        }
+        temp.push(values);
+        this.filter.set(`multiplier - ${multiplierValue}`, temp);
+        temp = this.filter.has(`category - ${categoryValue}`) ? this.filter.get(`category - ${categoryValue}`) : [];
+        if (!this.filter.has(`category - ${categoryValue}`)) {
+          this.filterValue.push(`category - ${categoryValue}`);
+        }
+        temp.push(values);
+        this.filter.set(`category - ${categoryValue}`, temp);
+        temp = this.filter.has(`version - ${versionValue}`) ? this.filter.get(`version - ${versionValue}`) : [];
+        if (!this.filter.has(`version - ${versionValue}`)) {
+          this.filterValue.push(`version - ${versionValue}`);
+        }
+        temp.push(values);
+        this.filter.set(`version - ${versionValue}`, temp);
+        temp = this.filter.has(`name - ${nameValue}`) ? this.filter.get(`name - ${nameValue}`) : [];
+        if (!this.filter.has(`name - ${nameValue}`)) {
+          this.filterValue.push(`name - ${nameValue}`);
+        }
+        temp.push(values);
+        this.filter.set(`name - ${nameValue}`, temp);
+        temp = this.filter.has(`instances - ${instancesValue}`) ? this.filter.get(`instances - ${instancesValue}`) : [];
+        if (!this.filter.has(`instances - ${instancesValue}`)) {
+          this.filterValue.push(`instances - ${instancesValue}`);
+        }
+        temp.push(values);
+        this.filter.set(`instances - ${instancesValue}`, temp);
+        temp = this.filter.has(`cpu - ${cpuValue}`) ? this.filter.get(`cpu - ${cpuValue}`) : [];
+        if (!this.filter.has(`cpu - ${cpuValue}`)) {
+          this.filterValue.push(`cpu - ${cpuValue}`);
+        }
+        temp.push(values);
+        this.filter.set(`cpu - ${cpuValue}`, temp);
+        temp = this.filter.has(`ram - ${ramValue}`) ? this.filter.get(`ram - ${ramValue}`) : [];
+        if (!this.filter.has(`ram - ${ramValue}`)) {
+          this.filterValue.push(`ram - ${ramValue}`);
+        }
+        temp.push(values);
+        this.filter.set(`ram - ${ramValue}`, temp);
+        temp = this.filter.has(`hdd - ${hddValue}`) ? this.filter.get(`hdd - ${hddValue}`) : [];
+        if (!this.filter.has(`hdd - ${hddValue}`)) {
+          this.filterValue.push(`hdd - ${hddValue}`);
+        }
+        temp.push(values);
+        this.filter.set(`hdd - ${hddValue}`, temp);
+        temp = this.filter.has(`visible - ${visibleValue}`) ? this.filter.get(`visible - ${visibleValue}`) : [];
+        if (!this.filter.has(`visible - ${visibleValue}`)) {
+          this.filterValue.push(`visible - ${visibleValue}`);
+        }
+        temp.push(values);
+        this.filter.set(`visible - ${visibleValue}`, temp);
+        temp = this.filter.has(`enabled - ${enabledValue}`) ? this.filter.get(`enabled - ${enabledValue}`) : [];
+        if (!this.filter.has(`enabled - ${enabledValue}`)) {
+          this.filterValue.push(`enabled - ${enabledValue}`);
+        }
+        temp.push(values);
+        this.filter.set(`enabled - ${enabledValue}`, temp);
         return values;
       });
       this.filters.others = this.filterValue.sort();
+      this.tableData = this.values;
       this.filterValue.forEach((value) => {
         this.filters.states.push({
           name: value,
@@ -363,13 +422,13 @@ export default {
     },
     setSearch() {
       this.originalData = JSON.stringify(this.tableData);
-      this.fuseSearch = SearchService.generateSearch(Fuse, this.tableData, ['roundTime']);
+      this.fuseSearch = SearchService.generateSearch(Fuse, this.tableData, ['name']);
     },
     sortChange(sortProps) {
       this.processData(sortProps, true);
     },
     sorting(sortProps, data) {
-      const ret = SortService.sortHistoryInfo(data, sortProps, this.originalData);
+      const ret = SortService.sortMarketplace(data, sortProps, this.originalData);
       this.tableData = Object.keys(ret.tableDatas).length > 0 ? ret.tableDatas : this.tableData;
       return ret.datas;
     },
@@ -377,18 +436,27 @@ export default {
       const values = [];
       data.forEach((item) => {
         values.push({
-          roundTime: !item.roundTime ? '' : item.roundTime,
-          roundTimeConverted: !item.roundTimeConverted ? '' : item.roundTimeConverted,
-          total: !item.total ? '' : item.total,
-          cumulus: !item.cumulus ? '' : item.cumulus,
-          nimbus: !item.nimbus ? '' : item.nimbus,
-          stratus: !item.stratus ? '' : item.stratus,
+          name: !item.name ? '' : item.name,
+          description: !item.description ? '' : item.description,
+          price: !item.price ? '' : item.price,
+          multiplier: !item.multiplier ? '' : item.multiplier,
+          category: !item.category ? '' : item.category,
+          version: !item.version ? '' : item.version,
+          instances: !item.instances ? '' : item.instances,
+          cpu: !item.compose[0].cpu ? '' : item.compose[0].cpu,
+          ram: !item.compose[0].ram ? '' : item.compose[0].ram,
+          hdd: !item.compose[0].hdd ? '' : item.compose[0].hdd,
+          visible: !item.visible ? '' : item.visible,
+          enabled: !item.enabled ? '' : item.enabled,
+          containerPorts: !item.compose[0].containerPorts ? '' : item.compose[0].containerPorts.toString(),
+          portSpecs: !item.compose[0].portSpecs ? '' : item.compose[0].portSpecs.toString(),
+          ports: !item.compose[0].ports ? '' : item.compose[0].ports.toString(),
         });
       });
       return values;
     },
     downloadCsvFile(data) {
-      CsvService.Download(this.processDataForCsv(data), CsvService.HistoryInfoHeaders, 'History_Info', ExportToCsv);
+      CsvService.Download(this.processDataForCsv(data), CsvService.MarketplaceHeaders, 'Marketplace', ExportToCsv);
     },
     processFilters(key) {
       if (!this.filters.default.includes(key)) {

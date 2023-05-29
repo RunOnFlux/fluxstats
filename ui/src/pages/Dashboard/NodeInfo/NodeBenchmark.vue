@@ -292,7 +292,10 @@
             :total="pagination.total"
           />
         </div>
-        <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+        <vue-element-loading
+          :active="isLoading"
+          spinner="bar-fade-scale"
+        />
       </card>
     </div>
   </div>
@@ -307,6 +310,10 @@ import axios from 'axios';
 import { MemoryStorage } from 'ttl-localstorage';
 import { ExportToCsv } from 'export-to-csv';
 import VueElementLoading from 'vue-element-loading';
+import CsvService from '../Service/CsvService';
+import SearchService from '../Service/SearchService';
+import TransformationService from '../Service/TransformationService';
+import SortService from '../Service/SortService';
 import {
   httpRequestFluxInfo, httpRequestDaemonInfo, httpRequestFluxHistoryStats,
 } from '../Request/HttpRequest';
@@ -440,25 +447,9 @@ export default {
     processData(sortProps, isProcessingState) {
       let result;
       if (this.searchQuery !== '') {
-        const temp = [];
-        result = this.fuseSearch.search(`=${this.searchQuery}`);
-        for (let i = 0; i < Object.keys(result).length; i += 1) {
-          temp.push(result[i].item);
-        }
-        result = temp;
+        result = SearchService.search(this.fuseSearch, this.searchQuery);
       } else if (this.filters.default.length) {
-        const arr = [];
-        const data = [];
-        this.filters.default.forEach((item) => {
-          const objs = this.filter.get(item);
-          objs.forEach((obj) => {
-            if (!arr.includes(`${obj.benchmark.bench.ipaddress}${obj.geolocation.org}`)) {
-              arr.push(`${obj.benchmark.bench.ipaddress}${obj.geolocation.org}`);
-              data.push(obj);
-            }
-          });
-        });
-        result = data;
+        result = TransformationService.processFilters(this.filters, this.filter, 'nodebenchmark');
       } else {
         result = this.tableData;
       }
@@ -735,216 +726,15 @@ export default {
     },
     setSearch() {
       this.originalData = JSON.stringify(this.tableData);
-      this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['benchmark.bench.ipaddress'] });
+      this.fuseSearch = SearchService.generateSearch(Fuse, this.tableData, ['benchmark.bench.ipaddress']);
     },
     sortChange(sortProps) {
       this.processData(sortProps, true);
     },
     sorting(sortProps, data) {
-      if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.bechmark.bench.ipaddress > b.bechmark.bench.ipaddress) {
-            val = 1;
-          } else if (a.bechmark.bench.ipaddress < b.bechmark.bench.ipaddress) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.bechmark.bench.ipaddress < b.bechmark.bench.ipaddress) {
-            val = 1;
-          } else if (a.bechmark.bench.ipaddress > b.bechmark.bench.ipaddress) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Download Speed' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.benchmark.bench.download_speed > b.benchmark.bench.download_speed) {
-            val = 1;
-          } else if (a.benchmark.bench.download_speed < b.benchmark.bench.download_speed) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Download Speed' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.benchmark.bench.download_speed < b.benchmark.bench.download_speed) {
-            val = 1;
-          } else if (a.benchmark.bench.download_speed > b.benchmark.bench.download_speed) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Upload Speed' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.benchmark.bench.upload_speed > b.benchmark.bench.upload_speed) {
-            val = 1;
-          } else if (a.benchmark.bench.upload_speed < b.benchmark.bench.upload_speed) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Upload Speed' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.benchmark.bench.upload_speed < b.benchmark.bench.upload_speed) {
-            val = 1;
-          } else if (a.benchmark.bench.upload_speed > b.benchmark.bench.upload_speed) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Ping' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.benchmark.bench.ping > b.benchmark.bench.ping) {
-            val = 1;
-          } else if (a.benchmark.bench.ping < b.benchmark.bench.ping) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Ping' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.benchmark.bench.ping < b.benchmark.bench.ping) {
-            val = 1;
-          } else if (a.benchmark.bench.ping > b.benchmark.bench.ping) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Status' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.benchmark.status.status > b.benchmark.status.status) {
-            val = 1;
-          } else if (a.benchmark.status.status < b.benchmark.status.status) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Status' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.benchmark.status.status < b.benchmark.status.status) {
-            val = 1;
-          } else if (a.benchmark.status.status > b.benchmark.status.status) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Total Application Running' && sortProps.column.order === 'ascending') {
-        this.tableData.sort((a, b) => {
-          let val = 0;
-          if (a.apps.count > b.apps.count) {
-            val = 1;
-          } else if (a.apps.count < b.apps.count) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Total Application Running' && sortProps.column.order === 'descending') {
-        this.tableData.sort((a, b) => {
-          let val = 0;
-          if (a.apps.count < b.apps.count) {
-            val = 1;
-          } else if (a.apps.count > b.apps.count) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Tier' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.node.status.tier > b.node.status.tier) {
-            val = 1;
-          } else if (a.node.status.tier < b.node.status.tier) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Tier' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.node.status.tier < b.node.status.tier) {
-            val = 1;
-          } else if (a.node.status.tier > b.node.status.tier) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Organization' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.geolocation.org > b.geolocation.org) {
-            val = 1;
-          } else if (a.geolocation.org < b.geolocation.org) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Organization' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.geolocation.org < b.geolocation.org) {
-            val = 1;
-          } else if (a.geolocation.org > b.geolocation.org) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Thunder Enabled' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.benchmark.bench.thunder > b.benchmark.bench.thunder) {
-            val = 1;
-          } else if (a.benchmark.bench.thunder < b.benchmark.bench.thunder) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Thunder Enabled' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.benchmark.bench.thunder < b.benchmark.bench.thunder) {
-            val = 1;
-          } else if (a.benchmark.bench.thunder > b.benchmark.bench.thunder) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'UPnP Enabled' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.benchmark.upnp > b.benchmark.upnp) {
-            val = 1;
-          } else if (a.benchmark.upnp < b.benchmark.upnp) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'UPnP Enabled' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.benchmark.upnp < b.benchmark.upnp) {
-            val = 1;
-          } else if (a.benchmark.upnp > b.benchmark.upnp) {
-            val = -1;
-          }
-          return val;
-        });
-      } else {
-        this.tableData = JSON.parse(this.originalData);
-      }
-      return data;
+      const ret = SortService.sortNodeBenchmark(data, sortProps, this.originalData);
+      this.tableData = Object.keys(ret.tableDatas).length > 0 ? ret.tableDatas : this.tableData;
+      return ret.datas;
     },
     processDataForCsv(data) {
       const values = [];
@@ -984,54 +774,7 @@ export default {
       return values;
     },
     downloadCsvFile(data) {
-      const date = new Date();
-      const month = date.getMonth();
-      const day = date.getDate();
-      const year = date.getFullYear();
-      const options = {
-        filename: `Node_Benchmark_${month}${day}${year}`,
-        fieldSeparator: ',',
-        quoteStrings: '"',
-        decimalSeparator: '.',
-        showLabels: true,
-        showTitle: true,
-        title: `Node Benchmark - ${month}/${day}/${year}`,
-        useTextFile: false,
-        useBom: true,
-        headers: [
-          'IP Address',
-          'Organization',
-          'Tier',
-          'Download Speed',
-          'Upload Speed',
-          'Ping',
-          'Status',
-          'UPnP Enabled',
-          'Total Application Running',
-          'RPC Port',
-          'Benchmarking',
-          'Flux',
-          'Architecture',
-          'Arm Board',
-          'Time',
-          'Converted Time',
-          'Real Cores',
-          'Cores',
-          'RAM',
-          'SSD',
-          'HDD',
-          'Total Storage',
-          'Disk',
-          'Disk Size',
-          'Disk Write Speed',
-          'EPS',
-          'Thunder',
-          'Errors',
-          'Needed To Fix Issues',
-        ],
-      };
-      const csvExporter = new ExportToCsv(options);
-      csvExporter.generateCsv(this.processDataForCsv(data));
+      CsvService.Download(this.processDataForCsv(data), CsvService.NodeBenchmarkHeaders, 'Node_Benchmark', ExportToCsv);
     },
     processFilters(key) {
       if (!this.filters.default.includes(key)) {
@@ -1045,14 +788,7 @@ export default {
       return this.processData(false, false);
     },
     processState(keys) {
-      this.filters.states.map((item) => {
-        const values = item;
-        values.state = false;
-        if (keys.includes(values.name)) {
-          values.state = true;
-        }
-        return values;
-      });
+      this.filters = TransformationService.processState(keys, this.filters);
     },
   },
 };

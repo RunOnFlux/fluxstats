@@ -30,6 +30,14 @@ const httpRequestFluxHistoryStats = async (axios, MemoryStorage) => {
   }
 };
 
+const httpRequestMarketPlace = async (axios, MemoryStorage) => {
+  const lsdata = MemoryStorage.get('marketplace');
+  if (!lsdata) {
+    const response = await axios.get('https://stats.runonflux.io/marketplace/listapps');
+    MemoryStorage.put('marketplace', response.data.data, 18000);
+  }
+};
+
 // ipports -> array of string port value
 async function httpRequestFluxConnections(axios, ipports) {
   try {
@@ -97,4 +105,5 @@ module.exports = {
   httpRequestFluxHistoryStats,
   httpRequestFluxConnections,
   httpRequestFluxPriceHistory,
+  httpRequestMarketPlace,
 };

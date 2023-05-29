@@ -35,7 +35,10 @@
             <i class="nc-icon nc-cloud-download-93" />
           </l-button>
         </div>
-        <div class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap" style="margin-top: 50px;">
+        <div
+          class="col-12 d-flex justify-content-center justify-content-sm-between flex-wrap"
+          style="margin-top: 50px;"
+        >
           <el-select
             v-model="tierFilter.default"
             class="select-default mb-3"
@@ -101,7 +104,7 @@
             style="width: 100%;"
             :data="queriedData"
           >
-          message: `ip: ${node.ip}\ncountry: ${node.country}\ncontinent: ${node.continent}\norg: ${node.org}\nzelId: ${node.zelId}\npayment address: ${node.paymentAddress}\nconnection in: ${indata}\nconnection out: ${outdata}`,
+            message: `ip: ${node.ip}\ncountry: ${node.country}\ncontinent: ${node.continent}\norg: ${node.org}\nzelId: ${node.zelId}\npayment address: ${node.paymentAddress}\nconnection in: ${indata}\nconnection out: ${outdata}`,
             <el-table-column type="expand">
               <template slot-scope="props">
                 <p><b>IP Address:</b> {{ props.row.ip }} </p>
@@ -124,23 +127,47 @@
             <el-table-column
               fixed="right"
               label="Actions"
-              width="120">
+              width="120"
+            >
               <template slot-scope="scope">
                 <el-button
-                  @click="setNode(scope.$index, queriedData)"
                   type="primary"
-                  size="small">
+                  size="small"
+                  @click="setNode(scope.$index, queriedData)"
+                >
                   Set
                 </el-button>
               </template>
             </el-table-column>
           </el-table>
         </div>
-        <div class="col-12 d-flex flex-wrap" style="margin-top: 30px;">
-          <el-input-number v-model="offsetX" :step="50" size="mini" :min="-1000" :max="1000"></el-input-number>
-          <el-input-number v-model="offsetY" :step="50" controls-position="right" size="mini" :min="-1000" :max="1000"></el-input-number>
+        <div
+          class="col-12 d-flex flex-wrap"
+          style="margin-top:
+          30px;"
+        >
+          <el-input-number
+            v-model="offsetX"
+            :step="50"
+            size="mini"
+            :min="-1000"
+            :max="1000"
+          >
+          </el-input-number>
+          <el-input-number
+            v-model="offsetY"
+            :step="50"
+            controls-position="right"
+            size="mini"
+            :min="-1000"
+            :max="1000"
+          >
+          </el-input-number>
         </div>
-        <div id="workspace" style="background-color: #E5E8E8; margin-left: 15px;margin-right: 15px;margin-top: 20px;margin-bottom: 20px;">
+        <div
+          id="workspace"
+          style="background-color: #E5E8E8; margin-left: 15px;margin-right: 15px;margin-top: 20px;margin-bottom: 20px;"
+        >
           <d3-network
             :net-nodes="nodes"
             :net-links="links"
@@ -148,7 +175,10 @@
             @node-click="onClick"
           />
         </div>
-        <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+        <vue-element-loading
+          :active="isLoading"
+          spinner="bar-fade-scale"
+        />
       </card>
     </div>
   </div>
@@ -166,6 +196,8 @@ import rateLimit from 'axios-rate-limit';
 import { MemoryStorage } from 'ttl-localstorage';
 import { ExportToCsv } from 'export-to-csv';
 import VueElementLoading from 'vue-element-loading';
+import CsvService from '../Service/CsvService';
+import TransformationService from '../Service/TransformationService';
 import { getDataVisualization } from '../Request/DataVisualization';
 import FluxNetwork from '../Components/FluxNetwork.vue';
 import FluxConnection from '../Components/FluxConnection.vue';
@@ -277,14 +309,7 @@ export default {
       await this.processQueriedData();
     },
     async processState(keys) {
-      this.tierFilter.states.map((item) => {
-        const values = item;
-        values.state = false;
-        if (keys.includes(values.name)) {
-          values.state = true;
-        }
-        return values;
-      });
+      this.tierFilter = TransformationService.processState(keys, this.tierFilter);
     },
     async processQueriedData() {
       try {
@@ -760,34 +785,19 @@ export default {
       return values;
     },
     downloadCsvFile(data) {
-      const date = new Date();
-      const month = date.getMonth();
-      const day = date.getDate();
-      const year = date.getFullYear();
-      const options = {
-        filename: `Node_${month}${day}${year}`,
-        fieldSeparator: ',',
-        quoteStrings: '"',
-        decimalSeparator: '.',
-        showLabels: true,
-        showTitle: true,
-        title: `Node - ${month}/${day}/${year}`,
-        useTextFile: false,
-        useBom: true,
-        headers: [
-          'IP Address',
-          'Tier',
-          'Country',
-          'Continent',
-          'Organization',
-          'ZelId',
-          'PaymentAddress',
-          'Connection In',
-          'Connection Out',
-        ],
-      };
-      const csvExporter = new ExportToCsv(options);
-      csvExporter.generateCsv(this.processDataForCsv(data));
+      const module = 'Node';
+      const headers = [
+        'IP Address',
+        'Tier',
+        'Country',
+        'Continent',
+        'Organization',
+        'ZelId',
+        'PaymentAddress',
+        'Connection In',
+        'Connection Out',
+      ];
+      CsvService.Download(this.processDataForCsv(data), headers, module, ExportToCsv);
     },
   },
 };

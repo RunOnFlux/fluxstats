@@ -178,7 +178,10 @@
             :total="pagination.total"
           />
         </div>
-        <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+        <vue-element-loading
+          :active="isLoading"
+          spinner="bar-fade-scale"
+        />
       </card>
     </div>
   </div>
@@ -193,6 +196,10 @@ import axios from 'axios';
 import { MemoryStorage } from 'ttl-localstorage';
 import { ExportToCsv } from 'export-to-csv';
 import VueElementLoading from 'vue-element-loading';
+import CsvService from '../Service/CsvService';
+import SearchService from '../Service/SearchService';
+import TransformationService from '../Service/TransformationService';
+import SortService from '../Service/SortService';
 import {
   httpRequestFluxInfo, httpRequestDaemonInfo, httpRequestFluxHistoryStats,
 } from '../Request/HttpRequest';
@@ -303,25 +310,9 @@ export default {
     processData(sortProps, isProcessingState) {
       let result;
       if (this.searchQuery !== '') {
-        const temp = [];
-        result = this.fuseSearch.search(`=${this.searchQuery}`);
-        for (let i = 0; i < Object.keys(result).length; i += 1) {
-          temp.push(result[i].item);
-        }
-        result = temp;
+        result = SearchService.search(this.fuseSearch, this.searchQuery);
       } else if (this.filters.default.length) {
-        const arr = [];
-        const data = [];
-        this.filters.default.forEach((item) => {
-          const objs = this.filter.get(item);
-          objs.forEach((obj) => {
-            if (!arr.includes(`${obj.zelId}${obj.paymentId}`)) {
-              arr.push(`${obj.zelId}${obj.paymentId}`);
-              data.push(obj);
-            }
-          });
-        });
-        result = data;
+        result = TransformationService.processFilters(this.filters, this.filter, 'nodeaddressinfo');
       } else {
         result = this.tableData;
       }
@@ -425,96 +416,15 @@ export default {
     },
     setSearch() {
       this.originalData = JSON.stringify(this.tableData);
-      this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['zelId'] });
+      this.fuseSearch = SearchService.generateSearch(Fuse, this.tableData, ['zelId']);
     },
     sortChange(sortProps) {
       this.processData(sortProps, true);
     },
     sorting(sortProps, data) {
-      if (sortProps.column.label === 'Zel ID' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.zelId > b.zelId) {
-            val = 1;
-          } else if (a.zelId < b.zelId) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Zel ID' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.zelId < b.zelId) {
-            val = 1;
-          } else if (a.zelId > b.zelId) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Payment ID' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.paymentId > b.paymentId) {
-            val = 1;
-          } else if (a.paymentId < b.paymentId) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Payment ID' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.paymentId < b.paymentId) {
-            val = 1;
-          } else if (a.paymentId > b.paymentId) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Organization' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.org > b.org) {
-            val = 1;
-          } else if (a.org < b.org) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Organization' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.org < b.org) {
-            val = 1;
-          } else if (a.org > b.org) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Total Nodes' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (parseInt(a.totalNodes, 10) > parseInt(b.totalNodes, 10)) {
-            val = 1;
-          } else if (parseInt(a.totalNodes, 10) < parseInt(b.totalNodes, 10)) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Total Nodes' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (parseInt(a.totalNodes, 10) < parseInt(b.totalNodes, 10)) {
-            val = 1;
-          } else if (parseInt(a.totalNodes, 10) > parseInt(b.totalNodes, 10)) {
-            val = -1;
-          }
-          return val;
-        });
-      } else {
-        this.tableData = JSON.parse(this.originalData);
-      }
-      return data;
+      const ret = SortService.sortNodeAddressInfo(data, sortProps, this.originalData);
+      this.tableData = Object.keys(ret.tableDatas).length > 0 ? ret.tableDatas : this.tableData;
+      return ret.datas;
     },
     processDataForCsv(data) {
       const values = [];
@@ -532,32 +442,7 @@ export default {
       return values;
     },
     downloadCsvFile(data) {
-      const date = new Date();
-      const month = date.getMonth();
-      const day = date.getDate();
-      const year = date.getFullYear();
-      const options = {
-        filename: `Node_Address_Info_${month}${day}${year}`,
-        fieldSeparator: ',',
-        quoteStrings: '"',
-        decimalSeparator: '.',
-        showLabels: true,
-        showTitle: true,
-        title: `Node Address Info - ${month}/${day}/${year}`,
-        useTextFile: false,
-        useBom: true,
-        headers: [
-          'Zel ID',
-          'Payment ID',
-          'Organization',
-          'Total Nodes',
-          'Total Cumulus',
-          'Total Nimbus',
-          'Total Stratus',
-        ],
-      };
-      const csvExporter = new ExportToCsv(options);
-      csvExporter.generateCsv(this.processDataForCsv(data));
+      CsvService.Download(this.processDataForCsv(data), CsvService.NodeAddressInfoHeaders, 'Node_Address_Info', ExportToCsv);
     },
     processFilters(key) {
       if (!this.filters.default.includes(key)) {
@@ -571,14 +456,7 @@ export default {
       return this.processData(false, false);
     },
     processState(keys) {
-      this.filters.states.map((item) => {
-        const values = item;
-        values.state = false;
-        if (keys.includes(values.name)) {
-          values.state = true;
-        }
-        return values;
-      });
+      this.filters = TransformationService.processState(keys, this.filters);
     },
   },
 };

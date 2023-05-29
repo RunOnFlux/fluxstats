@@ -17,7 +17,10 @@
               Cumulus + Nimbus + Stratus
             </template>
           </stats-card>
-          <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+          <vue-element-loading
+            :active="isLoading"
+            spinner="bar-fade-scale"
+          />
         </div>
       </div>
       <div class="col-xl-3 col-md-6">
@@ -36,7 +39,10 @@
               1,000 Flux
             </template>
           </stats-card>
-          <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+          <vue-element-loading
+            :active="isLoading"
+            spinner="bar-fade-scale"
+          />
         </div>
       </div>
       <div class="col-xl-3 col-md-6">
@@ -55,7 +61,10 @@
               12,500 Flux
             </template>
           </stats-card>
-          <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+          <vue-element-loading
+            :active="isLoading"
+            spinner="bar-fade-scale"
+          />
         </div>
       </div>
       <div class="col-xl-3 col-md-6">
@@ -74,7 +83,10 @@
               40,000 Flux
             </template>
           </stats-card>
-          <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+          <vue-element-loading
+            :active="isLoading"
+            spinner="bar-fade-scale"
+          />
         </div>
       </div>
       <div class="col-xl-3 col-md-6">
@@ -93,7 +105,10 @@
               Total Number of Available Storage
             </template>
           </stats-card>
-          <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+          <vue-element-loading
+            :active="isLoading"
+            spinner="bar-fade-scale"
+          />
         </div>
       </div>
       <div class="col-xl-3 col-md-6">
@@ -112,7 +127,10 @@
               Total Number of Available Cores
             </template>
           </stats-card>
-          <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+          <vue-element-loading
+            :active="isLoading"
+            spinner="bar-fade-scale"
+          />
         </div>
       </div>
       <div class="col-xl-3 col-md-6">
@@ -131,7 +149,10 @@
               Total Number of Available RAM
             </template>
           </stats-card>
-          <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+          <vue-element-loading
+            :active="isLoading"
+            spinner="bar-fade-scale"
+          />
         </div>
       </div>
       <div class="col-xl-3 col-md-6">
@@ -150,7 +171,10 @@
               Latest Flux Version Being Used
             </template>
           </stats-card>
-          <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+          <vue-element-loading
+            :active="isLoading"
+            spinner="bar-fade-scale"
+          />
         </div>
       </div>
       <div class="col-xl-3 col-md-6">
@@ -169,7 +193,10 @@
               Total Cumulus Node With Thunder Enabled
             </template>
           </stats-card>
-          <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+          <vue-element-loading
+            :active="isLoading"
+            spinner="bar-fade-scale"
+          />
         </div>
       </div>
       <div class="col-xl-3 col-md-6">
@@ -188,7 +215,10 @@
               Total Cumulus Fractus Available Storage
             </template>
           </stats-card>
-          <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+          <vue-element-loading
+            :active="isLoading"
+            spinner="bar-fade-scale"
+          />
         </div>
       </div>
       <div class="col-xl-3 col-md-6">
@@ -207,14 +237,40 @@
               Total Countries On Flux Network
             </template>
           </stats-card>
-          <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+          <vue-element-loading
+            :active="isLoading"
+            spinner="bar-fade-scale"
+          />
+        </div>
+      </div>
+      <div class="col-xl-3 col-md-6">
+        <div>
+          <stats-card
+            :title="totalRegions.toString()"
+            sub-title="Total Regions"
+          >
+            <div
+              slot="header"
+              class="icon-info"
+            >
+              <i class="nc-icon nc-chart text-warning" />
+            </div>
+            <template slot="footer">
+              Total Regions On Flux Network
+            </template>
+          </stats-card>
+          <vue-element-loading
+            :active="isLoading"
+            spinner="bar-fade-scale"
+          />
         </div>
       </div>
     </div>
     <card>
       <div class="row">
-        <div class="col-md-9"
-             style="margin: auto;padding: 30px;"
+        <div
+          class="col-md-9"
+          style="margin: auto;padding: 30px;"
         >
           <div v-if="!isLoading">
             <GChart
@@ -226,12 +282,16 @@
           </div>
         </div>
       </div>
-      <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+      <vue-element-loading
+        :active="isLoading"
+        spinner="bar-fade-scale"
+      />
     </card>
     <card>
       <div class="row">
-        <div class="col-md-5"
-              style="margin: auto;padding: 50px;"
+        <div
+          class="col-md-5"
+          style="margin: auto;padding: 50px;"
         >
           <div v-if="!isLoading">
             <apexchart
@@ -242,8 +302,9 @@
             />
           </div>
         </div>
-        <div class="col-md-5"
-              style="margin: auto;padding: 50px;"
+        <div
+          class="col-md-5"
+          style="margin: auto;padding: 50px;"
         >
           <div v-if="!isLoading">
             <apexchart
@@ -254,8 +315,9 @@
             />
           </div>
         </div>
-        <div class="col-md-5"
-              style="margin: auto;padding: 50px;"
+        <div
+          class="col-md-5"
+          style="margin: auto;padding: 50px;"
         >
           <div v-if="!isLoading">
             <apexchart
@@ -266,8 +328,9 @@
             />
           </div>
         </div>
-        <div class="col-md-5"
-              style="margin: auto;padding: 50px;"
+        <div
+          class="col-md-5"
+          style="margin: auto;padding: 50px;"
         >
           <div v-if="!isLoading">
             <apexchart
@@ -278,8 +341,9 @@
             />
           </div>
         </div>
-        <div class="col-md-5"
-              style="margin: auto;padding: 50px;"
+        <div
+          class="col-md-5"
+          style="margin: auto;padding: 50px;"
         >
           <div v-if="!isLoading">
             <apexchart
@@ -290,8 +354,22 @@
             />
           </div>
         </div>
-        <div class="col-md-5"
-              style="margin: auto;padding: 50px;"
+        <div
+          class="col-md-5"
+          style="margin: auto;padding: 50px;"
+        >
+          <div v-if="!isLoading">
+            <apexchart
+              type="bar"
+              height="500"
+              :options="barChart7.data.chartOptions"
+              :series="barChart7.data.series"
+            />
+          </div>
+        </div>
+        <div
+          class="col-md-5"
+          style="margin: auto;padding: 50px;"
         >
           <div v-if="!isLoading">
             <apexchart
@@ -302,8 +380,9 @@
             />
           </div>
         </div>
-        <div class="col-md-5"
-              style="margin: auto;padding: 50px;"
+        <div
+          class="col-md-5"
+          style="margin: auto;padding: 50px;"
         >
           <div v-if="!isLoading">
             <apexchart
@@ -314,8 +393,9 @@
             />
           </div>
         </div>
-        <div class="col-md-5"
-              style="margin: auto;padding: 50px;"
+        <div
+          class="col-md-5"
+          style="margin: auto;padding: 50px;"
         >
           <div v-if="!isLoading">
             <apexchart
@@ -326,8 +406,9 @@
             />
           </div>
         </div>
-        <div class="col-md-5"
-              style="margin: auto;padding: 50px;"
+        <div
+          class="col-md-5"
+          style="margin: auto;padding: 50px;"
         >
           <div v-if="!isLoading">
             <apexchart
@@ -338,8 +419,9 @@
             />
           </div>
         </div>
-        <div class="col-md-5"
-              style="margin: auto;padding: 50px;"
+        <div
+          class="col-md-5"
+          style="margin: auto;padding: 50px;"
         >
           <div v-if="!isLoading">
             <apexchart
@@ -350,8 +432,37 @@
             />
           </div>
         </div>
+        <div
+          class="col-md-5"
+          style="margin: auto;padding: 50px;"
+        >
+          <div v-if="!isLoading">
+            <apexchart
+              type="bar"
+              height="500"
+              :options="barChart8.data.chartOptions"
+              :series="barChart8.data.series"
+            />
+          </div>
+        </div>
+        <div
+          class="col-md-5"
+          style="margin: auto;padding: 50px;"
+        >
+          <div v-if="!isLoading">
+            <apexchart
+              type="bar"
+              height="500"
+              :options="barChart9.data.chartOptions"
+              :series="barChart9.data.series"
+            />
+          </div>
+        </div>
       </div>
-      <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+      <vue-element-loading
+        :active="isLoading"
+        spinner="bar-fade-scale"
+      />
     </card>
   </div>
 </template>
@@ -1095,6 +1206,213 @@ export default {
           },
         },
       },
+      barChart7: {
+        data: {
+          series: [{
+            name: 'Cumulus',
+            data: [],
+          }, {
+            name: 'Nimbus',
+            data: [],
+          }, {
+            name: 'Stratus',
+            data: [],
+          }],
+          chartOptions: {
+            chart: {
+              type: 'bar',
+              width: 300,
+              stacked: true,
+              toolbar: {
+                show: true,
+              },
+              zoom: {
+                enabled: true,
+              },
+            },
+            title: {
+              text: 'Top 10 Region Location',
+              margin: 50,
+              style: {
+                fontSize: '22px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            subtitle: {
+              text: 'Region With Highest Node Count',
+              margin: 70,
+              style: {
+                fontSize: '12px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            responsive: [
+              {
+                options: {
+                  chart: {
+                    width: 150,
+                  },
+                },
+              },
+            ],
+            plotOptions: {
+              bar: {
+                horizontal: false,
+                borderRadius: 10,
+              },
+            },
+            xaxis: {
+              categories: [],
+            },
+            yaxis: {
+              title: {
+                text: 'Node Count',
+              },
+            },
+            legend: {
+              position: 'right',
+              offsetY: 40,
+            },
+            fill: {
+              opacity: 1,
+            },
+          },
+        },
+      },
+      barChart8: {
+        data: {
+          series: [{
+            name: 'Ping',
+            data: [],
+          }],
+          chartOptions: {
+            chart: {
+              type: 'bar',
+              height: 350,
+            },
+            plotOptions: {
+              bar: {
+                horizontal: false,
+                columnWidth: '55%',
+                endingShape: 'rounded',
+              },
+            },
+            dataLabels: {
+              enabled: false,
+            },
+            stroke: {
+              show: true,
+              width: 2,
+              colors: ['transparent'],
+            },
+            xaxis: {
+              categories: ['Cumulus', 'Nimbus', 'Stratus'],
+            },
+            yaxis: {
+              title: {
+                text: 'Latency',
+              },
+            },
+            fill: {
+              opacity: 1,
+            },
+            title: {
+              text: 'Network Latency Per Tier',
+              margin: 50,
+              style: {
+                fontSize: '22px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            subtitle: {
+              text: 'Average Network Latency Per Tier',
+              margin: 70,
+              style: {
+                fontSize: '12px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+          },
+        },
+      },
+      barChart9: {
+        data: {
+          series: [{
+            data: [],
+          }],
+          chartOptions: {
+            chart: {
+              type: 'bar',
+              width: 300,
+              stacked: true,
+              toolbar: {
+                show: true,
+              },
+              zoom: {
+                enabled: true,
+              },
+            },
+            title: {
+              text: 'Top 10 Fastest Latency',
+              margin: 50,
+              style: {
+                fontSize: '22px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            subtitle: {
+              text: 'Countries With Fastest Latency On Average',
+              margin: 70,
+              style: {
+                fontSize: '12px',
+                fontWeight: '9px',
+                fontFamily: 'Arial',
+                color: '#959392',
+              },
+            },
+            responsive: [
+              {
+                options: {
+                  chart: {
+                    width: 150,
+                  },
+                },
+              },
+            ],
+            plotOptions: {
+              bar: {
+                horizontal: false,
+                borderRadius: 10,
+              },
+            },
+            xaxis: {
+              categories: [],
+            },
+            yaxis: {
+              title: {
+                text: 'Latency',
+              },
+            },
+            legend: {
+              position: 'right',
+              offsetY: 40,
+            },
+            fill: {
+              opacity: 1,
+            },
+          },
+        },
+      },
       tableData: [],
       totalNumberOfNodes: 0,
       totalNumberOfCumulus: 0,
@@ -1111,6 +1429,7 @@ export default {
       paymentAddress: new Map(),
       organization: new Map(),
       totalCountries: 0,
+      totalRegions: 0,
       totalNodes: new Map(),
       totalCumulus: new Map(),
       totalStratus: new Map(),
@@ -1121,10 +1440,21 @@ export default {
       averageDownloadSpeedNimbus: 0,
       averageUploadSpeedStratus: 0,
       averageDownloadSpeedStratus: 0,
+      averageLatencyCumulus: 0,
+      averageLatencyNimbus: 0,
+      averageLatencyStratus: 0,
+      mapLatency: new Map(),
+      mapCumulusLatency: new Map(),
+      mapNimbusLatency: new Map(),
+      mapStratusLatency: new Map(),
       map: new Map(),
       mapCumulus: new Map(),
       mapNimbus: new Map(),
       mapStratus: new Map(),
+      mapRegion: new Map(),
+      mapCumulusRegion: new Map(),
+      mapNimbusRegion: new Map(),
+      mapStratusRegion: new Map(),
       mapOrganizations: new Map(),
       mapOrganizationsCumulus: new Map(),
       mapOrganizationsNimbus: new Map(),
@@ -1200,10 +1530,26 @@ export default {
           this.mapStratus.set(data.geolocation.country, 0);
           this.totalCountries += 1;
         }
+        if (!this.mapRegion.has(data.geolocation.regionName)) {
+          this.mapRegion.set(data.geolocation.regionName, 0);
+          this.mapCumulusRegion.set(data.geolocation.regionName, 0);
+          this.mapNimbusRegion.set(data.geolocation.regionName, 0);
+          this.mapStratusRegion.set(data.geolocation.regionName, 0);
+          this.totalRegions += 1;
+        }
+        if (!this.mapLatency.has(data.geolocation.country)) {
+          this.mapLatency.set(data.geolocation.country, 0);
+        }
         this.map.set(data.geolocation.country, this.map.has(data.geolocation.country) ? this.map.get(data.geolocation.country) + 1 : this.map.get(data.geolocation.country));
         this.mapCumulus.set(data.geolocation.country, data.tier === 'CUMULUS' ? this.mapCumulus.get(data.geolocation.country) + 1 : this.mapCumulus.get(data.geolocation.country));
         this.mapNimbus.set(data.geolocation.country, data.tier === 'NIMBUS' ? this.mapNimbus.get(data.geolocation.country) + 1 : this.mapNimbus.get(data.geolocation.country));
         this.mapStratus.set(data.geolocation.country, data.tier === 'STRATUS' ? this.mapStratus.get(data.geolocation.country) + 1 : this.mapStratus.get(data.geolocation.country));
+        this.mapRegion.set(data.geolocation.regionName, this.mapRegion.has(data.geolocation.regionName) ? this.mapRegion.get(data.geolocation.regionName) + 1 : this.mapRegion.get(data.geolocation.regionName));
+        this.mapCumulusRegion.set(data.geolocation.regionName, data.tier === 'CUMULUS' ? this.mapCumulusRegion.get(data.geolocation.regionName) + 1 : this.mapCumulusRegion.get(data.geolocation.regionName));
+        this.mapNimbusRegion.set(data.geolocation.regionName, data.tier === 'NIMBUS' ? this.mapNimbusRegion.get(data.geolocation.regionName) + 1 : this.mapNimbusRegion.get(data.geolocation.regionName));
+        this.mapStratusRegion.set(data.geolocation.regionName, data.tier === 'STRATUS' ? this.mapStratusRegion.get(data.geolocation.regionName) + 1 : this.mapStratusRegion.get(data.geolocation.regionName));
+        const latency = Number.isNaN(data.benchmark.bench.ping) || data.benchmark.bench.ping === undefined ? 0 : parseFloat(data.benchmark.bench.ping);
+        this.mapLatency.set(data.geolocation.country, this.mapLatency.has(data.geolocation.country) ? (parseFloat(this.mapLatency.get(data.geolocation.country)) + latency) / 2 : parseFloat(this.mapLatency.get(data.geolocation.country)));
         const uploadSpeed = Number.isNaN(data.benchmark.bench.upload_speed) || data.benchmark.bench.upload_speed === undefined ? 0 : parseFloat(data.benchmark.bench.upload_speed).toFixed(2);
         const downloadSpeed = Number.isNaN(data.benchmark.bench.download_speed) || data.benchmark.bench.download_speed === undefined ? 0 : parseFloat(data.benchmark.bench.download_speed).toFixed(2);
         this.averageUploadSpeedCumulus = data.tier === 'CUMULUS' ? (parseFloat(this.averageUploadSpeedCumulus) + parseFloat(uploadSpeed)).toFixed(2) : this.averageUploadSpeedCumulus;
@@ -1212,6 +1558,9 @@ export default {
         this.averageDownloadSpeedCumulus = data.tier === 'CUMULUS' ? (parseFloat(this.averageDownloadSpeedCumulus) + parseFloat(downloadSpeed)).toFixed(2) : this.averageDownloadSpeedCumulus;
         this.averageDownloadSpeedNimbus = data.tier === 'NIMBUS' ? (parseFloat(this.averageDownloadSpeedNimbus) + parseFloat(downloadSpeed)).toFixed(2) : this.averageDownloadSpeedNimbus;
         this.averageDownloadSpeedStratus = data.tier === 'STRATUS' ? (parseFloat(this.averageDownloadSpeedStratus) + parseFloat(downloadSpeed)).toFixed(2) : this.averageDownloadSpeedStratus;
+        this.averageLatencyCumulus = data.tier === 'CUMULUS' ? (parseFloat(this.averageLatencyCumulus) + parseFloat(latency)).toFixed(2) : this.averageLatencyCumulus;
+        this.averageLatencyNimbus = data.tier === 'NIMBUS' ? (parseFloat(this.averageLatencyNimbus) + parseFloat(latency)).toFixed(2) : this.averageLatencyNimbus;
+        this.averageLatencyStratus = data.tier === 'STRATUS' ? (parseFloat(this.averageLatencyStratus) + parseFloat(latency)).toFixed(2) : this.averageLatencyStratus;
         const as = new Date(parseInt(data.activeSince * 1000, 10)).toLocaleString();
         const date = as.split(', ')[0];
         const month = date.split('/')[0];
@@ -1257,6 +1606,47 @@ export default {
         this.barChart1.data.series[0].data.push(this.mapCumulus.get(ent[i].name));
         this.barChart1.data.series[1].data.push(this.mapNimbus.get(ent[i].name));
         this.barChart1.data.series[2].data.push(this.mapStratus.get(ent[i].name));
+      }
+      idx = 0;
+      ent = [];
+      for (const entry of new Map([...this.mapRegion.entries()].sort((a, b) => b[1] - a[1])).entries()) {
+        const key = entry[0];
+        const value = entry[1];
+        ent.push({
+          name: key,
+          total: value,
+        });
+        if (idx < 9) {
+          idx += 1;
+        } else {
+          break;
+        }
+      }
+      for (let i = 0; i < 10; i += 1) {
+        this.barChart7.data.chartOptions.xaxis.categories.push(ent[i].name);
+        this.barChart7.data.series[0].data.push(this.mapCumulusRegion.get(ent[i].name));
+        this.barChart7.data.series[1].data.push(this.mapNimbusRegion.get(ent[i].name));
+        this.barChart7.data.series[2].data.push(this.mapStratusRegion.get(ent[i].name));
+      }
+      console.log(this.mapLatency);
+      idx = 0;
+      ent = [];
+      for (const entry of new Map([...this.mapLatency.entries()].sort((a, b) => a[1] - b[1])).entries()) {
+        const key = entry[0];
+        const value = entry[1];
+        ent.push({
+          name: key,
+          total: value,
+        });
+        if (idx < 9) {
+          idx += 1;
+        } else {
+          break;
+        }
+      }
+      for (let i = 0; i < 10; i += 1) {
+        this.barChart9.data.chartOptions.xaxis.categories.push(ent[i].name);
+        this.barChart9.data.series[0].data.push(parseFloat(this.mapLatency.get(ent[i].name)).toFixed(2));
       }
       idx = 0;
       ent = [];
@@ -1356,6 +1746,11 @@ export default {
         parseFloat(this.averageDownloadSpeedCumulus / this.totalNumberOfCumulus).toFixed(2),
         parseFloat(this.averageDownloadSpeedNimbus / this.totalNumberOfNimbus).toFixed(2),
         parseFloat(this.averageDownloadSpeedStratus / this.totalNumberOfStratus).toFixed(2),
+      ];
+      this.barChart8.data.series[0].data = [
+        parseFloat(this.averageLatencyCumulus / this.totalNumberOfCumulus).toFixed(2),
+        parseFloat(this.averageLatencyNimbus / this.totalNumberOfNimbus).toFixed(2),
+        parseFloat(this.averageLatencyStratus / this.totalNumberOfStratus).toFixed(2),
       ];
     },
     async getFluxPriceHistory() {

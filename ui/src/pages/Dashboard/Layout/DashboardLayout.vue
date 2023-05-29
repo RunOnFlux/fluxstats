@@ -19,8 +19,9 @@
           <sidebar-item :link="{name: 'Up Time', path: '/flux/nodeinfo/uptime'}" />
           <sidebar-item :link="{name: 'Daemon', path: '/flux/nodeinfo/daemon'}" />
         </sidebar-item>
-        <sidebar-item :link="{name: 'History', icon: 'nc-icon nc-notes'}">
-          <sidebar-item :link="{name: 'Info', path: '/flux/nodehistory/historyinfo'}" />
+        <sidebar-item :link="{name: 'History Info', icon: 'nc-icon nc-notes', path: '/flux/nodehistory/historyinfo'}" />
+        <sidebar-item :link="{name: 'Information', icon: 'nc-icon nc-bullet-list-67'}">
+          <sidebar-item :link="{name: 'Marketplace', path: '/flux/information/marketplace'}" />
         </sidebar-item>
       </template>
     </side-bar>

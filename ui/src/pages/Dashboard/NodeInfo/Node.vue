@@ -211,7 +211,10 @@
             :total="pagination.total"
           />
         </div>
-        <vue-element-loading :active="isLoading" spinner="bar-fade-scale" />
+        <vue-element-loading
+          :active="isLoading"
+          spinner="bar-fade-scale"
+        />
       </card>
     </div>
   </div>
@@ -226,6 +229,10 @@ import axios from 'axios';
 import { MemoryStorage } from 'ttl-localstorage';
 import { ExportToCsv } from 'export-to-csv';
 import VueElementLoading from 'vue-element-loading';
+import CsvService from '../Service/CsvService';
+import SearchService from '../Service/SearchService';
+import TransformationService from '../Service/TransformationService';
+import SortService from '../Service/SortService';
 import {
   httpRequestFluxInfo, httpRequestDaemonInfo, httpRequestFluxHistoryStats,
 } from '../Request/HttpRequest';
@@ -339,25 +346,9 @@ export default {
     processData(sortProps, isProcessingState) {
       let result;
       if (this.searchQuery !== '') {
-        const temp = [];
-        result = this.fuseSearch.search(`=${this.searchQuery}`);
-        for (let i = 0; i < Object.keys(result).length; i += 1) {
-          temp.push(result[i].item);
-        }
-        result = temp;
+        result = SearchService.search(this.fuseSearch, this.searchQuery);
       } else if (this.filters.default.length) {
-        const arr = [];
-        const data = [];
-        this.filters.default.forEach((item) => {
-          const objs = this.filter.get(item);
-          objs.forEach((obj) => {
-            if (!arr.includes(`${obj.node.status.ip}${obj.flux.zelid}`)) {
-              arr.push(`${obj.node.status.ip}${obj.flux.zelid}`);
-              data.push(obj);
-            }
-          });
-        });
-        result = data;
+        result = TransformationService.processFilters(this.filters, this.filter, 'node');
       } else {
         result = this.tableData;
       }
@@ -466,116 +457,15 @@ export default {
     },
     setSearch() {
       this.originalData = JSON.stringify(this.tableData);
-      this.fuseSearch = new Fuse(this.tableData, { useExtendedSearch: true, keys: ['node.status.ip'] });
+      this.fuseSearch = SearchService.generateSearch(Fuse, this.tableData, ['node.status.ip']);
     },
     sortChange(sortProps) {
       this.processData(sortProps, true);
     },
     sorting(sortProps, data) {
-      if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.node.status.ip > b.node.status.ip) {
-            val = 1;
-          } else if (a.node.status.ip < b.node.status.ip) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'IP Address' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.node.status.ip < b.node.status.ip) {
-            val = 1;
-          } else if (a.node.status.ip > b.node.status.ip) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Network Protocol' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.node.status.network > b.node.status.network) {
-            val = 1;
-          } else if (a.node.status.network < b.node.status.network) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Network Protocol' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.node.status.network < b.node.status.network) {
-            val = 1;
-          } else if (a.node.status.network > b.node.status.network) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Tier' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.node.status.tier > b.node.status.tier) {
-            val = 1;
-          } else if (a.node.status.tier < b.node.status.tier) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Tier' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.node.status.tier < b.node.status.tier) {
-            val = 1;
-          } else if (a.node.status.tier > b.node.status.tier) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Status' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.node.status.status > b.node.status.status) {
-            val = 1;
-          } else if (a.node.status.status < b.node.status.status) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Status' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.node.status.status < b.node.status.status) {
-            val = 1;
-          } else if (a.node.status.status > b.node.status.status) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Payment Rank' && sortProps.column.order === 'ascending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.node.status.rank > b.node.status.rank) {
-            val = 1;
-          } else if (a.node.status.rank < b.node.status.rank) {
-            val = -1;
-          }
-          return val;
-        });
-      } else if (sortProps.column.label === 'Payment Rank' && sortProps.column.order === 'descending') {
-        data.sort((a, b) => {
-          let val = 0;
-          if (a.node.status.rank < b.node.status.rank) {
-            val = 1;
-          } else if (a.node.status.rank > b.node.status.rank) {
-            val = -1;
-          }
-          return val;
-        });
-      } else {
-        this.tableData = JSON.parse(this.originalData);
-      }
-      return data;
+      const ret = SortService.sortNode(data, sortProps, this.originalData);
+      this.tableData = Object.keys(ret.tableDatas).length > 0 ? ret.tableDatas : this.tableData;
+      return ret.datas;
     },
     processDataForCsv(data) {
       const values = [];
@@ -609,48 +499,7 @@ export default {
       return values;
     },
     downloadCsvFile(data) {
-      const date = new Date();
-      const month = date.getMonth();
-      const day = date.getDate();
-      const year = date.getFullYear();
-      const options = {
-        filename: `Node_${month}${day}${year}`,
-        fieldSeparator: ',',
-        quoteStrings: '"',
-        decimalSeparator: '.',
-        showLabels: true,
-        showTitle: true,
-        title: `Node - ${month}/${day}/${year}`,
-        useTextFile: false,
-        useBom: true,
-        headers: [
-          'IP Address',
-          'Network Protocol',
-          'Tier',
-          'Status',
-          'Payment Rank',
-          'Collateral',
-          'Txn Hash',
-          'Added Height',
-          'Out Idx',
-          'Confirmed Height',
-          'Last Confirmed Height',
-          'Last Paid Height',
-          'Payment Address',
-          'Pub Key',
-          'Zel ID',
-          'Active Since',
-          'Active Since Converted',
-          'Last Paid',
-          'Last Paid Converted',
-          'Amount',
-          'Crux ID',
-          'DOS State',
-          'DOS Message',
-        ],
-      };
-      const csvExporter = new ExportToCsv(options);
-      csvExporter.generateCsv(this.processDataForCsv(data));
+      CsvService.Download(this.processDataForCsv(data), CsvService.NodeHeaders, 'Node', ExportToCsv);
     },
     processFilters(key) {
       if (!this.filters.default.includes(key)) {
@@ -664,14 +513,7 @@ export default {
       return this.processData(false, false);
     },
     processState(keys) {
-      this.filters.states.map((item) => {
-        const values = item;
-        values.state = false;
-        if (keys.includes(values.name)) {
-          values.state = true;
-        }
-        return values;
-      });
+      this.filters = TransformationService.processState(keys, this.filters);
     },
   },
 };
