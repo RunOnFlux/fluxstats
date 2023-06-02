@@ -56,7 +56,7 @@
       }
     ],
     "visible": true,
-    "enabled": false
+    "enabled": true
   },
   {
     "description": "The Timpi Collector Node hosted via the Flux Cloud",
