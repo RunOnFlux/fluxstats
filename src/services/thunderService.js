@@ -65,11 +65,11 @@ async function processThunder(time, node, timeout, retry = false) {
 
 async function processThunderNodes() {
   const startRefresh = new Date().getTime();
+  let processedThunderNodesRound = [];
   try {
     log.info(`Beginning processing processThunderNodes of ${startRefresh}.`);
     fluxNodesWithError = [];
     processedFluxNodes = [];
-    processedThundernodes = [];
     let nodes = await getNodes();
     if (nodes && nodes.length > 0) {
       nodes = nodes.filter((node) => node.last_paid_height && node.tier === 'CUMULUS'); // only CUMULUS nodes that are longer on the network
@@ -83,18 +83,18 @@ async function processThunderNodes() {
         if ((i + 1) % 75 === 0) {
           await Promise.allSettled(promiseArray);
           promiseArray = [];
-          totalProcessedNodes += processedFluxNodes.length;
+          totalProcessedNodes += processedThunderNodesRound.length;
           log.info(`processThunderNodes total processed: ${totalProcessedNodes}`);
-          processedFluxNodes = [];
-          log.info(`Thunder Nodes Already Found: ${processedThundernodes.length}`);
+          processedThunderNodesRound = [];
+          log.info(`Thunder Nodes Already Found: ${processedThunderNodesRound.length}`);
         }
       }
       if (promiseArray.length > 0) {
         await Promise.allSettled(promiseArray);
         promiseArray = [];
-        totalProcessedNodes += processedFluxNodes.length;
-        processedFluxNodes = [];
-        log.info(`Thunder Nodes Already Found: ${processedThundernodes.length}`);
+        totalProcessedNodes += processedThunderNodesRound.length;
+        processedThunderNodesRound = [];
+        log.info(`Thunder Nodes Already Found: ${processedThunderNodesRound.length}`);
       }
       log.info(`Found ${fluxNodesWithError.length} FluxNodes with errors.`);
       // eslint-disable-next-line no-restricted-syntax
@@ -103,17 +103,17 @@ async function processThunderNodes() {
         if ((i + 1) % 20 === 0) {
           await Promise.allSettled(promiseArray);
           promiseArray = [];
-          totalProcessedNodes += processedFluxNodes.length;
+          totalProcessedNodes += processedThunderNodesRound.length;
           log.info(`processThunderNodes total processed: ${totalProcessedNodes}`);
-          processedFluxNodes = [];
+          processedThunderNodesRound = [];
         }
       }
       if (promiseArray.length > 0) {
         await Promise.allSettled(promiseArray);
         promiseArray = [];
-        totalProcessedNodes += processedFluxNodes.length;
+        totalProcessedNodes += processedThunderNodesRound.length;
         log.info(`processThunderNodes total processed: ${totalProcessedNodes}`);
-        processedFluxNodes = [];
+        processedThunderNodesRound = [];
       }
       log.info(`Total Thunder Found: ${processedThundernodes.length}`);
       fluxNodesWithError = [];
@@ -125,6 +125,7 @@ async function processThunderNodes() {
   } finally {
     const endRefresh = new Date().getTime() - startRefresh;
     log.info(`Execution time of processThunder: ${endRefresh} ms`);
+    processedThundernodes = processedThunderNodesRound;
   }
 }
 
