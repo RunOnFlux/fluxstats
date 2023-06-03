@@ -3201,6 +3201,50 @@
     "enabled": true
   },
   {
+    "description": "Capture screenshots of websites as a (host it yourself) API. API Instructions: https://github.com/robvanderleek/capture-website-api#usage",
+    "price": 5.00,
+    "category": "Hosting",
+    "version": 4,
+    "name": "WebsiteScreenshotAPI",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "WebsiteScreenshotAPI",
+        "description": "website-screenshot-api",
+        "repotag": "wirewrex/cwa-flux:latest",
+        "containerPorts": [
+          8080
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/root",
+        "tiered": false,
+        "cpu": 2.0,
+        "ram": 2000,
+        "hdd": 20,
+        "cpubasic": 2.0,
+        "cpusuper": 2.0,
+        "cpubamf": 2.0,
+        "rambasic": 2000,
+        "ramsuper": 2000,
+        "rambamf": 2000,
+        "hddbasic": 20,
+        "hddsuper": 20,
+        "hddbamf": 20,
+        "portSpecs": [
+          "34000-34020"
+        ],
+        "ports": [34010],
+        "userEnvironmentParameters": []
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
     "description": "A Simple Public IP Address API",
     "price": 1.1,
     "category": "Hosting",
