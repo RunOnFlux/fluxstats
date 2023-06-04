@@ -162,8 +162,8 @@
   },
   {
     "description": "Presearch is a Decentralized Search Engine - PresearchNodeLegacy on Flux Network works with 'GrandFather' Nodes but with auto staking limitations when Nodes disconnect",
-    "price": 6.99,
-    "multiplier": 10.92,
+    "price": 9.99,
+    "multiplier": 15.6,
     "category": "Crypto",
     "version": 4,
     "name": "PresearchNodeLegacy",
@@ -214,8 +214,8 @@
   },
   {
     "description": "Presearch is a Decentralized Search Engine - PresearchNode on Flux Network uses FluxStorage to build Private Keys and works without auto staking limitations when Nodes disconnect, doesn't work with 'Grandfather' nodes.",
-    "price": 6.99,
-    "multiplier": 10.92,
+    "price": 9.99,
+    "multiplier": 15.6,
     "category": "Crypto",
     "version": 4,
     "name": "PresearchNode",
