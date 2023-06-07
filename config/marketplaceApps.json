@@ -111,8 +111,8 @@
   },
   {
     "description": "The Streamr Broker Node hosted via the Flux Cloud",
-    "price": 4,
-	  "multiplier": 1.97,
+    "price": 5.99,
+	  "multiplier": 2.94,
     "category": "Crypto",
     "version": 4,
     "name": "StreamrNode",
@@ -3586,8 +3586,8 @@
   },
   {
     "description": "Broker Node have been replaced by StreamrNode on Flux Marketplace",
-    "price": 4,
-    "multiplier": 1.97,
+    "price": 5.99,
+    "multiplier": 2.94,
     "category": "Crypto",
     "version": 4,
     "name": "BrokerNode",
