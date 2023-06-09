@@ -3634,5 +3634,55 @@
     ],
     "visible": true,
     "enabled": false
+  },
+  {
+    "description": "PoUW at Flux layer 2 network. Folding@home is a project focused on disease research. Client Visit was disabled, to check Run On Flux team stats go to https://stats.foldingathome.org/team/262156",
+    "price": 1.91,
+    "category": "Productivity",
+    "version": 4,
+    "name": "Folding@FluxCloud",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "FoldingAtHome",
+        "description": "Folding @ Home for AMD64 Devices.",
+        "repotag": "yurinnick/folding-at-home:latest",
+        "containerPorts": [
+          7396
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": ["TEAM=262156"],
+        "commands": [],
+        "containerData": "/config",
+        "tiered": false,
+        "cpu": 1.0,
+        "ram": 700,
+        "hdd": 3,
+        "cpubasic": 1.0,
+        "cpusuper": 1.0,
+        "cpubamf": 1.0,
+        "rambasic": 700,
+        "ramsuper": 700,
+        "rambamf": 700,
+        "hddbasic": 3,
+        "hddsuper": 3,
+        "hddbamf": 3,
+        "portSpecs": [
+          "35500-335600"
+        ],
+        "ports": [35555],
+        "userEnvironmentParameters": [
+          {
+            "name": "USER",
+            "description": "Type the username that you want to be folding to",
+            "placeholder": "Your Folding Username"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
