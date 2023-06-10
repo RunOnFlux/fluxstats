@@ -1615,7 +1615,7 @@
     "enabled": true
   },
   {
-    "description": "Streaming and chat platform",
+    "description": "Deploy Owncast - Self Hosted Streaming and Chat Platform - Config Instructions: https://owncast.online/docs/configuration/ ",
     "price": 15.0,
     "category": "Productivity",
     "version": 4,
@@ -2971,7 +2971,7 @@
     "enabled": true
   },
   {
-    "description": "Host your Minecraftt server on the Flux Cloud",
+    "description": "Host your Minecraft server on the Flux Cloud",
     "price": 6.9,
     "category": "Games",
     "version": 4,
