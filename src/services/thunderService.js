@@ -127,6 +127,9 @@ async function processThunderNodes() {
     const endRefresh = new Date().getTime() - startRefresh;
     log.info(`Execution time of processThunder: ${endRefresh} ms`);
     processedThundernodes = processedThundernodesRound;
+    setTimeout(() => {
+      processThunderNodes();
+    }, 60 * 60 * 1000);
   }
 }
 
