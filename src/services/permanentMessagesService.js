@@ -48,7 +48,7 @@ async function processMessages() {
     log.info(`Obtained message: ${messages.length}`);
     for (const hash of hashes) {
       const queryUpdate = { hash: hash.hash };
-      const exists = serviceHelper.findOneInDatabase(database, collection, queryUpdate);
+      const exists = serviceHelper.findOneInDatabase(database, collection, queryUpdate, {});
       if (!exists || !exists.message) { // not present in db or present in db but does not have message
         const value = hash;
         const mesExists = messages.find((m) => m.hash === hash.hash);
@@ -84,7 +84,7 @@ async function apiAllMessages(req, res) {
         _id: 0,
       },
     };
-      // return latest fluxnode round
+    // return latest fluxnode round
     const response = await serviceHelper.findInDatabase(database, collection, query, projection);
     const resMessage = serviceHelper.createDataMessage(response);
     res.json(resMessage);
@@ -106,7 +106,7 @@ async function apiMissingMessages(req, res) {
         _id: 0,
       },
     };
-      // return latest fluxnode round
+    // return latest fluxnode round
     const response = await serviceHelper.findInDatabase(database, collection, query, projection);
     const resMessage = serviceHelper.createDataMessage(response);
     res.json(resMessage);
@@ -126,7 +126,7 @@ async function apiStatsMessages(req, res) {
         _id: 0,
       },
     };
-      // return latest fluxnode round
+    // return latest fluxnode round
     const response = await serviceHelper.findInDatabase(database, collection, query, projection);
     const totalMessage = response.length;
     const missingMessages = response.filter((m) => m.message === false);
