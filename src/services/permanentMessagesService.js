@@ -51,6 +51,11 @@ async function processMessages() {
       const exists = serviceHelper.findOneInDatabase(database, collection, queryUpdate, {});
       if (!exists || !exists.message) { // not present in db or present in db but does not have message
         const value = hash;
+        if (!exists) {
+          log.info(`New hash: ${hash.hash}`);
+        } else {
+          log.info(`New message for hash: ${hash.hash}`);
+        }
         const mesExists = messages.find((m) => m.hash === hash.hash);
         if (mesExists) {
           value.message = mesExists;
