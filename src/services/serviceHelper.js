@@ -150,12 +150,12 @@ async function updateOneInDatabase(database, collection, query, update, options)
   return result;
 }
 
-async function updateInDatabase(database, collection, query, projection = {}) {
+async function updateInDatabase(database, collection, query, projection) {
   const result = await database.collection(collection).updateMany(query, projection).catch((error) => { throw error; });
   return result;
 }
 
-async function findOneAndDeleteInDatabase(database, collection, query, projection = {}) {
+async function findOneAndDeleteInDatabase(database, collection, query, projection) {
   const result = await database.collection(collection).findOneAndDelete(query, projection).catch((error) => { throw error; });
   return result;
 }
