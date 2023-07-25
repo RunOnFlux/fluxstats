@@ -60,6 +60,7 @@ async function processMessages() {
         if (!exists) {
           log.info(`New hash: ${hash.hash}`);
         } else {
+          log.info(`Current message: ${exists.message}`);
           log.info(`New message for hash: ${hash.hash}`);
         }
         const mesExists = messages.find((m) => m.hash === hash.hash);
