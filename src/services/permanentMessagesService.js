@@ -54,8 +54,8 @@ async function processMessages() {
           message: 1,
         },
       };
-      const exists = serviceHelper.findOneInDatabase(database, collection, queryUpdate, projection);
-      log.info(exists);
+      // eslint-disable-next-line no-await-in-loop
+      const exists = await serviceHelper.findOneInDatabase(database, collection, queryUpdate, projection);
       if (!exists || !exists.message) { // not present in db or present in db but does not have message
         const value = hash;
         if (!exists) {
