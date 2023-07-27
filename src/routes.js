@@ -48,7 +48,7 @@ module.exports = (app) => {
     permanentMessages.apiStatsMessages(req, res);
   });
   app.get('/fluxmessages/get/:hash?/:txid?', cache('1 minute'), (req, res) => {
-    permanentMessages.apiStatsMessages(req, res);
+    permanentMessages.apiGetMessage(req, res);
   });
 
   app.get('/kadena/nodes', cache('1 minute'), (req, res) => {
