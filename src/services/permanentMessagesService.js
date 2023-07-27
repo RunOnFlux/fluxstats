@@ -160,6 +160,33 @@ async function apiStatsMessages(req, res) {
   }
 }
 
+async function apiGetMessage(req, res) {
+  try {
+    let { hash } = req.params;
+    hash = hash || req.query.hash;
+    let { txid } = req.params;
+    txid = txid || req.query.txid;
+    const database = db.db(config.database.flux.database);
+    const query = {
+      hash,
+      txid,
+    };
+    const projection = {
+      projection: {
+        _id: 0,
+      },
+    };
+    // return latest fluxnode round
+    const response = await serviceHelper.findOneInDatabase(database, collection, query, projection);
+    const resMessage = serviceHelper.createDataMessage(response);
+    res.json(resMessage);
+  } catch (error) {
+    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+    res.json(errMessage);
+    log.error(error);
+  }
+}
+
 async function bootstrapFluxCollection() {
   const database = db.db(config.database.flux.database);
 
@@ -194,4 +221,5 @@ module.exports = {
   apiAllMessages,
   apiMissingMessages,
   apiStatsMessages,
+  apiGetMessage,
 };
