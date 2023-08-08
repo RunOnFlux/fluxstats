@@ -3727,7 +3727,7 @@
       }
     ],
     "visible": true,
-    "enabled": false
+    "enabled": true
   },
   {
     "description": "Host your Neurai-ElectrumX via Flux Cloud",
@@ -3771,6 +3771,6 @@
       }
     ],
     "visible": true,
-    "enabled": false
+    "enabled": true
   }
 ]
