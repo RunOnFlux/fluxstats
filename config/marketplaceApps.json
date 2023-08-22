@@ -3772,5 +3772,49 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "Host your Blockbook for Neurai on the Flux Cloud",
+    "price": 10.8,
+    "category": "Blockbook",
+    "version": 4,
+    "name": "BlockbookXNA",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "blockbookneurai",
+        "description": "Blockbook for Neurai",
+        "repotag": "runonflux/blockbook-docker:latest",
+        "containerPorts": [
+          9168,1337
+        ],
+        "domains": [
+          "",""
+        ],
+        "environmentParameters": ["COIN=neurai","BLOCKBOOK_PORT=9168","BLOCKBOOKGIT_URL=https://github.com/NeuraiProject/blockbook"],
+        "commands": [],
+        "containerData": "/root",
+        "tiered": false,
+        "cpu": 2.5,
+        "ram": 5000,
+        "hdd": 40.0,
+        "cpubasic": 2.5,
+        "cpusuper": 2.5,
+        "cpubamf": 2.5,
+        "rambasic": 5000,
+        "ramsuper": 5000,
+        "rambamf": 5000,
+        "hddbasic": 40,
+        "hddsuper": 40,
+        "hddbamf": 40,
+        "portSpecs": [
+          "34000-34500"
+        ],
+        "ports": [34149,31450],
+        "userEnvironmentParameters": []
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
