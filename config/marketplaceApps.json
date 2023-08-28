@@ -3847,16 +3847,7 @@
         "tiered": false,
         "cpu": 1,
         "ram": 2000,
-        "hdd": 10,
-        "cpubasic": 1,
-        "cpusuper": 1,
-        "cpubamf": 1,
-        "rambasic": 2000,
-        "ramsuper": 2000,
-        "rambamf": 2000,
-        "hddbasic": 10,
-        "hddsuper": 10,
-        "hddbamf": 10,      
+        "hdd": 10,      
         "portSpecs": [
           "38000-38999"
         ],
