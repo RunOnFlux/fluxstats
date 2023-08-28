@@ -3843,6 +3843,8 @@
         "cpu": 1,
         "ram": 2000,
         "hdd": 10,
+        "contacts": [],
+        "geolocation": [],
         "staticip": true,
         "nodes": [],
         "expire": 22000,
