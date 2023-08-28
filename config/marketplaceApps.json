@@ -3867,7 +3867,9 @@
             "description": "The key of your masternode",
             "placeholder": "Enter your key here"
           }
-        ]
+        ],
+        "secrets": "",
+        "repoauth": ""
       }
     ],
     "visible": true,
