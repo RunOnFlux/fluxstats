@@ -3825,6 +3825,11 @@
     "version": 7,
     "name": "FiroNode",
     "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "staticip": true,
+    "nodes": [],
+    "expire": 22000,
     "compose": [
       {
         "name": "node",
@@ -3842,12 +3847,7 @@
         "tiered": false,
         "cpu": 1,
         "ram": 2000,
-        "hdd": 10,
-        "contacts": [],
-        "geolocation": [],
-        "staticip": true,
-        "nodes": [],
-        "expire": 22000,
+        "hdd": 10,      
         "portSpecs": [
           "38000-38999"
         ],
