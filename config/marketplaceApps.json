@@ -367,12 +367,17 @@
   },
   {
     "description": "Host your Firo Node on the Flux Network",
-    "price": 9,
-	"multiplier": 1,
+    "price": 5.7,
+	  "multiplier": 1,
     "category": "Blockchain",
-    "version": 4,
+    "version": 7,
     "name": "FiroNode",
     "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "staticip": true,
+    "nodes": [],
+    "expire": 22000,
     "compose": [
       {
         "name": "node",
@@ -390,16 +395,7 @@
         "tiered": false,
         "cpu": 1,
         "ram": 2000,
-        "hdd": 10,
-        "cpubasic": 1,
-        "cpusuper": 1,
-        "cpubamf": 1,
-        "rambasic": 2000,
-        "ramsuper": 2000,
-        "rambamf": 2000,
-        "hddbasic": 10,
-        "hddsuper": 10,
-        "hddbamf": 10,
+        "hdd": 10,      
         "portSpecs": [
           "38000-38999"
         ],
@@ -410,7 +406,9 @@
             "description": "The key of your masternode",
             "placeholder": "Enter your key here"
           }
-        ]
+        ],
+        "secrets": "",
+        "repoauth": ""
       }
     ],
     "visible": true,
@@ -3812,55 +3810,6 @@
         ],
         "ports": [34149,31450],
         "userEnvironmentParameters": []
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
-    "description": "Host your Firo Node on the Flux Network",
-    "price": 5.7,
-	  "multiplier": 1,
-    "category": "Blockchain",
-    "version": 7,
-    "name": "FiroNode",
-    "instances": 3,
-    "contacts": [],
-    "geolocation": [],
-    "staticip": true,
-    "nodes": [],
-    "expire": 22000,
-    "compose": [
-      {
-        "name": "node",
-        "description": "The Firo Node container",
-        "repotag": "runonflux/fironode:latest",
-        "containerPorts": [
-          8168
-        ],
-        "domains": [
-          ""
-        ],
-        "environmentParameters": [],
-        "commands": [],
-        "containerData": "/root/.firo",
-        "tiered": false,
-        "cpu": 1,
-        "ram": 2000,
-        "hdd": 10,      
-        "portSpecs": [
-          "38000-38999"
-        ],
-        "ports": [38000],
-        "userEnvironmentParameters": [
-          {
-            "name": "KEY",
-            "description": "The key of your masternode",
-            "placeholder": "Enter your key here"
-          }
-        ],
-        "secrets": "",
-        "repoauth": ""
       }
     ],
     "visible": true,
