@@ -3832,7 +3832,7 @@
       {
         "name": "blocxmasternode",
         "description": "The BLOCX Masternode container",
-        "repotag": "blocxtech/blocxnode:2.1.0",
+        "repotag": "blocxtech/blocxnode:latest",
         "containerPorts": [
           12972
         ],
