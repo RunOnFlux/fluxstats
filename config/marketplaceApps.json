@@ -3817,7 +3817,7 @@
   },
   {
     "description": "Host your BLOCX Masternode on the Flux Cloud",
-    "price": 11.0,
+    "price": 8.0,
 	  "multiplier": 1,
     "category": "Blockchain",
     "version": 7,
@@ -3843,9 +3843,9 @@
         "commands": [],
         "containerData": "/root/.blocx",
         "tiered": false,
-        "cpu": 2,
-        "ram": 2000,
-        "hdd": 40,      
+        "cpu": 1,
+        "ram": 1000,
+        "hdd": 10,      
         "portSpecs": [
           "33100-33110"
         ],
