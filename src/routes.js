@@ -96,6 +96,10 @@ module.exports = (app) => {
     marketplaceService.listApps(req, res);
   });
 
+  app.get('/marketplace/listdevapps', cache('1 minute'), (req, res) => {
+    marketplaceService.listDevApps(req, res);
+  });
+
   app.get('/thunder/nodes', cache('1 minute'), (req, res) => {
     thunderService.getThunderNodes(req, res);
   });

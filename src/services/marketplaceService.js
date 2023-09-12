@@ -13,6 +13,18 @@ async function listApps(req, res) {
   }
 }
 
+async function listDevApps(req, res) {
+  try {
+    const appsList = await axios.get('https://raw.githubusercontent.com/RunOnFlux/fluxapi/master/config/devMarketplaceApps.json');
+    res.json({ status: 'success', data: appsList.data });
+  } catch (error) {
+    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+    res.json(errMessage);
+    log.error(error);
+  }
+}
+
 module.exports = {
   listApps,
+  listDevApps,
 };
