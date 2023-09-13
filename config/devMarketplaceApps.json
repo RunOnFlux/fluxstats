@@ -2972,7 +2972,7 @@
     "description": "Host your Java Minecraft server on the Flux Cloud",
     "price": 6.9,
     "category": "Games",
-    "version": 7,
+    "version": 4,
     "name": "Minecraft",
     "instances": 3,
     "compose": [
@@ -2993,15 +2993,6 @@
         "cpu": 2,
         "ram": 5000,
         "hdd": 30,
-        "cpubasic": 1.5,
-        "cpusuper": 1.5,
-        "cpubamf": 1.5,
-        "rambasic": 5000,
-        "ramsuper": 5000,
-        "rambamf": 5000,
-        "hddbasic": 30,
-        "hddsuper": 30,
-        "hddbamf": 30,
         "portSpecs": [
           "22222-39100"
         ],
