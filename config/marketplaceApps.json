@@ -415,17 +415,22 @@
     "enabled": true
   },
   {
-    "description": "Host your PivX Node on the Flux Network",
-    "price": 9,
-	"multiplier": 1,
+    "description": "Host your PIVX Masternode on the Flux Cloud",
+    "price": 10.0,
+	  "multiplier": 1,
     "category": "Blockchain",
-    "version": 4,
-    "name": "PivXNode",
+    "version": 7,
+    "name": "PIVXNode",
     "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "staticip": true,
+    "nodes": [],
+    "expire": 22000,
     "compose": [
       {
         "name": "node",
-        "description": "The PivX Node container",
+        "description": "The PIVX Masternode container",
         "repotag": "runonflux/pivxnode:latest",
         "containerPorts": [
           51472
@@ -438,17 +443,8 @@
         "containerData": "/root/.pivx",
         "tiered": false,
         "cpu": 1,
-        "ram": 2000,
-        "hdd": 50,
-        "cpubasic": 1,
-        "cpusuper": 1,
-        "cpubamf": 1,
-        "rambasic": 2000,
-        "ramsuper": 2000,
-        "rambamf": 2000,
-        "hddbasic": 50,
-        "hddsuper": 50,
-        "hddbamf": 50,
+        "ram": 2500,
+        "hdd": 50,      
         "portSpecs": [
           "37300-37500"
         ],
@@ -459,7 +455,9 @@
             "description": "The key of your masternode",
             "placeholder": "Enter your key here"
           }
-        ]
+        ],
+        "secrets": "",
+        "repoauth": ""
       }
     ],
     "visible": true,
