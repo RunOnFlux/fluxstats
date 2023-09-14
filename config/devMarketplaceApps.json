@@ -2969,65 +2969,61 @@
       "enabled": true
     },
     {
-      "description": "Host your Minecraftt server on the Flux Cloud",
-      "price": 6.9,
-      "category": "Games",
-      "version": 4,
-      "name": "Minecraft",
-      "instances": 3,
-      "compose": [
-        {
-          "name": "minecraftserver",
-          "description": "The Minecraft Server container",
-          "repotag": "itzg/minecraft-server:latest",
-          "containerPorts": [
-            25565
-          ],
-          "domains": [
-            ""
-          ],
-          "environmentParameters": ["EULA=TRUE"],
-          "commands": [],
-          "containerData": "s:/data",
-          "tiered": false,
-          "cpu": 1.5,
-          "ram": 5000,
-          "hdd": 30,
-          "cpubasic": 1.5,
-          "cpusuper": 1.5,
-          "cpubamf": 1.5,
-          "rambasic": 5000,
-          "ramsuper": 5000,
-          "rambamf": 5000,
-          "hddbasic": 30,
-          "hddsuper": 30,
-          "hddbamf": 30,
-          "portSpecs": [
-            "39000-39100"
-          ],
-          "ports": [39050],
-          "userEnvironmentParameters": [
-            {
-              "name": "SEED",
-              "description": "If you want to create the Minecraft level with a specific Seed (only Positive Numbers)",
-              "placeholder": "Put in a random Number, e.g 1785852800490497919"
-            },
-            {
-              "name": "DIFFICULTY",
-              "description": "The difficulty level can be set like peaceful, easy, normal, and hard",
-              "placeholder": "(default: easy)"
-            },
-            {
-              "name": "TYP",
-              "description": "What kind of server typ do you want, refer to https://github.com/itzg/docker-minecraft-server/blob/master/README.md",
-              "placeholder": "Enter your server typ here, e.g CATSERVER"
-            }
-          ]
-        }
-      ],
-      "visible": true,
-      "enabled": true
-    },
+    "description": "Host your Java Minecraft server on the Flux Cloud",
+    "price": 6.9,
+    "category": "Games",
+    "version": 4,
+    "name": "Minecraft",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "minecraftserver",
+        "description": "The Minecraft Server container",
+        "repotag": "wirewrex/minecraft-server:flux",
+        "containerPorts": [
+          25565,22222
+        ],
+        "domains": [
+          "",""
+        ],
+        "environmentParameters": ["EULA=TRUE"],
+        "commands": [],
+        "containerData": "/root|s:/root/cluster|s:/root/backup",
+        "tiered": false,
+        "cpu": 2,
+        "ram": 5000,
+        "hdd": 30,
+        "portSpecs": [
+          "22222-39100"
+        ],
+        "ports": [25565,22222],
+        "userEnvironmentParameters": [
+          {
+            "name": "SEED",
+            "description": "If you want to create the Minecraft level with a specific Seed (only Positive Numbers)",
+            "placeholder": "Put in a random Number, e.g 1785852800490497919"
+          },
+          {
+            "name": "MINECRAFT_USERNAME",
+            "description": "Enter the Minecraft username that should be designated as the server operator",
+            "placeholder": "minecraft username"
+          },
+          {
+            "name": "DIFFICULTY",
+            "description": "The difficulty level can be set like peaceful, easy, normal, and hard",
+            "placeholder": "(default: easy)"
+          },
+          {
+            "name": "TYPE",
+            "description": "What kind of server type do you want, refer to https://github.com/itzg/docker-minecraft-server/blob/master/README.md",
+            "placeholder": "Enter your server type here, e.g CATSERVER"
+          }
+        ]
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
     {
       "description": "Host your Meowcoin Full Node on the Flux Cloud",
       "price": 7.3,
@@ -3865,4 +3861,3 @@
       "enabled": true
     }
   ]
-  
