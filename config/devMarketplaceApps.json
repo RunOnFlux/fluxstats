@@ -2969,35 +2969,40 @@
       "enabled": true
     },
     {
-    "description": "Host your Java Minecraft server on the Flux Cloud",
-    "price": 12.15,
-    "category": "Games",
-    "version": 4,
-    "name": "Minecraft",
-    "instances": 3,
-    "compose": [
-      {
-        "name": "minecraftserver",
-        "description": "The Minecraft Server container",
-        "repotag": "wirewrex/minecraft-server:flux",
-        "containerPorts": [
-          25565,22222
-        ],
-        "domains": [
-          "",""
-        ],
-        "environmentParameters": ["EULA=TRUE"],
-        "commands": [],
-        "containerData": "/root|s:/root/cluster|s:/root/backup",
-        "tiered": false,
-        "cpu": 2,
-        "ram": 5000,
-        "hdd": 30,
-        "portSpecs": [
-          "22222-39100"
-        ],
-        "ports": [25565,22222],
-        "userEnvironmentParameters": [
+      "description": "Host your Java Minecraft server on the Flux Cloud",
+      "price": 12.15,
+      "category": "Games",
+      "version": 7,
+      "name": "Minecraft",
+      "instances": 3,
+      "contacts": [],
+      "geolocation": [],
+      "staticip": false,
+      "nodes": [],
+      "expire": 22000,
+      "compose": [
+        {
+          "name": "minecraftserver",
+          "description": "The Minecraft Server container",
+          "repotag": "wirewrex/minecraft-server:flux",
+          "containerPorts": [
+           25565,22222
+          ],
+          "domains": [
+            "",""
+          ],
+          "environmentParameters": ["EULA=TRUE"],
+          "commands": [],
+          "containerData": "/root|s:/root/cluster|s:/root/backup",
+          "tiered": false,
+          "cpu": 2,
+          "ram": 5000,
+          "hdd": 30,      
+          "portSpecs": [
+            "22222-25565"
+          ],
+          "ports": [25565,22222],
+          "userEnvironmentParameters": [
           {
             "name": "SEED",
             "description": "If you want to create the Minecraft level with a specific Seed (only Positive Numbers)",
@@ -3018,12 +3023,14 @@
             "description": "What kind of server type do you want, refer to https://github.com/itzg/docker-minecraft-server/blob/master/README.md",
             "placeholder": "Enter your server type here, e.g CATSERVER"
           }
-        ]
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
+        ],
+          "secrets": "",
+          "repoauth": ""
+        }
+      ],
+      "visible": true,
+      "enabled": true
+    },
     {
       "description": "Host your Meowcoin Full Node on the Flux Cloud",
       "price": 7.3,
