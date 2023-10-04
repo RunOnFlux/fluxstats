@@ -446,9 +446,9 @@
         "ram": 2500,
         "hdd": 50,      
         "portSpecs": [
-          "37300-37500"
+          "51400-51500"
         ],
-        "ports": [37300],
+        "ports": [51472],
         "userEnvironmentParameters": [
           {
             "name": "KEY",
