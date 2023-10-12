@@ -3808,7 +3808,7 @@
 	  "multiplier": 1,
     "category": "Blockchain",
     "version": 7,
-    "name": "NeoxaNode",
+    "name": "NeoxaMN",
     "instances": 3,
     "contacts": [],
     "geolocation": [],
