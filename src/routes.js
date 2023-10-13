@@ -97,7 +97,8 @@ module.exports = (app) => {
   });
 
   app.get('/marketplace/listdevapps', cache('1 minute'), (req, res) => {
-    marketplaceService.listDevApps(req, res);
+    // marketplaceService.listDevApps(req, res); //until we fix fluxOs marketplace
+    marketplaceService.listApps(req, res);
   });
 
   app.get('/thunder/nodes', cache('1 minute'), (req, res) => {
