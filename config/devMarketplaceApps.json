@@ -149,11 +149,12 @@
           "ports": [37566],
           "userEnvironmentParameters": [
             {
-              "name": "F_S_ENV",
-              "description": "Your Flux Storage Environment, containing the ident and key parameters",
-              "placeholder": "Enter your https link here"
+              "name": "key",
+              "description": "Your Timpi Node Key",
+              "placeholder": "Timpi Node Key"
             }
-          ]
+          ],
+          "envFluxStorage": true
         }
       ],
       "visible": true,
