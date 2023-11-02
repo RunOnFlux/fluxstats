@@ -366,18 +366,18 @@
     "enabled": true
   },
   {
-    "description": "Host your Firo Node on the Flux Network",
-    "price": 5.7,
+    "description": "Host your Firo Masternode on the Flux Cloud for a 3-month plan",
+    "price": 25.83,
 	  "multiplier": 1,
     "category": "Masternode",
     "version": 7,
-    "name": "FiroNode",
+    "name": "FiroMN3",
     "instances": 3,
     "contacts": [],
     "geolocation": [],
     "staticip": true,
     "nodes": [],
-    "expire": 22000,
+    "expire": 66000,
     "compose": [
       {
         "name": "node",
@@ -395,7 +395,7 @@
         "tiered": false,
         "cpu": 1,
         "ram": 2000,
-        "hdd": 10,      
+        "hdd": 12,      
         "portSpecs": [
           "38000-38999"
         ],
