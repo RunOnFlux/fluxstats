@@ -2985,7 +2985,7 @@
         {
           "name": "minecraftserver",
           "description": "The Minecraft Server container",
-          "repotag": "wirewrex/minecraft-server:flux",
+          "repotag": "wirewrex/minecraft-server:fluxtest",
           "containerPorts": [
            25565,22222
           ],
@@ -2994,7 +2994,7 @@
           ],
           "environmentParameters": ["EULA=TRUE"],
           "commands": [],
-          "containerData": "/root|s:/root/cluster|s:/root/backup",
+          "containerData": "/root|s:/root/cluster",
           "tiered": false,
           "cpu": 2,
           "ram": 5000,
