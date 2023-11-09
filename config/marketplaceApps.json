@@ -420,7 +420,7 @@
 	  "multiplier": 1,
     "category": "Masternode",
     "version": 7,
-    "name": "PIVXNode",
+    "name": "PIVXMN",
     "instances": 3,
     "contacts": [],
     "geolocation": [],
@@ -469,7 +469,7 @@
 	"multiplier": 1,
     "category": "Masternode",
     "version": 4,
-    "name": "DashNode",
+    "name": "DashMN",
     "instances": 3,
     "compose": [
       {
@@ -3759,7 +3759,7 @@
 	  "multiplier": 1,
     "category": "Masternode",
     "version": 7,
-    "name": "BLOCXNode",
+    "name": "BLOCXMN",
     "instances": 3,
     "contacts": [],
     "geolocation": [],
