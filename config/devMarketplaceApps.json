@@ -378,7 +378,7 @@
       "geolocation": [],
       "staticip": true,
       "nodes": [],
-      "expire": 22000,
+      "expire": 66000,
       "compose": [
         {
           "name": "node",
