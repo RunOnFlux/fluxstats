@@ -3850,5 +3850,40 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "Host your Celestia Light Node on the Flux Cloud",
+    "price": 5.5,
+    "category": "Blockchain",
+    "version": 4,
+    "name": "CelestiaLN",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "celestialightnode",
+        "description": "The Celestia Light Node container",
+        "repotag": "runonflux/celestia-node:latest",
+        "containerPorts": [
+          26658,2121,9090
+        ],
+        "domains": [
+          "","",""
+        ],
+        "environmentParameters": ["NODE_TYPE=light","P2P_NETWORK=celestia"],
+        "commands": [],
+        "containerData": "/home/celestia/.celestia-light",
+        "tiered": false,
+        "cpu": 1.0,
+        "ram": 2000,
+        "hdd": 50.0,
+        "portSpecs": [
+          "2000-27000"
+        ],
+        "ports": [26658,2121,9090],
+        "userEnvironmentParameters": []
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
