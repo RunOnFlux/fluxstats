@@ -233,7 +233,7 @@ async function getFluxNodeGeolocation(ip) {
         source.cancel('Operation canceled by the user.');
       }
     }, defaultTimeout * 2);
-    const ipApiUrl = `http://ip-api.com/json/${ip.split(':')[0]}?fields=status,continent,continentCode,country,countryCode,region,regionName,lat,lon,query,org`;
+    const ipApiUrl = `http://ip-api.com/json/${ip.split(':')[0]}?fields=status,continent,continentCode,country,countryCode,region,regionName,lat,lon,query,org,isp`;
     const ipRes = await httpGeo.get(ipApiUrl);
     isResolved = true;
     if (ipRes.data.status === 'success') {
@@ -247,7 +247,7 @@ async function getFluxNodeGeolocation(ip) {
         regionName: ipRes.data.regionName,
         lat: ipRes.data.lat,
         lon: ipRes.data.lon,
-        org: ipRes.data.org,
+        org: ipRes.data.org || ipRes.data.isp,
       };
       // push this to our database
       return information;
