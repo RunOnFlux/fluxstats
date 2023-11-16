@@ -34,6 +34,13 @@ const LRUoptionsShort = {
 
 const myCacheShort = new LRU(LRUoptionsShort);
 
+// default cache
+const LRUGeoOptions = {
+  max: 20000, // 20000 unique ips
+  ttl: 1000 * 60 * 60 * 24 * 7, // 1 week
+};
+const myGeolocationCache = new LRU(LRUGeoOptions);
+
 let db = null;
 const geocollection = config.database.local.collections.geolocation;
 const completedRoundsCollection = config.database.local.collections.completedRounds;
@@ -525,46 +532,28 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
       conIn = connectionsIn.length;
     }
     const auxIp = fluxnode.ip.split(':')[0];
-    const query = { ip: auxIp };
-    const projection = {
-      projection: {
-        _id: 0,
-        ip: 1,
-        continent: 1,
-        continentCode: 1,
-        country: 1,
-        countryCode: 1,
-        region: 1,
-        regionName: 1,
-        lat: 1,
-        lon: 1,
-        org: 1,
-      },
-    };
-    const result = await serviceHelper.findOneInDatabase(database, geocollection, query, projection).catch((error) => {
-      log.error(error);
-    });
-    if (!result && fluxInfo.geolocation) {
-      // geo ok, store it and update fluxInfo.
-      await serviceHelper.insertOneToDatabase(database, geocollection, fluxInfo.geolocation).catch((error) => {
-        log.error(error);
-      });
-    }
-    if (!fluxInfo.geolocation) {
-      // we shall always have geolocation
-      if (result) {
-        fluxInfo.geolocation = result;
-      } else {
+
+    if (!myGeolocationCache.has(auxIp)) {
+      myGeolocationCache.set(auxIp, auxIp);
+      if (!fluxInfo.geolocation) {
         const geoRes = await getFluxNodeGeolocation(fluxnode.ip);
         if (geoRes) {
           fluxInfo.geolocation = geoRes;
-          // geo ok, store it and update fluxInfo.
-          await serviceHelper.insertOneToDatabase(database, geocollection, fluxInfo.geolocation).catch((error) => {
-            log.error(error);
-          });
         }
       }
+      if (fluxInfo.geolocation) {
+        const query = { ip: auxIp };
+        const update = { $set: fluxInfo.geolocation };
+        const options = {
+          upsert: true,
+        };
+        // eslint-disable-next-line no-await-in-loop
+        await serviceHelper.updateOneInDatabase(database, geocollection, query, update, options).catch((error) => {
+          log.error(error);
+        });
+      }
     }
+
     fluxInfo.ip = fluxnode.ip;
     fluxInfo.addedHeight = fluxnode.added_height;
     fluxInfo.confirmedHeight = fluxnode.confirmed_height;
