@@ -226,6 +226,7 @@ async function getFluxNodeIPs(fluxnodeList) {
 async function getFluxNodeGeolocation(ip) {
   try {
     const { CancelToken } = axios;
+    log.info(`Getting Geolocation of IP ${ip.split(':')[0]}`);
     const source = CancelToken.source();
     let isResolved = false;
     setTimeout(() => {
@@ -236,7 +237,7 @@ async function getFluxNodeGeolocation(ip) {
     const ipApiUrl = `http://ip-api.com/json/${ip.split(':')[0]}?fields=status,continent,continentCode,country,countryCode,region,regionName,lat,lon,query,org,isp`;
     const ipRes = await httpGeo.get(ipApiUrl);
     isResolved = true;
-    if (ipRes.data.status === 'success') {
+    if (ipRes.data.status === 'success' && ipRes.data.ip !== '') {
       const information = {
         ip: ipRes.data.query,
         continent: ipRes.data.continent,
@@ -535,13 +536,13 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
 
     if (!myGeolocationCache.has(auxIp)) {
       myGeolocationCache.set(auxIp, auxIp);
-      if (!fluxInfo.geolocation) {
+      if (!fluxInfo.geolocation || fluxInfo.geolocation.ip === '') {
         const geoRes = await getFluxNodeGeolocation(fluxnode.ip);
         if (geoRes) {
           fluxInfo.geolocation = geoRes;
         }
       }
-      if (fluxInfo.geolocation) {
+      if (fluxInfo.geolocation && fluxInfo.geolocation.ip !== '') {
         const query = { ip: auxIp };
         const update = { $set: fluxInfo.geolocation };
         const options = {
@@ -551,6 +552,14 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
         await serviceHelper.updateOneInDatabase(database, geocollection, query, update, options).catch((error) => {
           log.error(error);
         });
+      }
+    }
+    if (!fluxInfo.geolocation || fluxInfo.geolocation.ip === '') {
+      const geoRes = await getFluxNodeGeolocation(fluxnode.ip);
+      if (geoRes) {
+        fluxInfo.geolocation = geoRes;
+      } else {
+        fluxInfo.geolocation = null;
       }
     }
 
@@ -632,11 +641,15 @@ async function getGeolocationInBatchAndRefreshDatabase() {
       ordered: false, // If false, continue with remaining inserts when one fails.
     };
     // eslint-disable-next-line no-restricted-syntax
-    for (let i = 0; i < currentFluxNodeIps.length; i += 1) {
-      const ip = currentFluxNodeIps[i];
+    const uniqueFluxNodeIps = [...new Set(currentFluxNodeIps.map((ip) => ip.split(':')[0]))];
+    for (let i = 0; i < uniqueFluxNodeIps.length; i += 1) {
+      const auxIp = uniqueFluxNodeIps[i];
       geoExecuted = false;
-      const auxIp = ip.includes(':') ? ip.split(':')[0] : ip;
-      filterGeolocation.push(auxIp);
+      const ipApi = {
+        query: auxIp,
+        fields: 'status,continent,continentCode,country,countryCode,region,regionName,lat,lon,query,org,isp',
+      };
+      filterGeolocation.push(ipApi);
       isResolved = false;
       if ((i + 1) % 100 === 0) {
         // eslint-disable-next-line no-loop-func
@@ -662,17 +675,19 @@ async function getGeolocationInBatchAndRefreshDatabase() {
                 regionName: geo.regionName,
                 lat: geo.lat,
                 lon: geo.lon,
-                org: geo.org,
+                org: geo.org || geo.isp,
               };
               fluxNodesGeolocations.push(geoInformation);
             }
           }
           geoExecuted = true;
           uniqueGeolocations = [...new Set(fluxNodesGeolocations)];
-          log.info('Inserting MongoDB Geolocation FluxNodesGeolocations');
-          await serviceHelper.insertManyToDatabase(database, geocollection, uniqueGeolocations, options).catch((error) => {
-            log.error(`Error inserting in geocollection db: ${error}`);
-          });
+          if (uniqueGeolocations.length > 0) {
+            log.info('Inserting MongoDB Geolocation FluxNodesGeolocations');
+            await serviceHelper.insertManyToDatabase(database, geocollection, uniqueGeolocations, options).catch((error) => {
+              log.error(`Error inserting in geocollection db: ${error}`);
+            });
+          }
           log.info(`Flux Geolocation Batch Processed: ${i + 1}`);
         } catch (e) {
           log.error(`Flux Geolocation failed with error: ${e}`);
@@ -692,7 +707,7 @@ async function getGeolocationInBatchAndRefreshDatabase() {
           isResolved = true;
           // eslint-disable-next-line no-restricted-syntax
           for (const geo of ipRes.data) {
-            if (geo.status === 'success') {
+            if (geo.status === 'success' && geo.ip !== '') {
               const geoInformation = {
                 ip: geo.query,
                 continent: geo.continent,
@@ -703,7 +718,7 @@ async function getGeolocationInBatchAndRefreshDatabase() {
                 regionName: geo.regionName,
                 lat: geo.lat,
                 lon: geo.lon,
-                org: geo.org,
+                org: geo.org || geo.isp,
               };
               fluxNodesGeolocations.push(geoInformation);
             }
@@ -716,10 +731,12 @@ async function getGeolocationInBatchAndRefreshDatabase() {
       }
     }
     uniqueGeolocations = [...new Set(fluxNodesGeolocations)];
-    log.info('Inserting MongoDB Geolocation FluxNodesGeolocations');
-    await serviceHelper.insertManyToDatabase(database, geocollection, uniqueGeolocations, options).catch((error) => {
-      log.error(`Error inserting in geocollection db: ${error}`);
-    });
+    if (uniqueGeolocations.length > 0) {
+      log.info('Inserting MongoDB Geolocation FluxNodesGeolocations');
+      await serviceHelper.insertManyToDatabase(database, geocollection, uniqueGeolocations, options).catch((error) => {
+        log.error(`Error inserting in geocollection db: ${error}`);
+      });
+    }
     uniqueGeolocations = [];
   } finally {
     log.info('getGeolocationInBatchAndRefreshDatabase finished');
