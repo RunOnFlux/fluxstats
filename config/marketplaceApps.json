@@ -397,9 +397,9 @@
         "ram": 2000,
         "hdd": 12,      
         "portSpecs": [
-          "8000-9000"
+          "37000-38100"
         ],
-        "ports": [8168],
+        "ports": [38000],
         "userEnvironmentParameters": [
           {
             "name": "KEY",
