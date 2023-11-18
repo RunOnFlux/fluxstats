@@ -15,6 +15,9 @@ module.exports = (app) => {
   app.get('/storedlocations', cache('5 minutes'), (req, res) => {
     fluxService.getAllGeolocation(req, res);
   });
+  app.get('/fluxlocation/:ip', cache('5 minutes'), (req, res) => {
+    fluxService.getFluxLocation(req, res);
+  });
   // strings of projection wanted
   app.get('/fluxinfo/:projection?', cache('10 minutes'), (req, res) => {
     fluxService.getAllFluxInformation(req, res);

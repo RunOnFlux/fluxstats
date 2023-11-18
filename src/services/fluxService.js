@@ -898,6 +898,41 @@ async function getAllGeolocation(req, res, i = 0) {
   }
 }
 
+async function getFluxLocation(req, res) {
+  try {
+    let { ip } = req.params;
+    ip = ip || req.query.ip;
+    if (!ip) {
+      throw new Error('Mandatory ip parameter is missing');
+    }
+    ip = ip.split(':')[0];
+    const database = db.db(config.database.local.database);
+    const query = { ip };
+    const projection = {
+      projection: {
+        _id: 0,
+        ip: 1,
+        continent: 1,
+        continentCode: 1,
+        country: 1,
+        countryCode: 1,
+        region: 1,
+        regionName: 1,
+        lat: 1,
+        lon: 1,
+        org: 1,
+      },
+    };
+    const result = await serviceHelper.findInDatabase(database, geocollection, query, projection);
+    const resMessage = serviceHelper.createDataMessage(result);
+    res.json(resMessage);
+  } catch (error) {
+    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+    res.json(errMessage);
+    log.error(error);
+  }
+}
+
 let runninggetLastRound = false;
 async function getLastRound(i = 0) {
   let lastRound = myCacheShort.get('lastround');
@@ -1307,6 +1342,7 @@ module.exports = {
   start,
   getFluxNodeIPs,
   getAllGeolocation,
+  getFluxLocation,
   getAllFluxInformation,
   getFluxIPHistory,
   getAllFluxGeolocation,
