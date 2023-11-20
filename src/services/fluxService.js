@@ -923,7 +923,7 @@ async function getFluxLocation(req, res) {
         org: 1,
       },
     };
-    const result = await serviceHelper.findInDatabase(database, geocollection, query, projection);
+    const result = await serviceHelper.findOneInDatabase(database, geocollection, query, projection);
     const resMessage = serviceHelper.createDataMessage(result);
     res.json(resMessage);
   } catch (error) {
