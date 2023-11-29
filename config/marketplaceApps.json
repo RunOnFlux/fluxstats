@@ -3885,40 +3885,5 @@
     ],
     "visible": true,
     "enabled": true
-  },
-  {
-    "description": "Host your Bittensor Full Node on the Flux Cloud",
-    "price": 21.0,
-    "category": "Blockchain",
-    "version": 4,
-    "name": "BittensorFN",
-    "instances": 3,
-    "compose": [
-      {
-        "name": "bittensorfullnode",
-        "description": "The Bittensor Full Node container",
-        "repotag": "opentensor/subtensor:latest",
-        "containerPorts": [
-          9944,30333,9933
-        ],
-        "domains": [
-          "","",""
-        ],
-        "environmentParameters": ["CARGO_HOME=/var/www/node-subtensor/.cargo"],
-        "commands": ["/bin/bash","-c","./node-subtensor --base-path /tmp/blockchain --chain ./raw_spec.json --rpc-external --rpc-cors all --ws-external --no-mdns --ws-max-connections 10000 --in-peers 500 --out-peers 500 --bootnodes /dns/bootnode.finney.opentensor.ai/tcp/30333/ws/p2p/12D3KooWRwbMb85RWnT8DSXSYMWQtuDwh4LJzndoRrTDotTR5gDC --sync warp"],
-        "containerData": "/tmp",
-        "tiered": false,
-        "cpu": 4.5,
-        "ram": 8000,
-        "hdd": 150.0,
-        "portSpecs": [
-          "9000-31000"
-        ],
-        "ports": [9944,30333,9933],
-        "userEnvironmentParameters": []
-      }
-    ],
-    "visible": true,
-    "enabled": true
   }
 ]
