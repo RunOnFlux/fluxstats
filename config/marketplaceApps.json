@@ -13,15 +13,9 @@
         "name": "helloworldparams",
         "description": "Parameters are PAGE_TITLE and PAGE_CONTENT",
         "repotag": "jeffvaderflux/helloworld_params:latest",
-        "containerPorts": [
-          80
-        ],
-        "domains": [
-          ""
-        ],
-        "environmentParameters": [
-          "VALUE=1"
-        ],
+        "containerPorts": [80],
+        "domains": [""],
+        "environmentParameters": ["VALUE=1"],
         "commands": [],
         "containerData": "/tmp",
         "tiered": false,
@@ -37,9 +31,7 @@
         "hddbasic": 1,
         "hddsuper": 1,
         "hddbamf": 1,
-        "portSpecs": [
-          "37185-37285"
-        ],
+        "portSpecs": ["37185-37285"],
         "ports": [37185],
         "userEnvironmentParameters": [
           {
@@ -70,12 +62,8 @@
         "name": "FoldingAtHome",
         "description": "Folding @ Home for AMD64 Devices.",
         "repotag": "yurinnick/folding-at-home:latest",
-        "containerPorts": [
-          7396
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [7396],
+        "domains": [""],
         "environmentParameters": ["TEAM=262156"],
         "commands": [],
         "containerData": "/config",
@@ -92,9 +80,7 @@
         "hddbasic": 3,
         "hddsuper": 3,
         "hddbamf": 3,
-        "portSpecs": [
-          "35500-335600"
-        ],
+        "portSpecs": ["35500-335600"],
         "ports": [35555],
         "userEnvironmentParameters": [
           {
@@ -121,12 +107,8 @@
         "name": "timpicollector",
         "description": "The Timpi Collector Node Container",
         "repotag": "timpiltd/timpi-collector:latest",
-        "containerPorts": [
-          5015
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [5015],
+        "domains": [""],
         "environmentParameters": ["package=collector"],
         "commands": [],
         "containerData": "/tmp",
@@ -143,9 +125,7 @@
         "hddbasic": 10,
         "hddsuper": 10,
         "hddbamf": 10,
-        "portSpecs": [
-          "37500-37600"
-        ],
+        "portSpecs": ["37500-37600"],
         "ports": [37566],
         "userEnvironmentParameters": [
           {
@@ -162,7 +142,7 @@
   {
     "description": "The Streamr Broker Node hosted via the Flux Cloud",
     "price": 5.99,
-	  "multiplier": 2.94,
+    "multiplier": 2.94,
     "category": "Blockchain",
     "version": 4,
     "name": "StreamrNode",
@@ -172,12 +152,8 @@
         "name": "streamrbroker",
         "description": "The Streamr Broker Node Container",
         "repotag": "streamr/broker-node:latest",
-        "containerPorts": [
-          1883,7170,7171
-        ],
-        "domains": [
-          "","",""
-        ],
+        "containerPorts": [1883, 7170, 7171],
+        "domains": ["", "", ""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/home/streamr/.streamr",
@@ -194,10 +170,8 @@
         "hddbasic": 1,
         "hddsuper": 1,
         "hddbamf": 1,
-        "portSpecs": [
-          "31100-31200"
-        ],
-        "ports": [31111,31112,31113],
+        "portSpecs": ["31100-31200"],
+        "ports": [31111, 31112, 31113],
         "userEnvironmentParameters": [
           {
             "name": "STREAMR__BROKER__PLUGINS__BRUBECK_MINER__BENEFICIARY_ADDRESS",
@@ -224,13 +198,13 @@
         "name": "node",
         "description": "The Presearch node container",
         "repotag": "presearch/node:latest",
-        "containerPorts": [
-          38253
+        "containerPorts": [38253],
+        "domains": [""],
+        "environmentParameters": [
+          "STAKE=disconnected:oldest,wallet:minimum",
+          "ALLOW_DISCONNECTED_STAKE_TRANSFER_AFTER=30m",
+          "TAGS=flux"
         ],
-        "domains": [
-          ""
-        ],
-        "environmentParameters": ["STAKE=disconnected:oldest,wallet:minimum", "ALLOW_DISCONNECTED_STAKE_TRANSFER_AFTER=30m", "TAGS=flux"],
         "commands": [],
         "containerData": "/app/node",
         "tiered": false,
@@ -246,9 +220,7 @@
         "hddbasic": 2,
         "hddsuper": 2,
         "hddbamf": 2,
-        "portSpecs": [
-          "39000-39999"
-        ],
+        "portSpecs": ["39000-39999"],
         "ports": [39000],
         "userEnvironmentParameters": [
           {
@@ -276,13 +248,15 @@
         "name": "node",
         "description": "The Presearch node container",
         "repotag": "presearch/node:latest",
-        "containerPorts": [
-          38253
+        "containerPorts": [38253],
+        "domains": [""],
+        "environmentParameters": [
+          "STAKE=disconnected:oldest#flux,wallet:minimum",
+          "ALLOW_DISCONNECTED_STAKE_TRANSFER_AFTER=30m",
+          "TAGS=flux",
+          "URL=https://home.runonflux.io",
+          "F_S_ENV=https://storage.runonflux.io/v2/env/presearch"
         ],
-        "domains": [
-          ""
-        ],
-        "environmentParameters": ["STAKE=disconnected:oldest#flux,wallet:minimum", "ALLOW_DISCONNECTED_STAKE_TRANSFER_AFTER=30m", "TAGS=flux", "URL=https://home.runonflux.io", "F_S_ENV=https://storage.runonflux.io/v2/env/presearch"],
         "commands": [],
         "containerData": "/app/node",
         "tiered": false,
@@ -298,9 +272,7 @@
         "hddbasic": 2,
         "hddsuper": 2,
         "hddbamf": 2,
-        "portSpecs": [
-          "39000-39999"
-        ],
+        "portSpecs": ["39000-39999"],
         "ports": [39000],
         "userEnvironmentParameters": [
           {
@@ -333,12 +305,8 @@
         "name": "ironfishnode",
         "description": "The IronFish Node Container",
         "repotag": "runonflux/iron-fish:latest",
-        "containerPorts": [
-          9033
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [9033],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/root/.ironfish",
@@ -355,9 +323,7 @@
         "hddbasic": 50,
         "hddsuper": 50,
         "hddbamf": 50,
-        "portSpecs": [
-          "39000-39999"
-        ],
+        "portSpecs": ["39000-39999"],
         "ports": [39010],
         "userEnvironmentParameters": []
       }
@@ -368,7 +334,7 @@
   {
     "description": "Host your Firo Masternode on the Flux Cloud for a 3-month plan",
     "price": 25.83,
-	  "multiplier": 1,
+    "multiplier": 1,
     "category": "Masternode",
     "version": 7,
     "name": "FiroMN3",
@@ -383,22 +349,16 @@
         "name": "node",
         "description": "The Firo Node container",
         "repotag": "runonflux/fironode:latest",
-        "containerPorts": [
-          8168
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [8168],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/root/.firo",
         "tiered": false,
         "cpu": 1,
         "ram": 2000,
-        "hdd": 12,      
-        "portSpecs": [
-          "8000-9000"
-        ],
+        "hdd": 12,
+        "portSpecs": ["8000-9000"],
         "ports": [8168],
         "userEnvironmentParameters": [
           {
@@ -417,7 +377,7 @@
   {
     "description": "Host your PIVX Masternode on the Flux Cloud",
     "price": 10.0,
-	  "multiplier": 1,
+    "multiplier": 1,
     "category": "Masternode",
     "version": 7,
     "name": "PIVXMN",
@@ -432,22 +392,16 @@
         "name": "node",
         "description": "The PIVX Masternode container",
         "repotag": "runonflux/pivxnode:latest",
-        "containerPorts": [
-          51472
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [51472],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/root/.pivx",
         "tiered": false,
         "cpu": 1,
         "ram": 2500,
-        "hdd": 50,      
-        "portSpecs": [
-          "51400-51500"
-        ],
+        "hdd": 50,
+        "portSpecs": ["51400-51500"],
         "ports": [51472],
         "userEnvironmentParameters": [
           {
@@ -466,7 +420,7 @@
   {
     "description": "Host your Dash Node on the Flux Network",
     "price": 9,
-	"multiplier": 1,
+    "multiplier": 1,
     "category": "Masternode",
     "version": 4,
     "name": "DashMN",
@@ -476,12 +430,8 @@
         "name": "node",
         "description": "The Dash Node container",
         "repotag": "runonflux/dashnode:latest",
-        "containerPorts": [
-          9999
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [9999],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/root/.dashcore",
@@ -498,9 +448,7 @@
         "hddbasic": 50,
         "hddsuper": 50,
         "hddbamf": 50,
-        "portSpecs": [
-          "37500-37700"
-        ],
+        "portSpecs": ["37500-37700"],
         "ports": [37500],
         "userEnvironmentParameters": [
           {
@@ -517,7 +465,7 @@
   {
     "description": "Host your Kaspa Node on the Flux Network",
     "price": 13.5,
-	"multiplier": 1.22,
+    "multiplier": 1.22,
     "category": "Blockchain",
     "version": 4,
     "name": "KaspaNode",
@@ -527,12 +475,8 @@
         "name": "node",
         "description": "The Kaspa Node container",
         "repotag": "supertypo/kaspad:latest",
-        "containerPorts": [
-          16110,16111
-        ],
-        "domains": [
-          "",""
-        ],
+        "containerPorts": [16110, 16111],
+        "domains": ["", ""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/app/data",
@@ -549,10 +493,8 @@
         "hddbasic": 50,
         "hddsuper": 50,
         "hddbamf": 50,
-        "portSpecs": [
-          "37700-37999"
-        ],
-        "ports": [37700,37701],
+        "portSpecs": ["37700-37999"],
+        "ports": [37700, 37701],
         "userEnvironmentParameters": []
       }
     ],
@@ -562,7 +504,7 @@
   {
     "description": "Host your Ravencoin Node on the Flux Network",
     "price": 6.9,
-	"multiplier": 1,
+    "multiplier": 1,
     "category": "Blockchain",
     "version": 4,
     "name": "RavenNode",
@@ -572,13 +514,13 @@
         "name": "node",
         "description": "The Raven Node container",
         "repotag": "dramirezrt/ravencoin-core-server:latest",
-        "containerPorts": [
-          38080,38767,31413
+        "containerPorts": [38080, 38767, 31413],
+        "domains": ["", "", ""],
+        "environmentParameters": [
+          "RAVEN_PORT=38767",
+          "TRANSMISSION_PORT=31413",
+          "FRONTEND_PORT=38080"
         ],
-        "domains": [
-          "","",""
-        ],
-        "environmentParameters": ["RAVEN_PORT=38767","TRANSMISSION_PORT=31413","FRONTEND_PORT=38080"],
         "commands": [],
         "containerData": "/kingofthenorth",
         "tiered": false,
@@ -594,10 +536,8 @@
         "hddbasic": 69,
         "hddsuper": 69,
         "hddbamf": 69,
-        "portSpecs": [
-          "31350-38999"
-        ],
-        "ports": [38080,38767,31413],
+        "portSpecs": ["31350-38999"],
+        "ports": [38080, 38767, 31413],
         "userEnvironmentParameters": [
           {
             "name": "UACOMMENT",
@@ -613,7 +553,7 @@
   {
     "description": "Host your Kadena Chainweb Node on the Flux Network",
     "price": 17.5,
-	"multiplier": 1.52,
+    "multiplier": 1.52,
     "category": "Blockchain",
     "version": 4,
     "name": "ChainwebNode",
@@ -623,14 +563,18 @@
         "name": "kadenachainwebnode",
         "description": "Canary branch of Node",
         "repotag": "runonflux/kadena-chainweb-node:latest",
-        "containerPorts": [
-          31350,31351
+        "containerPorts": [31350, 31351],
+        "domains": ["", ""],
+        "environmentParameters": [
+          "CHAINWEB_P2P_PORT=31350",
+          "CHAINWEB_SERVICE_PORT=31351",
+          "LOGLEVEL=warn"
         ],
-        "domains": [
-          "",""
+        "commands": [
+          "/bin/bash",
+          "-c",
+          "(test -d /data/chainweb-db/0 && ./run-chainweb-node.sh) || (/chainweb/initialize-db.sh && ./run-chainweb-node.sh)"
         ],
-        "environmentParameters": ["CHAINWEB_P2P_PORT=31350","CHAINWEB_SERVICE_PORT=31351","LOGLEVEL=warn"],
-        "commands": ["/bin/bash","-c","(test -d /data/chainweb-db/0 && ./run-chainweb-node.sh) || (/chainweb/initialize-db.sh && ./run-chainweb-node.sh)"],
         "containerData": "/data",
         "tiered": false,
         "cpu": 3,
@@ -645,10 +589,8 @@
         "hddbasic": 200,
         "hddsuper": 200,
         "hddbamf": 200,
-        "portSpecs": [
-          "31250-36500"
-        ],
-        "ports": [31350,31351],
+        "portSpecs": ["31250-36500"],
+        "ports": [31350, 31351],
         "userEnvironmentParameters": []
       }
     ],
@@ -658,7 +600,7 @@
   {
     "description": "Host your Neoxa Node on the Flux Network",
     "price": 6.9,
-	"multiplier": 1,
+    "multiplier": 1,
     "category": "Blockchain",
     "version": 4,
     "name": "NeoxaNode",
@@ -668,12 +610,8 @@
         "name": "neoxanode",
         "description": "The Neoxa Node container",
         "repotag": "neoxa/full-node:latest",
-        "containerPorts": [
-          8788
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [8788],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/home/neoxa/.neoxa",
@@ -690,9 +628,7 @@
         "hddbasic": 22,
         "hddsuper": 22,
         "hddbamf": 22,
-        "portSpecs": [
-          "31000-31250"
-        ],
+        "portSpecs": ["31000-31250"],
         "ports": [31000],
         "userEnvironmentParameters": []
       }
@@ -703,7 +639,7 @@
   {
     "description": "Host your Polkadot Node on the Flux Network",
     "price": 3.3,
-	"multiplier": 1,
+    "multiplier": 1,
     "category": "Blockchain",
     "version": 4,
     "name": "PolkadotNode",
@@ -713,12 +649,8 @@
         "name": "polkadotnode",
         "description": "The Polkadot Node container",
         "repotag": "runonflux/polkadot-docker:latest",
-        "containerPorts": [
-          30333,9933,9944
-        ],
-        "domains": [
-          "","",""
-        ],
+        "containerPorts": [30333, 9933, 9944],
+        "domains": ["", "", ""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/chaindata",
@@ -735,10 +667,8 @@
         "hddbasic": 20,
         "hddsuper": 20,
         "hddbamf": 20,
-        "portSpecs": [
-          "33200-34000"
-        ],
-        "ports": [33201,33202,33203],
+        "portSpecs": ["33200-34000"],
+        "ports": [33201, 33202, 33203],
         "userEnvironmentParameters": []
       }
     ],
@@ -748,7 +678,7 @@
   {
     "description": "Host your Kusama Node on the Flux Network",
     "price": 3.3,
-	"multiplier": 1,
+    "multiplier": 1,
     "category": "Blockchain",
     "version": 4,
     "name": "KusamaNode",
@@ -758,14 +688,10 @@
         "name": "kusamanode",
         "description": "The Kusama Node container",
         "repotag": "runonflux/polkadot-docker:latest",
-        "containerPorts": [
-          30333,9933,9944
-        ],
-        "domains": [
-          "","",""
-        ],
+        "containerPorts": [30333, 9933, 9944],
+        "domains": ["", "", ""],
         "environmentParameters": [],
-        "commands": ["--chain","kusama"],
+        "commands": ["--chain", "kusama"],
         "containerData": "/chaindata",
         "tiered": false,
         "cpu": 0.8,
@@ -780,10 +706,8 @@
         "hddbasic": 20,
         "hddsuper": 20,
         "hddbamf": 20,
-        "portSpecs": [
-          "33200-34000"
-        ],
-        "ports": [33204,33205,33206],
+        "portSpecs": ["33200-34000"],
+        "ports": [33204, 33205, 33206],
         "userEnvironmentParameters": []
       }
     ],
@@ -793,7 +717,7 @@
   {
     "description": "Host your Handshake Node on the Flux Network",
     "price": 6.9,
-	"multiplier": 1,
+    "multiplier": 1,
     "category": "Blockchain",
     "version": 4,
     "name": "HandshakeNode",
@@ -803,14 +727,17 @@
         "name": "hsdnode",
         "description": "The Handshake Node container",
         "repotag": "wirewrex/hsd_with_ip:latest",
-        "containerPorts": [
-          12038
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [12038],
+        "domains": [""],
         "environmentParameters": [],
-        "commands": ["hsd","--bip37=true","--listen=true","--public-port=39001","--port=12038","--max-inbound=1000"],
+        "commands": [
+          "hsd",
+          "--bip37=true",
+          "--listen=true",
+          "--public-port=39001",
+          "--port=12038",
+          "--max-inbound=1000"
+        ],
         "containerData": "/root/.hsd",
         "tiered": false,
         "cpu": 1.5,
@@ -825,9 +752,7 @@
         "hddbasic": 100,
         "hddsuper": 100,
         "hddbamf": 100,
-        "portSpecs": [
-          "39000-39500"
-        ],
+        "portSpecs": ["39000-39500"],
         "ports": [39001],
         "userEnvironmentParameters": []
       }
@@ -838,7 +763,7 @@
   {
     "description": "Host your Deso backend Node on the Flux Network",
     "price": 54,
-	"multiplier": 1,
+    "multiplier": 1,
     "category": "Blockchain",
     "version": 4,
     "name": "DesoNode",
@@ -848,12 +773,8 @@
         "name": "desonode",
         "description": "The Deso Node container",
         "repotag": "honsontran/deso-backend:stable",
-        "containerPorts": [
-          33445,33444
-        ],
-        "domains": [
-          "",""
-        ],
+        "containerPorts": [33445, 33444],
+        "domains": ["", ""],
         "environmentParameters": [],
         "commands": ["run"],
         "containerData": "/db",
@@ -870,10 +791,8 @@
         "hddbasic": 400,
         "hddsuper": 400,
         "hddbamf": 400,
-        "portSpecs": [
-          "33400-33600"
-        ],
-        "ports": [33445,33444],
+        "portSpecs": ["33400-33600"],
+        "ports": [33445, 33444],
         "userEnvironmentParameters": []
       }
     ],
@@ -883,7 +802,7 @@
   {
     "description": "Host your Dogecoin Full Node on the Flux Network",
     "price": 6.9,
-	"multiplier": 1,
+    "multiplier": 1,
     "category": "Blockchain",
     "version": 4,
     "name": "DogecoinNode",
@@ -893,14 +812,15 @@
         "name": "dogenode",
         "description": "The Dogecoin Node container",
         "repotag": "bigmandave/doge-node:latest",
-        "containerPorts": [
-          22556
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [22556],
+        "domains": [""],
         "environmentParameters": [],
-        "commands": ["/wowmuchdocker/dogecoin-node/bin/dogecoind","-conf=/etc/doge/dogecoin.conf","-datadir=/etc/doge","-printtoconsole"],
+        "commands": [
+          "/wowmuchdocker/dogecoin-node/bin/dogecoind",
+          "-conf=/etc/doge/dogecoin.conf",
+          "-datadir=/etc/doge",
+          "-printtoconsole"
+        ],
         "containerData": "/etc/doge/",
         "tiered": false,
         "cpu": 1.0,
@@ -915,9 +835,7 @@
         "hddbasic": 100,
         "hddsuper": 100,
         "hddbamf": 100,
-        "portSpecs": [
-          "33400-33600"
-        ],
+        "portSpecs": ["33400-33600"],
         "ports": [34203],
         "userEnvironmentParameters": []
       }
@@ -928,7 +846,7 @@
   {
     "description": "Host your Sushiswap Frontend on the Flux Cloud",
     "price": 3.0,
-	"multiplier": 1,
+    "multiplier": 1,
     "category": "Front-end",
     "version": 4,
     "name": "Sushiswap",
@@ -938,12 +856,8 @@
         "name": "sushiswapui",
         "description": "The Sushiswap UI container",
         "repotag": "runonflux/sushiswap-interface:latest",
-        "containerPorts": [
-          3000
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [3000],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/tmp",
@@ -960,9 +874,7 @@
         "hddbasic": 5.0,
         "hddsuper": 5.0,
         "hddbamf": 5.0,
-        "portSpecs": [
-          "35000-35200"
-        ],
+        "portSpecs": ["35000-35200"],
         "ports": [35000],
         "userEnvironmentParameters": []
       }
@@ -973,7 +885,7 @@
   {
     "description": "Host your Yearn Finance Frontend on the Flux Cloud",
     "price": 3.0,
-	"multiplier": 1,
+    "multiplier": 1,
     "category": "Front-end",
     "version": 4,
     "name": "Yearn",
@@ -983,12 +895,8 @@
         "name": "yearnui",
         "description": "The Yearn Finance UI container",
         "repotag": "runonflux/yearn-finance-v3:latest",
-        "containerPorts": [
-          80
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [80],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/tmp",
@@ -1005,9 +913,7 @@
         "hddbasic": 5.0,
         "hddsuper": 5.0,
         "hddbamf": 5.0,
-        "portSpecs": [
-          "35000-35200"
-        ],
+        "portSpecs": ["35000-35200"],
         "ports": [35001],
         "userEnvironmentParameters": []
       }
@@ -1018,7 +924,7 @@
   {
     "description": "Host your GMX.io Frontend on the Flux Cloud",
     "price": 3.0,
-	"multiplier": 1,
+    "multiplier": 1,
     "category": "Front-end",
     "version": 4,
     "name": "Gmx",
@@ -1028,12 +934,8 @@
         "name": "gmxui",
         "description": "The GMX UI container",
         "repotag": "runonflux/gmx-interface:latest",
-        "containerPorts": [
-          3000
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [3000],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/tmp",
@@ -1050,9 +952,7 @@
         "hddbasic": 5.0,
         "hddsuper": 5.0,
         "hddbamf": 5.0,
-        "portSpecs": [
-          "35000-35200"
-        ],
+        "portSpecs": ["35000-35200"],
         "ports": [35002],
         "userEnvironmentParameters": []
       }
@@ -1063,7 +963,7 @@
   {
     "description": "Host your Dopex.io Frontend on the Flux Cloud",
     "price": 3.0,
-	"multiplier": 1,
+    "multiplier": 1,
     "category": "Front-end",
     "version": 4,
     "name": "Dopex",
@@ -1073,12 +973,8 @@
         "name": "dopexui",
         "description": "The Dopex UI container",
         "repotag": "runonflux/dopex-site:latest",
-        "containerPorts": [
-          3000
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [3000],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/tmp",
@@ -1095,9 +991,7 @@
         "hddbasic": 5.0,
         "hddsuper": 5.0,
         "hddbamf": 5.0,
-        "portSpecs": [
-          "35000-35200"
-        ],
+        "portSpecs": ["35000-35200"],
         "ports": [35003],
         "userEnvironmentParameters": []
       }
@@ -1108,7 +1002,7 @@
   {
     "description": "Host your Pangolin Frontend on the Flux Cloud",
     "price": 3.0,
-	"multiplier": 1,
+    "multiplier": 1,
     "category": "Front-end",
     "version": 4,
     "name": "Pangolin",
@@ -1118,12 +1012,8 @@
         "name": "pangolinui",
         "description": "The Pangolin UI container",
         "repotag": "runonflux/pangolindex-interface:latest",
-        "containerPorts": [
-          3000
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [3000],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/tmp",
@@ -1140,9 +1030,7 @@
         "hddbasic": 5.0,
         "hddsuper": 5.0,
         "hddbamf": 5.0,
-        "portSpecs": [
-          "35000-35200"
-        ],
+        "portSpecs": ["35000-35200"],
         "ports": [35003],
         "userEnvironmentParameters": []
       }
@@ -1153,7 +1041,7 @@
   {
     "description": "Host your Liquity Frontend on the Flux Cloud",
     "price": 3.0,
-	"multiplier": 1,
+    "multiplier": 1,
     "category": "Front-end",
     "version": 4,
     "name": "Liquity",
@@ -1163,12 +1051,8 @@
         "name": "liquityui",
         "description": "The Liquity UI container",
         "repotag": "liquity/dev-frontend:latest",
-        "containerPorts": [
-          80
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [80],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/tmp",
@@ -1185,9 +1069,7 @@
         "hddbasic": 5.0,
         "hddsuper": 5.0,
         "hddbamf": 5.0,
-        "portSpecs": [
-          "35000-35200"
-        ],
+        "portSpecs": ["35000-35200"],
         "ports": [35004],
         "userEnvironmentParameters": []
       }
@@ -1198,7 +1080,7 @@
   {
     "description": "Host your Balancer Finance Frontend on the Flux Cloud",
     "price": 3.0,
-	"multiplier": 1,
+    "multiplier": 1,
     "category": "Front-end",
     "version": 4,
     "name": "Balancer",
@@ -1208,14 +1090,10 @@
         "name": "balancerui",
         "description": "The Balancer Finance UI container",
         "repotag": "balancerfi/frontend-v2:latest",
-        "containerPorts": [
-          80
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [80],
+        "domains": [""],
         "environmentParameters": [],
-        "commands": ["/bin/sh","/docker-init.sh"],
+        "commands": ["/bin/sh", "/docker-init.sh"],
         "containerData": "/app",
         "tiered": false,
         "cpu": 1.0,
@@ -1230,9 +1108,7 @@
         "hddbasic": 5.0,
         "hddsuper": 5.0,
         "hddbamf": 5.0,
-        "portSpecs": [
-          "35000-35200"
-        ],
+        "portSpecs": ["35000-35200"],
         "ports": [35005],
         "userEnvironmentParameters": [
           {
@@ -1259,7 +1135,7 @@
   {
     "description": "Host your Osmosis Frontend on the Flux Cloud",
     "price": 3.0,
-	"multiplier": 1.42,
+    "multiplier": 1.42,
     "category": "Front-end",
     "version": 4,
     "name": "Osmosis",
@@ -1269,12 +1145,8 @@
         "name": "osmosisui",
         "description": "The Osmosis UI container",
         "repotag": "osmolabs/osmosis-frontend:latest",
-        "containerPorts": [
-          3000
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [3000],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/tmp",
@@ -1291,9 +1163,7 @@
         "hddbasic": 5.0,
         "hddsuper": 5.0,
         "hddbamf": 5.0,
-        "portSpecs": [
-          "35000-35200"
-        ],
+        "portSpecs": ["35000-35200"],
         "ports": [35006],
         "userEnvironmentParameters": []
       }
@@ -1304,7 +1174,7 @@
   {
     "description": "Host your Alephium Full Node on the Flux Cloud",
     "price": 4.2,
-	"multiplier": 1.47,
+    "multiplier": 1.47,
     "category": "Blockchain",
     "version": 4,
     "name": "AlephiumNode",
@@ -1314,12 +1184,8 @@
         "name": "alephiumnode",
         "description": "The Alephium Full Node container",
         "repotag": "touilleio/alephium-standalone:latest-root",
-        "containerPorts": [
-          39973
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [39973],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/data",
@@ -1336,9 +1202,7 @@
         "hddbasic": 80,
         "hddsuper": 80,
         "hddbamf": 80,
-        "portSpecs": [
-          "39000-39999"
-        ],
+        "portSpecs": ["39000-39999"],
         "ports": [39973],
         "userEnvironmentParameters": []
       }
@@ -1358,13 +1222,14 @@
         "name": "blockbookethereumclassic",
         "description": "Blockbook for Ethereum Classic",
         "repotag": "runonflux/blockbook-docker:latest",
-        "containerPorts": [
-          9137
+        "containerPorts": [9137],
+        "domains": [""],
+        "environmentParameters": [
+          "COIN=ethereum-classic",
+          "BLOCKBOOK_PORT=9137",
+          "RPC_URL_PROTOCOL=ws",
+          "RPC_PORT=9138"
         ],
-        "domains": [
-          ""
-        ],
-        "environmentParameters": ["COIN=ethereum-classic","BLOCKBOOK_PORT=9137","RPC_URL_PROTOCOL=ws","RPC_PORT=9138"],
         "commands": [],
         "containerData": "/root",
         "tiered": false,
@@ -1380,9 +1245,7 @@
         "hddbasic": 70,
         "hddsuper": 70,
         "hddbamf": 70,
-        "portSpecs": [
-          "34000-34500"
-        ],
+        "portSpecs": ["34000-34500"],
         "ports": [34142],
         "userEnvironmentParameters": []
       }
@@ -1402,13 +1265,16 @@
         "name": "blockbookflux",
         "description": "Blockbook for Flux",
         "repotag": "runonflux/blockbook-docker:latest",
-        "containerPorts": [
-          9158
+        "containerPorts": [9158],
+        "domains": [""],
+        "environmentParameters": [
+          "COIN=flux",
+          "BLOCKBOOK_PORT=9158",
+          "RPC_PORT=16124",
+          "FETCH_FILE=fetch-params.sh",
+          "BOOTSTRAP=1",
+          "EXTRACONFIG=\"addnode=explorer.zelcash.online\""
         ],
-        "domains": [
-          ""
-        ],
-        "environmentParameters": ["COIN=flux","BLOCKBOOK_PORT=9158","RPC_PORT=16124","FETCH_FILE=fetch-params.sh","BOOTSTRAP=1","EXTRACONFIG=\"addnode=explorer.zelcash.online\""],
         "commands": [],
         "containerData": "/root",
         "tiered": false,
@@ -1424,9 +1290,7 @@
         "hddbasic": 60,
         "hddsuper": 60,
         "hddbamf": 60,
-        "portSpecs": [
-          "34000-34500"
-        ],
+        "portSpecs": ["34000-34500"],
         "ports": [34142],
         "userEnvironmentParameters": []
       }
@@ -1446,13 +1310,13 @@
         "name": "blockbooklitecoin",
         "description": "Blockbook for Litecoin",
         "repotag": "runonflux/blockbook-docker:latest",
-        "containerPorts": [
-          9134
+        "containerPorts": [9134],
+        "domains": [""],
+        "environmentParameters": [
+          "COIN=litecoin",
+          "BLOCKBOOK_PORT=9134",
+          "RPC_PORT=9135"
         ],
-        "domains": [
-          ""
-        ],
-        "environmentParameters": ["COIN=litecoin","BLOCKBOOK_PORT=9134","RPC_PORT=9135"],
         "commands": [],
         "containerData": "/root",
         "tiered": false,
@@ -1468,9 +1332,7 @@
         "hddbasic": 120,
         "hddsuper": 120,
         "hddbamf": 120,
-        "portSpecs": [
-          "34000-34500"
-        ],
+        "portSpecs": ["34000-34500"],
         "ports": [34139],
         "userEnvironmentParameters": []
       }
@@ -1490,13 +1352,18 @@
         "name": "blockbookfiro",
         "description": "Blockbook for Firo",
         "repotag": "runonflux/blockbook-docker:latest",
-        "containerPorts": [
-          9150
+        "containerPorts": [9150],
+        "domains": [""],
+        "environmentParameters": [
+          "COIN=firo",
+          "BLOCKBOOK_PORT=9150",
+          "RPC_PORT=9151",
+          "GOLANG_VERSION=go1.17.1",
+          "ROCKSDB_VERSION=v6.22.1",
+          "BLOCKBOOKGIT_URL=https://github.com/firoorg/blockbook",
+          "TAG=firo14.12.0-mainnet",
+          "DAEMON_URL=https://github.com/firoorg/firo/releases/download/v0.14.12.0/firo-0.14.12.0-linux64.tar.gz"
         ],
-        "domains": [
-          ""
-        ],
-        "environmentParameters": ["COIN=firo","BLOCKBOOK_PORT=9150","RPC_PORT=9151","GOLANG_VERSION=go1.17.1","ROCKSDB_VERSION=v6.22.1","BLOCKBOOKGIT_URL=https://github.com/firoorg/blockbook","TAG=firo14.12.0-mainnet","DAEMON_URL=https://github.com/firoorg/firo/releases/download/v0.14.12.0/firo-0.14.12.0-linux64.tar.gz"],
         "commands": [],
         "containerData": "/root",
         "tiered": false,
@@ -1512,9 +1379,7 @@
         "hddbasic": 40,
         "hddsuper": 40,
         "hddbamf": 40,
-        "portSpecs": [
-          "34000-34500"
-        ],
+        "portSpecs": ["34000-34500"],
         "ports": [34155],
         "userEnvironmentParameters": []
       }
@@ -1534,13 +1399,13 @@
         "name": "blockbookgroestlcoin",
         "description": "Blockbook for Groestlcoin",
         "repotag": "runonflux/blockbook-docker:latest",
-        "containerPorts": [
-          9145
+        "containerPorts": [9145],
+        "domains": [""],
+        "environmentParameters": [
+          "COIN=groestlcoin",
+          "BLOCKBOOK_PORT=9145",
+          "RPC_PORT=9146"
         ],
-        "domains": [
-          ""
-        ],
-        "environmentParameters": ["COIN=groestlcoin","BLOCKBOOK_PORT=9145","RPC_PORT=9146"],
         "commands": [],
         "containerData": "/root",
         "tiered": false,
@@ -1556,9 +1421,7 @@
         "hddbasic": 85,
         "hddsuper": 85,
         "hddbamf": 85,
-        "portSpecs": [
-          "34000-34500"
-        ],
+        "portSpecs": ["34000-34500"],
         "ports": [34150],
         "userEnvironmentParameters": []
       }
@@ -1578,12 +1441,8 @@
         "name": "privatebin",
         "description": "The PrivateBin Container",
         "repotag": "littlestache/privatebin:latest",
-        "containerPorts": [
-          80
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [80],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/app",
@@ -1600,9 +1459,7 @@
         "hddbasic": 2,
         "hddsuper": 2,
         "hddbamf": 2,
-        "portSpecs": [
-          "31000-32000"
-        ],
+        "portSpecs": ["31000-32000"],
         "ports": [31791],
         "userEnvironmentParameters": []
       }
@@ -1622,12 +1479,8 @@
         "name": "owncast",
         "description": "The Owncast Container",
         "repotag": "gabekangas/owncast:latest",
-        "containerPorts": [
-          8080,1935
-        ],
-        "domains": [
-          "",""
-        ],
+        "containerPorts": [8080, 1935],
+        "domains": ["", ""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/owncast",
@@ -1644,10 +1497,8 @@
         "hddbasic": 150,
         "hddsuper": 150,
         "hddbamf": 150,
-        "portSpecs": [
-          "34600-34800"
-        ],
-        "ports": [34673,34674],
+        "portSpecs": ["34600-34800"],
+        "ports": [34673, 34674],
         "userEnvironmentParameters": []
       }
     ],
@@ -1666,12 +1517,8 @@
         "name": "synctube",
         "description": "The SyncTube Container",
         "repotag": "littlestache/synctube:latest",
-        "containerPorts": [
-          4200
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [4200],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/synctube",
@@ -1688,9 +1535,7 @@
         "hddbasic": 15,
         "hddsuper": 15,
         "hddbamf": 15,
-        "portSpecs": [
-          "32900-33000"
-        ],
+        "portSpecs": ["32900-33000"],
         "ports": [32944],
         "userEnvironmentParameters": []
       }
@@ -1710,13 +1555,9 @@
         "name": "grocy",
         "description": "The Grocy Container",
         "repotag": "linuxserver/grocy:latest",
-        "containerPorts": [
-          80
-        ],
-        "domains": [
-          ""
-        ],
-        "environmentParameters": ["PUID=1000","PGID=1000","TZ=Europe/London"],
+        "containerPorts": [80],
+        "domains": [""],
+        "environmentParameters": ["PUID=1000", "PGID=1000", "TZ=Europe/London"],
         "commands": [],
         "containerData": "/groc",
         "tiered": false,
@@ -1732,9 +1573,7 @@
         "hddbasic": 10,
         "hddsuper": 10,
         "hddbamf": 10,
-        "portSpecs": [
-          "36300-36400"
-        ],
+        "portSpecs": ["36300-36400"],
         "ports": [36377],
         "userEnvironmentParameters": []
       }
@@ -1745,7 +1584,7 @@
   {
     "description": "An open source voxel game engine",
     "price": 3.6,
-	"multiplier": 1,
+    "multiplier": 1,
     "category": "Games",
     "version": 4,
     "name": "MineTest",
@@ -1755,13 +1594,9 @@
         "name": "minetest",
         "description": "The MineTest Container",
         "repotag": "linuxserver/minetest:latest",
-        "containerPorts": [
-          30000
-        ],
-        "domains": [
-          ""
-        ],
-        "environmentParameters": ["PUID=1000","PGID=1000","TZ=Europe/London"],
+        "containerPorts": [30000],
+        "domains": [""],
+        "environmentParameters": ["PUID=1000", "PGID=1000", "TZ=Europe/London"],
         "commands": [],
         "containerData": "/mine",
         "tiered": false,
@@ -1777,9 +1612,7 @@
         "hddbasic": 10,
         "hddsuper": 10,
         "hddbamf": 10,
-        "portSpecs": [
-          "32000-32100"
-        ],
+        "portSpecs": ["32000-32100"],
         "ports": [32000],
         "userEnvironmentParameters": []
       }
@@ -1790,7 +1623,7 @@
   {
     "description": "Get Google search results, but without any ads, javascript, AMP links, cookies, or IP address tracking",
     "price": 3.0,
-	"multiplier": 1,
+    "multiplier": 1,
     "category": "Productivity",
     "version": 4,
     "name": "Whoogle",
@@ -1800,12 +1633,8 @@
         "name": "whoogle",
         "description": "The Whoogle Container",
         "repotag": "benbusby/whoogle-search:latest",
-        "containerPorts": [
-          5000
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [5000],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/app",
@@ -1822,9 +1651,7 @@
         "hddbasic": 5,
         "hddsuper": 5,
         "hddbamf": 5,
-        "portSpecs": [
-          "35400-35500"
-        ],
+        "portSpecs": ["35400-35500"],
         "ports": [35420],
         "userEnvironmentParameters": []
       }
@@ -1835,7 +1662,7 @@
   {
     "description": "WBO is an online collaborative whiteboard that allows many users to draw simultaneously on a large virtual board",
     "price": 3.0,
-	"multiplier": 1,
+    "multiplier": 1,
     "category": "Productivity",
     "version": 4,
     "name": "WBO",
@@ -1845,12 +1672,8 @@
         "name": "wbo",
         "description": "The WBO Container",
         "repotag": "lovasoa/wbo:latest",
-        "containerPorts": [
-          80
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [80],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/tmpwbo",
@@ -1867,9 +1690,7 @@
         "hddbasic": 5,
         "hddsuper": 5,
         "hddbamf": 5,
-        "portSpecs": [
-          "33900-34000"
-        ],
+        "portSpecs": ["33900-34000"],
         "ports": [33929],
         "userEnvironmentParameters": []
       }
@@ -1889,12 +1710,8 @@
         "name": "tosios",
         "description": "The Tosios Container",
         "repotag": "littlestache/tosios:latest",
-        "containerPorts": [
-          3001
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [3001],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/tmptosios",
@@ -1911,9 +1728,7 @@
         "hddbasic": 5,
         "hddsuper": 5,
         "hddbamf": 5,
-        "portSpecs": [
-          "37400-37500"
-        ],
+        "portSpecs": ["37400-37500"],
         "ports": [37481],
         "userEnvironmentParameters": []
       }
@@ -1933,12 +1748,8 @@
         "name": "devlife",
         "description": "The Devlife Container",
         "repotag": "littlestache/devlife:latest",
-        "containerPorts": [
-          80
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [80],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/tmptosios",
@@ -1955,9 +1766,7 @@
         "hddbasic": 2,
         "hddsuper": 2,
         "hddbamf": 2,
-        "portSpecs": [
-          "39200-39300"
-        ],
+        "portSpecs": ["39200-39300"],
         "ports": [39252],
         "userEnvironmentParameters": []
       }
@@ -1977,12 +1786,8 @@
         "name": "posio",
         "description": "The Posio Container",
         "repotag": "littlestache/posio:latest",
-        "containerPorts": [
-          5000
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [5000],
+        "domains": [""],
         "environmentParameters": ["POSIO_SETTINGS=/app/config.py"],
         "commands": [],
         "containerData": "/tmpposio",
@@ -1999,9 +1804,7 @@
         "hddbasic": 2,
         "hddsuper": 2,
         "hddbamf": 2,
-        "portSpecs": [
-          "34200-34300"
-        ],
+        "portSpecs": ["34200-34300"],
         "ports": [34260],
         "userEnvironmentParameters": []
       }
@@ -2021,12 +1824,8 @@
         "name": "libreddit",
         "description": "The Posio Container",
         "repotag": "spikecodes/libreddit:latest",
-        "containerPorts": [
-          8080
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [8080],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/tmplib",
@@ -2043,9 +1842,7 @@
         "hddbasic": 2,
         "hddsuper": 2,
         "hddbamf": 2,
-        "portSpecs": [
-          "34600-34700"
-        ],
+        "portSpecs": ["34600-34700"],
         "ports": [34638],
         "userEnvironmentParameters": []
       }
@@ -2065,12 +1862,8 @@
         "name": "focalboard",
         "description": "The Focalboard Container",
         "repotag": "mattermost/focalboard:latest",
-        "containerPorts": [
-          8000
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [8000],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/tmpfocal",
@@ -2087,9 +1880,7 @@
         "hddbasic": 2,
         "hddsuper": 2,
         "hddbamf": 2,
-        "portSpecs": [
-          "31600-31700"
-        ],
+        "portSpecs": ["31600-31700"],
         "ports": [31654],
         "userEnvironmentParameters": []
       }
@@ -2109,12 +1900,8 @@
         "name": "giftrun",
         "description": "The Giftrun Container",
         "repotag": "littlestache/giftrun:latest",
-        "containerPorts": [
-          80
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [80],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/tmpgift",
@@ -2131,9 +1918,7 @@
         "hddbasic": 2,
         "hddsuper": 2,
         "hddbamf": 2,
-        "portSpecs": [
-          "32600-32700"
-        ],
+        "portSpecs": ["32600-32700"],
         "ports": [32649],
         "userEnvironmentParameters": []
       }
@@ -2153,12 +1938,8 @@
         "name": "element",
         "description": "The Element Container",
         "repotag": "vectorim/element-web:latest",
-        "containerPorts": [
-          80
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [80],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/tmpele",
@@ -2175,9 +1956,7 @@
         "hddbasic": 2,
         "hddsuper": 2,
         "hddbamf": 2,
-        "portSpecs": [
-          "34200-34300"
-        ],
+        "portSpecs": ["34200-34300"],
         "ports": [34253],
         "userEnvironmentParameters": []
       }
@@ -2197,12 +1976,8 @@
         "name": "rustpad",
         "description": "The Rustpad Container",
         "repotag": "ekzhang/rustpad:latest",
-        "containerPorts": [
-          3030
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [3030],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/tmprustpad",
@@ -2219,9 +1994,7 @@
         "hddbasic": 2,
         "hddsuper": 2,
         "hddbamf": 2,
-        "portSpecs": [
-          "38100-38200"
-        ],
+        "portSpecs": ["38100-38200"],
         "ports": [38144],
         "userEnvironmentParameters": []
       }
@@ -2241,12 +2014,8 @@
         "name": "bibliogram",
         "description": "The Bibliogram Container",
         "repotag": "cloudrac3r/bibliogram:latest",
-        "containerPorts": [
-          10407
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [10407],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/tmpbib",
@@ -2263,9 +2032,7 @@
         "hddbasic": 2,
         "hddsuper": 2,
         "hddbamf": 2,
-        "portSpecs": [
-          "35600-35700"
-        ],
+        "portSpecs": ["35600-35700"],
         "ports": [35691],
         "userEnvironmentParameters": []
       }
@@ -2285,12 +2052,8 @@
         "name": "teamspeak",
         "description": "The Teamspeak Container",
         "repotag": "teamspeak:latest",
-        "containerPorts": [
-          9987,10011,30033
-        ],
-        "domains": [
-          "","",""
-        ],
+        "containerPorts": [9987, 10011, 30033],
+        "domains": ["", "", ""],
         "environmentParameters": ["TS3SERVER_LICENSE=accept"],
         "commands": [],
         "containerData": "/teams",
@@ -2307,10 +2070,8 @@
         "hddbasic": 1,
         "hddsuper": 1,
         "hddbamf": 1,
-        "portSpecs": [
-          "38880-39000"
-        ],
-        "ports": [38895,38896,38897],
+        "portSpecs": ["38880-39000"],
+        "ports": [38895, 38896, 38897],
         "userEnvironmentParameters": []
       }
     ],
@@ -2329,13 +2090,13 @@
         "name": "valheim",
         "description": "The Valheim Container - Use Server Port 39870 to Connect!",
         "repotag": "mbround18/valheim:latest",
-        "containerPorts": [
-          2456,2457,2458
+        "containerPorts": [2456, 2457, 2458],
+        "domains": ["", "", ""],
+        "environmentParameters": [
+          "AUTO_UPDATE=1",
+          "AUTO_UPDATE_SCHEDULE=0 1 * * *",
+          "AUTO_UPDATE_PAUSE_WITH_PLAYERS=1"
         ],
-        "domains": [
-          "","",""
-        ],
-        "environmentParameters": ["AUTO_UPDATE=1","AUTO_UPDATE_SCHEDULE=0 1 * * *","AUTO_UPDATE_PAUSE_WITH_PLAYERS=1"],
         "commands": [],
         "containerData": "/val",
         "tiered": false,
@@ -2351,10 +2112,8 @@
         "hddbasic": 20,
         "hddsuper": 20,
         "hddbamf": 20,
-        "portSpecs": [
-          "39850-39900"
-        ],
-        "ports": [39870,39871,39872],
+        "portSpecs": ["39850-39900"],
+        "ports": [39870, 39871, 39872],
         "userEnvironmentParameters": [
           {
             "name": "NAME",
@@ -2384,13 +2143,13 @@
         "name": "terraria",
         "description": "The Terraria Container - In the game client use server port 33333 to connect",
         "repotag": "littlestache/terraria:latest",
-        "containerPorts": [
-          7777,8080
+        "containerPorts": [7777, 8080],
+        "domains": ["", ""],
+        "environmentParameters": [
+          "GAME_PARAM=-config serverconfig.txt",
+          "UID=99",
+          "GID=100"
         ],
-        "domains": [
-          "",""
-        ],
-        "environmentParameters": ["GAME_PARAM=-config serverconfig.txt","UID=99","GID=100"],
         "commands": [],
         "containerData": "/ter",
         "tiered": false,
@@ -2406,10 +2165,8 @@
         "hddbasic": 10,
         "hddsuper": 10,
         "hddbamf": 10,
-        "portSpecs": [
-          "34200-36800"
-        ],
-        "ports": [34250,36735],
+        "portSpecs": ["34200-36800"],
+        "ports": [34250, 36735],
         "userEnvironmentParameters": []
       }
     ],
@@ -2428,12 +2185,8 @@
         "name": "drawio",
         "description": "The Drawio Container",
         "repotag": "jgraph/drawio:latest",
-        "containerPorts": [
-          8080,8443
-        ],
-        "domains": [
-          "",""
-        ],
+        "containerPorts": [8080, 8443],
+        "domains": ["", ""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/tmpdraw",
@@ -2450,10 +2203,8 @@
         "hddbasic": 4,
         "hddsuper": 4,
         "hddbamf": 4,
-        "portSpecs": [
-          "33250-33260"
-        ],
-        "ports": [33253,33254],
+        "portSpecs": ["33250-33260"],
+        "ports": [33253, 33254],
         "userEnvironmentParameters": []
       }
     ],
@@ -2472,13 +2223,9 @@
         "name": "teeworlds",
         "description": "The Teeworlds Container",
         "repotag": "riftbit/teeworlds:latest",
-        "containerPorts": [
-          32913,8304
-        ],
-        "domains": [
-          "",""
-        ],
-        "environmentParameters": ["TW_sv_register=1","TW_sv_port=32913"],
+        "containerPorts": [32913, 8304],
+        "domains": ["", ""],
+        "environmentParameters": ["TW_sv_register=1", "TW_sv_port=32913"],
         "commands": [],
         "containerData": "/tmptee",
         "tiered": false,
@@ -2494,10 +2241,8 @@
         "hddbasic": 2,
         "hddsuper": 2,
         "hddbamf": 2,
-        "portSpecs": [
-          "32900-36550"
-        ],
-        "ports": [32913,36521],
+        "portSpecs": ["32900-36550"],
+        "ports": [32913, 36521],
         "userEnvironmentParameters": [
           {
             "name": "TW_sv_name",
@@ -2527,13 +2272,12 @@
         "name": "ark",
         "description": "The Ark Container",
         "repotag": "thmhoag/arkserver:latest",
-        "containerPorts": [
-          36479,36480,36481
+        "containerPorts": [36479, 36480, 36481],
+        "domains": ["", "", ""],
+        "environmentParameters": [
+          "am_ark_QueryPort=36479",
+          "am_ark_Port=36481"
         ],
-        "domains": [
-          "","",""
-        ],
-        "environmentParameters": ["am_ark_QueryPort=36479","am_ark_Port=36481"],
         "commands": [],
         "containerData": "/arktmp",
         "tiered": false,
@@ -2549,10 +2293,8 @@
         "hddbasic": 60,
         "hddsuper": 60,
         "hddbamf": 60,
-        "portSpecs": [
-          "36450-36500"
-        ],
-        "ports": [36479,36480,36481],
+        "portSpecs": ["36450-36500"],
+        "ports": [36479, 36480, 36481],
         "userEnvironmentParameters": [
           {
             "name": "am_ark_SessionName",
@@ -2582,13 +2324,13 @@
         "name": "blockbookviacoin",
         "description": "Blockbook for Viacoin",
         "repotag": "runonflux/blockbook-docker:latest",
-        "containerPorts": [
-          9155
+        "containerPorts": [9155],
+        "domains": [""],
+        "environmentParameters": [
+          "COIN=viacoin",
+          "BLOCKBOOK_PORT=9155",
+          "RPC_PORT=9156"
         ],
-        "domains": [
-          ""
-        ],
-        "environmentParameters": ["COIN=viacoin","BLOCKBOOK_PORT=9155","RPC_PORT=9156"],
         "commands": [],
         "containerData": "/root",
         "tiered": false,
@@ -2604,9 +2346,7 @@
         "hddbasic": 200,
         "hddsuper": 200,
         "hddbamf": 200,
-        "portSpecs": [
-          "34100-34200"
-        ],
+        "portSpecs": ["34100-34200"],
         "ports": [34160],
         "userEnvironmentParameters": []
       }
@@ -2626,12 +2366,8 @@
         "name": "yacy",
         "description": "The YaCy Container",
         "repotag": "luccioman/yacy:latest-alpine",
-        "containerPorts": [
-          8090,8443
-        ],
-        "domains": [
-          "",""
-        ],
+        "containerPorts": [8090, 8443],
+        "domains": ["", ""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/tmpyacy",
@@ -2648,10 +2384,8 @@
         "hddbasic": 60,
         "hddsuper": 60,
         "hddbamf": 60,
-        "portSpecs": [
-          "33400-33500"
-        ],
-        "ports": [33437,33438],
+        "portSpecs": ["33400-33500"],
+        "ports": [33437, 33438],
         "userEnvironmentParameters": []
       }
     ],
@@ -2670,13 +2404,13 @@
         "name": "blockbookvertcoin",
         "description": "Blockbook for Vertcoin",
         "repotag": "runonflux/blockbook-docker:latest",
-        "containerPorts": [
-          9140
+        "containerPorts": [9140],
+        "domains": [""],
+        "environmentParameters": [
+          "COIN=vertcoin",
+          "BLOCKBOOK_PORT=9140",
+          "RPC_PORT=9141"
         ],
-        "domains": [
-          ""
-        ],
-        "environmentParameters": ["COIN=vertcoin","BLOCKBOOK_PORT=9140","RPC_PORT=9141"],
         "commands": [],
         "containerData": "/root",
         "tiered": false,
@@ -2692,9 +2426,7 @@
         "hddbasic": 40,
         "hddsuper": 40,
         "hddbamf": 40,
-        "portSpecs": [
-          "34100-34200"
-        ],
+        "portSpecs": ["34100-34200"],
         "ports": [34145],
         "userEnvironmentParameters": []
       }
@@ -2714,12 +2446,8 @@
         "name": "ethercalc",
         "description": "The EtherCalc Container",
         "repotag": "audreyt/ethercalc:latest",
-        "containerPorts": [
-          8000
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [8000],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/tmpredis",
@@ -2736,9 +2464,7 @@
         "hddbasic": 2,
         "hddsuper": 2,
         "hddbamf": 2,
-        "portSpecs": [
-          "33600-33700"
-        ],
+        "portSpecs": ["33600-33700"],
         "ports": [33661],
         "userEnvironmentParameters": []
       }
@@ -2758,13 +2484,9 @@
         "name": "blockbookqtum",
         "description": "Blockbook for Qtum",
         "repotag": "runonflux/blockbook-docker:latest",
-        "containerPorts": [
-          9188
-        ],
-        "domains": [
-          ""
-        ],
-        "environmentParameters": ["COIN=qtum","BLOCKBOOK_PORT=9188"],
+        "containerPorts": [9188],
+        "domains": [""],
+        "environmentParameters": ["COIN=qtum", "BLOCKBOOK_PORT=9188"],
         "commands": [],
         "containerData": "/root",
         "tiered": false,
@@ -2780,9 +2502,7 @@
         "hddbasic": 100,
         "hddsuper": 100,
         "hddbamf": 100,
-        "portSpecs": [
-          "34100-34200"
-        ],
+        "portSpecs": ["34100-34200"],
         "ports": [34193],
         "userEnvironmentParameters": []
       }
@@ -2802,12 +2522,8 @@
         "name": "onlinecompiler",
         "description": "Online Compiler",
         "repotag": "sidpro/compiler:latest",
-        "containerPorts": [
-          80
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [80],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/tmp",
@@ -2824,9 +2540,7 @@
         "hddbasic": 5,
         "hddsuper": 5,
         "hddbamf": 5,
-        "portSpecs": [
-          "36000-36100"
-        ],
+        "portSpecs": ["36000-36100"],
         "ports": [36001],
         "userEnvironmentParameters": []
       }
@@ -2846,13 +2560,9 @@
         "name": "blockbookdash",
         "description": "Blockbook for Dash",
         "repotag": "runonflux/blockbook-docker:latest",
-        "containerPorts": [
-          9133
-        ],
-        "domains": [
-          ""
-        ],
-        "environmentParameters": ["COIN=dash","BLOCKBOOK_PORT=9133"],
+        "containerPorts": [9133],
+        "domains": [""],
+        "environmentParameters": ["COIN=dash", "BLOCKBOOK_PORT=9133"],
         "commands": [],
         "containerData": "/root",
         "tiered": false,
@@ -2868,9 +2578,7 @@
         "hddbasic": 85,
         "hddsuper": 85,
         "hddbamf": 85,
-        "portSpecs": [
-          "35600-35700"
-        ],
+        "portSpecs": ["35600-35700"],
         "ports": [35660],
         "userEnvironmentParameters": []
       }
@@ -2890,13 +2598,14 @@
         "name": "blockbookdivi",
         "description": "Blockbook for Divi",
         "repotag": "runonflux/blockbook-docker:latest",
-        "containerPorts": [
-          9189
+        "containerPorts": [9189],
+        "domains": [""],
+        "environmentParameters": [
+          "COIN=divi",
+          "BLOCKBOOK_PORT=9189",
+          "RPC_PORT=9190",
+          "DAEMON_URL=https://github.com/DiviProject/Divi/releases/download/v2.5.1/divi-2.5.1-x86_64-linux.tar.gz"
         ],
-        "domains": [
-          ""
-        ],
-        "environmentParameters": ["COIN=divi","BLOCKBOOK_PORT=9189","RPC_PORT=9190","DAEMON_URL=https://github.com/DiviProject/Divi/releases/download/v2.5.1/divi-2.5.1-x86_64-linux.tar.gz"],
         "commands": [],
         "containerData": "/root",
         "tiered": false,
@@ -2912,9 +2621,7 @@
         "hddbasic": 50,
         "hddsuper": 50,
         "hddbamf": 50,
-        "portSpecs": [
-          "35600-35700"
-        ],
+        "portSpecs": ["35600-35700"],
         "ports": [35670],
         "userEnvironmentParameters": []
       }
@@ -2934,13 +2641,13 @@
         "name": "blockbookdecred",
         "description": "Blockbook for Decred",
         "repotag": "runonflux/blockbook-docker:latest",
-        "containerPorts": [
-          9161
+        "containerPorts": [9161],
+        "domains": [""],
+        "environmentParameters": [
+          "COIN=decred",
+          "BLOCKBOOK_PORT=9161",
+          "DAEMON_URL=https://github.com/decred/decred-binaries/releases/download/v1.7.6/decrediton-v1.7.6.tar.gz"
         ],
-        "domains": [
-          ""
-        ],
-        "environmentParameters": ["COIN=decred","BLOCKBOOK_PORT=9161","DAEMON_URL=https://github.com/decred/decred-binaries/releases/download/v1.7.6/decrediton-v1.7.6.tar.gz"],
         "commands": [],
         "containerData": "/root",
         "tiered": false,
@@ -2956,9 +2663,7 @@
         "hddbasic": 50,
         "hddsuper": 50,
         "hddbamf": 50,
-        "portSpecs": [
-          "35600-35700"
-        ],
+        "portSpecs": ["35600-35700"],
         "ports": [35680],
         "userEnvironmentParameters": []
       }
@@ -2978,12 +2683,8 @@
         "name": "meowcoinnode",
         "description": "The Meowcoin Node Container",
         "repotag": "rvnminersaandn/meowcoin-core:latest",
-        "containerPorts": [
-          8788,9766
-        ],
-        "domains": [
-          "",""
-        ],
+        "containerPorts": [8788, 9766],
+        "domains": ["", ""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/root",
@@ -3000,10 +2701,8 @@
         "hddbasic": 60,
         "hddsuper": 60,
         "hddbamf": 60,
-        "portSpecs": [
-          "35700-35750"
-        ],
-        "ports": [35700,35701],
+        "portSpecs": ["35700-35750"],
+        "ports": [35700, 35701],
         "userEnvironmentParameters": []
       }
     ],
@@ -3022,14 +2721,16 @@
         "name": "wanchainrpc",
         "description": "The Wanchain RPC Node Container",
         "repotag": "wanchain/client-go:3.0.0-rpc",
-        "containerPorts": [
-          18545,17717
-        ],
-        "domains": [
-          "",""
-        ],
+        "containerPorts": [18545, 17717],
+        "domains": ["", ""],
         "environmentParameters": [],
-        "commands": ["gwan","--http","--http.corsdomain=*","--http.port=18545","--http.addr=0.0.0.0"],
+        "commands": [
+          "gwan",
+          "--http",
+          "--http.corsdomain=*",
+          "--http.port=18545",
+          "--http.addr=0.0.0.0"
+        ],
         "containerData": "/root",
         "tiered": false,
         "cpu": 2.0,
@@ -3044,10 +2745,8 @@
         "hddbasic": 350,
         "hddsuper": 350,
         "hddbamf": 350,
-        "portSpecs": [
-          "31000-31050"
-        ],
-        "ports": [31010,31011],
+        "portSpecs": ["31000-31050"],
+        "ports": [31010, 31011],
         "userEnvironmentParameters": []
       }
     ],
@@ -3066,12 +2765,8 @@
         "name": "nexanode",
         "description": "The Nexa Node Container",
         "repotag": "bchunlimited/nexa-1.1:ubuntu20.04",
-        "containerPorts": [
-          7228,7227,7229,7230
-        ],
-        "domains": [
-          "","","",""
-        ],
+        "containerPorts": [7228, 7227, 7229, 7230],
+        "domains": ["", "", "", ""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/data",
@@ -3088,10 +2783,8 @@
         "hddbasic": 40,
         "hddsuper": 40,
         "hddbamf": 40,
-        "portSpecs": [
-          "37000-38000"
-        ],
-        "ports": [37230,37231,37232,37233],
+        "portSpecs": ["37000-38000"],
+        "ports": [37230, 37231, 37232, 37233],
         "userEnvironmentParameters": []
       }
     ],
@@ -3110,12 +2803,8 @@
         "name": "electrumxradiant",
         "description": "The Radiant Electrumx Container",
         "repotag": "radiantcommunity/electrumx_radiant_node:v1",
-        "containerPorts": [
-          50010,50012,8000
-        ],
-        "domains": [
-          "","",""
-        ],
+        "containerPorts": [50010, 50012, 8000],
+        "domains": ["", "", ""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/root",
@@ -3132,10 +2821,8 @@
         "hddbasic": 10,
         "hddsuper": 10,
         "hddbamf": 10,
-        "portSpecs": [
-          "38500-38550"
-        ],
-        "ports": [38501,38502,38503],
+        "portSpecs": ["38500-38550"],
+        "ports": [38501, 38502, 38503],
         "userEnvironmentParameters": []
       }
     ],
@@ -3154,14 +2841,19 @@
         "name": "radiantnode",
         "description": "The Radiant Node Container",
         "repotag": "radiantcommunity/radiant-node:latest",
-        "containerPorts": [
-          7332,7333
-        ],
-        "domains": [
-          "",""
-        ],
+        "containerPorts": [7332, 7333],
+        "domains": ["", ""],
         "environmentParameters": [],
-        "commands": ["-rpcworkqueue=32","-rpcthreads=16","-rest","-server","-rpcallowip=0.0.0.0/0","-txindex=1","-rpcuser=dockeruser","-rpcpassword=dockerpass"],
+        "commands": [
+          "-rpcworkqueue=32",
+          "-rpcthreads=16",
+          "-rest",
+          "-server",
+          "-rpcallowip=0.0.0.0/0",
+          "-txindex=1",
+          "-rpcuser=dockeruser",
+          "-rpcpassword=dockerpass"
+        ],
         "containerData": "/root",
         "tiered": false,
         "cpu": 1.0,
@@ -3176,10 +2868,8 @@
         "hddbasic": 5,
         "hddsuper": 5,
         "hddbamf": 5,
-        "portSpecs": [
-          "38500-38550"
-        ],
-        "ports": [38510,38511],
+        "portSpecs": ["38500-38550"],
+        "ports": [38510, 38511],
         "userEnvironmentParameters": []
       }
     ],
@@ -3188,7 +2878,7 @@
   },
   {
     "description": "Capture screenshots of websites as a (host it yourself) API. API Instructions: https://github.com/robvanderleek/capture-website-api#usage",
-    "price": 5.00,
+    "price": 5.0,
     "category": "Hosting",
     "version": 4,
     "name": "WebsiteScreenshotAPI",
@@ -3198,12 +2888,8 @@
         "name": "WebsiteScreenshotAPI",
         "description": "website-screenshot-api",
         "repotag": "wirewrex/cwa-flux:latest",
-        "containerPorts": [
-          8080
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [8080],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/root",
@@ -3220,9 +2906,7 @@
         "hddbasic": 20,
         "hddsuper": 20,
         "hddbamf": 20,
-        "portSpecs": [
-          "34000-34020"
-        ],
+        "portSpecs": ["34000-34020"],
         "ports": [34010],
         "userEnvironmentParameters": []
       }
@@ -3242,12 +2926,8 @@
         "name": "ipify",
         "description": "ipify-api",
         "repotag": "wirewrex/ipify-api:latest",
-        "containerPorts": [
-          3000
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [3000],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/tmp",
@@ -3264,9 +2944,7 @@
         "hddbasic": 1,
         "hddsuper": 1,
         "hddbamf": 1,
-        "portSpecs": [
-          "34000-34020"
-        ],
+        "portSpecs": ["34000-34020"],
         "ports": [34010],
         "userEnvironmentParameters": []
       }
@@ -3286,12 +2964,8 @@
         "name": "nostrrelay",
         "description": "The Nostr Relay Container",
         "repotag": "wirewrex/nostr-rs-relay:custom",
-        "containerPorts": [
-          8080
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [8080],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/db",
@@ -3308,12 +2982,10 @@
         "hddbasic": 10,
         "hddsuper": 10,
         "hddbamf": 10,
-        "portSpecs": [
-          "34400-34500"
-        ],
+        "portSpecs": ["34400-34500"],
         "ports": [34428],
         "userEnvironmentParameters": [
-           {
+          {
             "name": "NAME",
             "description": "Add a custom name to your Nostr Relay",
             "placeholder": "Please add your custom name here"
@@ -3356,12 +3028,8 @@
         "name": "bitgertrpc",
         "description": "The Bitgert RPC Node Container",
         "repotag": "bitgert/brise-node-flux:latest",
-        "containerPorts": [
-          3545,40605
-        ],
-        "domains": [
-          "",""
-        ],
+        "containerPorts": [3545, 40605],
+        "domains": ["", ""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/root",
@@ -3378,10 +3046,8 @@
         "hddbasic": 200,
         "hddsuper": 200,
         "hddbamf": 200,
-        "portSpecs": [
-          "32200-32400"
-        ],
-        "ports": [32300,32301],
+        "portSpecs": ["32200-32400"],
+        "ports": [32300, 32301],
         "userEnvironmentParameters": []
       }
     ],
@@ -3400,14 +3066,20 @@
         "name": "celorpc",
         "description": "The Celo RPC Node Container",
         "repotag": "runonflux/celo-blockchain:latest",
-        "containerPorts": [
-          8545,8546,30303
-        ],
-        "domains": [
-          "","",""
-        ],
+        "containerPorts": [8545, 8546, 30303],
+        "domains": ["", "", ""],
         "environmentParameters": [],
-        "commands": ["--verbosity=3","--syncmode=full","--http","--http.addr=0.0.0.0","--http.api=eth,net,web3,debug,admin,personal","--light.serve=90","--light.maxpeers=1000","--maxpeers=1100","--datadir=/root/.celo"],
+        "commands": [
+          "--verbosity=3",
+          "--syncmode=full",
+          "--http",
+          "--http.addr=0.0.0.0",
+          "--http.api=eth,net,web3,debug,admin,personal",
+          "--light.serve=90",
+          "--light.maxpeers=1000",
+          "--maxpeers=1100",
+          "--datadir=/root/.celo"
+        ],
         "containerData": "/root/.celo",
         "tiered": false,
         "cpu": 4.0,
@@ -3422,10 +3094,8 @@
         "hddbasic": 300,
         "hddsuper": 300,
         "hddbamf": 300,
-        "portSpecs": [
-          "35000-35100"
-        ],
-        "ports": [35000,35001,35002],
+        "portSpecs": ["35000-35100"],
+        "ports": [35000, 35001, 35002],
         "userEnvironmentParameters": []
       }
     ],
@@ -3444,14 +3114,19 @@
         "name": "fuserpc",
         "description": "The Fuse RPC Node Container",
         "repotag": "fusenet/node:latest",
-        "containerPorts": [
-          8545,30300,8546
-        ],
-        "domains": [
-          "","",""
-        ],
+        "containerPorts": [8545, 30300, 8546],
+        "domains": ["", "", ""],
         "environmentParameters": [],
-        "commands": ["--config","fuse","--Init.WebSocketsEnabled","true","--HealthChecks.Enabled","true","--HealthChecks.Slug","/api/health"],
+        "commands": [
+          "--config",
+          "fuse",
+          "--Init.WebSocketsEnabled",
+          "true",
+          "--HealthChecks.Enabled",
+          "true",
+          "--HealthChecks.Slug",
+          "/api/health"
+        ],
         "containerData": "/data",
         "tiered": false,
         "cpu": 2.0,
@@ -3466,10 +3141,8 @@
         "hddbasic": 100,
         "hddsuper": 100,
         "hddbamf": 100,
-        "portSpecs": [
-          "38000-39000"
-        ],
-        "ports": [38545,38303,38456],
+        "portSpecs": ["38000-39000"],
+        "ports": [38545, 38303, 38456],
         "userEnvironmentParameters": []
       }
     ],
@@ -3488,12 +3161,8 @@
         "name": "astarrpc",
         "description": "The Astar RPC Node Container",
         "repotag": "runonflux/astar-node:latest",
-        "containerPorts": [
-          9944,30333,30334
-        ],
-        "domains": [
-          "","",""
-        ],
+        "containerPorts": [9944, 30333, 30334],
+        "domains": ["", "", ""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/root",
@@ -3510,10 +3179,8 @@
         "hddbasic": 600,
         "hddsuper": 600,
         "hddbamf": 600,
-        "portSpecs": [
-          "36000-36500"
-        ],
-        "ports": [36011,36012,36013],
+        "portSpecs": ["36000-36500"],
+        "ports": [36011, 36012, 36013],
         "userEnvironmentParameters": []
       }
     ],
@@ -3532,13 +3199,9 @@
         "name": "algorandrpc",
         "description": "The Algorand RPC Node Container",
         "repotag": "runonflux/go-algorand:latest",
-        "containerPorts": [
-          8080,1337
-        ],
-        "domains": [
-          "",""
-        ],
-        "environmentParameters": ["NETWORK=mainnet","FAST_CATCHUP=1"],
+        "containerPorts": [8080, 1337],
+        "domains": ["", ""],
+        "environmentParameters": ["NETWORK=mainnet", "FAST_CATCHUP=1"],
         "commands": [],
         "containerData": "/algod/data",
         "tiered": false,
@@ -3554,10 +3217,8 @@
         "hddbasic": 100,
         "hddsuper": 100,
         "hddbamf": 100,
-        "portSpecs": [
-          "38000-38100"
-        ],
-        "ports": [38080,38081],
+        "portSpecs": ["38000-38100"],
+        "ports": [38080, 38081],
         "userEnvironmentParameters": [
           {
             "name": "F_S_ENV",
@@ -3583,12 +3244,8 @@
         "name": "streamrbroker",
         "description": "The Streamr Broker Node Container",
         "repotag": "streamr/broker-node:latest",
-        "containerPorts": [
-          1883,7170,7171
-        ],
-        "domains": [
-          "","",""
-        ],
+        "containerPorts": [1883, 7170, 7171],
+        "domains": ["", "", ""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/home/streamr/.streamr",
@@ -3605,10 +3262,8 @@
         "hddbasic": 1,
         "hddsuper": 1,
         "hddbamf": 1,
-        "portSpecs": [
-          "31100-31200"
-        ],
-        "ports": [31111,31112,31113],
+        "portSpecs": ["31100-31200"],
+        "ports": [31111, 31112, 31113],
         "userEnvironmentParameters": [
           {
             "name": "STREAMR__BROKER__PLUGINS__BRUBECK_MINER__BENEFICIARY_ADDRESS",
@@ -3633,12 +3288,8 @@
         "name": "neurainode",
         "description": "The Neurai Node Container",
         "repotag": "neuraiproject/neurai-node:latest",
-        "containerPorts": [
-          19001,19000
-        ],
-        "domains": [
-          "",""
-        ],
+        "containerPorts": [19001, 19000],
+        "domains": ["", ""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/data",
@@ -3655,10 +3306,8 @@
         "hddbasic": 20,
         "hddsuper": 20,
         "hddbamf": 20,
-        "portSpecs": [
-          "36730-36750"
-        ],
-        "ports": [36735,36736],
+        "portSpecs": ["36730-36750"],
+        "ports": [36735, 36736],
         "userEnvironmentParameters": []
       }
     ],
@@ -3677,12 +3326,8 @@
         "name": "electrumxneurai",
         "description": "The Neurai ElectrumX Container",
         "repotag": "neuraiproject/electrumx-node:latest",
-        "containerPorts": [
-          19000,19011,19012,8000
-        ],
-        "domains": [
-          "","","",""
-        ],
+        "containerPorts": [19000, 19011, 19012, 8000],
+        "domains": ["", "", "", ""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/root",
@@ -3699,10 +3344,8 @@
         "hddbasic": 30,
         "hddsuper": 30,
         "hddbamf": 30,
-        "portSpecs": [
-          "36730-36750"
-        ],
-        "ports": [36740,36741,36742,36743],
+        "portSpecs": ["36730-36750"],
+        "ports": [36740, 36741, 36742, 36743],
         "userEnvironmentParameters": []
       }
     ],
@@ -3721,13 +3364,13 @@
         "name": "blockbookneurai",
         "description": "Blockbook for Neurai",
         "repotag": "runonflux/blockbook-docker:latest",
-        "containerPorts": [
-          9168,1337
+        "containerPorts": [9168, 1337],
+        "domains": ["", ""],
+        "environmentParameters": [
+          "COIN=neurai",
+          "BLOCKBOOK_PORT=9168",
+          "BLOCKBOOKGIT_URL=https://github.com/NeuraiProject/blockbook"
         ],
-        "domains": [
-          "",""
-        ],
-        "environmentParameters": ["COIN=neurai","BLOCKBOOK_PORT=9168","BLOCKBOOKGIT_URL=https://github.com/NeuraiProject/blockbook"],
         "commands": [],
         "containerData": "/root",
         "tiered": false,
@@ -3743,10 +3386,8 @@
         "hddbasic": 40,
         "hddsuper": 40,
         "hddbamf": 40,
-        "portSpecs": [
-          "34000-34500"
-        ],
-        "ports": [34149,31450],
+        "portSpecs": ["34000-34500"],
+        "ports": [34149, 31450],
         "userEnvironmentParameters": []
       }
     ],
@@ -3756,7 +3397,7 @@
   {
     "description": "Host your BLOCX Masternode on the Flux Cloud",
     "price": 8.0,
-	  "multiplier": 1,
+    "multiplier": 1,
     "category": "Masternode",
     "version": 7,
     "name": "BLOCXMN",
@@ -3771,22 +3412,16 @@
         "name": "blocxmasternode",
         "description": "The BLOCX Masternode container",
         "repotag": "blocxtech/blocxnode:latest",
-        "containerPorts": [
-          12972
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [12972],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/root/.blocx",
         "tiered": false,
         "cpu": 1,
         "ram": 1000,
-        "hdd": 10,      
-        "portSpecs": [
-          "33100-33110"
-        ],
+        "hdd": 10,
+        "portSpecs": ["33100-33110"],
         "ports": [33106],
         "userEnvironmentParameters": [
           {
@@ -3805,7 +3440,7 @@
   {
     "description": "Host your Neoxa Masternode on the Flux Cloud",
     "price": 11.2,
-	  "multiplier": 1,
+    "multiplier": 1,
     "category": "Masternode",
     "version": 7,
     "name": "NeoxaMN",
@@ -3820,22 +3455,16 @@
         "name": "neoxamasternode",
         "description": "The Neoxa Masternode container",
         "repotag": "runonflux/neoxa-node:latest",
-        "containerPorts": [
-          8788
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [8788],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/root/.neoxacore",
         "tiered": false,
         "cpu": 2,
         "ram": 2000,
-        "hdd": 20,      
-        "portSpecs": [
-          "8500-9000"
-        ],
+        "hdd": 20,
+        "portSpecs": ["8500-9000"],
         "ports": [8788],
         "userEnvironmentParameters": [
           {
@@ -3863,23 +3492,17 @@
         "name": "celestialightnode",
         "description": "The Celestia Light Node container",
         "repotag": "runonflux/celestia-node:latest",
-        "containerPorts": [
-          26658,2121,9090
-        ],
-        "domains": [
-          "","",""
-        ],
-        "environmentParameters": ["NODE_TYPE=light","P2P_NETWORK=celestia"],
+        "containerPorts": [26658, 2121, 9090],
+        "domains": ["", "", ""],
+        "environmentParameters": ["NODE_TYPE=light", "P2P_NETWORK=celestia"],
         "commands": [],
         "containerData": "/home/celestia/.celestia-light",
         "tiered": false,
         "cpu": 1.0,
         "ram": 2000,
         "hdd": 50.0,
-        "portSpecs": [
-          "2000-27000"
-        ],
-        "ports": [26658,2121,9090],
+        "portSpecs": ["2000-27000"],
+        "ports": [26658, 2121, 9090],
         "userEnvironmentParameters": []
       }
     ],
@@ -3898,23 +3521,21 @@
         "name": "bittensorfullnode",
         "description": "The Bittensor Full Node container",
         "repotag": "opentensor/subtensor:latest",
-        "containerPorts": [
-          9944,30333,9933
-        ],
-        "domains": [
-          "","",""
-        ],
+        "containerPorts": [9944, 30333, 9933],
+        "domains": ["", "", ""],
         "environmentParameters": ["CARGO_HOME=/var/www/node-subtensor/.cargo"],
-        "commands": ["/bin/bash","-c","./node-subtensor --base-path /tmp/blockchain --chain ./raw_spec.json --rpc-external --rpc-cors all --ws-external --no-mdns --ws-max-connections 10000 --in-peers 500 --out-peers 500 --bootnodes /dns/bootnode.finney.opentensor.ai/tcp/30333/ws/p2p/12D3KooWRwbMb85RWnT8DSXSYMWQtuDwh4LJzndoRrTDotTR5gDC --sync warp"],
+        "commands": [
+          "/bin/bash",
+          "-c",
+          "./node-subtensor --base-path /tmp/blockchain --chain ./raw_spec.json --rpc-external --rpc-cors all --ws-external --no-mdns --ws-max-connections 10000 --in-peers 500 --out-peers 500 --bootnodes /dns/bootnode.finney.opentensor.ai/tcp/30333/ws/p2p/12D3KooWRwbMb85RWnT8DSXSYMWQtuDwh4LJzndoRrTDotTR5gDC --sync warp"
+        ],
         "containerData": "/tmp",
         "tiered": false,
         "cpu": 4.5,
         "ram": 8000,
         "hdd": 150.0,
-        "portSpecs": [
-          "9000-31000"
-        ],
-        "ports": [9944,30333,9933],
+        "portSpecs": ["9000-31000"],
+        "ports": [9944, 30333, 9933],
         "userEnvironmentParameters": []
       }
     ],
