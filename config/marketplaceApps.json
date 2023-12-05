@@ -3544,7 +3544,7 @@
   },
   {
     "description": "TEST",
-    "price": 32,
+    "price": 45,
     "multiplier": 1,
     "category": "Masternode",
     "version": 7,
@@ -3588,7 +3588,7 @@
   },
   {
     "description": "TESTB",
-    "price": 32,
+    "price": 45,
     "multiplier": 1,
     "category": "Masternode",
     "version": 7,
