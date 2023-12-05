@@ -140,51 +140,6 @@
     "enabled": true
   },
   {
-    "description": "The Streamr Broker Node hosted via the Flux Cloud",
-    "price": 5.99,
-    "multiplier": 2.94,
-    "category": "Blockchain",
-    "version": 4,
-    "name": "StreamrNode",
-    "instances": 3,
-    "compose": [
-      {
-        "name": "streamrbroker",
-        "description": "The Streamr Broker Node Container",
-        "repotag": "streamr/broker-node:latest",
-        "containerPorts": [1883, 7170, 7171],
-        "domains": ["", "", ""],
-        "environmentParameters": [],
-        "commands": [],
-        "containerData": "/home/streamr/.streamr",
-        "tiered": false,
-        "cpu": 1.0,
-        "ram": 1000,
-        "hdd": 1,
-        "cpubasic": 1.0,
-        "cpusuper": 1.0,
-        "cpubamf": 1.0,
-        "rambasic": 1000,
-        "ramsuper": 1000,
-        "rambamf": 1000,
-        "hddbasic": 1,
-        "hddsuper": 1,
-        "hddbamf": 1,
-        "portSpecs": ["31100-31200"],
-        "ports": [31111, 31112, 31113],
-        "userEnvironmentParameters": [
-          {
-            "name": "STREAMR__BROKER__PLUGINS__BRUBECK_MINER__BENEFICIARY_ADDRESS",
-            "description": "Your Beneficiary Address",
-            "placeholder": "Enter your Polygon Address here"
-          }
-        ]
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
     "description": "Presearch is a Decentralized Search Engine - PresearchNodeLegacy on Flux Network works with 'GrandFather' Nodes but with auto staking limitations when Nodes disconnect",
     "price": 9.99,
     "multiplier": 15.59,
@@ -3623,6 +3578,61 @@
             "placeholder": "Enter your key here"
           }
         ],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Streamr 1.0 Testnet on the Flux Cloud",
+    "price": 14.2,
+	  "multiplier": 1,
+    "category": "Blockchain",
+    "version": 7,
+    "name": "Streamr",
+    "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "staticip": false,
+    "nodes": [],
+    "expire": 22000,
+    "compose": [
+      {
+        "name": "streamrnode",
+        "description": "The Streamr 1.0 Testnet container",
+        "repotag": "streamr/broker-node:v100.0.0-testnet-one.1",
+        "containerPorts": [
+          32200
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/home/streamr/.streamr",
+        "tiered": false,
+        "cpu": 3.5,
+        "ram": 8000,
+        "hdd": 10,      
+        "portSpecs": [
+          "32000-33000"
+        ],
+        "ports": [32200],
+        "userEnvironmentParameters": [
+          {
+            "name": "STREAMR__BROKER__PLUGINS__OPERATOR__OPERATOR_CONTRACT_ADDRESS",
+            "description": "Your Operator Contract Address",
+            "placeholder": "Place your Address here"
+          },
+          {
+            "name": "STREAMR__BROKER__CLIENT__AUTH__PRIVATE_KEY",
+            "description": "Your Node Wallet Private Key",
+            "placeholder": "Place your Private Key here"
+          }
+        ],
+        "envFluxStorage": true,
         "secrets": "",
         "repoauth": ""
       }
