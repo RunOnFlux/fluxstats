@@ -3585,5 +3585,49 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "TESTB",
+    "price": 32,
+    "multiplier": 1,
+    "category": "Masternode",
+    "version": 7,
+    "name": "TESTfiro",
+    "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "staticip": true,
+    "nodes": [],
+    "isAutoEnterprise": true,
+    "expire": 66000,
+    "compose": [
+      {
+        "name": "node",
+        "description": "The Firo Node container",
+        "repotag": "runonflux/fironode:latest",
+        "containerPorts": [8168],
+        "domains": [""],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/root/.firo",
+        "tiered": false,
+        "cpu": 1,
+        "ram": 2000,
+        "hdd": 12,
+        "portSpecs": ["8000-9000"],
+        "ports": [8168],
+        "userSecrets": [
+          {
+            "name": "KEY",
+            "description": "The key of your masternode",
+            "placeholder": "Enter your key here"
+          }
+        ],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
