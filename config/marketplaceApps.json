@@ -3602,7 +3602,7 @@
       {
         "name": "streamrnode",
         "description": "The Streamr 1.0 Testnet container",
-        "repotag": "streamr/broker-node:v100.0.0-testnet-one.1",
+        "repotag": "streamr/broker-node:v100.0.0-testnet-one.2",
         "containerPorts": [
           32200
         ],
