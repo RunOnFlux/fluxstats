@@ -79,7 +79,7 @@
         "repotag": "itzg/minecraft-server:latest",
         "containerPorts": [25565],
         "domains": [""],
-        "environmentParameters": ["EULA=TRUE",TYPE=SPIGOT],
+        "environmentParameters": ["EULA=TRUE","TYPE=SPIGOT"],
         "commands": [],
         "containerData": "r:/data",
         "tiered": false,
@@ -139,7 +139,7 @@
           "ram": 5000,
           "hdd": 30,      
           "portSpecs": [
-            25565-25700"
+            "25565-25700"
           ],
           "ports": [25565],
         ],
