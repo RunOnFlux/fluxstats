@@ -59,6 +59,98 @@
       "enabled": true
     },
     {
+    "description": "Host your PRIVATE Java Minecraft server on the Flux Cloud",
+    "price": 25.67,
+    "multiplier": 1,
+    "category": "Games",
+    "version": 7,
+    "name": "privateminecraftserver",
+    "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "staticip": true,
+    "nodes": [],
+    "isAutoEnterprise": true,
+    "expire": 22000,
+    "compose": [
+      {
+        "name": "node",
+        "description": "Private Minecraft Server container",
+        "repotag": "itzg/minecraft-server:latest",
+        "containerPorts": [25565],
+        "domains": [""],
+        "environmentParameters": ["EULA=TRUE",TYPE=SPIGOT],
+        "commands": [],
+        "containerData": "r:/data",
+        "tiered": false,
+        "cpu": 2,
+        "ram": 5000,
+        "hdd": 30,
+        "portSpecs": ["25565-25600"],
+        "ports": [25565],
+        "userSecrets": [
+          {
+            "name": "OPS",
+            "description": "Enter the minecraft username that should be set as the server operator/administrator",
+            "placeholder": "Enter the admins minecraft username here"
+          },
+           {
+            "name": "WHITELIST",
+            "description": "Enter the minecraft usernames that should be whitelisted, comma seperated",
+            "placeholder": "Enter minecraft usernames to whitelist here"
+          },
+          {
+            "name": "RCON_PASSWORD",
+            "description": "The RCON Password for your server will be encrypted on chain",
+            "placeholder": "Enter your desired password (not transmitted over the internet)"
+          }
+        ],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+      "description": "Host your PUBLIC Java Minecraft server on the Flux Cloud",
+      "price": 12.15,
+      "category": "Games",
+      "version": 7,
+      "name": "Minecraft",
+      "instances": 3,
+      "contacts": [],
+      "geolocation": [],
+      "staticip": false,
+      "nodes": [],
+      "expire": 22000,
+      "compose": [
+        {
+          "name": "minecraftserver",
+          "description": "The Minecraft Server container",
+          "repotag": "itzg/minecraft-server:latest",
+          "containerPorts": [25565],
+          "domains": [""],
+          "environmentParameters": ["EULA=TRUE"],
+          "commands": [],
+          "containerData": "r:/data",
+          "tiered": false,
+          "cpu": 2,
+          "ram": 5000,
+          "hdd": 30,      
+          "portSpecs": [
+            25565-25700"
+          ],
+          "ports": [25565],
+        ],
+          "secrets": "",
+          "repoauth": ""
+        }
+      ],
+      "visible": true,
+      "enabled": true
+    },
+    {
       "description": "PoUW at Flux layer 2 network. Folding@home is a project focused on disease research. Client Visit was disabled, to check Run On Flux team stats go to https://stats.foldingathome.org/team/262156",
       "price": 1.91,
       "category": "Productivity",
@@ -2964,69 +3056,6 @@
           ],
           "ports": [35680],
           "userEnvironmentParameters": []
-        }
-      ],
-      "visible": true,
-      "enabled": true
-    },
-    {
-      "description": "Host your Java Minecraft server on the Flux Cloud",
-      "price": 12.15,
-      "category": "Games",
-      "version": 7,
-      "name": "Minecraft",
-      "instances": 3,
-      "contacts": [],
-      "geolocation": [],
-      "staticip": false,
-      "nodes": [],
-      "expire": 22000,
-      "compose": [
-        {
-          "name": "minecraftserver",
-          "description": "The Minecraft Server container",
-          "repotag": "wirewrex/minecraft-server:fluxtest",
-          "containerPorts": [
-           25565,22222
-          ],
-          "domains": [
-            "",""
-          ],
-          "environmentParameters": ["EULA=TRUE"],
-          "commands": [],
-          "containerData": "/root|s:/root/cluster",
-          "tiered": false,
-          "cpu": 2,
-          "ram": 5000,
-          "hdd": 30,      
-          "portSpecs": [
-            "22222-25565"
-          ],
-          "ports": [25565,22222],
-          "userEnvironmentParameters": [
-          {
-            "name": "SEED",
-            "description": "If you want to create the Minecraft level with a specific Seed (only Positive Numbers)",
-            "placeholder": "Put in a random Number, e.g 1785852800490497919"
-          },
-          {
-            "name": "MINECRAFT_USERNAME",
-            "description": "Enter the Minecraft username that should be designated as the server operator",
-            "placeholder": "minecraft username"
-          },
-          {
-            "name": "DIFFICULTY",
-            "description": "The difficulty level can be set like peaceful, easy, normal, and hard",
-            "placeholder": "(default: easy)"
-          },
-          {
-            "name": "TYPE",
-            "description": "What kind of server type do you want, refer to https://github.com/itzg/docker-minecraft-server/blob/master/README.md",
-            "placeholder": "Enter your server type here, e.g CATSERVER"
-          }
-        ],
-          "secrets": "",
-          "repoauth": ""
         }
       ],
       "visible": true,
