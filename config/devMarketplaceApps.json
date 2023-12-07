@@ -138,11 +138,8 @@
           "cpu": 2,
           "ram": 5000,
           "hdd": 30,      
-          "portSpecs": [
-            "25565-25700"
-          ],
+          "portSpecs": ["25565-25700"],
           "ports": [25565],
-        ],
           "secrets": "",
           "repoauth": ""
         }
