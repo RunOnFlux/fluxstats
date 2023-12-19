@@ -140,14 +140,18 @@
     "enabled": true
   },
   {
-    "description": "Presearch is a Decentralized Search Engine - PresearchNodeLegacy on Flux Network works with 'GrandFather' Nodes but with auto staking limitations when Nodes disconnect",
+    "description": "Host your Presearch Node Legacy on the Flux Cloud for a 1-month plan. PresearchNodeLegacy on Flux Network works with 'GrandFather' Nodes but with auto staking limitations when Nodes disconnect",
     "price": 9.99,
     "multiplier": 15.59,
     "category": "Blockchain",
-    "version": 4,
+    "version": 7,
     "name": "PresearchNodeLegacy",
     "instances": 3,
     "lockedValues": ["instances"],
+    "contacts": [],
+    "geolocation": [],
+    "nodes": [],
+    "expire": 22000,
     "compose": [
       {
         "name": "node",
@@ -166,15 +170,6 @@
         "cpu": 0.3,
         "ram": 300,
         "hdd": 2,
-        "cpubasic": 0.3,
-        "cpusuper": 0.3,
-        "cpubamf": 0.3,
-        "rambasic": 300,
-        "ramsuper": 300,
-        "rambamf": 300,
-        "hddbasic": 2,
-        "hddsuper": 2,
-        "hddbamf": 2,
         "portSpecs": ["39000-39999"],
         "ports": [39000],
         "userEnvironmentParameters": [
@@ -183,21 +178,168 @@
             "description": "Your node registration code",
             "placeholder": "Enter your code here"
           }
-        ]
+        ],
+        "secrets": "",
+        "repoauth": ""
       }
     ],
     "visible": true,
     "enabled": true
   },
   {
-    "description": "Presearch is a Decentralized Search Engine - PresearchNode on Flux Network uses FluxStorage to build Private Keys and works without auto staking limitations when Nodes disconnect, doesn't work with 'Grandfather' nodes.",
+    "description": "Host your Presearch Node Legacy on the Flux Cloud for a 3-month plan. PresearchNodeLegacy on Flux Network works with 'GrandFather' Nodes but with auto staking limitations when Nodes disconnect",
+    "price": 28.47,
+    "multiplier": 15.59,
+    "category": "Blockchain",
+    "version": 7,
+    "name": "PresearchNodeLegacy",
+    "instances": 3,
+    "lockedValues": ["instances"],
+    "contacts": [],
+    "geolocation": [],
+    "nodes": [],
+    "expire": 66000,
+    "compose": [
+      {
+        "name": "node",
+        "description": "The Presearch node container",
+        "repotag": "presearch/node:latest",
+        "containerPorts": [38253],
+        "domains": [""],
+        "environmentParameters": [
+          "STAKE=disconnected:oldest,wallet:minimum",
+          "ALLOW_DISCONNECTED_STAKE_TRANSFER_AFTER=30m",
+          "TAGS=flux"
+        ],
+        "commands": [],
+        "containerData": "/app/node",
+        "tiered": false,
+        "cpu": 0.3,
+        "ram": 300,
+        "hdd": 2,
+        "portSpecs": ["39000-39999"],
+        "ports": [39000],
+        "userEnvironmentParameters": [
+          {
+            "name": "REGISTRATION_CODE",
+            "description": "Your node registration code",
+            "placeholder": "Enter your code here"
+          }
+        ],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Presearch Node Legacy on the Flux Cloud for a 6-month plan. PresearchNodeLegacy on Flux Network works with 'GrandFather' Nodes but with auto staking limitations when Nodes disconnect",
+    "price": 53.95,
+    "multiplier": 15.59,
+    "category": "Blockchain",
+    "version": 7,
+    "name": "PresearchNodeLegacy",
+    "instances": 3,
+    "lockedValues": ["instances"],
+    "contacts": [],
+    "geolocation": [],
+    "nodes": [],
+    "expire": 132000,
+    "compose": [
+      {
+        "name": "node",
+        "description": "The Presearch node container",
+        "repotag": "presearch/node:latest",
+        "containerPorts": [38253],
+        "domains": [""],
+        "environmentParameters": [
+          "STAKE=disconnected:oldest,wallet:minimum",
+          "ALLOW_DISCONNECTED_STAKE_TRANSFER_AFTER=30m",
+          "TAGS=flux"
+        ],
+        "commands": [],
+        "containerData": "/app/node",
+        "tiered": false,
+        "cpu": 0.3,
+        "ram": 300,
+        "hdd": 2,
+        "portSpecs": ["39000-39999"],
+        "ports": [39000],
+        "userEnvironmentParameters": [
+          {
+            "name": "REGISTRATION_CODE",
+            "description": "Your node registration code",
+            "placeholder": "Enter your code here"
+          }
+        ],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Presearch Node Legacy on the Flux Cloud for a 12-month plan. PresearchNodeLegacy on Flux Network works with 'GrandFather' Nodes but with auto staking limitations when Nodes disconnect",
+    "price": 89.99,
+    "multiplier": 15.59,
+    "category": "Blockchain",
+    "version": 7,
+    "name": "PresearchNodeLegacy",
+    "instances": 3,
+    "lockedValues": ["instances"],
+    "contacts": [],
+    "geolocation": [],
+    "nodes": [],
+    "expire": 264000,
+    "compose": [
+      {
+        "name": "node",
+        "description": "The Presearch node container",
+        "repotag": "presearch/node:latest",
+        "containerPorts": [38253],
+        "domains": [""],
+        "environmentParameters": [
+          "STAKE=disconnected:oldest,wallet:minimum",
+          "ALLOW_DISCONNECTED_STAKE_TRANSFER_AFTER=30m",
+          "TAGS=flux"
+        ],
+        "commands": [],
+        "containerData": "/app/node",
+        "tiered": false,
+        "cpu": 0.3,
+        "ram": 300,
+        "hdd": 2,
+        "portSpecs": ["39000-39999"],
+        "ports": [39000],
+        "userEnvironmentParameters": [
+          {
+            "name": "REGISTRATION_CODE",
+            "description": "Your node registration code",
+            "placeholder": "Enter your code here"
+          }
+        ],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Presearch Node on the Flux Cloud for a 1-month plan. PresearchNode on Flux Network uses FluxStorage to build Private Keys and works without auto staking limitations when Nodes disconnect, doesn't work with 'Grandfather' nodes.",
     "price": 9.99,
     "multiplier": 15.59,
     "category": "Blockchain",
-    "version": 4,
+    "version": 7,
     "name": "PresearchNode",
     "instances": 3,
     "lockedValues": ["instances"],
+    "contacts": [],
+    "geolocation": [],
+    "nodes": [],
+    "expire": 22000,
     "compose": [
       {
         "name": "node",
@@ -218,15 +360,6 @@
         "cpu": 0.3,
         "ram": 300,
         "hdd": 2,
-        "cpubasic": 0.3,
-        "cpusuper": 0.3,
-        "cpubamf": 0.3,
-        "rambasic": 300,
-        "ramsuper": 300,
-        "rambamf": 300,
-        "hddbasic": 2,
-        "hddsuper": 2,
-        "hddbamf": 2,
         "portSpecs": ["39000-39999"],
         "ports": [39000],
         "userEnvironmentParameters": [
@@ -241,7 +374,174 @@
             "value": "",
             "placeholder": "Enter your node description"
           }
-        ]
+        ],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Presearch Node on the Flux Cloud for a 3-month plan. PresearchNode on Flux Network uses FluxStorage to build Private Keys and works without auto staking limitations when Nodes disconnect, doesn't work with 'Grandfather' nodes.",
+    "price": 28.47,
+    "multiplier": 15.59,
+    "category": "Blockchain",
+    "version": 7,
+    "name": "PresearchNode",
+    "instances": 3,
+    "lockedValues": ["instances"],
+    "contacts": [],
+    "geolocation": [],
+    "nodes": [],
+    "expire": 66000,
+    "compose": [
+      {
+        "name": "node",
+        "description": "The Presearch node container",
+        "repotag": "presearch/node:latest",
+        "containerPorts": [38253],
+        "domains": [""],
+        "environmentParameters": [
+          "STAKE=disconnected:oldest#flux,wallet:minimum",
+          "ALLOW_DISCONNECTED_STAKE_TRANSFER_AFTER=30m",
+          "TAGS=flux",
+          "URL=https://home.runonflux.io",
+          "F_S_ENV=https://storage.runonflux.io/v2/env/presearch"
+        ],
+        "commands": [],
+        "containerData": "/app/node",
+        "tiered": false,
+        "cpu": 0.3,
+        "ram": 300,
+        "hdd": 2,
+        "portSpecs": ["39000-39999"],
+        "ports": [39000],
+        "userEnvironmentParameters": [
+          {
+            "name": "REGISTRATION_CODE",
+            "description": "Your node registration code",
+            "placeholder": "Enter your code here"
+          },
+          {
+            "name": "DESCRIPTION",
+            "description": "Optional description for your node",
+            "value": "",
+            "placeholder": "Enter your node description"
+          }
+        ],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Presearch Node on the Flux Cloud for a 6-month plan. PresearchNode on Flux Network uses FluxStorage to build Private Keys and works without auto staking limitations when Nodes disconnect, doesn't work with 'Grandfather' nodes.",
+    "price": 53.95,
+    "multiplier": 15.59,
+    "category": "Blockchain",
+    "version": 7,
+    "name": "PresearchNode",
+    "instances": 3,
+    "lockedValues": ["instances"],
+    "contacts": [],
+    "geolocation": [],
+    "nodes": [],
+    "expire": 132000,
+    "compose": [
+      {
+        "name": "node",
+        "description": "The Presearch node container",
+        "repotag": "presearch/node:latest",
+        "containerPorts": [38253],
+        "domains": [""],
+        "environmentParameters": [
+          "STAKE=disconnected:oldest#flux,wallet:minimum",
+          "ALLOW_DISCONNECTED_STAKE_TRANSFER_AFTER=30m",
+          "TAGS=flux",
+          "URL=https://home.runonflux.io",
+          "F_S_ENV=https://storage.runonflux.io/v2/env/presearch"
+        ],
+        "commands": [],
+        "containerData": "/app/node",
+        "tiered": false,
+        "cpu": 0.3,
+        "ram": 300,
+        "hdd": 2,
+        "portSpecs": ["39000-39999"],
+        "ports": [39000],
+        "userEnvironmentParameters": [
+          {
+            "name": "REGISTRATION_CODE",
+            "description": "Your node registration code",
+            "placeholder": "Enter your code here"
+          },
+          {
+            "name": "DESCRIPTION",
+            "description": "Optional description for your node",
+            "value": "",
+            "placeholder": "Enter your node description"
+          }
+        ],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Presearch Node on the Flux Cloud for a 12-month plan. PresearchNode on Flux Network uses FluxStorage to build Private Keys and works without auto staking limitations when Nodes disconnect, doesn't work with 'Grandfather' nodes.",
+    "price": 89.99,
+    "multiplier": 15.59,
+    "category": "Blockchain",
+    "version": 7,
+    "name": "PresearchNode",
+    "instances": 3,
+    "lockedValues": ["instances"],
+    "contacts": [],
+    "geolocation": [],
+    "nodes": [],
+    "expire": 264000,
+    "compose": [
+      {
+        "name": "node",
+        "description": "The Presearch node container",
+        "repotag": "presearch/node:latest",
+        "containerPorts": [38253],
+        "domains": [""],
+        "environmentParameters": [
+          "STAKE=disconnected:oldest#flux,wallet:minimum",
+          "ALLOW_DISCONNECTED_STAKE_TRANSFER_AFTER=30m",
+          "TAGS=flux",
+          "URL=https://home.runonflux.io",
+          "F_S_ENV=https://storage.runonflux.io/v2/env/presearch"
+        ],
+        "commands": [],
+        "containerData": "/app/node",
+        "tiered": false,
+        "cpu": 0.3,
+        "ram": 300,
+        "hdd": 2,
+        "portSpecs": ["39000-39999"],
+        "ports": [39000],
+        "userEnvironmentParameters": [
+          {
+            "name": "REGISTRATION_CODE",
+            "description": "Your node registration code",
+            "placeholder": "Enter your code here"
+          },
+          {
+            "name": "DESCRIPTION",
+            "description": "Optional description for your node",
+            "value": "",
+            "placeholder": "Enter your node description"
+          }
+        ],
+        "secrets": "",
+        "repoauth": ""
       }
     ],
     "visible": true,
@@ -3498,94 +3798,6 @@
     "enabled": true
   },
   {
-    "description": "TEST",
-    "price": 45,
-    "multiplier": 1,
-    "category": "Masternode",
-    "version": 7,
-    "name": "TESTfiro",
-    "instances": 3,
-    "contacts": [],
-    "geolocation": [],
-    "staticip": true,
-    "nodes": [],
-    "isAutoEnterprise": true,
-    "expire": 66000,
-    "compose": [
-      {
-        "name": "node",
-        "description": "The Firo Node container",
-        "repotag": "runonflux/fironode:latest",
-        "containerPorts": [8168],
-        "domains": [""],
-        "environmentParameters": [],
-        "commands": [],
-        "containerData": "/root/.firo",
-        "tiered": false,
-        "cpu": 1,
-        "ram": 2000,
-        "hdd": 12,
-        "portSpecs": ["8000-9000"],
-        "ports": [8168],
-        "userEnvironmentParameters": [
-          {
-            "name": "KEY",
-            "description": "The key of your masternode",
-            "placeholder": "Enter your key here"
-          }
-        ],
-        "secrets": "",
-        "repoauth": ""
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
-    "description": "TESTB",
-    "price": 45,
-    "multiplier": 1,
-    "category": "Masternode",
-    "version": 7,
-    "name": "TESTfiro",
-    "instances": 3,
-    "contacts": [],
-    "geolocation": [],
-    "staticip": true,
-    "nodes": [],
-    "isAutoEnterprise": true,
-    "expire": 66000,
-    "compose": [
-      {
-        "name": "node",
-        "description": "The Firo Node container",
-        "repotag": "runonflux/fironode:latest",
-        "containerPorts": [8168],
-        "domains": [""],
-        "environmentParameters": [],
-        "commands": [],
-        "containerData": "/root/.firo",
-        "tiered": false,
-        "cpu": 1,
-        "ram": 2000,
-        "hdd": 12,
-        "portSpecs": ["8000-9000"],
-        "ports": [8168],
-        "userSecrets": [
-          {
-            "name": "KEY",
-            "description": "The key of your masternode",
-            "placeholder": "Enter your key here"
-          }
-        ],
-        "secrets": "",
-        "repoauth": ""
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
     "description": "Host your Streamr 1.0 Testnet on the Flux Cloud",
     "price": 14.2,
 	  "multiplier": 1,
@@ -3638,6 +3850,6 @@
       }
     ],
     "visible": true,
-    "enabled": true
+    "enabled": false
   }
 ]
