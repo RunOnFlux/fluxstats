@@ -188,7 +188,7 @@
   },
   {
     "description": "Host your Presearch Node Legacy on the Flux Cloud for a 3-month plan. PresearchNodeLegacy on Flux Network works with 'GrandFather' Nodes but with auto staking limitations when Nodes disconnect",
-    "price": 28.47,
+    "price": 27.87,
     "multiplier": 15.59,
     "category": "Blockchain",
     "version": 7,
@@ -235,7 +235,7 @@
   },
   {
     "description": "Host your Presearch Node Legacy on the Flux Cloud for a 6-month plan. PresearchNodeLegacy on Flux Network works with 'GrandFather' Nodes but with auto staking limitations when Nodes disconnect",
-    "price": 53.95,
+    "price": 50.95,
     "multiplier": 15.59,
     "category": "Blockchain",
     "version": 7,
@@ -282,7 +282,7 @@
   },
   {
     "description": "Host your Presearch Node Legacy on the Flux Cloud for a 12-month plan. PresearchNodeLegacy on Flux Network works with 'GrandFather' Nodes but with auto staking limitations when Nodes disconnect",
-    "price": 89.99,
+    "price": 83.92,
     "multiplier": 15.59,
     "category": "Blockchain",
     "version": 7,
@@ -384,7 +384,7 @@
   },
   {
     "description": "Host your Presearch Node on the Flux Cloud for a 3-month plan. PresearchNode on Flux Network uses FluxStorage to build Private Keys and works without auto staking limitations when Nodes disconnect, doesn't work with 'Grandfather' nodes.",
-    "price": 28.47,
+    "price": 27.87,
     "multiplier": 15.59,
     "category": "Blockchain",
     "version": 7,
@@ -439,7 +439,7 @@
   },
   {
     "description": "Host your Presearch Node on the Flux Cloud for a 6-month plan. PresearchNode on Flux Network uses FluxStorage to build Private Keys and works without auto staking limitations when Nodes disconnect, doesn't work with 'Grandfather' nodes.",
-    "price": 53.95,
+    "price": 50.95,
     "multiplier": 15.59,
     "category": "Blockchain",
     "version": 7,
@@ -494,7 +494,7 @@
   },
   {
     "description": "Host your Presearch Node on the Flux Cloud for a 12-month plan. PresearchNode on Flux Network uses FluxStorage to build Private Keys and works without auto staking limitations when Nodes disconnect, doesn't work with 'Grandfather' nodes.",
-    "price": 89.99,
+    "price": 83.92,
     "multiplier": 15.59,
     "category": "Blockchain",
     "version": 7,
