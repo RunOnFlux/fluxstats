@@ -57,7 +57,7 @@
     },
     {
     "description": "Host your PRIVATE Java Minecraft server on the Flux Cloud",
-    "price": 25.67,
+    "price": 15.3,
     "multiplier": 1,
     "category": "Games",
     "version": 7,
@@ -68,7 +68,6 @@
     "staticip": false,
     "nodes": [],
     "isAutoEnterprise": true,
-    "expire": 22000,
     "compose": [
       {
         "name": "node",
