@@ -37,9 +37,6 @@
           "hddbasic": 1,
           "hddsuper": 1,
           "hddbamf": 1,
-          "portSpecs": [
-            "37185-37285"
-          ],
           "ports": [37185],
           "userEnvironmentParameters": [
             {
@@ -86,7 +83,6 @@
         "cpu": 1,
         "ram": 1000,
         "hdd": 10,
-        "portSpecs": ["25565-25565"],
         "ports": [25565],
         "userSecrets": [
           {
@@ -138,7 +134,6 @@
           "cpu": 2,
           "ram": 5000,
           "hdd": 30,      
-          "portSpecs": ["25565-25700"],
           "ports": [25565],
           "secrets": "",
           "repoauth": ""
@@ -181,9 +176,6 @@
           "hddbasic": 3,
           "hddsuper": 3,
           "hddbamf": 3,
-          "portSpecs": [
-            "35500-335600"
-          ],
           "ports": [35555],
           "userEnvironmentParameters": [
             {
@@ -232,9 +224,6 @@
           "hddbasic": 10,
           "hddsuper": 10,
           "hddbamf": 10,
-          "portSpecs": [
-            "37500-37600"
-          ],
           "ports": [37566],
           "userEnvironmentParameters": [
             {
@@ -252,7 +241,7 @@
     {
       "description": "The Streamr Broker Node hosted via the Flux Cloud",
       "price": 5.99,
-        "multiplier": 2.94,
+        "multiplier": 1,
       "category": "Blockchain",
       "version": 4,
       "name": "StreamrNode",
@@ -284,9 +273,6 @@
           "hddbasic": 1,
           "hddsuper": 1,
           "hddbamf": 1,
-          "portSpecs": [
-            "31100-31200"
-          ],
           "ports": [31111,31112,31113],
           "userEnvironmentParameters": [
             {
@@ -297,8 +283,8 @@
           ]
         }
       ],
-      "visible": true,
-      "enabled": true
+      "visible": false,
+      "enabled": false
     },
     {
       "description": "Presearch is a Decentralized Search Engine - PresearchNodeLegacy on Flux Network works with 'GrandFather' Nodes but with auto staking limitations when Nodes disconnect",
@@ -336,9 +322,6 @@
           "hddbasic": 2,
           "hddsuper": 2,
           "hddbamf": 2,
-          "portSpecs": [
-            "39000-39999"
-          ],
           "ports": [39000],
           "userEnvironmentParameters": [
             {
@@ -388,9 +371,6 @@
           "hddbasic": 2,
           "hddsuper": 2,
           "hddbamf": 2,
-          "portSpecs": [
-            "39000-39999"
-          ],
           "ports": [39000],
           "userEnvironmentParameters": [
             {
@@ -445,9 +425,6 @@
           "hddbasic": 50,
           "hddsuper": 50,
           "hddbamf": 50,
-          "portSpecs": [
-            "39000-39999"
-          ],
           "ports": [39010],
           "userEnvironmentParameters": []
         }
@@ -486,9 +463,6 @@
           "cpu": 1,
           "ram": 2000,
           "hdd": 10,      
-          "portSpecs": [
-            "38000-38999"
-          ],
           "ports": [38000],
           "userEnvironmentParameters": [
             {
@@ -539,9 +513,6 @@
           "hddbasic": 50,
           "hddsuper": 50,
           "hddbamf": 50,
-          "portSpecs": [
-            "37300-37500"
-          ],
           "ports": [37300],
           "userEnvironmentParameters": [
             {
@@ -590,9 +561,6 @@
           "hddbasic": 50,
           "hddsuper": 50,
           "hddbamf": 50,
-          "portSpecs": [
-            "37500-37700"
-          ],
           "ports": [37500],
           "userEnvironmentParameters": [
             {
@@ -641,9 +609,6 @@
           "hddbasic": 50,
           "hddsuper": 50,
           "hddbamf": 50,
-          "portSpecs": [
-            "37700-37999"
-          ],
           "ports": [37700,37701],
           "userEnvironmentParameters": []
         }
@@ -686,9 +651,6 @@
           "hddbasic": 69,
           "hddsuper": 69,
           "hddbamf": 69,
-          "portSpecs": [
-            "31350-38999"
-          ],
           "ports": [38080,38767,31413],
           "userEnvironmentParameters": [
             {
@@ -737,9 +699,6 @@
           "hddbasic": 200,
           "hddsuper": 200,
           "hddbamf": 200,
-          "portSpecs": [
-            "31250-36500"
-          ],
           "ports": [31350,31351],
           "userEnvironmentParameters": []
         }
@@ -782,9 +741,6 @@
           "hddbasic": 22,
           "hddsuper": 22,
           "hddbamf": 22,
-          "portSpecs": [
-            "31000-31250"
-          ],
           "ports": [31000],
           "userEnvironmentParameters": []
         }
@@ -827,9 +783,6 @@
           "hddbasic": 20,
           "hddsuper": 20,
           "hddbamf": 20,
-          "portSpecs": [
-            "33200-34000"
-          ],
           "ports": [33201,33202,33203],
           "userEnvironmentParameters": []
         }
@@ -872,9 +825,6 @@
           "hddbasic": 20,
           "hddsuper": 20,
           "hddbamf": 20,
-          "portSpecs": [
-            "33200-34000"
-          ],
           "ports": [33204,33205,33206],
           "userEnvironmentParameters": []
         }
@@ -917,9 +867,6 @@
           "hddbasic": 100,
           "hddsuper": 100,
           "hddbamf": 100,
-          "portSpecs": [
-            "39000-39500"
-          ],
           "ports": [39001],
           "userEnvironmentParameters": []
         }
@@ -962,9 +909,6 @@
           "hddbasic": 400,
           "hddsuper": 400,
           "hddbamf": 400,
-          "portSpecs": [
-            "33400-33600"
-          ],
           "ports": [33445,33444],
           "userEnvironmentParameters": []
         }
@@ -1007,9 +951,6 @@
           "hddbasic": 100,
           "hddsuper": 100,
           "hddbamf": 100,
-          "portSpecs": [
-            "33400-33600"
-          ],
           "ports": [34203],
           "userEnvironmentParameters": []
         }
@@ -1052,9 +993,6 @@
           "hddbasic": 5.0,
           "hddsuper": 5.0,
           "hddbamf": 5.0,
-          "portSpecs": [
-            "35000-35200"
-          ],
           "ports": [35000],
           "userEnvironmentParameters": []
         }
@@ -1097,9 +1035,6 @@
           "hddbasic": 5.0,
           "hddsuper": 5.0,
           "hddbamf": 5.0,
-          "portSpecs": [
-            "35000-35200"
-          ],
           "ports": [35001],
           "userEnvironmentParameters": []
         }
@@ -1142,9 +1077,6 @@
           "hddbasic": 5.0,
           "hddsuper": 5.0,
           "hddbamf": 5.0,
-          "portSpecs": [
-            "35000-35200"
-          ],
           "ports": [35002],
           "userEnvironmentParameters": []
         }
@@ -1187,9 +1119,6 @@
           "hddbasic": 5.0,
           "hddsuper": 5.0,
           "hddbamf": 5.0,
-          "portSpecs": [
-            "35000-35200"
-          ],
           "ports": [35003],
           "userEnvironmentParameters": []
         }
@@ -1232,9 +1161,6 @@
           "hddbasic": 5.0,
           "hddsuper": 5.0,
           "hddbamf": 5.0,
-          "portSpecs": [
-            "35000-35200"
-          ],
           "ports": [35003],
           "userEnvironmentParameters": []
         }
@@ -1277,9 +1203,6 @@
           "hddbasic": 5.0,
           "hddsuper": 5.0,
           "hddbamf": 5.0,
-          "portSpecs": [
-            "35000-35200"
-          ],
           "ports": [35004],
           "userEnvironmentParameters": []
         }
@@ -1322,9 +1245,6 @@
           "hddbasic": 5.0,
           "hddsuper": 5.0,
           "hddbamf": 5.0,
-          "portSpecs": [
-            "35000-35200"
-          ],
           "ports": [35005],
           "userEnvironmentParameters": [
             {
@@ -1383,9 +1303,6 @@
           "hddbasic": 5.0,
           "hddsuper": 5.0,
           "hddbamf": 5.0,
-          "portSpecs": [
-            "35000-35200"
-          ],
           "ports": [35006],
           "userEnvironmentParameters": []
         }
@@ -1428,9 +1345,6 @@
           "hddbasic": 80,
           "hddsuper": 80,
           "hddbamf": 80,
-          "portSpecs": [
-            "39000-39999"
-          ],
           "ports": [39973],
           "userEnvironmentParameters": []
         }
@@ -1472,9 +1386,6 @@
           "hddbasic": 70,
           "hddsuper": 70,
           "hddbamf": 70,
-          "portSpecs": [
-            "34000-34500"
-          ],
           "ports": [34142],
           "userEnvironmentParameters": []
         }
@@ -1516,9 +1427,6 @@
           "hddbasic": 60,
           "hddsuper": 60,
           "hddbamf": 60,
-          "portSpecs": [
-            "34000-34500"
-          ],
           "ports": [34142],
           "userEnvironmentParameters": []
         }
@@ -1560,9 +1468,6 @@
           "hddbasic": 120,
           "hddsuper": 120,
           "hddbamf": 120,
-          "portSpecs": [
-            "34000-34500"
-          ],
           "ports": [34139],
           "userEnvironmentParameters": []
         }
@@ -1604,9 +1509,6 @@
           "hddbasic": 40,
           "hddsuper": 40,
           "hddbamf": 40,
-          "portSpecs": [
-            "34000-34500"
-          ],
           "ports": [34155],
           "userEnvironmentParameters": []
         }
@@ -1648,9 +1550,6 @@
           "hddbasic": 85,
           "hddsuper": 85,
           "hddbamf": 85,
-          "portSpecs": [
-            "34000-34500"
-          ],
           "ports": [34150],
           "userEnvironmentParameters": []
         }
@@ -1692,9 +1591,6 @@
           "hddbasic": 2,
           "hddsuper": 2,
           "hddbamf": 2,
-          "portSpecs": [
-            "31000-32000"
-          ],
           "ports": [31791],
           "userEnvironmentParameters": []
         }
@@ -1736,9 +1632,6 @@
           "hddbasic": 150,
           "hddsuper": 150,
           "hddbamf": 150,
-          "portSpecs": [
-            "34600-34800"
-          ],
           "ports": [34673,34674],
           "userEnvironmentParameters": []
         }
@@ -1780,9 +1673,6 @@
           "hddbasic": 15,
           "hddsuper": 15,
           "hddbamf": 15,
-          "portSpecs": [
-            "32900-33000"
-          ],
           "ports": [32944],
           "userEnvironmentParameters": []
         }
@@ -1824,9 +1714,6 @@
           "hddbasic": 10,
           "hddsuper": 10,
           "hddbamf": 10,
-          "portSpecs": [
-            "36300-36400"
-          ],
           "ports": [36377],
           "userEnvironmentParameters": []
         }
@@ -1869,9 +1756,6 @@
           "hddbasic": 10,
           "hddsuper": 10,
           "hddbamf": 10,
-          "portSpecs": [
-            "32000-32100"
-          ],
           "ports": [32000],
           "userEnvironmentParameters": []
         }
@@ -1914,9 +1798,6 @@
           "hddbasic": 5,
           "hddsuper": 5,
           "hddbamf": 5,
-          "portSpecs": [
-            "35400-35500"
-          ],
           "ports": [35420],
           "userEnvironmentParameters": []
         }
@@ -1959,9 +1840,6 @@
           "hddbasic": 5,
           "hddsuper": 5,
           "hddbamf": 5,
-          "portSpecs": [
-            "33900-34000"
-          ],
           "ports": [33929],
           "userEnvironmentParameters": []
         }
@@ -2003,9 +1881,6 @@
           "hddbasic": 5,
           "hddsuper": 5,
           "hddbamf": 5,
-          "portSpecs": [
-            "37400-37500"
-          ],
           "ports": [37481],
           "userEnvironmentParameters": []
         }
@@ -2047,9 +1922,6 @@
           "hddbasic": 2,
           "hddsuper": 2,
           "hddbamf": 2,
-          "portSpecs": [
-            "39200-39300"
-          ],
           "ports": [39252],
           "userEnvironmentParameters": []
         }
@@ -2091,9 +1963,6 @@
           "hddbasic": 2,
           "hddsuper": 2,
           "hddbamf": 2,
-          "portSpecs": [
-            "34200-34300"
-          ],
           "ports": [34260],
           "userEnvironmentParameters": []
         }
@@ -2135,9 +2004,6 @@
           "hddbasic": 2,
           "hddsuper": 2,
           "hddbamf": 2,
-          "portSpecs": [
-            "34600-34700"
-          ],
           "ports": [34638],
           "userEnvironmentParameters": []
         }
@@ -2179,9 +2045,6 @@
           "hddbasic": 2,
           "hddsuper": 2,
           "hddbamf": 2,
-          "portSpecs": [
-            "31600-31700"
-          ],
           "ports": [31654],
           "userEnvironmentParameters": []
         }
@@ -2223,9 +2086,6 @@
           "hddbasic": 2,
           "hddsuper": 2,
           "hddbamf": 2,
-          "portSpecs": [
-            "32600-32700"
-          ],
           "ports": [32649],
           "userEnvironmentParameters": []
         }
@@ -2267,9 +2127,6 @@
           "hddbasic": 2,
           "hddsuper": 2,
           "hddbamf": 2,
-          "portSpecs": [
-            "34200-34300"
-          ],
           "ports": [34253],
           "userEnvironmentParameters": []
         }
@@ -2311,9 +2168,6 @@
           "hddbasic": 2,
           "hddsuper": 2,
           "hddbamf": 2,
-          "portSpecs": [
-            "38100-38200"
-          ],
           "ports": [38144],
           "userEnvironmentParameters": []
         }
@@ -2355,9 +2209,6 @@
           "hddbasic": 2,
           "hddsuper": 2,
           "hddbamf": 2,
-          "portSpecs": [
-            "35600-35700"
-          ],
           "ports": [35691],
           "userEnvironmentParameters": []
         }
@@ -2399,9 +2250,6 @@
           "hddbasic": 1,
           "hddsuper": 1,
           "hddbamf": 1,
-          "portSpecs": [
-            "38880-39000"
-          ],
           "ports": [38895,38896,38897],
           "userEnvironmentParameters": []
         }
@@ -2443,9 +2291,6 @@
           "hddbasic": 20,
           "hddsuper": 20,
           "hddbamf": 20,
-          "portSpecs": [
-            "39850-39900"
-          ],
           "ports": [39870,39871,39872],
           "userEnvironmentParameters": [
             {
@@ -2498,9 +2343,6 @@
           "hddbasic": 10,
           "hddsuper": 10,
           "hddbamf": 10,
-          "portSpecs": [
-            "34200-36800"
-          ],
           "ports": [34250,36735],
           "userEnvironmentParameters": []
         }
@@ -2542,9 +2384,6 @@
           "hddbasic": 4,
           "hddsuper": 4,
           "hddbamf": 4,
-          "portSpecs": [
-            "33250-33260"
-          ],
           "ports": [33253,33254],
           "userEnvironmentParameters": []
         }
@@ -2586,9 +2425,6 @@
           "hddbasic": 2,
           "hddsuper": 2,
           "hddbamf": 2,
-          "portSpecs": [
-            "32900-36550"
-          ],
           "ports": [32913,36521],
           "userEnvironmentParameters": [
             {
@@ -2641,9 +2477,6 @@
           "hddbasic": 60,
           "hddsuper": 60,
           "hddbamf": 60,
-          "portSpecs": [
-            "36450-36500"
-          ],
           "ports": [36479,36480,36481],
           "userEnvironmentParameters": [
             {
@@ -2696,9 +2529,6 @@
           "hddbasic": 200,
           "hddsuper": 200,
           "hddbamf": 200,
-          "portSpecs": [
-            "34100-34200"
-          ],
           "ports": [34160],
           "userEnvironmentParameters": []
         }
@@ -2740,9 +2570,6 @@
           "hddbasic": 60,
           "hddsuper": 60,
           "hddbamf": 60,
-          "portSpecs": [
-            "33400-33500"
-          ],
           "ports": [33437,33438],
           "userEnvironmentParameters": []
         }
@@ -2784,9 +2611,6 @@
           "hddbasic": 40,
           "hddsuper": 40,
           "hddbamf": 40,
-          "portSpecs": [
-            "34100-34200"
-          ],
           "ports": [34145],
           "userEnvironmentParameters": []
         }
@@ -2828,9 +2652,6 @@
           "hddbasic": 2,
           "hddsuper": 2,
           "hddbamf": 2,
-          "portSpecs": [
-            "33600-33700"
-          ],
           "ports": [33661],
           "userEnvironmentParameters": []
         }
@@ -2872,9 +2693,6 @@
           "hddbasic": 100,
           "hddsuper": 100,
           "hddbamf": 100,
-          "portSpecs": [
-            "34100-34200"
-          ],
           "ports": [34193],
           "userEnvironmentParameters": []
         }
@@ -2916,9 +2734,6 @@
           "hddbasic": 5,
           "hddsuper": 5,
           "hddbamf": 5,
-          "portSpecs": [
-            "36000-36100"
-          ],
           "ports": [36001],
           "userEnvironmentParameters": []
         }
@@ -2960,9 +2775,6 @@
           "hddbasic": 85,
           "hddsuper": 85,
           "hddbamf": 85,
-          "portSpecs": [
-            "35600-35700"
-          ],
           "ports": [35660],
           "userEnvironmentParameters": []
         }
@@ -3004,9 +2816,6 @@
           "hddbasic": 50,
           "hddsuper": 50,
           "hddbamf": 50,
-          "portSpecs": [
-            "35600-35700"
-          ],
           "ports": [35670],
           "userEnvironmentParameters": []
         }
@@ -3048,9 +2857,6 @@
           "hddbasic": 50,
           "hddsuper": 50,
           "hddbamf": 50,
-          "portSpecs": [
-            "35600-35700"
-          ],
           "ports": [35680],
           "userEnvironmentParameters": []
         }
@@ -3092,9 +2898,6 @@
           "hddbasic": 60,
           "hddsuper": 60,
           "hddbamf": 60,
-          "portSpecs": [
-            "35700-35750"
-          ],
           "ports": [35700,35701],
           "userEnvironmentParameters": []
         }
@@ -3136,9 +2939,6 @@
           "hddbasic": 350,
           "hddsuper": 350,
           "hddbamf": 350,
-          "portSpecs": [
-            "31000-31050"
-          ],
           "ports": [31010,31011],
           "userEnvironmentParameters": []
         }
@@ -3180,9 +2980,6 @@
           "hddbasic": 40,
           "hddsuper": 40,
           "hddbamf": 40,
-          "portSpecs": [
-            "37000-38000"
-          ],
           "ports": [37230,37231,37232,37233],
           "userEnvironmentParameters": []
         }
@@ -3224,9 +3021,6 @@
           "hddbasic": 10,
           "hddsuper": 10,
           "hddbamf": 10,
-          "portSpecs": [
-            "38500-38550"
-          ],
           "ports": [38501,38502,38503],
           "userEnvironmentParameters": []
         }
@@ -3268,9 +3062,6 @@
           "hddbasic": 5,
           "hddsuper": 5,
           "hddbamf": 5,
-          "portSpecs": [
-            "38500-38550"
-          ],
           "ports": [38510,38511],
           "userEnvironmentParameters": []
         }
@@ -3312,9 +3103,6 @@
           "hddbasic": 20,
           "hddsuper": 20,
           "hddbamf": 20,
-          "portSpecs": [
-            "34000-34020"
-          ],
           "ports": [34010],
           "userEnvironmentParameters": []
         }
@@ -3356,9 +3144,6 @@
           "hddbasic": 1,
           "hddsuper": 1,
           "hddbamf": 1,
-          "portSpecs": [
-            "34000-34020"
-          ],
           "ports": [34010],
           "userEnvironmentParameters": []
         }
@@ -3400,9 +3185,6 @@
           "hddbasic": 10,
           "hddsuper": 10,
           "hddbamf": 10,
-          "portSpecs": [
-            "34400-34500"
-          ],
           "ports": [34428],
           "userEnvironmentParameters": [
              {
@@ -3470,9 +3252,6 @@
           "hddbasic": 200,
           "hddsuper": 200,
           "hddbamf": 200,
-          "portSpecs": [
-            "32200-32400"
-          ],
           "ports": [32300,32301],
           "userEnvironmentParameters": []
         }
@@ -3514,9 +3293,6 @@
           "hddbasic": 300,
           "hddsuper": 300,
           "hddbamf": 300,
-          "portSpecs": [
-            "35000-35100"
-          ],
           "ports": [35000,35001,35002],
           "userEnvironmentParameters": []
         }
@@ -3558,9 +3334,6 @@
           "hddbasic": 100,
           "hddsuper": 100,
           "hddbamf": 100,
-          "portSpecs": [
-            "38000-39000"
-          ],
           "ports": [38545,38303,38456],
           "userEnvironmentParameters": []
         }
@@ -3602,9 +3375,6 @@
           "hddbasic": 600,
           "hddsuper": 600,
           "hddbamf": 600,
-          "portSpecs": [
-            "36000-36500"
-          ],
           "ports": [36011,36012,36013],
           "userEnvironmentParameters": []
         }
@@ -3646,9 +3416,6 @@
           "hddbasic": 100,
           "hddsuper": 100,
           "hddbamf": 100,
-          "portSpecs": [
-            "38000-38100"
-          ],
           "ports": [38080,38081],
           "userEnvironmentParameters": [
             {
@@ -3665,7 +3432,7 @@
     {
       "description": "Broker Node have been replaced by StreamrNode on Flux Marketplace",
       "price": 5.99,
-      "multiplier": 2.94,
+      "multiplier": 1,
       "category": "Blockchain",
       "version": 4,
       "name": "BrokerNode",
@@ -3697,9 +3464,6 @@
           "hddbasic": 1,
           "hddsuper": 1,
           "hddbamf": 1,
-          "portSpecs": [
-            "31100-31200"
-          ],
           "ports": [31111,31112,31113],
           "userEnvironmentParameters": [
             {
@@ -3710,7 +3474,7 @@
           ]
         }
       ],
-      "visible": true,
+      "visible": false,
       "enabled": false
     },
     {
@@ -3747,9 +3511,6 @@
           "hddbasic": 20,
           "hddsuper": 20,
           "hddbamf": 20,
-          "portSpecs": [
-            "36730-36750"
-          ],
           "ports": [36735,36736],
           "userEnvironmentParameters": []
         }
@@ -3791,9 +3552,6 @@
           "hddbasic": 30,
           "hddsuper": 30,
           "hddbamf": 30,
-          "portSpecs": [
-            "36730-36750"
-          ],
           "ports": [36740,36741,36742,36743],
           "userEnvironmentParameters": []
         }
@@ -3835,9 +3593,6 @@
           "hddbasic": 40,
           "hddsuper": 40,
           "hddbamf": 40,
-          "portSpecs": [
-            "34000-34500"
-          ],
           "ports": [34149,31450],
           "userEnvironmentParameters": []
         }
@@ -3876,9 +3631,6 @@
           "cpu": 1,
           "ram": 1000,
           "hdd": 10,      
-          "portSpecs": [
-            "33100-33110"
-          ],
           "ports": [33106],
           "userEnvironmentParameters": [
             {
@@ -3925,9 +3677,6 @@
         "cpu": 2,
         "ram": 2000,
         "hdd": 20,      
-        "portSpecs": [
-          "8500-9000"
-        ],
         "ports": [8788],
         "userEnvironmentParameters": [
           {
@@ -3937,6 +3686,59 @@
           }
         ],
         "envFluxStorage": true,
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Streamr 1.0 Testnet on the Flux Cloud",
+    "price": 14.2,
+	  "multiplier": 1,
+    "category": "Blockchain",
+    "version": 7,
+    "name": "Streamr",
+    "instances": 3,
+    "isAutoEnterprise": true,
+    "contacts": [],
+    "geolocation": [],
+    "staticip": false,
+    "nodes": [],
+    "expire": 22000,
+    "compose": [
+      {
+        "name": "streamrnode",
+        "description": "The Streamr 1.0 Testnet container",
+        "repotag": "streamr/broker-node:v100.0.0-testnet-one.2",
+        "containerPorts": [
+          32200
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/home/streamr/.streamr",
+        "tiered": false,
+        "cpu": 3.5,
+        "ram": 8000,
+        "hdd": 10,
+        "portSpecs": ["30000-50000"],    
+        "ports": [32200],
+        "userEnvironmentParameters": [
+          {
+            "name": "STREAMR__BROKER__PLUGINS__OPERATOR__OPERATOR_CONTRACT_ADDRESS",
+            "description": "Your Operator Contract Address",
+            "placeholder": "Place your Address here"
+          },
+          {
+            "name": "STREAMR__BROKER__CLIENT__AUTH__PRIVATE_KEY",
+            "description": "Your Node Wallet Private Key",
+            "placeholder": "Place your Private Key here"
+          }
+        ],
         "secrets": "",
         "repoauth": ""
       }
