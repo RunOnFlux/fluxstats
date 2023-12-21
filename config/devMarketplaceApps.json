@@ -3727,7 +3727,7 @@
         "hdd": 10,
         "portSpecs": ["30000-50000"],    
         "ports": [32200],
-        "userEnvironmentParameters": [
+        "userSecrets": [
           {
             "name": "STREAMR__BROKER__PLUGINS__OPERATOR__OPERATOR_CONTRACT_ADDRESS",
             "description": "Your Operator Contract Address",
@@ -3780,7 +3780,7 @@
         "hdd": 10,
         "portSpecs": ["30000-50000"],    
         "ports": [32200],
-        "userEnvironmentParameters": [
+        "userSecrets": [
           {
             "name": "STREAMR__BROKER__PLUGINS__OPERATOR__OPERATOR_CONTRACT_ADDRESS",
             "description": "Your Operator Contract Address",
@@ -3833,7 +3833,7 @@
         "hdd": 10,
         "portSpecs": ["30000-50000"],    
         "ports": [32200],
-        "userEnvironmentParameters": [
+        "userSecrets": [
           {
             "name": "STREAMR__BROKER__PLUGINS__OPERATOR__OPERATOR_CONTRACT_ADDRESS",
             "description": "Your Operator Contract Address",
@@ -3886,7 +3886,7 @@
         "hdd": 10,
         "portSpecs": ["30000-50000"],    
         "ports": [32200],
-        "userEnvironmentParameters": [
+        "userSecrets": [
           {
             "name": "STREAMR__BROKER__PLUGINS__OPERATOR__OPERATOR_CONTRACT_ADDRESS",
             "description": "Your Operator Contract Address",
