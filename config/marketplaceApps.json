@@ -150,6 +150,7 @@
     "lockedValues": ["instances"],
     "contacts": [],
     "geolocation": [],
+    "staticip": false,
     "nodes": [],
     "expire": 22000,
     "compose": [
@@ -197,6 +198,7 @@
     "lockedValues": ["instances"],
     "contacts": [],
     "geolocation": [],
+    "staticip": false,
     "nodes": [],
     "expire": 66000,
     "compose": [
@@ -244,6 +246,7 @@
     "lockedValues": ["instances"],
     "contacts": [],
     "geolocation": [],
+    "staticip": false,
     "nodes": [],
     "expire": 132000,
     "compose": [
@@ -291,6 +294,7 @@
     "lockedValues": ["instances"],
     "contacts": [],
     "geolocation": [],
+    "staticip": false,
     "nodes": [],
     "expire": 264000,
     "compose": [
@@ -338,6 +342,7 @@
     "lockedValues": ["instances"],
     "contacts": [],
     "geolocation": [],
+    "staticip": false,
     "nodes": [],
     "expire": 22000,
     "compose": [
@@ -393,6 +398,7 @@
     "lockedValues": ["instances"],
     "contacts": [],
     "geolocation": [],
+    "staticip": false,
     "nodes": [],
     "expire": 66000,
     "compose": [
@@ -448,6 +454,7 @@
     "lockedValues": ["instances"],
     "contacts": [],
     "geolocation": [],
+    "staticip": false,
     "nodes": [],
     "expire": 132000,
     "compose": [
@@ -503,6 +510,7 @@
     "lockedValues": ["instances"],
     "contacts": [],
     "geolocation": [],
+    "staticip": false,
     "nodes": [],
     "expire": 264000,
     "compose": [
