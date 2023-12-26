@@ -3417,7 +3417,7 @@
   {
     "description": "Broker Node have been replaced by StreamrNode on Flux Marketplace",
     "price": 5.99,
-    "multiplier": 2.94,
+    "multiplier": 1,
     "category": "Blockchain",
     "version": 4,
     "name": "BrokerNode",
@@ -3455,7 +3455,7 @@
         ]
       }
     ],
-    "visible": true,
+    "visible": false,
     "enabled": false
   },
   {
