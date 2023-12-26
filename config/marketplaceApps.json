@@ -3718,7 +3718,7 @@
     "enabled": true
   },
   {
-    "description": "Host your Streamr 1.0 Testnet on the Flux Cloud",
+    "description": "Host your Streamr 1.0 Testnet on the Flux Cloud 1-month plan",
     "price": 23.18,
 	  "multiplier": 1,
     "category": "Blockchain",
@@ -3751,7 +3751,7 @@
         "hdd": 10,
         "portSpecs": ["30000-50000"],    
         "ports": [32200],
-        "userEnvironmentParameters": [
+        "userSecrets": [
           {
             "name": "STREAMR__BROKER__PLUGINS__OPERATOR__OPERATOR_CONTRACT_ADDRESS",
             "description": "Your Operator Contract Address",
@@ -3768,6 +3768,165 @@
       }
     ],
     "visible": true,
-    "enabled": false
+    "enabled": true
+  },
+  {
+    "description": "Host your Streamr 1.0 Testnet on the Flux Cloud 3-month plan",
+    "price": 64.67,
+	  "multiplier": 1,
+    "category": "Blockchain",
+    "version": 7,
+    "name": "Streamr",
+    "instances": 3,
+    "isAutoEnterprise": true,
+    "contacts": [],
+    "geolocation": [],
+    "staticip": false,
+    "nodes": [],
+    "expire": 66000,
+    "compose": [
+      {
+        "name": "streamrnode",
+        "description": "The Streamr 1.0 Testnet container",
+        "repotag": "streamr/broker-node:v100.0.0-testnet-one.2",
+        "containerPorts": [
+          32200
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/home/streamr/.streamr",
+        "tiered": false,
+        "cpu": 3.5,
+        "ram": 8000,
+        "hdd": 10,
+        "portSpecs": ["30000-50000"],    
+        "ports": [32200],
+        "userSecrets": [
+          {
+            "name": "STREAMR__BROKER__PLUGINS__OPERATOR__OPERATOR_CONTRACT_ADDRESS",
+            "description": "Your Operator Contract Address",
+            "placeholder": "Place your Address here"
+          },
+          {
+            "name": "STREAMR__BROKER__CLIENT__AUTH__PRIVATE_KEY",
+            "description": "Your Node Wallet Private Key",
+            "placeholder": "Place your Private Key here"
+          }
+        ],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Streamr 1.0 Testnet on the Flux Cloud 6-month plan",
+    "price": 118.22,
+	  "multiplier": 1,
+    "category": "Blockchain",
+    "version": 7,
+    "name": "Streamr",
+    "instances": 3,
+    "isAutoEnterprise": true,
+    "contacts": [],
+    "geolocation": [],
+    "staticip": false,
+    "nodes": [],
+    "expire": 132000,
+    "compose": [
+      {
+        "name": "streamrnode",
+        "description": "The Streamr 1.0 Testnet container",
+        "repotag": "streamr/broker-node:v100.0.0-testnet-one.2",
+        "containerPorts": [
+          32200
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/home/streamr/.streamr",
+        "tiered": false,
+        "cpu": 3.5,
+        "ram": 8000,
+        "hdd": 10,
+        "portSpecs": ["30000-50000"],    
+        "ports": [32200],
+        "userSecrets": [
+          {
+            "name": "STREAMR__BROKER__PLUGINS__OPERATOR__OPERATOR_CONTRACT_ADDRESS",
+            "description": "Your Operator Contract Address",
+            "placeholder": "Place your Address here"
+          },
+          {
+            "name": "STREAMR__BROKER__CLIENT__AUTH__PRIVATE_KEY",
+            "description": "Your Node Wallet Private Key",
+            "placeholder": "Place your Private Key here"
+          }
+        ],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Streamr 1.0 Testnet on the Flux Cloud 12-month plan",
+    "price": 194.71,
+	  "multiplier": 1,
+    "category": "Blockchain",
+    "version": 7,
+    "name": "Streamr",
+    "instances": 3,
+    "isAutoEnterprise": true,
+    "contacts": [],
+    "geolocation": [],
+    "staticip": false,
+    "nodes": [],
+    "expire": 264000,
+    "compose": [
+      {
+        "name": "streamrnode",
+        "description": "The Streamr 1.0 Testnet container",
+        "repotag": "streamr/broker-node:v100.0.0-testnet-one.2",
+        "containerPorts": [
+          32200
+        ],
+        "domains": [
+          ""
+        ],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/home/streamr/.streamr",
+        "tiered": false,
+        "cpu": 3.5,
+        "ram": 8000,
+        "hdd": 10,
+        "portSpecs": ["30000-50000"],    
+        "ports": [32200],
+        "userSecrets": [
+          {
+            "name": "STREAMR__BROKER__PLUGINS__OPERATOR__OPERATOR_CONTRACT_ADDRESS",
+            "description": "Your Operator Contract Address",
+            "placeholder": "Place your Address here"
+          },
+          {
+            "name": "STREAMR__BROKER__CLIENT__AUTH__PRIVATE_KEY",
+            "description": "Your Node Wallet Private Key",
+            "placeholder": "Place your Private Key here"
+          }
+        ],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
