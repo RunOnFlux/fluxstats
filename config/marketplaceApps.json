@@ -3294,6 +3294,50 @@
     "enabled": true
   },
   {
+    "description": "Broker Node have been replaced by StreamrNode on Flux Marketplace",
+    "price": 5.99,
+    "multiplier": 1,
+    "category": "Blockchain",
+    "version": 4,
+    "name": "BrokerNode",
+    "instances": 3,
+    "compose": [
+      {
+        "name": "streamrbroker",
+        "description": "The Streamr Broker Node Container",
+        "repotag": "streamr/broker-node:latest",
+        "containerPorts": [1883, 7170, 7171],
+        "domains": ["", "", ""],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/home/streamr/.streamr",
+        "tiered": false,
+        "cpu": 1.0,
+        "ram": 1000,
+        "hdd": 1,
+        "cpubasic": 1.0,
+        "cpusuper": 1.0,
+        "cpubamf": 1.0,
+        "rambasic": 1000,
+        "ramsuper": 1000,
+        "rambamf": 1000,
+        "hddbasic": 1,
+        "hddsuper": 1,
+        "hddbamf": 1,
+        "ports": [31111, 31112, 31113],
+        "userEnvironmentParameters": [
+          {
+            "name": "STREAMR__BROKER__PLUGINS__BRUBECK_MINER__BENEFICIARY_ADDRESS",
+            "description": "Your Beneficiary Address",
+            "placeholder": "Enter your Polygon Address here"
+          }
+        ]
+      }
+    ],
+    "visible": false,
+    "enabled": false
+  },
+  {
     "description": "Host your Neurai Fullnode via Flux Cloud",
     "price": 6.62,
     "category": "Blockchain",
