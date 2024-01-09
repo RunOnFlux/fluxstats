@@ -1,7 +1,7 @@
 [
   {
     "description": "A simple hello world app with parameterized content",
-    "price": 0.3,
+    "price": 0.33,
     "multiplier": 10,
     "category": "Hosting",
     "version": 4,
@@ -51,7 +51,7 @@
   },
   {
     "description": "PoUW at Flux layer 2 network. Folding@home is a project focused on disease research. Client Visit was disabled, to check Run On Flux team stats go to https://stats.foldingathome.org/team/262156",
-    "price": 1.91,
+    "price": 2.87,
     "category": "Productivity",
     "version": 4,
     "name": "FoldingAtFluxCloud",
@@ -546,7 +546,7 @@
   },
   {
     "description": "An IronFish Full Node",
-    "price": 11.5,
+    "price": 16.5,
     "multiplier": 1,
     "category": "Blockchain",
     "version": 4,
@@ -711,46 +711,8 @@
     "enabled": true
   },
   {
-    "description": "Host your Kaspa Node on the Flux Network",
-    "price": 13.5,
-    "multiplier": 1.22,
-    "category": "Blockchain",
-    "version": 4,
-    "name": "KaspaNode",
-    "instances": 3,
-    "compose": [
-      {
-        "name": "node",
-        "description": "The Kaspa Node container",
-        "repotag": "supertypo/kaspad:latest",
-        "containerPorts": [16110, 16111],
-        "domains": ["", ""],
-        "environmentParameters": [],
-        "commands": [],
-        "containerData": "/app/data",
-        "tiered": false,
-        "cpu": 4,
-        "ram": 8000,
-        "hdd": 50,
-        "cpubasic": 4,
-        "cpusuper": 4,
-        "cpubamf": 4,
-        "rambasic": 8000,
-        "ramsuper": 8000,
-        "rambamf": 8000,
-        "hddbasic": 50,
-        "hddsuper": 50,
-        "hddbamf": 50,
-        "ports": [37700, 37701],
-        "userEnvironmentParameters": []
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
     "description": "Host your Ravencoin Node on the Flux Network",
-    "price": 6.9,
+    "price": 7.7,
     "multiplier": 1,
     "category": "Blockchain",
     "version": 4,
@@ -844,7 +806,7 @@
   },
   {
     "description": "Host your Neoxa Node on the Flux Network",
-    "price": 6.9,
+    "price": 8.16,
     "multiplier": 1,
     "category": "Blockchain",
     "version": 4,
@@ -874,44 +836,6 @@
         "hddsuper": 22,
         "hddbamf": 22,
         "ports": [31000],
-        "userEnvironmentParameters": []
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
-    "description": "Host your Polkadot Node on the Flux Network",
-    "price": 3.3,
-    "multiplier": 1,
-    "category": "Blockchain",
-    "version": 4,
-    "name": "PolkadotNode",
-    "instances": 3,
-    "compose": [
-      {
-        "name": "polkadotnode",
-        "description": "The Polkadot Node container",
-        "repotag": "runonflux/polkadot-docker:latest",
-        "containerPorts": [30333, 9933, 9944],
-        "domains": ["", "", ""],
-        "environmentParameters": [],
-        "commands": [],
-        "containerData": "/chaindata",
-        "tiered": false,
-        "cpu": 0.8,
-        "ram": 1800,
-        "hdd": 20,
-        "cpubasic": 0.8,
-        "cpusuper": 0.8,
-        "cpubamf": 0.8,
-        "rambasic": 1800,
-        "ramsuper": 1800,
-        "rambamf": 1800,
-        "hddbasic": 20,
-        "hddsuper": 20,
-        "hddbamf": 20,
-        "ports": [33201, 33202, 33203],
         "userEnvironmentParameters": []
       }
     ],
@@ -957,53 +881,8 @@
     "enabled": true
   },
   {
-    "description": "Host your Handshake Node on the Flux Network",
-    "price": 6.9,
-    "multiplier": 1,
-    "category": "Blockchain",
-    "version": 4,
-    "name": "HandshakeNode",
-    "instances": 3,
-    "compose": [
-      {
-        "name": "hsdnode",
-        "description": "The Handshake Node container",
-        "repotag": "wirewrex/hsd_with_ip:latest",
-        "containerPorts": [12038],
-        "domains": [""],
-        "environmentParameters": [],
-        "commands": [
-          "hsd",
-          "--bip37=true",
-          "--listen=true",
-          "--public-port=39001",
-          "--port=12038",
-          "--max-inbound=1000"
-        ],
-        "containerData": "/root/.hsd",
-        "tiered": false,
-        "cpu": 1.5,
-        "ram": 2000,
-        "hdd": 100,
-        "cpubasic": 1.5,
-        "cpusuper": 1.5,
-        "cpubamf": 1.5,
-        "rambasic": 2000,
-        "ramsuper": 2000,
-        "rambamf": 2000,
-        "hddbasic": 100,
-        "hddsuper": 100,
-        "hddbamf": 100,
-        "ports": [39001],
-        "userEnvironmentParameters": []
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
     "description": "Host your Deso backend Node on the Flux Network",
-    "price": 54,
+    "price": 41.25,
     "multiplier": 1,
     "category": "Blockchain",
     "version": 4,
@@ -1041,7 +920,7 @@
   },
   {
     "description": "Host your Dogecoin Full Node on the Flux Network",
-    "price": 6.9,
+    "price": 7.5,
     "multiplier": 1,
     "category": "Blockchain",
     "version": 4,
@@ -1084,7 +963,7 @@
   },
   {
     "description": "Host your Sushiswap Frontend on the Flux Cloud",
-    "price": 3.0,
+    "price": 3.16,
     "multiplier": 1,
     "category": "Front-end",
     "version": 4,
@@ -1122,7 +1001,7 @@
   },
   {
     "description": "Host your Yearn Finance Frontend on the Flux Cloud",
-    "price": 3.0,
+    "price": 3.16,
     "multiplier": 1,
     "category": "Front-end",
     "version": 4,
@@ -1160,7 +1039,7 @@
   },
   {
     "description": "Host your GMX.io Frontend on the Flux Cloud",
-    "price": 3.0,
+    "price": 3.16,
     "multiplier": 1,
     "category": "Front-end",
     "version": 4,
@@ -1198,7 +1077,7 @@
   },
   {
     "description": "Host your Dopex.io Frontend on the Flux Cloud",
-    "price": 3.0,
+    "price": 3.16,
     "multiplier": 1,
     "category": "Front-end",
     "version": 4,
@@ -1236,7 +1115,7 @@
   },
   {
     "description": "Host your Pangolin Frontend on the Flux Cloud",
-    "price": 3.0,
+    "price": 3.16,
     "multiplier": 1,
     "category": "Front-end",
     "version": 4,
@@ -1274,7 +1153,7 @@
   },
   {
     "description": "Host your Liquity Frontend on the Flux Cloud",
-    "price": 3.0,
+    "price": 3.16,
     "multiplier": 1,
     "category": "Front-end",
     "version": 4,
@@ -1312,7 +1191,7 @@
   },
   {
     "description": "Host your Balancer Finance Frontend on the Flux Cloud",
-    "price": 3.0,
+    "price": 3.16,
     "multiplier": 1,
     "category": "Front-end",
     "version": 4,
@@ -1366,8 +1245,8 @@
   },
   {
     "description": "Host your Osmosis Frontend on the Flux Cloud",
-    "price": 3.0,
-    "multiplier": 1.42,
+    "price": 3.16,
+    "multiplier": 1,
     "category": "Front-end",
     "version": 4,
     "name": "Osmosis",
@@ -1404,8 +1283,8 @@
   },
   {
     "description": "Host your Alephium Full Node on the Flux Cloud",
-    "price": 4.2,
-    "multiplier": 1.47,
+    "price": 4.28,
+    "multiplier": 1,
     "category": "Blockchain",
     "version": 4,
     "name": "AlephiumNode",
@@ -1443,7 +1322,7 @@
   },
   {
     "description": "Host your Blockbook for Ethereum Classic on the Flux Cloud",
-    "price": 10.8,
+    "price": 12.61,
     "category": "Blockbook",
     "version": 4,
     "name": "BlockbookETC",
@@ -1485,7 +1364,7 @@
   },
   {
     "description": "Host your Blockbook for Flux on the Flux Cloud",
-    "price": 12.3,
+    "price": 14.55,
     "category": "Blockbook",
     "version": 4,
     "name": "BlockbookFLUX",
@@ -1529,7 +1408,7 @@
   },
   {
     "description": "Host your Blockbook for Litecoin on the Flux Cloud",
-    "price": 10.8,
+    "price": 12.23,
     "category": "Blockbook",
     "version": 4,
     "name": "BlockbookLTC",
@@ -1570,7 +1449,7 @@
   },
   {
     "description": "Host your Blockbook for Firo on the Flux Cloud",
-    "price": 6.3,
+    "price": 7.2,
     "category": "Blockbook",
     "version": 4,
     "name": "BlockbookFIRO",
@@ -1616,7 +1495,7 @@
   },
   {
     "description": "Host your Blockbook for Groestlcoin on the Flux Cloud",
-    "price": 8.1,
+    "price": 9.31,
     "category": "Blockbook",
     "version": 4,
     "name": "BlockbookGRS",
@@ -1657,7 +1536,7 @@
   },
   {
     "description": "PrivateBin is a minimalist, open source online pastebin where the server has zero knowledge of pasted data. Data is encrypted and decrypted in the browser using 256bit AES",
-    "price": 0.6,
+    "price": 0.66,
     "category": "Productivity",
     "version": 4,
     "name": "PrivateBin",
@@ -1694,7 +1573,7 @@
   },
   {
     "description": "Streaming and chat platform",
-    "price": 15.0,
+    "price": 21.75,
     "category": "Productivity",
     "version": 4,
     "name": "Owncast",
@@ -1731,7 +1610,7 @@
   },
   {
     "description": "Synchronized video viewing with chat and other features",
-    "price": 15.0,
+    "price": 4.2,
     "category": "Productivity",
     "version": 4,
     "name": "SyncTube",
@@ -1768,7 +1647,7 @@
   },
   {
     "description": "Grocy is a web-based self-hosted groceries & household management solution for your home",
-    "price": 3.0,
+    "price": 3.32,
     "category": "Productivity",
     "version": 4,
     "name": "Grocy",
@@ -1805,7 +1684,7 @@
   },
   {
     "description": "An open source voxel game engine",
-    "price": 3.6,
+    "price": 3.32,
     "multiplier": 1,
     "category": "Games",
     "version": 4,
@@ -1828,9 +1707,9 @@
         "cpubasic": 1.0,
         "cpusuper": 1.0,
         "cpubamf": 1.0,
-        "rambasic": 2000,
-        "ramsuper": 2000,
-        "rambamf": 2000,
+        "rambasic": 1000,
+        "ramsuper": 1000,
+        "rambamf": 1000,
         "hddbasic": 10,
         "hddsuper": 10,
         "hddbamf": 10,
@@ -1843,7 +1722,7 @@
   },
   {
     "description": "Get Google search results, but without any ads, javascript, AMP links, cookies, or IP address tracking",
-    "price": 3.0,
+    "price": 3.32,
     "multiplier": 1,
     "category": "Productivity",
     "version": 4,
@@ -1862,16 +1741,16 @@
         "tiered": false,
         "cpu": 1.0,
         "ram": 1000,
-        "hdd": 5,
+        "hdd": 10,
         "cpubasic": 1.0,
         "cpusuper": 1.0,
         "cpubamf": 1.0,
         "rambasic": 1000,
         "ramsuper": 1000,
         "rambamf": 1000,
-        "hddbasic": 5,
-        "hddsuper": 5,
-        "hddbamf": 5,
+        "hddbasic": 10,
+        "hddsuper": 10,
+        "hddbamf": 10,
         "ports": [35420],
         "userEnvironmentParameters": []
       }
@@ -1881,7 +1760,7 @@
   },
   {
     "description": "WBO is an online collaborative whiteboard that allows many users to draw simultaneously on a large virtual board",
-    "price": 3.0,
+    "price": 3.32,
     "multiplier": 1,
     "category": "Productivity",
     "version": 4,
@@ -1900,16 +1779,16 @@
         "tiered": false,
         "cpu": 1.0,
         "ram": 1000,
-        "hdd": 5,
+        "hdd": 10,
         "cpubasic": 1.0,
         "cpusuper": 1.0,
         "cpubamf": 1.0,
         "rambasic": 1000,
         "ramsuper": 1000,
         "rambamf": 1000,
-        "hddbasic": 5,
-        "hddsuper": 5,
-        "hddbamf": 5,
+        "hddbasic": 10,
+        "hddsuper": 10,
+        "hddbamf": 10,
         "ports": [33929],
         "userEnvironmentParameters": []
       }
@@ -1919,7 +1798,7 @@
   },
   {
     "description": "The Open-Source IO Shooter is an open-source multiplayer game in the browser (desktop or browser)",
-    "price": 3.0,
+    "price": 3.32,
     "category": "Games",
     "version": 4,
     "name": "Tosios",
@@ -1937,16 +1816,16 @@
         "tiered": false,
         "cpu": 1.0,
         "ram": 1000,
-        "hdd": 5,
+        "hdd": 10,
         "cpubasic": 1.0,
         "cpusuper": 1.0,
         "cpubamf": 1.0,
         "rambasic": 1000,
         "ramsuper": 1000,
         "rambamf": 1000,
-        "hddbasic": 5,
-        "hddsuper": 5,
-        "hddbamf": 5,
+        "hddbasic": 10,
+        "hddsuper": 10,
+        "hddbamf": 10,
         "ports": [37481],
         "userEnvironmentParameters": []
       }
@@ -1956,7 +1835,7 @@
   },
   {
     "description": "A fun incremental clicker game simulating the life of a developer",
-    "price": 0.6,
+    "price": 0.66,
     "category": "Games",
     "version": 4,
     "name": "Devlife",
@@ -1993,7 +1872,7 @@
   },
   {
     "description": "A multiplayer geography game using Websockets",
-    "price": 0.6,
+    "price": 0.66,
     "category": "Games",
     "version": 4,
     "name": "Posio",
@@ -2030,7 +1909,7 @@
   },
   {
     "description": "An alternative private front-end to Reddit",
-    "price": 0.6,
+    "price": 0.66,
     "category": "Productivity",
     "version": 4,
     "name": "Libreddit",
@@ -2067,7 +1946,7 @@
   },
   {
     "description": "Focalboard is an open source, self-hosted project management tool. It helps define, organize, track and manage work across individuals and teams",
-    "price": 0.6,
+    "price": 0.66,
     "category": "Productivity",
     "version": 4,
     "name": "Focalboard",
@@ -2104,7 +1983,7 @@
   },
   {
     "description": "You're Santa, it's Christmas, and you have 6 billion gifts to deliver. Will you make it in time?",
-    "price": 0.6,
+    "price": 0.66,
     "category": "Games",
     "version": 4,
     "name": "Giftrun",
@@ -2141,7 +2020,7 @@
   },
   {
     "description": "Element (formerly known as Vector and Riot) is a Matrix web client built using the Matrix React SDK",
-    "price": 0.6,
+    "price": 0.66,
     "category": "Productivity",
     "version": 4,
     "name": "Element",
@@ -2178,7 +2057,7 @@
   },
   {
     "description": "Rustpad is an efficient and minimal open-source collaborative text editor",
-    "price": 0.6,
+    "price": 0.66,
     "category": "Productivity",
     "version": 4,
     "name": "Rustpad",
@@ -2215,7 +2094,7 @@
   },
   {
     "description": "Bibliogram is a website that takes data from Instagram's public profile views and puts it into a friendlier page that loads faster, gives downloadable images, eliminates ads, generates RSS feeds, and doesn't urge you to sign up",
-    "price": 0.6,
+    "price": 0.66,
     "category": "Productivity",
     "version": 4,
     "name": "Bibliogram",
@@ -2252,7 +2131,7 @@
   },
   {
     "description": "With TeamSpeak there are no centralized servers and no harvesting of personal data. Your chat, your data, your choice. With TeamSpeak, your team rules!",
-    "price": 1.8,
+    "price": 1.91,
     "category": "Hosting",
     "version": 4,
     "name": "Teamspeak",
@@ -2289,7 +2168,7 @@
   },
   {
     "description": "A brutal exploration and survival game for 1-10 players, set in a procedurally-generated purgatory inspired by viking culture. Battle, build, and conquer your way to a saga worthy of Odin’s patronage!",
-    "price": 7.35,
+    "price": 8.86,
     "category": "Games",
     "version": 4,
     "name": "Valheim",
@@ -2342,7 +2221,7 @@
   },
   {
     "description": "Terraria servers on Flux!",
-    "price": 6.0,
+    "price": 7.06,
     "category": "Games",
     "version": 4,
     "name": "Terraria",
@@ -2383,7 +2262,7 @@
   },
   {
     "description": "diagrams.net (formerly draw.io) is free online diagram software. You can use it as a flowchart maker, network diagram software, to design database schema, and more.",
-    "price": 1.5,
+    "price": 1.79,
     "category": "Productivity",
     "version": 4,
     "name": "Diagrams.net",
@@ -2420,7 +2299,7 @@
   },
   {
     "description": "Teeworlds servers deployed on Flux.",
-    "price": 1.2,
+    "price": 1.19,
     "category": "Games",
     "version": 4,
     "name": "Teeworlds",
@@ -2468,7 +2347,7 @@
   },
   {
     "description": "Ark: Survival Evolved Server on Flux",
-    "price": 10.5,
+    "price": 12.3,
     "category": "Games",
     "version": 4,
     "name": "Ark: Survival Evolved",
@@ -2519,7 +2398,7 @@
   },
   {
     "description": "Host your Blockbook for Viacoin on the Flux Cloud",
-    "price": 16.5,
+    "price": 18.75,
     "category": "Blockbook",
     "version": 4,
     "name": "BlockbookVIA",
@@ -2560,7 +2439,7 @@
   },
   {
     "description": "The YaCy search engine software provides results from a network of independent peers, instead of a central server. It is a distributed network where no single entity decides what to list or order it appears in.",
-    "price": 4.5,
+    "price": 4.95,
     "category": "Productivity",
     "version": 4,
     "name": "YaCy",
@@ -2597,7 +2476,7 @@
   },
   {
     "description": "Host your Blockbook for Vertcoin on the Flux Cloud",
-    "price": 9.0,
+    "price": 10.43,
     "category": "Blockbook",
     "version": 4,
     "name": "BlockbookVTC",
@@ -2638,7 +2517,7 @@
   },
   {
     "description": "Collaborative Spreadsheet with built-in Redis backend.",
-    "price": 0.45,
+    "price": 0.44,
     "category": "Productivity",
     "version": 4,
     "name": "EtherCalc",
@@ -2675,7 +2554,7 @@
   },
   {
     "description": "Host your Blockbook for Qtum on the Flux Cloud",
-    "price": 9.0,
+    "price": 10.5,
     "category": "Blockbook",
     "version": 4,
     "name": "BlockbookQTUM",
@@ -2712,7 +2591,7 @@
   },
   {
     "description": "Host a Online Compiler for C,C++,JAVA,Python,JavaScript on the Flux Cloud",
-    "price": 2.4,
+    "price": 2.78,
     "category": "Productivity",
     "version": 4,
     "name": "Compiler",
@@ -2749,7 +2628,7 @@
   },
   {
     "description": "Host your Blockbook for Dash on the Flux Cloud",
-    "price": 9.0,
+    "price": 10.06,
     "category": "Blockbook",
     "version": 4,
     "name": "BlockbookDASH",
@@ -2786,7 +2665,7 @@
   },
   {
     "description": "Host your Blockbook for Divi on the Flux Cloud",
-    "price": 7.8,
+    "price": 9.0,
     "category": "Blockbook",
     "version": 4,
     "name": "BlockbookDIVI",
@@ -2828,7 +2707,7 @@
   },
   {
     "description": "Host your Blockbook for Decred on the Flux Cloud",
-    "price": 7.8,
+    "price": 9.0,
     "category": "Blockbook",
     "version": 4,
     "name": "BlockbookDCR",
@@ -2869,7 +2748,7 @@
   },
   {
     "description": "Host your Meowcoin Full Node on the Flux Cloud",
-    "price": 7.3,
+    "price": 10.8,
     "category": "Blockchain",
     "version": 4,
     "name": "MeowcoinNode",
@@ -2906,7 +2785,7 @@
   },
   {
     "description": "Host your Wanchain RPC Node on the Flux Cloud",
-    "price": 14.0,
+    "price": 21.0,
     "category": "RPC Node",
     "version": 4,
     "name": "WanchainRPC",
@@ -2949,7 +2828,7 @@
   },
   {
     "description": "Host your Nexa Node on the Flux Cloud",
-    "price": 3.8,
+    "price": 5.7,
     "category": "Blockchain",
     "version": 4,
     "name": "NexaNode",
@@ -2986,7 +2865,7 @@
   },
   {
     "description": "Host your Radiant-ElectrumX on the Flux Cloud",
-    "price": 5.2,
+    "price": 7.81,
     "category": "Blockchain",
     "version": 4,
     "name": "ElectrumXRXD",
@@ -3023,7 +2902,7 @@
   },
   {
     "description": "Host your Radiant Node on the Flux Cloud",
-    "price": 2.4,
+    "price": 3.53,
     "category": "Blockchain",
     "version": 4,
     "name": "RadiantNode",
@@ -3069,7 +2948,7 @@
   },
   {
     "description": "Capture screenshots of websites as a (host it yourself) API. API Instructions: https://github.com/robvanderleek/capture-website-api#usage",
-    "price": 5.0,
+    "price": 6.62,
     "category": "Hosting",
     "version": 4,
     "name": "WebsiteScreenshotAPI",
@@ -3106,7 +2985,7 @@
   },
   {
     "description": "A Simple Public IP Address API",
-    "price": 1.1,
+    "price": 1.61,
     "category": "Hosting",
     "version": 4,
     "name": "Ipify",
@@ -3143,7 +3022,7 @@
   },
   {
     "description": "A Nostr Relay hosted on the Flux Cloud",
-    "price": 2.22,
+    "price": 3.32,
     "category": "Hosting",
     "version": 4,
     "name": "Nostr",
@@ -3206,7 +3085,7 @@
   },
   {
     "description": "Host your Bitgert RPC Node on the Flux Cloud",
-    "price": 14.0,
+    "price": 21.0,
     "category": "RPC Node",
     "version": 4,
     "name": "BitgertRPC",
@@ -3243,7 +3122,7 @@
   },
   {
     "description": "Host your Celo RPC Node on the Flux Cloud",
-    "price": 16.5,
+    "price": 24.75,
     "category": "RPC Node",
     "version": 4,
     "name": "CeloRPC",
@@ -3290,7 +3169,7 @@
   },
   {
     "description": "Host your Fuse RPC Node on the Flux Cloud",
-    "price": 9.0,
+    "price": 13.5,
     "category": "RPC Node",
     "version": 4,
     "name": "FuseRPC",
@@ -3336,7 +3215,7 @@
   },
   {
     "description": "Host your Astar RPC Node on the Flux Cloud",
-    "price": 40.0,
+    "price": 48.0,
     "category": "RPC Node",
     "version": 4,
     "name": "AstarRPC",
@@ -3373,7 +3252,7 @@
   },
   {
     "description": "Host your Algorand RPC Node on the Flux Cloud",
-    "price": 22.0,
+    "price": 33.0,
     "category": "RPC Node",
     "version": 4,
     "name": "AlgoRPC",
@@ -3460,7 +3339,7 @@
   },
   {
     "description": "Host your Neurai Fullnode via Flux Cloud",
-    "price": 4.5,
+    "price": 6.62,
     "category": "Blockchain",
     "version": 4,
     "name": "NeuraiNode",
@@ -3497,7 +3376,7 @@
   },
   {
     "description": "Host your Neurai-ElectrumX via Flux Cloud",
-    "price": 8.7,
+    "price": 12.9,
     "category": "Blockchain",
     "version": 4,
     "name": "ElectrumxXNA",
@@ -3534,7 +3413,7 @@
   },
   {
     "description": "Host your Blockbook for Neurai on the Flux Cloud",
-    "price": 10.8,
+    "price": 10.58,
     "category": "Blockbook",
     "version": 4,
     "name": "BlockbookXNA",
@@ -3575,7 +3454,7 @@
   },
   {
     "description": "Host your BLOCX Masternode on the Flux Cloud",
-    "price": 8.0,
+    "price": 7.81,
     "multiplier": 1,
     "category": "Masternode",
     "version": 7,
@@ -3617,7 +3496,7 @@
   },
   {
     "description": "Host your Neoxa Masternode on the Flux Cloud",
-    "price": 11.2,
+    "price": 11.11,
     "multiplier": 1,
     "category": "Masternode",
     "version": 7,
@@ -3659,7 +3538,7 @@
   },
   {
     "description": "Host your Celestia Light Node on the Flux Cloud",
-    "price": 5.5,
+    "price": 5.25,
     "category": "Blockchain",
     "version": 4,
     "name": "CelestiaLN",
@@ -3687,7 +3566,7 @@
   },
   {
     "description": "Host your Bittensor Full Node on the Flux Cloud",
-    "price": 21.0,
+    "price": 20.63,
     "category": "Blockchain",
     "version": 4,
     "name": "BittensorFN",
