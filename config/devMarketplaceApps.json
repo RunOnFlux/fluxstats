@@ -433,44 +433,33 @@
       "enabled": true
     },
     {
-      "description": "Host your Firo Node on the Flux Network",
-      "price": 5.7,
-        "multiplier": 1,
-      "category": "Blockchain",
+      "description": "Host your Firo Masternode on the Flux Cloud for a 1-month plan",
+      "price": 8.61,
+      "multiplier": 1,
+      "category": "Masternode",
       "version": 7,
-      "name": "FiroNode",
+      "name": "FiroMN3",
       "instances": 3,
       "contacts": [],
       "geolocation": [],
       "staticip": true,
       "nodes": [],
-      "expire": 66000,
+      "expire": 22000,
       "compose": [
         {
           "name": "node",
           "description": "The Firo Node container",
           "repotag": "runonflux/fironode:latest",
-          "containerPorts": [
-            8168
-          ],
-          "domains": [
-            ""
-          ],
+          "containerPorts": [8168],
+          "domains": [""],
           "environmentParameters": [],
           "commands": [],
           "containerData": "/root/.firo",
           "tiered": false,
           "cpu": 1,
           "ram": 2000,
-          "hdd": 10,      
-          "ports": [38000],
-          "userEnvironmentParameters": [
-            {
-              "name": "KEY",
-              "description": "The key of your masternode",
-              "placeholder": "Enter your key here"
-            }
-          ],
+          "hdd": 12,
+          "ports": [8168],
           "secrets": "",
           "repoauth": ""
         }
