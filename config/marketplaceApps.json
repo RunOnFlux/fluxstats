@@ -583,12 +583,47 @@
     "enabled": true
   },
   {
-    "description": "Host your Firo Masternode on the Flux Cloud for a 3-month plan",
-    "price": 25.83,
+    "description": "Host your(s) Firo Masternode(s) on the Flux Cloud for a 1-month plan",
+    "price": 8.61,
     "multiplier": 1,
     "category": "Masternode",
     "version": 7,
-    "name": "FiroMN3",
+    "name": "FiroMN",
+    "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "staticip": true,
+    "nodes": [],
+    "expire": 22000,
+    "compose": [
+      {
+        "name": "node",
+        "description": "The Firo Node container",
+        "repotag": "runonflux/fironode:latest",
+        "containerPorts": [8168],
+        "domains": [""],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/root/.firo",
+        "tiered": false,
+        "cpu": 1,
+        "ram": 2000,
+        "hdd": 12,
+        "ports": [8168],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your(s) Firo Masternode(s) on the Flux Cloud for a 3-month plan",
+    "price": 24.02,
+    "multiplier": 1,
+    "category": "Masternode",
+    "version": 7,
+    "name": "FiroMN",
     "instances": 3,
     "contacts": [],
     "geolocation": [],
@@ -610,13 +645,76 @@
         "ram": 2000,
         "hdd": 12,
         "ports": [8168],
-        "userEnvironmentParameters": [
-          {
-            "name": "KEY",
-            "description": "The key of your masternode",
-            "placeholder": "Enter your key here"
-          }
-        ],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your(s) Firo Masternode(s) on the Flux Cloud for a 6-month plan",
+    "price": 43.91,
+    "multiplier": 1,
+    "category": "Masternode",
+    "version": 7,
+    "name": "FiroMN",
+    "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "staticip": true,
+    "nodes": [],
+    "expire": 132000,
+    "compose": [
+      {
+        "name": "node",
+        "description": "The Firo Node container",
+        "repotag": "runonflux/fironode:latest",
+        "containerPorts": [8168],
+        "domains": [""],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/root/.firo",
+        "tiered": false,
+        "cpu": 1,
+        "ram": 2000,
+        "hdd": 12,
+        "ports": [8168],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your(s) Firo Masternode(s) on the Flux Cloud for a 12-month plan",
+    "price": 72.32,
+    "multiplier": 1,
+    "category": "Masternode",
+    "version": 7,
+    "name": "FiroMN",
+    "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "staticip": true,
+    "nodes": [],
+    "expire": 264000,
+    "compose": [
+      {
+        "name": "node",
+        "description": "The Firo Node container",
+        "repotag": "runonflux/fironode:latest",
+        "containerPorts": [8168],
+        "domains": [""],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/root/.firo",
+        "tiered": false,
+        "cpu": 1,
+        "ram": 2000,
+        "hdd": 12,
+        "ports": [8168],
         "secrets": "",
         "repoauth": ""
       }
