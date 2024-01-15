@@ -3745,7 +3745,7 @@
       }
     ],
     "visible": true,
-    "enabled": true
+    "enabled": false
   },
   {
     "description": "Host your Streamr 1.0 Testnet on the Flux Cloud 3-month plan",
@@ -3798,7 +3798,7 @@
       }
     ],
     "visible": true,
-    "enabled": true
+    "enabled": false
   },
   {
     "description": "Host your Streamr 1.0 Testnet on the Flux Cloud 6-month plan",
@@ -3851,7 +3851,7 @@
       }
     ],
     "visible": true,
-    "enabled": true
+    "enabled": false
   },
   {
     "description": "Host your Streamr 1.0 Testnet on the Flux Cloud 12-month plan",
@@ -3904,6 +3904,6 @@
       }
     ],
     "visible": true,
-    "enabled": true
+    "enabled": false
   }
 ]
