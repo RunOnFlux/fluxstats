@@ -3634,55 +3634,8 @@
       ],
       "visible": true,
       "enabled": true
-    },
-    {
-    "description": "Host your Neoxa Masternode on the Flux Cloud",
-    "price": 11.2,
-	  "multiplier": 1,
-    "category": "Masternode",
-    "version": 7,
-    "name": "NeoxaMNOLD",
-    "instances": 3,
-    "contacts": [],
-    "geolocation": [],
-    "staticip": true,
-    "nodes": [],
-    "expire": 22000,
-    "compose": [
-      {
-        "name": "neoxamasternode",
-        "description": "The Neoxa Masternode container",
-        "repotag": "runonflux/neoxa-node:latest",
-        "containerPorts": [
-          8788
-        ],
-        "domains": [
-          ""
-        ],
-        "environmentParameters": [],
-        "commands": [],
-        "containerData": "/root/.neoxacore",
-        "tiered": false,
-        "cpu": 2,
-        "ram": 2000,
-        "hdd": 20,      
-        "ports": [8788],
-        "userEnvironmentParameters": [
-          {
-            "name": "KEY",
-            "description": "The key of your masternode",
-            "placeholder": "Enter your key here"
-          }
-        ],
-        "envFluxStorage": true,
-        "secrets": "",
-        "repoauth": ""
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
+   },
+   {
     "description": "Host your(s) Neoxa Masternode(s) on the Flux Cloud for a 1-month plan",
     "price": 11.11,
     "multiplier": 1,
