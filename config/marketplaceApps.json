@@ -3680,7 +3680,7 @@
         "commands": [
           "/bin/bash",
           "-c",
-          "./node-subtensor --base-path /tmp/blockchain --chain ./raw_spec.json --rpc-external --rpc-cors all --ws-external --no-mdns --ws-max-connections 5000 --in-peers 200 --out-peers 200 --bootnodes /dns/bootnode.finney.opentensor.ai/tcp/30333/ws/p2p/12D3KooWRwbMb85RWnT8DSXSYMWQtuDwh4LJzndoRrTDotTR5gDC --no-private-ip --sync warp"
+          "/usr/local/bin/node-subtensor --base-path /tmp/blockchain --chain ./raw_spec.json --rpc-external --rpc-cors all --ws-external --no-mdns --ws-max-connections 5000 --in-peers 200 --out-peers 200 --bootnodes /dns/bootnode.finney.opentensor.ai/tcp/30333/ws/p2p/12D3KooWRwbMb85RWnT8DSXSYMWQtuDwh4LJzndoRrTDotTR5gDC --no-private-ip --sync warp"
         ],
         "containerData": "/tmp",
         "tiered": false,
