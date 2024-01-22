@@ -3712,7 +3712,7 @@
       {
         "name": "streamrnode",
         "description": "The Streamr 1.0 Testnet container",
-        "repotag": "streamr/broker-node:v100.0.0-testnet-two.4",
+        "repotag": "streamr/broker-node:v100.0.0-testnet-three.1",
         "containerPorts": [
           32200
         ],
@@ -3765,7 +3765,7 @@
       {
         "name": "streamrnode",
         "description": "The Streamr 1.0 Testnet container",
-        "repotag": "streamr/broker-node:v100.0.0-testnet-two.4",
+        "repotag": "streamr/broker-node:v100.0.0-testnet-three.1",
         "containerPorts": [
           32200
         ],
@@ -3818,7 +3818,7 @@
       {
         "name": "streamrnode",
         "description": "The Streamr 1.0 Testnet container",
-        "repotag": "streamr/broker-node:v100.0.0-testnet-two.4",
+        "repotag": "streamr/broker-node:v100.0.0-testnet-three.1",
         "containerPorts": [
           32200
         ],
@@ -3871,7 +3871,7 @@
       {
         "name": "streamrnode",
         "description": "The Streamr 1.0 Testnet container",
-        "repotag": "streamr/broker-node:v100.0.0-testnet-two.4",
+        "repotag": "streamr/broker-node:v100.0.0-testnet-three.1",
         "containerPorts": [
           32200
         ],
