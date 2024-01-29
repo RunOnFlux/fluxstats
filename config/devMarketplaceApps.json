@@ -56,6 +56,44 @@
       "enabled": true
     },
     {
+    "description": "Host your Palworld 8 slots Game Server for a 1-month plan",
+    "price": 12.09,
+    "multiplier": 1,
+    "category": "Games",
+    "version": 7,
+    "name": "palworld8slot",
+    "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "userGeolocation": [{"name": "Any", "id":0, "value": null},
+            {"name": "North America", "id":1, "value": "acNA"},
+            {"name": "Asia", "id":2, "value": "acAS"}],
+    "staticip": false,
+    "nodes": [],
+    "expire": 22000,
+    "compose": [
+      {
+        "name": "palworld",
+        "description": "Palworld Game container",
+        "repotag": "thijsvanloef/palworld-server-docker:latest",
+        "containerPorts": [8211, 27015, 25575],
+        "domains": ["", "", ""],
+        "environmentParameters": ["COMMUNITY=false","SERVER_NAME=Flux Cloud Game Server: https://runonflux.io","PLAYERS=8"],
+        "commands": [],
+        "containerData": "g:/palworld",
+        "tiered": false,
+        "cpu": 3,
+        "ram": 6500,
+        "hdd": 12,
+        "ports": [8211, 27015, 25575],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+    {
     "description": "Host your PRIVATE Java Minecraft server on the Flux Cloud",
     "price": 15.3,
     "multiplier": 1,
