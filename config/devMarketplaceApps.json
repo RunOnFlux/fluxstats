@@ -56,7 +56,7 @@
       "enabled": true
     },
     {
-    "description": "Host your Palworld 4 slots Game Server for a 1-month plan",
+    "description": "Host your Palworld 4 slots Game Server on Flux Cloud for a 1-month plan",
     "price": 9.99,
     "multiplier": 1.27,
     "category": "Games",
@@ -98,7 +98,7 @@
     "enabled": true
   },
   {
-    "description": "Host your Palworld 8 slots Game Server for a 1-month plan",
+    "description": "Host your Palworld 8 slots Game Server on Flux Cloud for a 1-month plan",
     "price": 14.99,
     "multiplier": 1.28,
     "category": "Games",
@@ -140,7 +140,7 @@
     "enabled": true
   },
   {
-  "description": "Host your Palworld 16 slots Game Server for a 1-month plan",
+  "description": "Host your Palworld 16 slots Game Server on Flux Cloud for a 1-month plan",
   "price": 22.99,
   "multiplier": 1.47,
   "category": "Games",
@@ -178,7 +178,7 @@
   "enabled": true
 },
 {
-"description": "Host your Palworld 32 slots Game Server for a 1-month plan",
+"description": "Host your Palworld 32 slots Game Server on Flux Cloud for a 1-month plan",
 "price": 29.99,
 "multiplier": 2.15,
 "category": "Games",
