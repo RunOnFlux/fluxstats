@@ -3690,7 +3690,7 @@
       {
         "name": "blocxamasternode",
         "description": "The Neoxa Masternode container",
-        "repotag": "blocxtech/blocxnode:latest",
+        "repotag": "blocxtech/blocxmasternode:3.1.0",
         "containerPorts": [12972],
         "domains": [""],
         "environmentParameters": [],
@@ -3725,7 +3725,7 @@
       {
         "name": "blocxamasternode",
         "description": "The Neoxa Masternode container",
-        "repotag": "blocxtech/blocxnode:latest",
+        "repotag": "blocxtech/blocxmasternode:3.1.0",
         "containerPorts": [12972],
         "domains": [""],
         "environmentParameters": [],
@@ -3760,7 +3760,7 @@
       {
         "name": "blocxamasternode",
         "description": "The Neoxa Masternode container",
-        "repotag": "blocxtech/blocxnode:latest",
+        "repotag": "blocxtech/blocxmasternode:3.1.0",
         "containerPorts": [12972],
         "domains": [""],
         "environmentParameters": [],
@@ -3795,7 +3795,7 @@
       {
         "name": "blocxamasternode",
         "description": "The Neoxa Masternode container",
-        "repotag": "blocxtech/blocxnode:latest",
+        "repotag": "blocxtech/blocxmasternode:3.1.0",
         "containerPorts": [12972],
         "domains": [""],
         "environmentParameters": [],
