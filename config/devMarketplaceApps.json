@@ -65,7 +65,7 @@
     "instances": 3,
     "contacts": [],
     "geolocation": [],
-    "userGeolocation": [{"text": "Any", "value": null},
+    "geolocationOptions": [{"text": "Any", "value": null},
             {"text": "North America", "value": "acNA"},
             {"text": "Asia", "value": "acAS"}],
     "staticip": false,
