@@ -1781,6 +1781,166 @@
     "enabled": true
   },
   {
+    "description": "Host your Palworld 4 slots Game Server on Flux Cloud for a 1-month plan",
+    "price": 9.99,
+    "multiplier": 1.16,
+    "category": "Games",
+    "version": 7,
+    "name": "Palworld4Slots",
+    "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "geolocationOptions": [{"text": "North America", "value": "acNA"},
+            {"text": "Europe", "value": "acEU"},
+            {"text": "Asia", "value": "acAS"},
+            {"text": "South America", "value": "acSA"},
+            {"text": "Oceania", "value": "acOC"},
+            {"text": "Africa", "value": "acAF"}
+            ],
+    "staticip": false,
+    "nodes": [],
+    "expire": 22000,
+    "compose": [
+      {
+        "name": "palworld",
+        "description": "Palworld Game container",
+        "repotag": "thijsvanloef/palworld-server-docker:latest",
+        "containerPorts": [8211, 27015, 25575],
+        "domains": ["", "", ""],
+        "environmentParameters": ["COMMUNITY=false","SERVER_NAME=Flux Cloud Game Server","SERVER_DESCRIPTION=Best Gaming Servers are on Flux Decentralized Network, get yours at runonflux.io","PLAYERS=4"],
+        "commands": [],
+        "containerData": "g:/palworld",
+        "tiered": false,
+        "cpu": 2,
+        "ram": 5000,
+        "hdd": 12,
+        "ports": [8211, 27015, 25575],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Palworld 8 slots Game Server on Flux Cloud for a 1-month plan",
+    "price": 14.99,
+    "multiplier": 1.39,
+    "category": "Games",
+    "version": 7,
+    "name": "Palworld8Slots",
+    "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "geolocationOptions": [{"text": "North America", "value": "acNA"},
+            {"text": "Europe", "value": "acEU"},
+            {"text": "Asia", "value": "acAS"},
+            {"text": "South America", "value": "acSA"},
+            {"text": "Oceania", "value": "acOC"},
+            {"text": "Africa", "value": "acAF"}
+            ],
+    "staticip": false,
+    "nodes": [],
+    "expire": 22000,
+    "compose": [
+      {
+        "name": "palworld",
+        "description": "Palworld Game container",
+        "repotag": "thijsvanloef/palworld-server-docker:latest",
+        "containerPorts": [8211, 27015, 25575],
+        "domains": ["", "", ""],
+        "environmentParameters": ["COMMUNITY=false","SERVER_NAME=Flux Cloud Game Server","SERVER_DESCRIPTION=Best Gaming Servers are on Flux Decentralized Network, get yours at runonflux.io","PLAYERS=8"],
+        "commands": [],
+        "containerData": "g:/palworld",
+        "tiered": false,
+        "cpu": 2.5,
+        "ram": 6250,
+        "hdd": 15,
+        "ports": [8211, 27015, 25575],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+  "description": "Host your Palworld 16 slots Game Server on Flux Cloud for a 1-month plan",
+  "price": 23.99,
+  "multiplier": 1.40,
+  "category": "Games",
+  "version": 7,
+  "name": "Palworld16Slots",
+  "instances": 3,
+  "contacts": [],
+  "geolocation": [],
+  "geolocationOptions": [{"text": "North America", "value": "acNA"},
+          {"text": "Europe", "value": "acEU"}
+          ],
+  "staticip": false,
+  "nodes": [],
+  "expire": 22000,
+  "compose": [
+    {
+      "name": "palworld",
+      "description": "Palworld Game container",
+      "repotag": "thijsvanloef/palworld-server-docker:latest",
+      "containerPorts": [8211, 27015, 25575],
+      "domains": ["", "", ""],
+      "environmentParameters": ["COMMUNITY=false","SERVER_NAME=Flux Cloud Game Server","SERVER_DESCRIPTION=Best Gaming Servers are on Flux Decentralized Network, get yours at runonflux.io","PLAYERS=16"],
+      "commands": [],
+      "containerData": "g:/palworld",
+      "tiered": false,
+      "cpu": 4,
+      "ram": 10000,
+      "hdd": 20,
+      "ports": [8211, 27015, 25575],
+      "secrets": "",
+      "repoauth": ""
+    }
+  ],
+  "visible": true,
+  "enabled": true
+},
+{
+"description": "Host your Palworld 32 slots Game Server on Flux Cloud for a 1-month plan",
+"price": 34.99,
+"multiplier": 1.39,
+"category": "Games",
+"version": 7,
+"name": "Palworld32Slots",
+"instances": 3,
+"contacts": [],
+"geolocation": [],
+"geolocationOptions": [{"text": "North America", "value": "acNA"},
+        {"text": "Europe", "value": "acEU"}
+        ],
+"staticip": false,
+"nodes": [],
+"expire": 22000,
+"compose": [
+  {
+    "name": "palworld",
+    "description": "Palworld Game container",
+    "repotag": "thijsvanloef/palworld-server-docker:latest",
+    "containerPorts": [8211, 27015, 25575],
+    "domains": ["", "", ""],
+    "environmentParameters": ["COMMUNITY=false","SERVER_NAME=Flux Cloud Game Server","SERVER_DESCRIPTION=Best Gaming Servers are on Flux Decentralized Network, get yours at runonflux.io","PLAYERS=32"],
+    "commands": [],
+    "containerData": "g:/palworld",
+    "tiered": false,
+    "cpu": 6,
+    "ram": 14000,
+    "hdd": 35,
+    "ports": [8211, 27015, 25575],
+    "secrets": "",
+    "repoauth": ""
+  }
+],
+"visible": true,
+"enabled": true
+},
+  {
     "description": "An open source voxel game engine",
     "price": 3.32,
     "multiplier": 1,
@@ -1816,7 +1976,7 @@
       }
     ],
     "visible": true,
-    "enabled": true
+    "enabled": false
   },
   {
     "description": "Get Google search results, but without any ads, javascript, AMP links, cookies, or IP address tracking",
@@ -1854,7 +2014,7 @@
       }
     ],
     "visible": true,
-    "enabled": true
+    "enabled": false
   },
   {
     "description": "WBO is an online collaborative whiteboard that allows many users to draw simultaneously on a large virtual board",
@@ -1892,7 +2052,7 @@
       }
     ],
     "visible": true,
-    "enabled": true
+    "enabled": false
   },
   {
     "description": "The Open-Source IO Shooter is an open-source multiplayer game in the browser (desktop or browser)",
@@ -1929,7 +2089,7 @@
       }
     ],
     "visible": true,
-    "enabled": true
+    "enabled": false
   },
   {
     "description": "A fun incremental clicker game simulating the life of a developer",
@@ -1966,7 +2126,7 @@
       }
     ],
     "visible": true,
-    "enabled": true
+    "enabled": false
   },
   {
     "description": "A multiplayer geography game using Websockets",
@@ -2003,7 +2163,7 @@
       }
     ],
     "visible": true,
-    "enabled": true
+    "enabled": false
   },
   {
     "description": "An alternative private front-end to Reddit",
@@ -2114,7 +2274,7 @@
       }
     ],
     "visible": true,
-    "enabled": true
+    "enabled": false
   },
   {
     "description": "Element (formerly known as Vector and Riot) is a Matrix web client built using the Matrix React SDK",
@@ -2284,7 +2444,7 @@
           "AUTO_UPDATE_PAUSE_WITH_PLAYERS=1"
         ],
         "commands": [],
-        "containerData": "/val",
+        "containerData": "g:/val",
         "tiered": false,
         "cpu": 2.5,
         "ram": 3500,
@@ -2315,7 +2475,7 @@
       }
     ],
     "visible": true,
-    "enabled": true
+    "enabled": false
   },
   {
     "description": "Terraria servers on Flux!",
@@ -2356,7 +2516,7 @@
       }
     ],
     "visible": true,
-    "enabled": true
+    "enabled": false
   },
   {
     "description": "diagrams.net (formerly draw.io) is free online diagram software. You can use it as a flowchart maker, network diagram software, to design database schema, and more.",
@@ -2441,7 +2601,7 @@
       }
     ],
     "visible": true,
-    "enabled": true
+    "enabled": false
   },
   {
     "description": "Ark: Survival Evolved Server on Flux",
@@ -2492,7 +2652,7 @@
       }
     ],
     "visible": true,
-    "enabled": true
+    "enabled": false
   },
   {
     "description": "Host your Blockbook for Viacoin on the Flux Cloud",
