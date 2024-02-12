@@ -56,6 +56,48 @@
       "enabled": true
     },
     {
+    "description": "Host your Enshrouded 4 slots Game Server on Flux Cloud for a 1-month plan",
+    "price": 8.99,
+    "multiplier": 1.07,
+    "category": "Games",
+    "version": 7,
+    "name": "Enshrouded4Slots",
+    "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "geolocationOptions": [{"text": "North America", "value": "acNA"},
+                {"text": "Europe", "value": "acEU"},
+                {"text": "Asia", "value": "acAS"},
+                {"text": "South America", "value": "acSA"},
+                {"text": "Oceania", "value": "acOC"},
+                {"text": "Africa", "value": "acAF"}
+                ],
+    "staticip": false,
+    "nodes": [],
+    "expire": 22000,
+    "compose": [
+      {
+        "name": "Enshrouded",
+        "description": "Enshrouded Game container",
+        "repotag": "jktuned/enshrouded-server:latest",
+        "containerPorts": [15636, 15637],
+        "domains": ["", ""],
+        "environmentParameters": ["SERVER_NAME=Flux Cloud Game Server","SERVER_SLOT_COUNT=4","UPDATE_CRON=0 2 * * *", "UPDATE_CHECK_PLAYERS=true"],
+        "commands": [],
+        "containerData": "g:/opt/enshrouded/server/savegame",
+        "tiered": false,
+        "cpu": 2,
+        "ram": 4000,
+        "hdd": 30,
+        "ports": [15636, 15637],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+    },
+    {
     "description": "Host your Palworld 4 slots Game Server on Flux Cloud for a 1-month plan",
     "price": 9.99,
     "multiplier": 1.16,
