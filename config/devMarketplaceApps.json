@@ -82,7 +82,7 @@
         "repotag": "jktuned/enshrouded-server:latest",
         "containerPorts": [15636, 15637],
         "domains": ["", ""],
-        "environmentParameters": ["SERVER_NAME=Flux Cloud Game Server","SERVER_SLOT_COUNT=4","UPDATE_CRON=0 2 * * *", "UPDATE_CHECK_PLAYERS=true"],
+        "environmentParameters": ["SERVER_NAME=Flux Cloud Decentralized Game Server","SERVER_SLOT_COUNT=4","UPDATE_CRON=0 2 * * *", "UPDATE_CHECK_PLAYERS=true"],
         "commands": [],
         "containerData": "g:/opt/enshrouded/server/savegame",
         "tiered": false,
