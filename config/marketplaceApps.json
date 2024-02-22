@@ -4036,7 +4036,7 @@
     "instances": 3,
     "contacts": [],
     "geolocation": [],
-    "staticip": true,
+    "staticip": false,
     "nodes": [],
     "expire": 22000,
     "compose": [
@@ -4074,7 +4074,7 @@
     "instances": 3,
     "contacts": [],
     "geolocation": [],
-    "staticip": true,
+    "staticip": false,
     "nodes": [],
     "expire": 66000,
     "compose": [
@@ -4112,7 +4112,7 @@
     "instances": 3,
     "contacts": [],
     "geolocation": [],
-    "staticip": true,
+    "staticip": false,
     "nodes": [],
     "expire": 132000,
     "compose": [
@@ -4150,7 +4150,7 @@
     "instances": 3,
     "contacts": [],
     "geolocation": [],
-    "staticip": true,
+    "staticip": false,
     "nodes": [],
     "expire": 264000,
     "compose": [
