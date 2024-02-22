@@ -4041,7 +4041,7 @@
     "expire": 22000,
     "compose": [
       {
-        "name": "bittensorfullnode"",
+        "name": "bittensorfullnode",
         "description": "The Bittensor Full Node container",
         "repotag": "opentensor/subtensor:latest",
         "containerPorts": [9944, 30333, 9933],
@@ -4079,7 +4079,7 @@
     "expire": 66000,
     "compose": [
       {
-        "name": "bittensorfullnode"",
+        "name": "bittensorfullnode",
         "description": "The Bittensor Full Node container",
         "repotag": "opentensor/subtensor:latest",
         "containerPorts": [9944, 30333, 9933],
@@ -4117,7 +4117,7 @@
     "expire": 132000,
     "compose": [
       {
-        "name": "bittensorfullnode"",
+        "name": "bittensorfullnode",
         "description": "The Bittensor Full Node container",
         "repotag": "opentensor/subtensor:latest",
         "containerPorts": [9944, 30333, 9933],
@@ -4155,7 +4155,7 @@
     "expire": 264000,
     "compose": [
       {
-        "name": "bittensorfullnode"",
+        "name": "bittensorfullnode",
         "description": "The Bittensor Full Node container",
         "repotag": "opentensor/subtensor:latest",
         "containerPorts": [9944, 30333, 9933],
