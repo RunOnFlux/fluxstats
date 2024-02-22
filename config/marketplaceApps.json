@@ -4027,12 +4027,18 @@
     "enabled": true
   },
   {
-    "description": "Host your Bittensor Full Node on the Flux Cloud",
+    "description": "Host your Bittensor Full Node on the Flux Cloud for a 1-month plan",
     "price": 20.63,
+    "multiplier": 1,
     "category": "Blockchain",
-    "version": 4,
+    "version": 7,
     "name": "BittensorFN",
     "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "staticip": false,
+    "nodes": [],
+    "expire": 22000,
     "compose": [
       {
         "name": "bittensorfullnode",
@@ -4041,18 +4047,132 @@
         "containerPorts": [9944, 30333, 9933],
         "domains": ["", "", ""],
         "environmentParameters": ["CARGO_HOME=/var/www/node-subtensor/.cargo"],
-        "commands": [
-          "/bin/bash",
+        "commands": ["/bin/bash",
           "-c",
           "/usr/local/bin/node-subtensor --base-path /tmp/blockchain --chain ./raw_spec.json --rpc-external --rpc-cors all --ws-external --no-mdns --ws-max-connections 5000 --in-peers 200 --out-peers 200 --bootnodes /dns/bootnode.finney.opentensor.ai/tcp/30333/ws/p2p/12D3KooWRwbMb85RWnT8DSXSYMWQtuDwh4LJzndoRrTDotTR5gDC --no-private-ip --sync warp"
-        ],
+	],
         "containerData": "/tmp",
         "tiered": false,
         "cpu": 4.5,
         "ram": 8000,
-        "hdd": 150.0,
+        "hdd": 150,
         "ports": [9944, 30333, 9933],
-        "userEnvironmentParameters": []
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Bittensor Full Node on the Flux Cloud for a 3-month plan",
+    "price": 57.55,
+    "multiplier": 1,
+    "category": "Blockchain",
+    "version": 7,
+    "name": "BittensorFN",
+    "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "staticip": false,
+    "nodes": [],
+    "expire": 66000,
+    "compose": [
+      {
+        "name": "bittensorfullnode",
+        "description": "The Bittensor Full Node container",
+        "repotag": "opentensor/subtensor:latest",
+        "containerPorts": [9944, 30333, 9933],
+        "domains": ["", "", ""],
+        "environmentParameters": ["CARGO_HOME=/var/www/node-subtensor/.cargo"],
+        "commands": ["/bin/bash",
+          "-c",
+          "/usr/local/bin/node-subtensor --base-path /tmp/blockchain --chain ./raw_spec.json --rpc-external --rpc-cors all --ws-external --no-mdns --ws-max-connections 5000 --in-peers 200 --out-peers 200 --bootnodes /dns/bootnode.finney.opentensor.ai/tcp/30333/ws/p2p/12D3KooWRwbMb85RWnT8DSXSYMWQtuDwh4LJzndoRrTDotTR5gDC --no-private-ip --sync warp"
+	],
+        "containerData": "/tmp",
+        "tiered": false,
+        "cpu": 4.5,
+        "ram": 8000,
+        "hdd": 150,
+        "ports": [9944, 30333, 9933],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Bittensor Full Node on the Flux Cloud for a 6-month plan",
+    "price": 105.19,
+    "multiplier": 1,
+    "category": "Blockchain",
+    "version": 7,
+    "name": "BittensorFN",
+    "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "staticip": false,
+    "nodes": [],
+    "expire": 132000,
+    "compose": [
+      {
+        "name": "bittensorfullnode",
+        "description": "The Bittensor Full Node container",
+        "repotag": "opentensor/subtensor:latest",
+        "containerPorts": [9944, 30333, 9933],
+        "domains": ["", "", ""],
+        "environmentParameters": ["CARGO_HOME=/var/www/node-subtensor/.cargo"],
+        "commands": ["/bin/bash",
+          "-c",
+          "/usr/local/bin/node-subtensor --base-path /tmp/blockchain --chain ./raw_spec.json --rpc-external --rpc-cors all --ws-external --no-mdns --ws-max-connections 5000 --in-peers 200 --out-peers 200 --bootnodes /dns/bootnode.finney.opentensor.ai/tcp/30333/ws/p2p/12D3KooWRwbMb85RWnT8DSXSYMWQtuDwh4LJzndoRrTDotTR5gDC --no-private-ip --sync warp"
+	],
+        "containerData": "/tmp",
+        "tiered": false,
+        "cpu": 4.5,
+        "ram": 8000,
+        "hdd": 150,
+        "ports": [9944, 30333, 9933],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Bittensor Full Node on the Flux Cloud for a 12-month plan",
+    "price": 173.25,
+    "multiplier": 1,
+    "category": "Blockchain",
+    "version": 7,
+    "name": "BittensorFN",
+    "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "staticip": false,
+    "nodes": [],
+    "expire": 264000,
+    "compose": [
+      {
+        "name": "bittensorfullnode",
+        "description": "The Bittensor Full Node container",
+        "repotag": "opentensor/subtensor:latest",
+        "containerPorts": [9944, 30333, 9933],
+        "domains": ["", "", ""],
+        "environmentParameters": ["CARGO_HOME=/var/www/node-subtensor/.cargo"],
+        "commands": ["/bin/bash",
+          "-c",
+          "/usr/local/bin/node-subtensor --base-path /tmp/blockchain --chain ./raw_spec.json --rpc-external --rpc-cors all --ws-external --no-mdns --ws-max-connections 5000 --in-peers 200 --out-peers 200 --bootnodes /dns/bootnode.finney.opentensor.ai/tcp/30333/ws/p2p/12D3KooWRwbMb85RWnT8DSXSYMWQtuDwh4LJzndoRrTDotTR5gDC --no-private-ip --sync warp"
+	],
+        "containerData": "/tmp",
+        "tiered": false,
+        "cpu": 4.5,
+        "ram": 8000,
+        "hdd": 150,
+        "ports": [9944, 30333, 9933],
+        "secrets": "",
+        "repoauth": ""
       }
     ],
     "visible": true,
