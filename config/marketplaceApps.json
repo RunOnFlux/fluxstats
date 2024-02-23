@@ -1845,7 +1845,7 @@
         "containerData": "g:/palworld/Pal/Saved",
         "tiered": false,
         "cpu": 2.5,
-        "ram": 6250,
+        "ram": 6300,
         "hdd": 15,
         "ports": [8211, 27015, 25575],
         "secrets": "",
