@@ -3091,7 +3091,7 @@
       "description": "Host your Meowcoin 2.0 Testnet Full Node on the Flux Cloud",
       "price": 10.8,
       "category": "Blockchain",
-      "version": 4,
+      "version": 7,
       "name": "MeowcoinTestnetNode",
       "instances": 3,
       "compose": [
