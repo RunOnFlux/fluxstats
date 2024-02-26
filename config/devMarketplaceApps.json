@@ -278,9 +278,9 @@
         "repotag": "itzg/minecraft-server:latest",
         "containerPorts": [25565],
         "domains": [""],
-        "environmentParameters": ["EULA=TRUE","TYPE=SPIGOT","INIT_MEMORY=5G"],
+        "environmentParameters": ["EULA=TRUE","TYPE=SPIGOT","MAX_MEMORY=1G","INIT_MEMORY=1G"],
         "commands": [],
-        "containerData": "r:/data",
+        "containerData": "g:/data",
         "tiered": false,
         "cpu": 1,
         "ram": 1000,
@@ -329,9 +329,9 @@
           "repotag": "itzg/minecraft-server:latest",
           "containerPorts": [25565],
           "domains": [""],
-          "environmentParameters": ["EULA=TRUE","INIT_ MEMORY=5G"],
+          "environmentParameters": ["EULA=TRUE","TYPE=SPIGOT","MAX_MEMORY=5G","INIT_MEMORY=5G"],
           "commands": [],
-          "containerData": "r:/data",
+          "containerData": "g:/data",
           "tiered": false,
           "cpu": 2,
           "ram": 5000,
@@ -3081,6 +3081,47 @@
           "hddsuper": 60,
           "hddbamf": 60,
           "ports": [35700,35701],
+          "userEnvironmentParameters": []
+        }
+      ],
+      "visible": true,
+      "enabled": true
+    },
+    {
+      "description": "Host your Meowcoin 2.0 Testnet Full Node on the Flux Cloud",
+      "price": 10.8,
+      "category": "Blockchain",
+      "version": 7,
+      "name": "MeowcoinTestnetNode",
+      "instances": 3,
+      "compose": [
+        {
+          "name": "meowcointestnetnode",
+          "description": "The Meowcoin Node Container",
+          "repotag": "zachprice105/meowcointestnet:latest",
+          "containerPorts": [
+            4569
+          ],
+          "domains": [
+            "",""
+          ],
+          "environmentParameters": [],
+          "commands": [],
+          "containerData": "/root",
+          "tiered": false,
+          "cpu": 2.0,
+          "ram": 6000,
+          "hdd": 60,
+          "cpubasic": 2.0,
+          "cpusuper": 2.0,
+          "cpubamf": 2.0,
+          "rambasic": 6000,
+          "ramsuper": 6000,
+          "rambamf": 6000,
+          "hddbasic": 60,
+          "hddsuper": 60,
+          "hddbamf": 60,
+          "ports": [4569],
           "userEnvironmentParameters": []
         }
       ],
