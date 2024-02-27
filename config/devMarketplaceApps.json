@@ -3094,6 +3094,11 @@
       "version": 7,
       "name": "MeowcoinTestnetNode",
       "instances": 3,
+      "contacts": [],
+      "geolocation": [],
+      "staticip": false,
+      "nodes": [],
+      "expire": 22000,
       "compose": [
         {
           "name": "meowcointestnetnode",
