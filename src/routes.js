@@ -62,7 +62,7 @@ module.exports = (app) => {
     fluxService.getMultiplier(req, res);
   });
 
-  app.get('/apps/getappspecsusdprice', cache('10 minute'), (req, res) => {
+  app.get('/apps/getappspecsusdprice', cache('10 minutes'), (req, res) => {
     fluxService.getAppSpecsUSDPrice(req, res);
   });
 
