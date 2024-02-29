@@ -66,10 +66,6 @@ module.exports = (app) => {
     fluxService.getAppSpecsUSDPrice(req, res);
   });
 
-  app.get('/apps/getfluxpricediscount', cache('1 minute'), (req, res) => {
-    fluxService.getFluxPriceDiscount(req, res);
-  });
-
   app.get('/hashes', cache('1 minute'), (req, res) => {
     res.sendFile(path.join(__dirname, './fluxHashes'));
   });

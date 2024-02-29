@@ -1331,18 +1331,6 @@ async function getAppSpecsUSDPrice(req, res) {
   }
 }
 
-async function getFluxPriceDiscount(req, res) {
-  try {
-    const multiplier = 0.9;
-    const resMessage = serviceHelper.createDataMessage(multiplier);
-    res.json(resMessage);
-  } catch (error) {
-    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
-    res.json(errMessage);
-    log.error(error);
-  }
-}
-
 async function start() {
   try {
     db = await serviceHelper.connectMongoDb().catch((error) => {
@@ -1389,5 +1377,4 @@ module.exports = {
   getLastRound,
   getMultiplier,
   getAppSpecsUSDPrice,
-  getFluxPriceDiscount,
 };
