@@ -1,0 +1,9 @@
+{
+    "cpu": 0.15,
+    "ram": 0.05,
+    "hdd": 0.02,
+    "minPrice": 0.01,
+    "port": 2,
+    "scope": 6,
+    "staticip": 3
+}

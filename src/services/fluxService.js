@@ -1319,6 +1319,30 @@ async function getMultiplier(req, res) {
   }
 }
 
+async function getAppSpecsUSDPrice(req, res) {
+  try {
+    const appsSpecsUSDPrices = await axios.get('https://raw.githubusercontent.com/RunOnFlux/fluxapi/master/config/appsSpecsUSDPrices.json');
+    const resMessage = serviceHelper.createDataMessage(appsSpecsUSDPrices.data);
+    res.json(resMessage);
+  } catch (error) {
+    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+    res.json(errMessage);
+    log.error(error);
+  }
+}
+
+async function getFluxPriceDiscount(req, res) {
+  try {
+    const multiplier = 0.9;
+    const resMessage = serviceHelper.createDataMessage(multiplier);
+    res.json(resMessage);
+  } catch (error) {
+    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+    res.json(errMessage);
+    log.error(error);
+  }
+}
+
 async function start() {
   try {
     db = await serviceHelper.connectMongoDb().catch((error) => {
@@ -1364,4 +1388,6 @@ module.exports = {
   processFluxNodes,
   getLastRound,
   getMultiplier,
+  getAppSpecsUSDPrice,
+  getFluxPriceDiscount,
 };
