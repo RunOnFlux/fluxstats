@@ -1321,7 +1321,7 @@ async function getMultiplier(req, res) {
 
 async function getAppSpecsUSDPrice(req, res) {
   try {
-    const appsSpecsUSDPrices = await axios.get('https://raw.githubusercontent.com/RunOnFlux/fluxapi/master/config/appsSpecsUSDPrices.json');
+    const appsSpecsUSDPrices = await axios.get('https://raw.githubusercontent.com/RunOnFlux/fluxstats/master/config/appSpecsUSDPrices.json');
     const resMessage = serviceHelper.createDataMessage(appsSpecsUSDPrices.data);
     res.json(resMessage);
   } catch (error) {
