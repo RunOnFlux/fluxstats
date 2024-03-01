@@ -7,5 +7,6 @@
     "port": 2,
     "scope": 6,
     "staticip": 3,
-    "fluxmultiplier": 0.9
+    "fluxmultiplier": 0.9,
+    "multiplier": 1.5
 }
