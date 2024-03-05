@@ -4237,7 +4237,7 @@
       {
         "name": "streamrnode",
         "description": "The Streamr 1.0 Testnet container",
-        "repotag": "streamr/broker-node:testnet-three",
+        "repotag": "streamr/node:v100.0.0-rc.1",
         "containerPorts": [
           32200
         ],
@@ -4246,7 +4246,7 @@
         ],
         "environmentParameters": [],
         "commands": [],
-        "containerData": "/home/streamr/.streamr",
+        "containerData": "/tmp",
         "tiered": false,
         "cpu": 3,
         "ram": 4000,
@@ -4290,7 +4290,7 @@
       {
         "name": "streamrnode",
         "description": "The Streamr 1.0 Testnet container",
-        "repotag": "streamr/broker-node:testnet-three",
+        "repotag": "streamr/node:v100.0.0-rc.1",
         "containerPorts": [
           32200
         ],
@@ -4299,7 +4299,7 @@
         ],
         "environmentParameters": [],
         "commands": [],
-        "containerData": "/home/streamr/.streamr",
+        "containerData": "/tmp",
         "tiered": false,
         "cpu": 3,
         "ram": 4000,
@@ -4343,7 +4343,7 @@
       {
         "name": "streamrnode",
         "description": "The Streamr 1.0 Testnet container",
-        "repotag": "streamr/broker-node:testnet-three",
+        "repotag": "streamr/node:v100.0.0-rc.1",
         "containerPorts": [
           32200
         ],
@@ -4352,7 +4352,7 @@
         ],
         "environmentParameters": [],
         "commands": [],
-        "containerData": "/home/streamr/.streamr",
+        "containerData": "/tmp",
         "tiered": false,
         "cpu": 3,
         "ram": 4000,
@@ -4396,7 +4396,7 @@
       {
         "name": "streamrnode",
         "description": "The Streamr 1.0 Testnet container",
-        "repotag": "streamr/broker-node:testnet-three",
+        "repotag": "streamr/node:v100.0.0-rc.1",
         "containerPorts": [
           32200
         ],
@@ -4405,7 +4405,7 @@
         ],
         "environmentParameters": [],
         "commands": [],
-        "containerData": "/home/streamr/.streamr",
+        "containerData": "/tmp",
         "tiered": false,
         "cpu": 3,
         "ram": 4000,
