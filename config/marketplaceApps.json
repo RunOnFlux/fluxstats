@@ -3154,6 +3154,11 @@
       "version": 7,
       "name": "MeowcoinTestnetNode",
       "instances": 3,
+      "contacts": [],
+      "geolocation": [],
+      "staticip": false,
+      "nodes": [],
+      "expire": 22000,
       "compose": [
         {
           "name": "meowcointestnetnode",
@@ -3163,7 +3168,7 @@
             4569
           ],
           "domains": [
-            "",""
+            ""
           ],
           "environmentParameters": [],
           "commands": [],
@@ -3185,9 +3190,9 @@
           "userEnvironmentParameters": []
         }
       ],
-      "visible": false,
-      "enabled": false
-    },
+      "visible": true,
+      "enabled": true
+  },
   {
     "description": "Host your Wanchain RPC Node on the Flux Cloud",
     "price": 21.0,
