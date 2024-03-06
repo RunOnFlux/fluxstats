@@ -2,6 +2,7 @@
   {
     "description": "A simple hello world app with parameterized content",
     "price": 0.33,
+    "priceUSD": 0.35,
     "multiplier": 10,
     "category": "Hosting",
     "version": 4,
