@@ -8,6 +8,6 @@
     "scope": 6,
     "staticip": 3,
     "fluxmultiplier": 0.9,
-    "multiplier": 1.5,
-    "minUSDPrice": 0.65
+    "multiplier": 1,
+    "minUSDPrice": 0.50
 }
