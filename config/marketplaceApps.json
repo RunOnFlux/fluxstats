@@ -4238,7 +4238,7 @@
       {
         "name": "streamrnode",
         "description": "The Streamr 1.0 Testnet container",
-        "repotag": "streamr/node:v100.0.0-rc.1",
+        "repotag": "streamr/node:latest",
         "containerPorts": [
           32200
         ],
@@ -4291,7 +4291,7 @@
       {
         "name": "streamrnode",
         "description": "The Streamr 1.0 Testnet container",
-        "repotag": "streamr/node:v100.0.0-rc.1",
+        "repotag": "streamr/node:latest",
         "containerPorts": [
           32200
         ],
@@ -4344,7 +4344,7 @@
       {
         "name": "streamrnode",
         "description": "The Streamr 1.0 Testnet container",
-        "repotag": "streamr/node:v100.0.0-rc.1",
+        "repotag": "streamr/node:latest",
         "containerPorts": [
           32200
         ],
@@ -4397,7 +4397,7 @@
       {
         "name": "streamrnode",
         "description": "The Streamr 1.0 Testnet container",
-        "repotag": "streamr/node:v100.0.0-rc.1",
+        "repotag": "streamr/node:latest",
         "containerPorts": [
           32200
         ],
