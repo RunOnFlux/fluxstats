@@ -5,9 +5,9 @@
     "hdd": 0.02,
     "minPrice": 0.01,
     "port": 2,
-    "scope": 6,
-    "staticip": 3,
+    "scope": 4,
+    "staticip": 2,
     "fluxmultiplier": 0.9,
-    "multiplier": 1.5,
+    "multiplier": 1,
     "minUSDPrice": 0.50
 }
