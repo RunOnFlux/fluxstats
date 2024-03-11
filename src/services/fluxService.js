@@ -1309,7 +1309,7 @@ async function fluxNodesHistoryStats(req, res, i = 0) {
 
 async function getMultiplier(req, res) {
   try {
-    const multiplier = 1;
+    const multiplier = 1.3;
     const resMessage = serviceHelper.createDataMessage(multiplier);
     res.json(resMessage);
   } catch (error) {
