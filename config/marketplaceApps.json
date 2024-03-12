@@ -1,9 +1,7 @@
 [
   {
     "description": "A simple hello world app with parameterized content",
-    "price": 0.33,
-    "priceUSD": 0.79,
-    "multiplier": 10,
+    "priceUSD": 0.50,
     "category": "Hosting",
     "version": 4,
     "name": "HelloWorldParams",
@@ -23,15 +21,6 @@
         "cpu": 0.1,
         "ram": 100,
         "hdd": 1,
-        "cpubasic": 0.1,
-        "cpusuper": 0.1,
-        "cpubamf": 0.1,
-        "rambasic": 100,
-        "ramsuper": 100,
-        "rambamf": 100,
-        "hddbasic": 1,
-        "hddsuper": 1,
-        "hddbamf": 1,
         "ports": [37185],
         "userEnvironmentParameters": [
           {
@@ -52,7 +41,8 @@
   },
   {
     "description": "PoUW at Flux layer 2 network. Folding@home is a project focused on disease research. Client Visit was disabled, to check Run On Flux team stats go to https://stats.foldingathome.org/team/262156",
-    "price": 2.87,
+    "priceUSD": 2.99,
+    "multiplier": 1.56,
     "category": "Productivity",
     "version": 4,
     "name": "FoldingAtFluxCloud",
@@ -71,15 +61,6 @@
         "cpu": 1.0,
         "ram": 700,
         "hdd": 3,
-        "cpubasic": 1.0,
-        "cpusuper": 1.0,
-        "cpubamf": 1.0,
-        "rambasic": 700,
-        "ramsuper": 700,
-        "rambamf": 700,
-        "hddbasic": 3,
-        "hddsuper": 3,
-        "hddbamf": 3,
         "ports": [35555],
         "userEnvironmentParameters": [
           {
@@ -95,8 +76,8 @@
   },
   {
     "description": "The Timpi Collector Node hosted via the Flux Cloud",
-    "price": 2.5,
-    "multiplier": 1.13,
+    "priceUSD": 2.49,
+    "multiplier": 1.12,
     "category": "Blockchain",
     "version": 4,
     "name": "TimpiCollector",
@@ -115,15 +96,6 @@
         "cpu": 1.0,
         "ram": 1000,
         "hdd": 10,
-        "cpubasic": 1.0,
-        "cpusuper": 1.0,
-        "cpubamf": 1.0,
-        "rambasic": 1000,
-        "ramsuper": 1000,
-        "rambamf": 1000,
-        "hddbasic": 10,
-        "hddsuper": 10,
-        "hddbamf": 10,
         "ports": [37566],
         "userEnvironmentParameters": [
           {
@@ -139,8 +111,8 @@
   },
   {
     "description": "Host your Presearch Node Legacy on the Flux Cloud for a 1-month plan. PresearchNodeLegacy on Flux Network works with 'GrandFather' Nodes but with auto staking limitations when Nodes disconnect",
-    "price": 9.99,
-    "multiplier": 15.59,
+    "priceUSD": 4.99,
+    "multiplier": 7.79,
     "category": "Blockchain",
     "version": 7,
     "name": "PresearchNodeLegacy",
@@ -151,147 +123,6 @@
     "staticip": false,
     "nodes": [],
     "expire": 22000,
-    "compose": [
-      {
-        "name": "node",
-        "description": "The Presearch node container",
-        "repotag": "presearch/node:latest",
-        "containerPorts": [38253],
-        "domains": [""],
-        "environmentParameters": [
-          "STAKE=disconnected:oldest,wallet:minimum",
-          "ALLOW_DISCONNECTED_STAKE_TRANSFER_AFTER=30m",
-          "TAGS=flux"
-        ],
-        "commands": [],
-        "containerData": "/app/node",
-        "tiered": false,
-        "cpu": 0.3,
-        "ram": 300,
-        "hdd": 2,
-        "ports": [39000],
-        "userEnvironmentParameters": [
-          {
-            "name": "REGISTRATION_CODE",
-            "description": "Your node registration code",
-            "placeholder": "Enter your code here"
-          }
-        ],
-        "secrets": "",
-        "repoauth": ""
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
-    "description": "Host your Presearch Node Legacy on the Flux Cloud for a 3-month plan. PresearchNodeLegacy on Flux Network works with 'GrandFather' Nodes but with auto staking limitations when Nodes disconnect",
-    "price": 27.87,
-    "multiplier": 15.59,
-    "category": "Blockchain",
-    "version": 7,
-    "name": "PresearchNodeLegacy",
-    "instances": 3,
-    "lockedValues": ["instances"],
-    "contacts": [],
-    "geolocation": [],
-    "staticip": false,
-    "nodes": [],
-    "expire": 66000,
-    "compose": [
-      {
-        "name": "node",
-        "description": "The Presearch node container",
-        "repotag": "presearch/node:latest",
-        "containerPorts": [38253],
-        "domains": [""],
-        "environmentParameters": [
-          "STAKE=disconnected:oldest,wallet:minimum",
-          "ALLOW_DISCONNECTED_STAKE_TRANSFER_AFTER=30m",
-          "TAGS=flux"
-        ],
-        "commands": [],
-        "containerData": "/app/node",
-        "tiered": false,
-        "cpu": 0.3,
-        "ram": 300,
-        "hdd": 2,
-        "ports": [39000],
-        "userEnvironmentParameters": [
-          {
-            "name": "REGISTRATION_CODE",
-            "description": "Your node registration code",
-            "placeholder": "Enter your code here"
-          }
-        ],
-        "secrets": "",
-        "repoauth": ""
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
-    "description": "Host your Presearch Node Legacy on the Flux Cloud for a 6-month plan. PresearchNodeLegacy on Flux Network works with 'GrandFather' Nodes but with auto staking limitations when Nodes disconnect",
-    "price": 50.95,
-    "multiplier": 15.59,
-    "category": "Blockchain",
-    "version": 7,
-    "name": "PresearchNodeLegacy",
-    "instances": 3,
-    "lockedValues": ["instances"],
-    "contacts": [],
-    "geolocation": [],
-    "staticip": false,
-    "nodes": [],
-    "expire": 132000,
-    "compose": [
-      {
-        "name": "node",
-        "description": "The Presearch node container",
-        "repotag": "presearch/node:latest",
-        "containerPorts": [38253],
-        "domains": [""],
-        "environmentParameters": [
-          "STAKE=disconnected:oldest,wallet:minimum",
-          "ALLOW_DISCONNECTED_STAKE_TRANSFER_AFTER=30m",
-          "TAGS=flux"
-        ],
-        "commands": [],
-        "containerData": "/app/node",
-        "tiered": false,
-        "cpu": 0.3,
-        "ram": 300,
-        "hdd": 2,
-        "ports": [39000],
-        "userEnvironmentParameters": [
-          {
-            "name": "REGISTRATION_CODE",
-            "description": "Your node registration code",
-            "placeholder": "Enter your code here"
-          }
-        ],
-        "secrets": "",
-        "repoauth": ""
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
-    "description": "Host your Presearch Node Legacy on the Flux Cloud for a 12-month plan. PresearchNodeLegacy on Flux Network works with 'GrandFather' Nodes but with auto staking limitations when Nodes disconnect",
-    "price": 83.92,
-    "multiplier": 15.59,
-    "category": "Blockchain",
-    "version": 7,
-    "name": "PresearchNodeLegacy",
-    "instances": 3,
-    "lockedValues": ["instances"],
-    "contacts": [],
-    "geolocation": [],
-    "staticip": false,
-    "nodes": [],
-    "expire": 264000,
     "compose": [
       {
         "name": "node",
@@ -327,8 +158,8 @@
   },
   {
     "description": "Host your Presearch Node on the Flux Cloud for a 1-month plan. PresearchNode on Flux Network uses FluxStorage to build Private Keys and works without auto staking limitations when Nodes disconnect, doesn't work with 'Grandfather' nodes.",
-    "price": 9.99,
-    "multiplier": 15.59,
+    "priceUSD": 4.99,
+    "multiplier": 7.79,
     "category": "Blockchain",
     "version": 7,
     "name": "PresearchNode",
@@ -339,171 +170,6 @@
     "staticip": false,
     "nodes": [],
     "expire": 22000,
-    "compose": [
-      {
-        "name": "node",
-        "description": "The Presearch node container",
-        "repotag": "presearch/node:latest",
-        "containerPorts": [38253],
-        "domains": [""],
-        "environmentParameters": [
-          "STAKE=disconnected:oldest#flux,wallet:minimum",
-          "ALLOW_DISCONNECTED_STAKE_TRANSFER_AFTER=30m",
-          "TAGS=flux",
-          "URL=https://home.runonflux.io",
-          "F_S_ENV=https://storage.runonflux.io/v2/env/presearch"
-        ],
-        "commands": [],
-        "containerData": "/app/node",
-        "tiered": false,
-        "cpu": 0.3,
-        "ram": 300,
-        "hdd": 2,
-        "ports": [39000],
-        "userEnvironmentParameters": [
-          {
-            "name": "REGISTRATION_CODE",
-            "description": "Your node registration code",
-            "placeholder": "Enter your code here"
-          },
-          {
-            "name": "DESCRIPTION",
-            "description": "Optional description for your node",
-            "value": "",
-            "placeholder": "Enter your node description"
-          }
-        ],
-        "secrets": "",
-        "repoauth": ""
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
-    "description": "Host your Presearch Node on the Flux Cloud for a 3-month plan. PresearchNode on Flux Network uses FluxStorage to build Private Keys and works without auto staking limitations when Nodes disconnect, doesn't work with 'Grandfather' nodes.",
-    "price": 27.87,
-    "multiplier": 15.59,
-    "category": "Blockchain",
-    "version": 7,
-    "name": "PresearchNode",
-    "instances": 3,
-    "lockedValues": ["instances"],
-    "contacts": [],
-    "geolocation": [],
-    "staticip": false,
-    "nodes": [],
-    "expire": 66000,
-    "compose": [
-      {
-        "name": "node",
-        "description": "The Presearch node container",
-        "repotag": "presearch/node:latest",
-        "containerPorts": [38253],
-        "domains": [""],
-        "environmentParameters": [
-          "STAKE=disconnected:oldest#flux,wallet:minimum",
-          "ALLOW_DISCONNECTED_STAKE_TRANSFER_AFTER=30m",
-          "TAGS=flux",
-          "URL=https://home.runonflux.io",
-          "F_S_ENV=https://storage.runonflux.io/v2/env/presearch"
-        ],
-        "commands": [],
-        "containerData": "/app/node",
-        "tiered": false,
-        "cpu": 0.3,
-        "ram": 300,
-        "hdd": 2,
-        "ports": [39000],
-        "userEnvironmentParameters": [
-          {
-            "name": "REGISTRATION_CODE",
-            "description": "Your node registration code",
-            "placeholder": "Enter your code here"
-          },
-          {
-            "name": "DESCRIPTION",
-            "description": "Optional description for your node",
-            "value": "",
-            "placeholder": "Enter your node description"
-          }
-        ],
-        "secrets": "",
-        "repoauth": ""
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
-    "description": "Host your Presearch Node on the Flux Cloud for a 6-month plan. PresearchNode on Flux Network uses FluxStorage to build Private Keys and works without auto staking limitations when Nodes disconnect, doesn't work with 'Grandfather' nodes.",
-    "price": 50.95,
-    "multiplier": 15.59,
-    "category": "Blockchain",
-    "version": 7,
-    "name": "PresearchNode",
-    "instances": 3,
-    "lockedValues": ["instances"],
-    "contacts": [],
-    "geolocation": [],
-    "staticip": false,
-    "nodes": [],
-    "expire": 132000,
-    "compose": [
-      {
-        "name": "node",
-        "description": "The Presearch node container",
-        "repotag": "presearch/node:latest",
-        "containerPorts": [38253],
-        "domains": [""],
-        "environmentParameters": [
-          "STAKE=disconnected:oldest#flux,wallet:minimum",
-          "ALLOW_DISCONNECTED_STAKE_TRANSFER_AFTER=30m",
-          "TAGS=flux",
-          "URL=https://home.runonflux.io",
-          "F_S_ENV=https://storage.runonflux.io/v2/env/presearch"
-        ],
-        "commands": [],
-        "containerData": "/app/node",
-        "tiered": false,
-        "cpu": 0.3,
-        "ram": 300,
-        "hdd": 2,
-        "ports": [39000],
-        "userEnvironmentParameters": [
-          {
-            "name": "REGISTRATION_CODE",
-            "description": "Your node registration code",
-            "placeholder": "Enter your code here"
-          },
-          {
-            "name": "DESCRIPTION",
-            "description": "Optional description for your node",
-            "value": "",
-            "placeholder": "Enter your node description"
-          }
-        ],
-        "secrets": "",
-        "repoauth": ""
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
-    "description": "Host your Presearch Node on the Flux Cloud for a 12-month plan. PresearchNode on Flux Network uses FluxStorage to build Private Keys and works without auto staking limitations when Nodes disconnect, doesn't work with 'Grandfather' nodes.",
-    "price": 83.92,
-    "multiplier": 15.59,
-    "category": "Blockchain",
-    "version": 7,
-    "name": "PresearchNode",
-    "instances": 3,
-    "lockedValues": ["instances"],
-    "contacts": [],
-    "geolocation": [],
-    "staticip": false,
-    "nodes": [],
-    "expire": 264000,
     "compose": [
       {
         "name": "node",
@@ -547,7 +213,7 @@
   },
   {
     "description": "An IronFish Full Node",
-    "price": 16.5,
+    "priceUSD": 11,
     "multiplier": 1,
     "category": "Blockchain",
     "version": 4,
@@ -567,15 +233,6 @@
         "cpu": 4.0,
         "ram": 8000,
         "hdd": 50,
-        "cpubasic": 4.0,
-        "cpusuper": 4.0,
-        "cpubamf": 4.0,
-        "rambasic": 8000,
-        "ramsuper": 8000,
-        "rambamf": 8000,
-        "hddbasic": 50,
-        "hddsuper": 50,
-        "hddbamf": 50,
         "ports": [39010],
         "userEnvironmentParameters": []
       }
@@ -585,8 +242,8 @@
   },
   {
     "description": "Host your(s) Firo Masternode(s) on the Flux Cloud for a 1-month plan",
-    "price": 8.61,
-    "multiplier": 1,
+    "priceUSD": 8.99,
+    "multiplier": 1.89,
     "category": "Masternode",
     "version": 7,
     "name": "FiroMN",
@@ -619,114 +276,9 @@
     "enabled": true
   },
   {
-    "description": "Host your(s) Firo Masternode(s) on the Flux Cloud for a 3-month plan",
-    "price": 24.02,
-    "multiplier": 1,
-    "category": "Masternode",
-    "version": 7,
-    "name": "FiroMN",
-    "instances": 3,
-    "contacts": [],
-    "geolocation": [],
-    "staticip": true,
-    "nodes": [],
-    "expire": 66000,
-    "compose": [
-      {
-        "name": "node",
-        "description": "The Firo Node container",
-        "repotag": "runonflux/fironode:latest",
-        "containerPorts": [8168],
-        "domains": [""],
-        "environmentParameters": [],
-        "commands": [],
-        "containerData": "/root/.firo",
-        "tiered": false,
-        "cpu": 1,
-        "ram": 2000,
-        "hdd": 12,
-        "ports": [8168],
-        "secrets": "",
-        "repoauth": ""
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
-    "description": "Host your(s) Firo Masternode(s) on the Flux Cloud for a 6-month plan",
-    "price": 43.91,
-    "multiplier": 1,
-    "category": "Masternode",
-    "version": 7,
-    "name": "FiroMN",
-    "instances": 3,
-    "contacts": [],
-    "geolocation": [],
-    "staticip": true,
-    "nodes": [],
-    "expire": 132000,
-    "compose": [
-      {
-        "name": "node",
-        "description": "The Firo Node container",
-        "repotag": "runonflux/fironode:latest",
-        "containerPorts": [8168],
-        "domains": [""],
-        "environmentParameters": [],
-        "commands": [],
-        "containerData": "/root/.firo",
-        "tiered": false,
-        "cpu": 1,
-        "ram": 2000,
-        "hdd": 12,
-        "ports": [8168],
-        "secrets": "",
-        "repoauth": ""
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
-    "description": "Host your(s) Firo Masternode(s) on the Flux Cloud for a 12-month plan",
-    "price": 72.32,
-    "multiplier": 1,
-    "category": "Masternode",
-    "version": 7,
-    "name": "FiroMN",
-    "instances": 3,
-    "contacts": [],
-    "geolocation": [],
-    "staticip": true,
-    "nodes": [],
-    "expire": 264000,
-    "compose": [
-      {
-        "name": "node",
-        "description": "The Firo Node container",
-        "repotag": "runonflux/fironode:latest",
-        "containerPorts": [8168],
-        "domains": [""],
-        "environmentParameters": [],
-        "commands": [],
-        "containerData": "/root/.firo",
-        "tiered": false,
-        "cpu": 1,
-        "ram": 2000,
-        "hdd": 12,
-        "ports": [8168],
-        "secrets": "",
-        "repoauth": ""
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
     "description": "Host your PIVX Masternode on the Flux Cloud",
-    "price": 10.0,
-    "multiplier": 1,
+    "priceUSD": 5.99,
+    "multiplier": 1.04,
     "category": "Masternode",
     "version": 7,
     "name": "PIVXMN",
@@ -767,8 +319,7 @@
   },
   {
     "description": "Host your Dash Node on the Flux Network",
-    "price": 9,
-    "multiplier": 1,
+    "priceUSD": 3.5,
     "category": "Masternode",
     "version": 4,
     "name": "DashMN",
@@ -787,15 +338,6 @@
         "cpu": 1,
         "ram": 2000,
         "hdd": 50,
-        "cpubasic": 1,
-        "cpusuper": 1,
-        "cpubamf": 1,
-        "rambasic": 2000,
-        "ramsuper": 2000,
-        "rambamf": 2000,
-        "hddbasic": 50,
-        "hddsuper": 50,
-        "hddbamf": 50,
         "ports": [37500],
         "userEnvironmentParameters": [
           {
@@ -811,8 +353,7 @@
   },
   {
     "description": "Host your Ravencoin Node on the Flux Network",
-    "price": 7.7,
-    "multiplier": 1,
+    "priceUSD": 5.99,
     "category": "Blockchain",
     "version": 4,
     "name": "RavenNode",
@@ -835,15 +376,6 @@
         "cpu": 2,
         "ram": 1500,
         "hdd": 69,
-        "cpubasic": 2,
-        "cpusuper": 2,
-        "cpubamf": 2,
-        "rambasic": 1500,
-        "ramsuper": 1500,
-        "rambamf": 1500,
-        "hddbasic": 69,
-        "hddsuper": 69,
-        "hddbamf": 69,
         "ports": [38080, 38767, 31413],
         "userEnvironmentParameters": [
           {
@@ -859,8 +391,7 @@
   },
   {
     "description": "Host your Kadena Chainweb Node on the Flux Network",
-    "price": 37.81,
-    "multiplier": 1,
+    "priceUSD": 25.99,
     "category": "Blockchain",
     "version": 4,
     "name": "ChainwebNode",
@@ -896,8 +427,8 @@
   },
   {
     "description": "Host your Neoxa Node on the Flux Network",
-    "price": 8.16,
-    "multiplier": 1,
+    "priceUSD": 5.99,
+    "multiplier": 1.1,
     "category": "Blockchain",
     "version": 4,
     "name": "NeoxaNode",
@@ -916,15 +447,6 @@
         "cpu": 2,
         "ram": 4000,
         "hdd": 22,
-        "cpubasic": 2,
-        "cpusuper": 2,
-        "cpubamf": 2,
-        "rambasic": 4000,
-        "ramsuper": 4000,
-        "rambamf": 4000,
-        "hddbasic": 22,
-        "hddsuper": 22,
-        "hddbamf": 22,
         "ports": [31000],
         "userEnvironmentParameters": []
       }
@@ -934,8 +456,7 @@
   },
   {
     "description": "Host your Kusama Node on the Flux Network",
-    "price": 3.3,
-    "multiplier": 1,
+    "priceUSD": 2.5,
     "category": "Blockchain",
     "version": 4,
     "name": "KusamaNode",
@@ -954,15 +475,6 @@
         "cpu": 0.8,
         "ram": 1800,
         "hdd": 20,
-        "cpubasic": 0.8,
-        "cpusuper": 0.8,
-        "cpubamf": 0.8,
-        "rambasic": 1800,
-        "ramsuper": 1800,
-        "rambamf": 1800,
-        "hddbasic": 20,
-        "hddsuper": 20,
-        "hddbamf": 20,
         "ports": [33204, 33205, 33206],
         "userEnvironmentParameters": []
       }
@@ -972,7 +484,7 @@
   },
   {
     "description": "Host your Deso backend Node on the Flux Network",
-    "price": 41.25,
+    "priceUSD": 27.99,
     "multiplier": 1,
     "category": "Blockchain",
     "version": 4,
@@ -992,15 +504,6 @@
         "cpu": 5.0,
         "ram": 24000,
         "hdd": 400,
-        "cpubasic": 5.0,
-        "cpusuper": 5.0,
-        "cpubamf": 5.0,
-        "rambasic": 24000,
-        "ramsuper": 24000,
-        "rambamf": 24000,
-        "hddbasic": 400,
-        "hddsuper": 400,
-        "hddbamf": 400,
         "ports": [33445, 33444],
         "userEnvironmentParameters": []
       }
@@ -1010,7 +513,7 @@
   },
   {
     "description": "Host your Dogecoin Full Node on the Flux Network",
-    "price": 7.5,
+    "priceUSD": 5,
     "multiplier": 1,
     "category": "Blockchain",
     "version": 4,
@@ -1035,15 +538,6 @@
         "cpu": 1.0,
         "ram": 3000,
         "hdd": 100,
-        "cpubasic": 1.0,
-        "cpusuper": 1.0,
-        "cpubamf": 1.0,
-        "rambasic": 3000,
-        "ramsuper": 3000,
-        "rambamf": 3000,
-        "hddbasic": 100,
-        "hddsuper": 100,
-        "hddbamf": 100,
         "ports": [34203],
         "userEnvironmentParameters": []
       }
@@ -1053,7 +547,7 @@
   },
   {
     "description": "Host your Sushiswap Frontend on the Flux Cloud",
-    "price": 3.16,
+    "priceUSD": 2.10,
     "multiplier": 1,
     "category": "Front-end",
     "version": 4,
@@ -1072,16 +566,7 @@
         "tiered": false,
         "cpu": 1.0,
         "ram": 1000,
-        "hdd": 5.0,
-        "cpubasic": 1.0,
-        "cpusuper": 1.0,
-        "cpubamf": 1.0,
-        "rambasic": 1000,
-        "ramsuper": 1000,
-        "rambamf": 1000,
-        "hddbasic": 5.0,
-        "hddsuper": 5.0,
-        "hddbamf": 5.0,
+        "hdd": 5,
         "ports": [35000],
         "userEnvironmentParameters": []
       }
@@ -1091,7 +576,7 @@
   },
   {
     "description": "Host your Yearn Finance Frontend on the Flux Cloud",
-    "price": 3.16,
+    "priceUSD": 2.10,
     "multiplier": 1,
     "category": "Front-end",
     "version": 4,
@@ -1110,16 +595,7 @@
         "tiered": false,
         "cpu": 1.0,
         "ram": 1000,
-        "hdd": 5.0,
-        "cpubasic": 1.0,
-        "cpusuper": 1.0,
-        "cpubamf": 1.0,
-        "rambasic": 1000,
-        "ramsuper": 1000,
-        "rambamf": 1000,
-        "hddbasic": 5.0,
-        "hddsuper": 5.0,
-        "hddbamf": 5.0,
+        "hdd": 5,
         "ports": [35001],
         "userEnvironmentParameters": []
       }
@@ -1129,7 +605,7 @@
   },
   {
     "description": "Host your GMX.io Frontend on the Flux Cloud",
-    "price": 3.16,
+    "priceUSD": 2.10,
     "multiplier": 1,
     "category": "Front-end",
     "version": 4,
@@ -1148,16 +624,7 @@
         "tiered": false,
         "cpu": 1.0,
         "ram": 1000,
-        "hdd": 5.0,
-        "cpubasic": 1.0,
-        "cpusuper": 1.0,
-        "cpubamf": 1.0,
-        "rambasic": 1000,
-        "ramsuper": 1000,
-        "rambamf": 1000,
-        "hddbasic": 5.0,
-        "hddsuper": 5.0,
-        "hddbamf": 5.0,
+        "hdd": 5,
         "ports": [35002],
         "userEnvironmentParameters": []
       }
@@ -1167,7 +634,7 @@
   },
   {
     "description": "Host your Dopex.io Frontend on the Flux Cloud",
-    "price": 3.16,
+    "priceUSD": 2.10,
     "multiplier": 1,
     "category": "Front-end",
     "version": 4,
@@ -1186,16 +653,7 @@
         "tiered": false,
         "cpu": 1.0,
         "ram": 1000,
-        "hdd": 5.0,
-        "cpubasic": 1.0,
-        "cpusuper": 1.0,
-        "cpubamf": 1.0,
-        "rambasic": 1000,
-        "ramsuper": 1000,
-        "rambamf": 1000,
-        "hddbasic": 5.0,
-        "hddsuper": 5.0,
-        "hddbamf": 5.0,
+        "hdd": 5,
         "ports": [35003],
         "userEnvironmentParameters": []
       }
@@ -1205,7 +663,7 @@
   },
   {
     "description": "Host your Pangolin Frontend on the Flux Cloud",
-    "price": 3.16,
+    "priceUSD": 2.10,
     "multiplier": 1,
     "category": "Front-end",
     "version": 4,
@@ -1224,16 +682,7 @@
         "tiered": false,
         "cpu": 1.0,
         "ram": 1000,
-        "hdd": 5.0,
-        "cpubasic": 1.0,
-        "cpusuper": 1.0,
-        "cpubamf": 1.0,
-        "rambasic": 1000,
-        "ramsuper": 1000,
-        "rambamf": 1000,
-        "hddbasic": 5.0,
-        "hddsuper": 5.0,
-        "hddbamf": 5.0,
+        "hdd": 5,
         "ports": [35003],
         "userEnvironmentParameters": []
       }
@@ -1243,7 +692,7 @@
   },
   {
     "description": "Host your Liquity Frontend on the Flux Cloud",
-    "price": 3.16,
+    "priceUSD": 2.10,
     "multiplier": 1,
     "category": "Front-end",
     "version": 4,
@@ -1262,16 +711,7 @@
         "tiered": false,
         "cpu": 1.0,
         "ram": 1000,
-        "hdd": 5.0,
-        "cpubasic": 1.0,
-        "cpusuper": 1.0,
-        "cpubamf": 1.0,
-        "rambasic": 1000,
-        "ramsuper": 1000,
-        "rambamf": 1000,
-        "hddbasic": 5.0,
-        "hddsuper": 5.0,
-        "hddbamf": 5.0,
+        "hdd": 5,
         "ports": [35004],
         "userEnvironmentParameters": []
       }
@@ -1281,7 +721,7 @@
   },
   {
     "description": "Host your Balancer Finance Frontend on the Flux Cloud",
-    "price": 3.16,
+    "priceUSD": 2.10,
     "multiplier": 1,
     "category": "Front-end",
     "version": 4,
@@ -1296,20 +736,11 @@
         "domains": [""],
         "environmentParameters": [],
         "commands": ["/bin/sh", "/docker-init.sh"],
-        "containerData": "/app",
+        "containerData": "r:/app",
         "tiered": false,
         "cpu": 1.0,
         "ram": 1000,
-        "hdd": 5.0,
-        "cpubasic": 1.0,
-        "cpusuper": 1.0,
-        "cpubamf": 1.0,
-        "rambasic": 1000,
-        "ramsuper": 1000,
-        "rambamf": 1000,
-        "hddbasic": 5.0,
-        "hddsuper": 5.0,
-        "hddbamf": 5.0,
+        "hdd": 5,
         "ports": [35005],
         "userEnvironmentParameters": [
           {
@@ -1335,7 +766,7 @@
   },
   {
     "description": "Host your Osmosis Frontend on the Flux Cloud",
-    "price": 3.16,
+    "priceUSD": 2.10,
     "multiplier": 1,
     "category": "Front-end",
     "version": 4,
@@ -1354,16 +785,7 @@
         "tiered": false,
         "cpu": 1.0,
         "ram": 1000,
-        "hdd": 5.0,
-        "cpubasic": 1.0,
-        "cpusuper": 1.0,
-        "cpubamf": 1.0,
-        "rambasic": 1000,
-        "ramsuper": 1000,
-        "rambamf": 1000,
-        "hddbasic": 5.0,
-        "hddsuper": 5.0,
-        "hddbamf": 5.0,
+        "hdd": 5,
         "ports": [35006],
         "userEnvironmentParameters": []
       }
@@ -1373,8 +795,8 @@
   },
   {
     "description": "Host your Alephium Full Node on the Flux Cloud",
-    "price": 5.78,
-    "multiplier": 1,
+    "priceUSD": 5.99,
+    "multiplier": 1.55,
     "category": "Blockchain",
     "version": 4,
     "name": "AlephiumNode",
@@ -1393,16 +815,6 @@
         "cpu": 0.5,
         "ram": 1000,
         "hdd": 130,
-        "cpubasic": 0.5,
-        "cpusuper": 0.5,
-        "cpubamf": 0.5,
-        "rambasic": 1000,
-        "ramsuper": 1000,
-        "rambamf": 1000,
-        "hddbasic": 130,
-        "hddsuper": 130,
-        "hddbamf": 130,
-
         "ports": [39973],
         "userEnvironmentParameters": []
       }
@@ -1412,7 +824,8 @@
   },
   {
     "description": "Host your Blockbook for Ethereum Classic on the Flux Cloud",
-    "price": 12.61,
+    "priceUSD": 8.40,
+    "multiplier": 1,
     "category": "Blockbook",
     "version": 4,
     "name": "BlockbookETC",
@@ -1435,16 +848,7 @@
         "tiered": false,
         "cpu": 2.0,
         "ram": 8000,
-        "hdd": 70.0,
-        "cpubasic": 2.0,
-        "cpusuper": 2.0,
-        "cpubamf": 2.0,
-        "rambasic": 8000,
-        "ramsuper": 8000,
-        "rambamf": 8000,
-        "hddbasic": 70,
-        "hddsuper": 70,
-        "hddbamf": 70,
+        "hdd": 70,
         "ports": [34142],
         "userEnvironmentParameters": []
       }
@@ -1454,7 +858,8 @@
   },
   {
     "description": "Host your Blockbook for Flux on the Flux Cloud",
-    "price": 14.55,
+    "priceUSD": 9.99,
+    "multiplier": 1,
     "category": "Blockbook",
     "version": 4,
     "name": "BlockbookFLUX",
@@ -1479,16 +884,7 @@
         "tiered": false,
         "cpu": 3.0,
         "ram": 8000,
-        "hdd": 60.0,
-        "cpubasic": 3.0,
-        "cpusuper": 3.0,
-        "cpubamf": 3.0,
-        "rambasic": 8000,
-        "ramsuper": 8000,
-        "rambamf": 8000,
-        "hddbasic": 60,
-        "hddsuper": 60,
-        "hddbamf": 60,
+        "hdd": 60,
         "ports": [34142],
         "userEnvironmentParameters": []
       }
@@ -1498,7 +894,8 @@
   },
   {
     "description": "Host your Blockbook for Litecoin on the Flux Cloud",
-    "price": 12.23,
+    "priceUSD": 8.15,
+    "multiplier": 1,
     "category": "Blockbook",
     "version": 4,
     "name": "BlockbookLTC",
@@ -1520,16 +917,7 @@
         "tiered": false,
         "cpu": 2.5,
         "ram": 4000,
-        "hdd": 120.0,
-        "cpubasic": 2.5,
-        "cpusuper": 2.5,
-        "cpubamf": 2.5,
-        "rambasic": 4000,
-        "ramsuper": 4000,
-        "rambamf": 4000,
-        "hddbasic": 120,
-        "hddsuper": 120,
-        "hddbamf": 120,
+        "hdd": 120,
         "ports": [34139],
         "userEnvironmentParameters": []
       }
@@ -1539,7 +927,8 @@
   },
   {
     "description": "Host your Blockbook for Firo on the Flux Cloud",
-    "price": 7.2,
+    "priceUSD": 4.80,
+    "multiplier": 1,
     "category": "Blockbook",
     "version": 4,
     "name": "BlockbookFIRO",
@@ -1566,16 +955,7 @@
         "tiered": false,
         "cpu": 2.0,
         "ram": 2000,
-        "hdd": 40.0,
-        "cpubasic": 2.0,
-        "cpusuper": 2.0,
-        "cpubamf": 2.0,
-        "rambasic": 2000,
-        "ramsuper": 2000,
-        "rambamf": 2000,
-        "hddbasic": 40,
-        "hddsuper": 40,
-        "hddbamf": 40,
+        "hdd": 40,
         "ports": [34155],
         "userEnvironmentParameters": []
       }
@@ -1585,7 +965,8 @@
   },
   {
     "description": "Host your Blockbook for Groestlcoin on the Flux Cloud",
-    "price": 9.31,
+    "priceUSD": 6.20,
+    "multiplier": 1,
     "category": "Blockbook",
     "version": 4,
     "name": "BlockbookGRS",
@@ -1607,16 +988,7 @@
         "tiered": false,
         "cpu": 2.0,
         "ram": 3000,
-        "hdd": 85.0,
-        "cpubasic": 2.0,
-        "cpusuper": 2.0,
-        "cpubamf": 2.0,
-        "rambasic": 3000,
-        "ramsuper": 3000,
-        "rambamf": 3000,
-        "hddbasic": 85,
-        "hddsuper": 85,
-        "hddbamf": 85,
+        "hdd": 85,
         "ports": [34150],
         "userEnvironmentParameters": []
       }
@@ -1626,7 +998,8 @@
   },
   {
     "description": "PrivateBin is a minimalist, open source online pastebin where the server has zero knowledge of pasted data. Data is encrypted and decrypted in the browser using 256bit AES",
-    "price": 0.66,
+    "priceUSD": 0.50,
+    "multiplier": 1,
     "category": "Productivity",
     "version": 4,
     "name": "PrivateBin",
@@ -1645,25 +1018,17 @@
         "cpu": 0.2,
         "ram": 200,
         "hdd": 2.0,
-        "cpubasic": 0.2,
-        "cpusuper": 0.2,
-        "cpubamf": 0.2,
-        "rambasic": 200,
-        "ramsuper": 200,
-        "rambamf": 200,
-        "hddbasic": 2,
-        "hddsuper": 2,
-        "hddbamf": 2,
         "ports": [31791],
         "userEnvironmentParameters": []
       }
     ],
-    "visible": true,
-    "enabled": true
+    "visible": false,
+    "enabled": false
   },
   {
     "description": "Streaming and chat platform",
-    "price": 21.75,
+    "priceUSD": 14.50,
+    "multiplier": 1,
     "category": "Productivity",
     "version": 4,
     "name": "Owncast",
@@ -1677,20 +1042,11 @@
         "domains": ["", ""],
         "environmentParameters": [],
         "commands": [],
-        "containerData": "/owncast",
+        "containerData": "r:/owncast",
         "tiered": false,
         "cpu": 5.0,
         "ram": 8000,
         "hdd": 150,
-        "cpubasic": 5.0,
-        "cpusuper": 5.0,
-        "cpubamf": 5.0,
-        "rambasic": 8000,
-        "ramsuper": 8000,
-        "rambamf": 8000,
-        "hddbasic": 150,
-        "hddsuper": 150,
-        "hddbamf": 150,
         "ports": [34673, 34674],
         "userEnvironmentParameters": []
       }
@@ -1700,7 +1056,8 @@
   },
   {
     "description": "Synchronized video viewing with chat and other features",
-    "price": 4.2,
+    "priceUSD": 2.80,
+    "multiplier": 1,
     "category": "Productivity",
     "version": 4,
     "name": "SyncTube",
@@ -1714,30 +1071,22 @@
         "domains": [""],
         "environmentParameters": [],
         "commands": [],
-        "containerData": "/synctube",
+        "containerData": "r:/synctube",
         "tiered": false,
         "cpu": 1.0,
         "ram": 2000,
         "hdd": 15,
-        "cpubasic": 1.0,
-        "cpusuper": 1.0,
-        "cpubamf": 1.0,
-        "rambasic": 2000,
-        "ramsuper": 2000,
-        "rambamf": 2000,
-        "hddbasic": 15,
-        "hddsuper": 15,
-        "hddbamf": 15,
         "ports": [32944],
         "userEnvironmentParameters": []
       }
     ],
-    "visible": true,
-    "enabled": true
+    "visible": false,
+    "enabled": false
   },
   {
     "description": "Grocy is a web-based self-hosted groceries & household management solution for your home",
-    "price": 3.32,
+    "priceUSD": 2.21,
+    "multiplier": 1,
     "category": "Productivity",
     "version": 4,
     "name": "Grocy",
@@ -1751,20 +1100,11 @@
         "domains": [""],
         "environmentParameters": ["PUID=1000", "PGID=1000", "TZ=Europe/London"],
         "commands": [],
-        "containerData": "/groc",
+        "containerData": "r:/groc",
         "tiered": false,
         "cpu": 1.0,
         "ram": 1000,
         "hdd": 10,
-        "cpubasic": 1.0,
-        "cpusuper": 1.0,
-        "cpubamf": 1.0,
-        "rambasic": 1000,
-        "ramsuper": 1000,
-        "rambamf": 1000,
-        "hddbasic": 10,
-        "hddsuper": 10,
-        "hddbamf": 10,
         "ports": [36377],
         "userEnvironmentParameters": []
       }
@@ -1774,8 +1114,8 @@
   },
   {
     "description": "Host your Palworld 4 slots Game Server on Flux Cloud for a 1-month plan",
-    "price": 9.99,
-    "multiplier": 1.16,
+    "priceUSD": 7.99,
+    "multiplier": 1.39,
     "category": "Games",
     "version": 7,
     "name": "Palworld4Slots",
@@ -1816,8 +1156,8 @@
   },
   {
     "description": "Host your Palworld 8 slots Game Server on Flux Cloud for a 1-month plan",
-    "price": 14.99,
-    "multiplier": 1.39,
+    "priceUSD": 12.99,
+    "multiplier": 1.8,
     "category": "Games",
     "version": 7,
     "name": "Palworld8Slots",
@@ -1858,8 +1198,8 @@
   },
   {
   "description": "Host your Palworld 16 slots Game Server on Flux Cloud for a 1-month plan",
-  "price": 23.99,
-  "multiplier": 1.40,
+  "priceUSD": 17.99,
+  "multiplier": 1.57,
   "category": "Games",
   "version": 7,
   "name": "Palworld16Slots",
@@ -1896,8 +1236,8 @@
 },
 {
 "description": "Host your Palworld 32 slots Game Server on Flux Cloud for a 1-month plan",
-"price": 34.99,
-"multiplier": 1.39,
+"priceUSD": 24.99,
+"multiplier": 1.49,
 "category": "Games",
 "version": 7,
 "name": "Palworld32Slots",
@@ -1933,8 +1273,8 @@
 "enabled": true
 },{
   "description": "Host your Enshrouded 4 slots Game Server on Flux Cloud for a 1-month plan",
-  "price": 8.99,
-  "multiplier": 1,
+  "priceUSD": 9.99,
+  "multiplier": 1.66,
   "category": "Games",
   "version": 7,
   "name": "Enshrouded4Slots",
@@ -1974,8 +1314,8 @@
   "enabled": true
   },{
     "description": "Host your Enshrouded 8 slots Game Server on Flux Cloud for a 1-month plan",
-    "price": 12.99,
-    "multiplier": 1,
+    "priceUSD": 14.99,
+    "multiplier": 1.72,
     "category": "Games",
     "version": 7,
     "name": "Enshrouded8Slots",
@@ -2011,8 +1351,8 @@
     "enabled": true
     },{
       "description": "Host your Enshrouded 16 slots Game Server on Flux Cloud for a 1-month plan",
-      "price": 16.99,
-      "multiplier": 1,
+      "priceUSD": 19.99,
+      "multiplier": 1.76,
       "category": "Games",
       "version": 7,
       "name": "Enshrouded16Slots",
@@ -2069,25 +1409,16 @@
         "cpu": 1.0,
         "ram": 1000,
         "hdd": 10,
-        "cpubasic": 1.0,
-        "cpusuper": 1.0,
-        "cpubamf": 1.0,
-        "rambasic": 1000,
-        "ramsuper": 1000,
-        "rambamf": 1000,
-        "hddbasic": 10,
-        "hddsuper": 10,
-        "hddbamf": 10,
         "ports": [32000],
         "userEnvironmentParameters": []
       }
     ],
-    "visible": true,
+    "visible": false,
     "enabled": false
   },
   {
     "description": "Get Google search results, but without any ads, javascript, AMP links, cookies, or IP address tracking",
-    "price": 3.32,
+    "priceUSD": 2.21,
     "multiplier": 1,
     "category": "Productivity",
     "version": 4,
@@ -2107,15 +1438,6 @@
         "cpu": 1.0,
         "ram": 1000,
         "hdd": 10,
-        "cpubasic": 1.0,
-        "cpusuper": 1.0,
-        "cpubamf": 1.0,
-        "rambasic": 1000,
-        "ramsuper": 1000,
-        "rambamf": 1000,
-        "hddbasic": 10,
-        "hddsuper": 10,
-        "hddbamf": 10,
         "ports": [35420],
         "userEnvironmentParameters": []
       }
@@ -2158,7 +1480,7 @@
         "userEnvironmentParameters": []
       }
     ],
-    "visible": true,
+    "visible": false,
     "enabled": false
   },
   {
@@ -2182,20 +1504,11 @@
         "cpu": 1.0,
         "ram": 1000,
         "hdd": 10,
-        "cpubasic": 1.0,
-        "cpusuper": 1.0,
-        "cpubamf": 1.0,
-        "rambasic": 1000,
-        "ramsuper": 1000,
-        "rambamf": 1000,
-        "hddbasic": 10,
-        "hddsuper": 10,
-        "hddbamf": 10,
         "ports": [37481],
         "userEnvironmentParameters": []
       }
     ],
-    "visible": true,
+    "visible": false,
     "enabled": false
   },
   {
@@ -2219,20 +1532,11 @@
         "cpu": 0.2,
         "ram": 200,
         "hdd": 2,
-        "cpubasic": 0.2,
-        "cpusuper": 0.2,
-        "cpubamf": 0.2,
-        "rambasic": 200,
-        "ramsuper": 200,
-        "rambamf": 200,
-        "hddbasic": 2,
-        "hddsuper": 2,
-        "hddbamf": 2,
         "ports": [39252],
         "userEnvironmentParameters": []
       }
     ],
-    "visible": true,
+    "visible": false,
     "enabled": false
   },
   {
@@ -2256,20 +1560,11 @@
         "cpu": 0.2,
         "ram": 200,
         "hdd": 2,
-        "cpubasic": 0.2,
-        "cpusuper": 0.2,
-        "cpubamf": 0.2,
-        "rambasic": 200,
-        "ramsuper": 200,
-        "rambamf": 200,
-        "hddbasic": 2,
-        "hddsuper": 2,
-        "hddbamf": 2,
         "ports": [34260],
         "userEnvironmentParameters": []
       }
     ],
-    "visible": true,
+    "visible": false,
     "enabled": false
   },
   {
@@ -2293,21 +1588,12 @@
         "cpu": 0.2,
         "ram": 200,
         "hdd": 2,
-        "cpubasic": 0.2,
-        "cpusuper": 0.2,
-        "cpubamf": 0.2,
-        "rambasic": 200,
-        "ramsuper": 200,
-        "rambamf": 200,
-        "hddbasic": 2,
-        "hddsuper": 2,
-        "hddbamf": 2,
         "ports": [34638],
         "userEnvironmentParameters": []
       }
     ],
-    "visible": true,
-    "enabled": true
+    "visible": false,
+    "enabled": false
   },
   {
     "description": "Focalboard is an open source, self-hosted project management tool. It helps define, organize, track and manage work across individuals and teams",
@@ -2330,21 +1616,12 @@
         "cpu": 0.2,
         "ram": 200,
         "hdd": 2,
-        "cpubasic": 0.2,
-        "cpusuper": 0.2,
-        "cpubamf": 0.2,
-        "rambasic": 200,
-        "ramsuper": 200,
-        "rambamf": 200,
-        "hddbasic": 2,
-        "hddsuper": 2,
-        "hddbamf": 2,
         "ports": [31654],
         "userEnvironmentParameters": []
       }
     ],
-    "visible": true,
-    "enabled": true
+    "visible": false,
+    "enabled": false
   },
   {
     "description": "You're Santa, it's Christmas, and you have 6 billion gifts to deliver. Will you make it in time?",
@@ -2367,20 +1644,11 @@
         "cpu": 0.2,
         "ram": 200,
         "hdd": 2,
-        "cpubasic": 0.2,
-        "cpusuper": 0.2,
-        "cpubamf": 0.2,
-        "rambasic": 200,
-        "ramsuper": 200,
-        "rambamf": 200,
-        "hddbasic": 2,
-        "hddsuper": 2,
-        "hddbamf": 2,
         "ports": [32649],
         "userEnvironmentParameters": []
       }
     ],
-    "visible": true,
+    "visible": false,
     "enabled": false
   },
   {
@@ -2404,21 +1672,12 @@
         "cpu": 0.2,
         "ram": 200,
         "hdd": 2,
-        "cpubasic": 0.2,
-        "cpusuper": 0.2,
-        "cpubamf": 0.2,
-        "rambasic": 200,
-        "ramsuper": 200,
-        "rambamf": 200,
-        "hddbasic": 2,
-        "hddsuper": 2,
-        "hddbamf": 2,
         "ports": [34253],
         "userEnvironmentParameters": []
       }
     ],
-    "visible": true,
-    "enabled": true
+    "visible": false,
+    "enabled": false
   },
   {
     "description": "Rustpad is an efficient and minimal open-source collaborative text editor",
@@ -2441,15 +1700,6 @@
         "cpu": 0.2,
         "ram": 200,
         "hdd": 2,
-        "cpubasic": 0.2,
-        "cpusuper": 0.2,
-        "cpubamf": 0.2,
-        "rambasic": 200,
-        "ramsuper": 200,
-        "rambamf": 200,
-        "hddbasic": 2,
-        "hddsuper": 2,
-        "hddbamf": 2,
         "ports": [38144],
         "userEnvironmentParameters": []
       }
@@ -2478,25 +1728,17 @@
         "cpu": 0.2,
         "ram": 200,
         "hdd": 2,
-        "cpubasic": 0.2,
-        "cpusuper": 0.2,
-        "cpubamf": 0.2,
-        "rambasic": 200,
-        "ramsuper": 200,
-        "rambamf": 200,
-        "hddbasic": 2,
-        "hddsuper": 2,
-        "hddbamf": 2,
         "ports": [35691],
         "userEnvironmentParameters": []
       }
     ],
-    "visible": true,
-    "enabled": true
+    "visible": false,
+    "enabled": false
   },
   {
     "description": "With TeamSpeak there are no centralized servers and no harvesting of personal data. Your chat, your data, your choice. With TeamSpeak, your team rules!",
-    "price": 1.91,
+    "priceUSD": 1.27,
+    "multiplier": 1,
     "category": "Hosting",
     "version": 4,
     "name": "Teamspeak",
@@ -2510,20 +1752,11 @@
         "domains": ["", "", ""],
         "environmentParameters": ["TS3SERVER_LICENSE=accept"],
         "commands": [],
-        "containerData": "/teams",
+        "containerData": "r:/teams",
         "tiered": false,
         "cpu": 0.5,
         "ram": 1000,
         "hdd": 1,
-        "cpubasic": 0.5,
-        "cpusuper": 0.5,
-        "cpubamf": 0.5,
-        "rambasic": 1000,
-        "ramsuper": 1000,
-        "rambamf": 1000,
-        "hddbasic": 1,
-        "hddsuper": 1,
-        "hddbamf": 1,
         "ports": [38895, 38896, 38897],
         "userEnvironmentParameters": []
       }
@@ -2556,16 +1789,6 @@
         "cpu": 2.5,
         "ram": 3500,
         "hdd": 20,
-        "cpubasic": 2.5,
-        "cpusuper": 2.5,
-        "cpubamf": 2.5,
-        "rambasic": 3500,
-        "ramsuper": 3500,
-        "rambamf": 3500,
-        "hddbasic": 20,
-        "hddsuper": 20,
-        "hddbamf": 20,
-
         "ports": [39870, 39871, 39872],
         "userEnvironmentParameters": [
           {
@@ -2581,7 +1804,7 @@
         ]
       }
     ],
-    "visible": true,
+    "visible": false,
     "enabled": false
   },
   {
@@ -2609,20 +1832,11 @@
         "cpu": 2.0,
         "ram": 3000,
         "hdd": 10,
-        "cpubasic": 2.0,
-        "cpusuper": 2.0,
-        "cpubamf": 2.0,
-        "rambasic": 3000,
-        "ramsuper": 3000,
-        "rambamf": 3000,
-        "hddbasic": 10,
-        "hddsuper": 10,
-        "hddbamf": 10,
         "ports": [34250, 36735],
         "userEnvironmentParameters": []
       }
     ],
-    "visible": true,
+    "visible": false,
     "enabled": false
   },
   {
@@ -2646,21 +1860,12 @@
         "cpu": 0.4,
         "ram": 1000,
         "hdd": 4,
-        "cpubasic": 0.4,
-        "cpusuper": 0.4,
-        "cpubamf": 0.4,
-        "rambasic": 1000,
-        "ramsuper": 1000,
-        "rambamf": 1000,
-        "hddbasic": 4,
-        "hddsuper": 4,
-        "hddbamf": 4,
         "ports": [33253, 33254],
         "userEnvironmentParameters": []
       }
     ],
-    "visible": true,
-    "enabled": true
+    "visible": false,
+    "enabled": false
   },
   {
     "description": "Teeworlds servers deployed on Flux.",
@@ -2683,15 +1888,6 @@
         "cpu": 0.3,
         "ram": 600,
         "hdd": 2,
-        "cpubasic": 0.3,
-        "cpusuper": 0.3,
-        "cpubamf": 0.3,
-        "rambasic": 600,
-        "ramsuper": 600,
-        "rambamf": 600,
-        "hddbasic": 2,
-        "hddsuper": 2,
-        "hddbamf": 2,
         "ports": [32913, 36521],
         "userEnvironmentParameters": [
           {
@@ -2707,7 +1903,7 @@
         ]
       }
     ],
-    "visible": true,
+    "visible": false,
     "enabled": false
   },
   {
@@ -2734,15 +1930,6 @@
         "cpu": 2.0,
         "ram": 8000,
         "hdd": 60,
-        "cpubasic": 2.0,
-        "cpusuper": 2.0,
-        "cpubamf": 2.0,
-        "rambasic": 8000,
-        "ramsuper": 8000,
-        "rambamf": 8000,
-        "hddbasic": 60,
-        "hddsuper": 60,
-        "hddbamf": 60,
         "ports": [36479, 36480, 36481],
         "userEnvironmentParameters": [
           {
@@ -2758,12 +1945,13 @@
         ]
       }
     ],
-    "visible": true,
+    "visible": false,
     "enabled": false
   },
   {
     "description": "Host your Blockbook for Viacoin on the Flux Cloud",
-    "price": 18.75,
+    "priceUSD": 12.50,
+    "multiplier": 1,
     "category": "Blockbook",
     "version": 4,
     "name": "BlockbookVIA",
@@ -2786,15 +1974,6 @@
         "cpu": 3.0,
         "ram": 8000,
         "hdd": 200,
-        "cpubasic": 3.0,
-        "cpusuper": 3.0,
-        "cpubamf": 3.0,
-        "rambasic": 8000,
-        "ramsuper": 8000,
-        "rambamf": 8000,
-        "hddbasic": 200,
-        "hddsuper": 200,
-        "hddbamf": 200,
         "ports": [34160],
         "userEnvironmentParameters": []
       }
@@ -2804,7 +1983,8 @@
   },
   {
     "description": "The YaCy search engine software provides results from a network of independent peers, instead of a central server. It is a distributed network where no single entity decides what to list or order it appears in.",
-    "price": 4.95,
+    "priceUSD": 3.30,
+    "multiplier": 1,
     "category": "Productivity",
     "version": 4,
     "name": "YaCy",
@@ -2823,15 +2003,6 @@
         "cpu": 1.0,
         "ram": 1200,
         "hdd": 60,
-        "cpubasic": 1.0,
-        "cpusuper": 1.0,
-        "cpubamf": 1.0,
-        "rambasic": 1200,
-        "ramsuper": 1200,
-        "rambamf": 1200,
-        "hddbasic": 60,
-        "hddsuper": 60,
-        "hddbamf": 60,
         "ports": [33437, 33438],
         "userEnvironmentParameters": []
       }
@@ -2841,7 +2012,8 @@
   },
   {
     "description": "Host your Blockbook for Vertcoin on the Flux Cloud",
-    "price": 10.43,
+    "priceUSD": 6.95,
+    "multiplier": 1,
     "category": "Blockbook",
     "version": 4,
     "name": "BlockbookVTC",
@@ -2864,15 +2036,6 @@
         "cpu": 2.6,
         "ram": 4500,
         "hdd": 40,
-        "cpubasic": 2.6,
-        "cpusuper": 2.6,
-        "cpubamf": 2.6,
-        "rambasic": 4500,
-        "ramsuper": 4500,
-        "rambamf": 4500,
-        "hddbasic": 40,
-        "hddsuper": 40,
-        "hddbamf": 40,
         "ports": [34145],
         "userEnvironmentParameters": []
       }
@@ -2901,25 +2064,17 @@
         "cpu": 0.1,
         "ram": 200,
         "hdd": 2,
-        "cpubasic": 0.1,
-        "cpusuper": 0.1,
-        "cpubamf": 0.1,
-        "rambasic": 200,
-        "ramsuper": 200,
-        "rambamf": 200,
-        "hddbasic": 2,
-        "hddsuper": 2,
-        "hddbamf": 2,
         "ports": [33661],
         "userEnvironmentParameters": []
       }
     ],
-    "visible": true,
-    "enabled": true
+    "visible": false,
+    "enabled": false
   },
   {
     "description": "Host your Blockbook for Qtum on the Flux Cloud",
-    "price": 10.5,
+    "priceUSD": 7.00,
+    "multiplier": 1,
     "category": "Blockbook",
     "version": 4,
     "name": "BlockbookQTUM",
@@ -2938,15 +2093,6 @@
         "cpu": 2.0,
         "ram": 4000,
         "hdd": 100,
-        "cpubasic": 2.0,
-        "cpusuper": 2.0,
-        "cpubamf": 2.0,
-        "rambasic": 4000,
-        "ramsuper": 4000,
-        "rambamf": 4000,
-        "hddbasic": 100,
-        "hddsuper": 100,
-        "hddbamf": 100,
         "ports": [34193],
         "userEnvironmentParameters": []
       }
@@ -2956,7 +2102,8 @@
   },
   {
     "description": "Host a Online Compiler for C,C++,JAVA,Python,JavaScript on the Flux Cloud",
-    "price": 2.78,
+    "priceUSD": 1.85,
+    "multiplier": 1,
     "category": "Productivity",
     "version": 4,
     "name": "Compiler",
@@ -2975,15 +2122,6 @@
         "cpu": 0.5,
         "ram": 2000,
         "hdd": 5,
-        "cpubasic": 0.5,
-        "cpusuper": 0.5,
-        "cpubamf": 0.5,
-        "rambasic": 2000,
-        "ramsuper": 2000,
-        "rambamf": 2000,
-        "hddbasic": 5,
-        "hddsuper": 5,
-        "hddbamf": 5,
         "ports": [36001],
         "userEnvironmentParameters": []
       }
@@ -2993,7 +2131,8 @@
   },
   {
     "description": "Host your Blockbook for Dash on the Flux Cloud",
-    "price": 10.06,
+    "priceUSD": 6.70,
+    "multiplier": 1,
     "category": "Blockbook",
     "version": 4,
     "name": "BlockbookDASH",
@@ -3012,15 +2151,6 @@
         "cpu": 2.0,
         "ram": 4000,
         "hdd": 85,
-        "cpubasic": 2.0,
-        "cpusuper": 2.0,
-        "cpubamf": 2.0,
-        "rambasic": 4000,
-        "ramsuper": 4000,
-        "rambamf": 4000,
-        "hddbasic": 85,
-        "hddsuper": 85,
-        "hddbamf": 85,
         "ports": [35660],
         "userEnvironmentParameters": []
       }
@@ -3030,7 +2160,8 @@
   },
   {
     "description": "Host your Blockbook for Divi on the Flux Cloud",
-    "price": 9.0,
+    "priceUSD": 6.00,
+    "multiplier": 1,
     "category": "Blockbook",
     "version": 4,
     "name": "BlockbookDIVI",
@@ -3054,15 +2185,6 @@
         "cpu": 2.0,
         "ram": 4000,
         "hdd": 50,
-        "cpubasic": 2.0,
-        "cpusuper": 2.0,
-        "cpubamf": 2.0,
-        "rambasic": 4000,
-        "ramsuper": 4000,
-        "rambamf": 4000,
-        "hddbasic": 50,
-        "hddsuper": 50,
-        "hddbamf": 50,
         "ports": [35670],
         "userEnvironmentParameters": []
       }
@@ -3072,7 +2194,8 @@
   },
   {
     "description": "Host your Blockbook for Decred on the Flux Cloud",
-    "price": 9.0,
+    "priceUSD": 6.00,
+    "multiplier": 1,
     "category": "Blockbook",
     "version": 4,
     "name": "BlockbookDCR",
@@ -3095,15 +2218,6 @@
         "cpu": 2.0,
         "ram": 4000,
         "hdd": 50,
-        "cpubasic": 2.0,
-        "cpusuper": 2.0,
-        "cpubamf": 2.0,
-        "rambasic": 4000,
-        "ramsuper": 4000,
-        "rambamf": 4000,
-        "hddbasic": 50,
-        "hddsuper": 50,
-        "hddbamf": 50,
         "ports": [35680],
         "userEnvironmentParameters": []
       }
@@ -3112,19 +2226,29 @@
     "enabled": true
   },
   {
-    "description": "Host your Meowcoin Full Node on the Flux Cloud",
-    "price": 10.8,
+    "description": "Host your Meowcoin 2.0 Testnet Full Node on the Flux Cloud",
+    "priceUSD": 7.20,
+    "multiplier": 1,
     "category": "Blockchain",
-    "version": 4,
-    "name": "MeowcoinNode",
+    "version": 7,
+    "name": "MeowcoinTestnetNode",
     "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "staticip": false,
+    "nodes": [],
+    "expire": 22000,
     "compose": [
       {
-        "name": "meowcoinnode",
+        "name": "meowcointestnetnode",
         "description": "The Meowcoin Node Container",
-        "repotag": "rvnminersaandn/meowcoin-core:latest",
-        "containerPorts": [8788, 9766],
-        "domains": ["", ""],
+        "repotag": "zachprice105/meowcointestnet:latest",
+        "containerPorts": [
+          4569
+        ],
+        "domains": [
+          ""
+        ],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/root",
@@ -3132,16 +2256,7 @@
         "cpu": 2.0,
         "ram": 6000,
         "hdd": 60,
-        "cpubasic": 2.0,
-        "cpusuper": 2.0,
-        "cpubamf": 2.0,
-        "rambasic": 6000,
-        "ramsuper": 6000,
-        "rambamf": 6000,
-        "hddbasic": 60,
-        "hddsuper": 60,
-        "hddbamf": 60,
-        "ports": [35700, 35701],
+        "ports": [4569],
         "userEnvironmentParameters": []
       }
     ],
@@ -3149,49 +2264,9 @@
     "enabled": true
   },
   {
-      "description": "Host your Meowcoin 2.0.3 Testnet Full Node on the Flux Cloud",
-      "price": 10.8,
-      "category": "Blockchain",
-      "version": 7,
-      "name": "MeowcoinTestnetNode",
-      "instances": 3,
-      "compose": [
-        {
-          "name": "meowcointestnetnode",
-          "description": "The Meowcoin Node Container",
-          "repotag": "zachprice105/meowcointestnet:latest",
-          "containerPorts": [
-            4569
-          ],
-          "domains": [
-            "",""
-          ],
-          "environmentParameters": [],
-          "commands": [],
-          "containerData": "/root",
-          "tiered": false,
-          "cpu": 2.0,
-          "ram": 6000,
-          "hdd": 60,
-          "cpubasic": 2.0,
-          "cpusuper": 2.0,
-          "cpubamf": 2.0,
-          "rambasic": 6000,
-          "ramsuper": 6000,
-          "rambamf": 6000,
-          "hddbasic": 60,
-          "hddsuper": 60,
-          "hddbamf": 60,
-          "ports": [4569],
-          "userEnvironmentParameters": []
-        }
-      ],
-      "visible": false,
-      "enabled": false
-    },
-  {
     "description": "Host your Wanchain RPC Node on the Flux Cloud",
-    "price": 21.0,
+    "priceUSD": 14.00,
+    "multiplier": 1,
     "category": "RPC Node",
     "version": 4,
     "name": "WanchainRPC",
@@ -3216,15 +2291,6 @@
         "cpu": 2.0,
         "ram": 8000,
         "hdd": 350,
-        "cpubasic": 2.0,
-        "cpusuper": 2.0,
-        "cpubamf": 2.0,
-        "rambasic": 8000,
-        "ramsuper": 8000,
-        "rambamf": 8000,
-        "hddbasic": 350,
-        "hddsuper": 350,
-        "hddbamf": 350,
         "ports": [31010, 31011],
         "userEnvironmentParameters": []
       }
@@ -3234,7 +2300,8 @@
   },
   {
     "description": "Host your Nexa Node on the Flux Cloud",
-    "price": 5.7,
+    "priceUSD": 3.80,
+    "multiplier": 1,
     "category": "Blockchain",
     "version": 4,
     "name": "NexaNode",
@@ -3253,15 +2320,6 @@
         "cpu": 1.0,
         "ram": 3000,
         "hdd": 40,
-        "cpubasic": 1.0,
-        "cpusuper": 1.0,
-        "cpubamf": 1.0,
-        "rambasic": 3000,
-        "ramsuper": 3000,
-        "rambamf": 3000,
-        "hddbasic": 40,
-        "hddsuper": 40,
-        "hddbamf": 40,
         "ports": [37230, 37231, 37232, 37233],
         "userEnvironmentParameters": []
       }
@@ -3271,7 +2329,8 @@
   },
   {
     "description": "Host your Radiant-ElectrumX on the Flux Cloud",
-    "price": 7.81,
+    "priceUSD": 5.20,
+    "multiplier": 1,
     "category": "Blockchain",
     "version": 4,
     "name": "ElectrumXRXD",
@@ -3290,15 +2349,6 @@
         "cpu": 2.0,
         "ram": 4000,
         "hdd": 10,
-        "cpubasic": 2.0,
-        "cpusuper": 2.0,
-        "cpubamf": 2.0,
-        "rambasic": 4000,
-        "ramsuper": 4000,
-        "rambamf": 4000,
-        "hddbasic": 10,
-        "hddsuper": 10,
-        "hddbamf": 10,
         "ports": [38501, 38502, 38503],
         "userEnvironmentParameters": []
       }
@@ -3308,7 +2358,8 @@
   },
   {
     "description": "Host your Radiant Node on the Flux Cloud",
-    "price": 3.53,
+    "priceUSD": 2.35,
+    "multiplier": 1,
     "category": "Blockchain",
     "version": 4,
     "name": "RadiantNode",
@@ -3336,15 +2387,6 @@
         "cpu": 1.0,
         "ram": 1500,
         "hdd": 5,
-        "cpubasic": 1.0,
-        "cpusuper": 1.0,
-        "cpubamf": 1.0,
-        "rambasic": 1500,
-        "ramsuper": 1500,
-        "rambamf": 1500,
-        "hddbasic": 5,
-        "hddsuper": 5,
-        "hddbamf": 5,
         "ports": [38510, 38511],
         "userEnvironmentParameters": []
       }
@@ -3354,7 +2396,8 @@
   },
   {
     "description": "Capture screenshots of websites as a (host it yourself) API. API Instructions: https://github.com/robvanderleek/capture-website-api#usage",
-    "price": 6.62,
+    "priceUSD": 4.41,
+    "multiplier": 1,
     "category": "Hosting",
     "version": 4,
     "name": "WebsiteScreenshotAPI",
@@ -3373,15 +2416,6 @@
         "cpu": 2.0,
         "ram": 2000,
         "hdd": 20,
-        "cpubasic": 2.0,
-        "cpusuper": 2.0,
-        "cpubamf": 2.0,
-        "rambasic": 2000,
-        "ramsuper": 2000,
-        "rambamf": 2000,
-        "hddbasic": 20,
-        "hddsuper": 20,
-        "hddbamf": 20,
         "ports": [34010],
         "userEnvironmentParameters": []
       }
@@ -3391,7 +2425,8 @@
   },
   {
     "description": "A Simple Public IP Address API",
-    "price": 1.61,
+    "priceUSD": 1.07,
+    "multiplier": 1,
     "category": "Hosting",
     "version": 4,
     "name": "Ipify",
@@ -3410,15 +2445,6 @@
         "cpu": 0.5,
         "ram": 600,
         "hdd": 1,
-        "cpubasic": 0.5,
-        "cpusuper": 0.5,
-        "cpubamf": 0.5,
-        "rambasic": 600,
-        "ramsuper": 600,
-        "rambamf": 600,
-        "hddbasic": 1,
-        "hddsuper": 1,
-        "hddbamf": 1,
         "ports": [34010],
         "userEnvironmentParameters": []
       }
@@ -3428,7 +2454,8 @@
   },
   {
     "description": "A Nostr Relay hosted on the Flux Cloud",
-    "price": 3.32,
+    "priceUSD": 2.21,
+    "multiplier": 1,
     "category": "Hosting",
     "version": 4,
     "name": "Nostr",
@@ -3447,15 +2474,6 @@
         "cpu": 1.0,
         "ram": 1000,
         "hdd": 10,
-        "cpubasic": 1.0,
-        "cpusuper": 1.0,
-        "cpubamf": 1.0,
-        "rambasic": 1000,
-        "ramsuper": 1000,
-        "rambamf": 1000,
-        "hddbasic": 10,
-        "hddsuper": 10,
-        "hddbamf": 10,
         "ports": [34428],
         "userEnvironmentParameters": [
           {
@@ -3491,7 +2509,8 @@
   },
   {
     "description": "Host your Bitgert RPC Node on the Flux Cloud",
-    "price": 21.0,
+    "priceUSD": 14.00,
+    "multiplier": 1,
     "category": "RPC Node",
     "version": 4,
     "name": "BitgertRPC",
@@ -3510,15 +2529,6 @@
         "cpu": 4.0,
         "ram": 8000,
         "hdd": 200,
-        "cpubasic": 4.0,
-        "cpusuper": 4.0,
-        "cpubamf": 4.0,
-        "rambasic": 8000,
-        "ramsuper": 8000,
-        "rambamf": 8000,
-        "hddbasic": 200,
-        "hddsuper": 200,
-        "hddbamf": 200,
         "ports": [32300, 32301],
         "userEnvironmentParameters": []
       }
@@ -3528,7 +2538,8 @@
   },
   {
     "description": "Host your Celo RPC Node on the Flux Cloud",
-    "price": 24.75,
+    "priceUSD": 16.50,
+    "multiplier": 1,
     "category": "RPC Node",
     "version": 4,
     "name": "CeloRPC",
@@ -3557,15 +2568,6 @@
         "cpu": 4.0,
         "ram": 9000,
         "hdd": 300,
-        "cpubasic": 4.0,
-        "cpusuper": 4.0,
-        "cpubamf": 4.0,
-        "rambasic": 9000,
-        "ramsuper": 9000,
-        "rambamf": 9000,
-        "hddbasic": 300,
-        "hddsuper": 300,
-        "hddbamf": 300,
         "ports": [35000, 35001, 35002],
         "userEnvironmentParameters": []
       }
@@ -3575,7 +2577,8 @@
   },
   {
     "description": "Host your Fuse RPC Node on the Flux Cloud",
-    "price": 13.5,
+    "priceUSD": 9.00,
+    "multiplier": 1,
     "category": "RPC Node",
     "version": 4,
     "name": "FuseRPC",
@@ -3603,15 +2606,6 @@
         "cpu": 2.0,
         "ram": 8000,
         "hdd": 100,
-        "cpubasic": 2.0,
-        "cpusuper": 2.0,
-        "cpubamf": 2.0,
-        "rambasic": 8000,
-        "ramsuper": 8000,
-        "rambamf": 8000,
-        "hddbasic": 100,
-        "hddsuper": 100,
-        "hddbamf": 100,
         "ports": [38545, 38303, 38456],
         "userEnvironmentParameters": []
       }
@@ -3621,7 +2615,8 @@
   },
   {
     "description": "Host your Astar RPC Node on the Flux Cloud",
-    "price": 48.0,
+    "priceUSD": 32.00,
+    "multiplier": 1,
     "category": "RPC Node",
     "version": 4,
     "name": "AstarRPC",
@@ -3640,15 +2635,6 @@
         "cpu": 8.0,
         "ram": 16000,
         "hdd": 600,
-        "cpubasic": 8.0,
-        "cpusuper": 8.0,
-        "cpubamf": 8.0,
-        "rambasic": 16000,
-        "ramsuper": 16000,
-        "rambamf": 16000,
-        "hddbasic": 600,
-        "hddsuper": 600,
-        "hddbamf": 600,
         "ports": [36011, 36012, 36013],
         "userEnvironmentParameters": []
       }
@@ -3658,7 +2644,8 @@
   },
   {
     "description": "Host your Algorand RPC Node on the Flux Cloud",
-    "price": 33.0,
+    "priceUSD": 22.00,
+    "multiplier": 1,
     "category": "RPC Node",
     "version": 4,
     "name": "AlgoRPC",
@@ -3677,15 +2664,6 @@
         "cpu": 8.0,
         "ram": 16000,
         "hdd": 100,
-        "cpubasic": 8.0,
-        "cpusuper": 8.0,
-        "cpubamf": 8.0,
-        "rambasic": 16000,
-        "ramsuper": 16000,
-        "rambamf": 16000,
-        "hddbasic": 100,
-        "hddsuper": 100,
-        "hddbamf": 100,
         "ports": [38080, 38081],
         "userEnvironmentParameters": [
           {
@@ -3745,7 +2723,8 @@
   },
   {
     "description": "Host your Neurai Fullnode via Flux Cloud",
-    "price": 6.62,
+    "priceUSD": 4.41,
+    "multiplier": 1,
     "category": "Blockchain",
     "version": 4,
     "name": "NeuraiNode",
@@ -3764,15 +2743,6 @@
         "cpu": 2.0,
         "ram": 2000,
         "hdd": 20,
-        "cpubasic": 2.0,
-        "cpusuper": 2.0,
-        "cpubamf": 2.0,
-        "rambasic": 2000,
-        "ramsuper": 2000,
-        "rambamf": 2000,
-        "hddbasic": 20,
-        "hddsuper": 20,
-        "hddbamf": 20,
         "ports": [36735, 36736],
         "userEnvironmentParameters": []
       }
@@ -3782,7 +2752,8 @@
   },
   {
     "description": "Host your Neurai-ElectrumX via Flux Cloud",
-    "price": 12.9,
+    "priceUSD": 8.60,
+    "multiplier": 1,
     "category": "Blockchain",
     "version": 4,
     "name": "ElectrumxXNA",
@@ -3801,15 +2772,6 @@
         "cpu": 4.0,
         "ram": 4000,
         "hdd": 30,
-        "cpubasic": 4.0,
-        "cpusuper": 4.0,
-        "cpubamf": 4.0,
-        "rambasic": 4000,
-        "ramsuper": 4000,
-        "rambamf": 4000,
-        "hddbasic": 30,
-        "hddsuper": 30,
-        "hddbamf": 30,
         "ports": [36740, 36741, 36742, 36743],
         "userEnvironmentParameters": []
       }
@@ -3819,7 +2781,8 @@
   },
   {
     "description": "Host your Blockbook for Neurai on the Flux Cloud",
-    "price": 10.58,
+    "priceUSD": 7.05,
+    "multiplier": 1,
     "category": "Blockbook",
     "version": 4,
     "name": "BlockbookXNA",
@@ -3842,15 +2805,6 @@
         "cpu": 2.5,
         "ram": 5000,
         "hdd": 40.0,
-        "cpubasic": 2.5,
-        "cpusuper": 2.5,
-        "cpubamf": 2.5,
-        "rambasic": 5000,
-        "ramsuper": 5000,
-        "rambamf": 5000,
-        "hddbasic": 40,
-        "hddsuper": 40,
-        "hddbamf": 40,
         "ports": [34149, 31450],
         "userEnvironmentParameters": []
       }
@@ -3860,7 +2814,7 @@
   },
   {
     "description": "Host your BLOCX Masternode on the Flux Cloud",
-    "price": 7.81,
+    "priceUSD": 4.29,
     "multiplier": 1,
     "category": "Masternode",
     "version": 7,
@@ -3902,7 +2856,7 @@
   },
   {
     "description": "Host your(s) Neoxa Masternode(s) on the Flux Cloud for a 1-month plan",
-    "price": 11.11,
+    "priceUSD": 6.49,
     "multiplier": 1,
     "category": "Masternode",
     "version": 7,
@@ -3936,113 +2890,9 @@
     "enabled": true
   },
   {
-    "description": "Host your(s) Neoxa Masternode(s) on the Flux Cloud for a 3-month plan",
-    "price": 30.1,
-    "multiplier": 1,
-    "category": "Masternode",
-    "version": 7,
-    "name": "NeoxaMN",
-    "instances": 3,
-    "contacts": [],
-    "geolocation": [],
-    "staticip": true,
-    "nodes": [],
-    "expire": 66000,
-    "compose": [
-      {
-        "name": "neoxamasternode",
-        "description": "The Neoxa Masternode container",
-        "repotag": "runonflux/neoxa-node:latest",
-        "containerPorts": [8788],
-        "domains": [""],
-        "environmentParameters": [],
-        "commands": [],
-        "containerData": "/root/.neoxacore",
-        "tiered": false,
-        "cpu": 2,
-        "ram": 2000,
-        "hdd": 20,
-        "ports": [8788],
-        "secrets": "",
-        "repoauth": ""
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
-    "description": "Host your(s) Neoxa Masternode(s) on the Flux Cloud for a 6-month plan",
-    "price": 56.6,
-    "multiplier": 1,
-    "category": "Masternode",
-    "version": 7,
-    "name": "NeoxaMN",
-    "instances": 3,
-    "contacts": [],
-    "geolocation": [],
-    "staticip": true,
-    "nodes": [],
-    "expire": 132000,
-    "compose": [
-      {
-        "name": "neoxamasternode",
-        "description": "The Neoxa Masternode container",
-        "repotag": "runonflux/neoxa-node:latest",
-        "containerPorts": [8788],
-        "domains": [""],
-        "environmentParameters": [],
-        "commands": [],
-        "containerData": "/root/.neoxacore",
-        "tiered": false,
-        "cpu": 2,
-        "ram": 2000,
-        "hdd": 20,
-        "ports": [8788],
-        "secrets": "",
-        "repoauth": ""
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
-    "description": "Host your(s) Neoxa Masternode(s) on the Flux Cloud for a 12-month plan",
-    "price": 92.55,
-    "multiplier": 1,
-    "category": "Masternode",
-    "version": 7,
-    "name": "NeoxaMN",
-    "instances": 3,
-    "contacts": [],
-    "geolocation": [],
-    "staticip": true,
-    "nodes": [],
-    "expire": 264000,
-    "compose": [
-      {
-        "name": "neoxamasternode",
-        "description": "The Neoxa Masternode container",
-        "repotag": "runonflux/neoxa-node:latest",
-        "containerPorts": [8788],
-        "domains": [""],
-        "environmentParameters": [],
-        "commands": [],
-        "containerData": "/root/.neoxacore",
-        "tiered": false,
-        "cpu": 2,
-        "ram": 2000,
-        "hdd": 20,
-        "ports": [8788],
-        "secrets": "",
-        "repoauth": ""
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
     "description": "Host your Celestia Light Node on the Flux Cloud",
-    "price": 5.25,
+    "priceUSD": 3.50,
+    "multiplier": 1,
     "category": "Blockchain",
     "version": 4,
     "name": "CelestiaLN",
@@ -4070,8 +2920,8 @@
   },
   {
     "description": "Host your Bittensor Full Node on the Flux Cloud for a 1-month plan",
-    "price": 20.63,
-    "multiplier": 1,
+    "priceUSD": 14.99,
+    "multiplier": 1.09,
     "category": "Blockchain",
     "version": 7,
     "name": "BittensorFN",
@@ -4081,120 +2931,6 @@
     "staticip": false,
     "nodes": [],
     "expire": 22000,
-    "compose": [
-      {
-        "name": "bittensorfullnode",
-        "description": "The Bittensor Full Node container",
-        "repotag": "opentensor/subtensor:latest",
-        "containerPorts": [9944, 30333, 9933],
-        "domains": ["", "", ""],
-        "environmentParameters": ["CARGO_HOME=/var/www/node-subtensor/.cargo"],
-        "commands": ["/bin/bash",
-          "-c",
-          "/usr/local/bin/node-subtensor --base-path /tmp/blockchain --chain ./raw_spec.json --rpc-external --rpc-cors all --ws-external --no-mdns --ws-max-connections 5000 --in-peers 200 --out-peers 200 --bootnodes /dns/bootnode.finney.opentensor.ai/tcp/30333/ws/p2p/12D3KooWRwbMb85RWnT8DSXSYMWQtuDwh4LJzndoRrTDotTR5gDC --no-private-ip --sync warp"
-	],
-        "containerData": "/tmp",
-        "tiered": false,
-        "cpu": 4.5,
-        "ram": 8000,
-        "hdd": 150,
-        "ports": [9944, 30333, 9933],
-        "secrets": "",
-        "repoauth": ""
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
-    "description": "Host your Bittensor Full Node on the Flux Cloud for a 3-month plan",
-    "price": 57.55,
-    "multiplier": 1,
-    "category": "Blockchain",
-    "version": 7,
-    "name": "BittensorFN",
-    "instances": 3,
-    "contacts": [],
-    "geolocation": [],
-    "staticip": false,
-    "nodes": [],
-    "expire": 66000,
-    "compose": [
-      {
-        "name": "bittensorfullnode",
-        "description": "The Bittensor Full Node container",
-        "repotag": "opentensor/subtensor:latest",
-        "containerPorts": [9944, 30333, 9933],
-        "domains": ["", "", ""],
-        "environmentParameters": ["CARGO_HOME=/var/www/node-subtensor/.cargo"],
-        "commands": ["/bin/bash",
-          "-c",
-          "/usr/local/bin/node-subtensor --base-path /tmp/blockchain --chain ./raw_spec.json --rpc-external --rpc-cors all --ws-external --no-mdns --ws-max-connections 5000 --in-peers 200 --out-peers 200 --bootnodes /dns/bootnode.finney.opentensor.ai/tcp/30333/ws/p2p/12D3KooWRwbMb85RWnT8DSXSYMWQtuDwh4LJzndoRrTDotTR5gDC --no-private-ip --sync warp"
-	],
-        "containerData": "/tmp",
-        "tiered": false,
-        "cpu": 4.5,
-        "ram": 8000,
-        "hdd": 150,
-        "ports": [9944, 30333, 9933],
-        "secrets": "",
-        "repoauth": ""
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
-    "description": "Host your Bittensor Full Node on the Flux Cloud for a 6-month plan",
-    "price": 105.19,
-    "multiplier": 1,
-    "category": "Blockchain",
-    "version": 7,
-    "name": "BittensorFN",
-    "instances": 3,
-    "contacts": [],
-    "geolocation": [],
-    "staticip": false,
-    "nodes": [],
-    "expire": 132000,
-    "compose": [
-      {
-        "name": "bittensorfullnode",
-        "description": "The Bittensor Full Node container",
-        "repotag": "opentensor/subtensor:latest",
-        "containerPorts": [9944, 30333, 9933],
-        "domains": ["", "", ""],
-        "environmentParameters": ["CARGO_HOME=/var/www/node-subtensor/.cargo"],
-        "commands": ["/bin/bash",
-          "-c",
-          "/usr/local/bin/node-subtensor --base-path /tmp/blockchain --chain ./raw_spec.json --rpc-external --rpc-cors all --ws-external --no-mdns --ws-max-connections 5000 --in-peers 200 --out-peers 200 --bootnodes /dns/bootnode.finney.opentensor.ai/tcp/30333/ws/p2p/12D3KooWRwbMb85RWnT8DSXSYMWQtuDwh4LJzndoRrTDotTR5gDC --no-private-ip --sync warp"
-	],
-        "containerData": "/tmp",
-        "tiered": false,
-        "cpu": 4.5,
-        "ram": 8000,
-        "hdd": 150,
-        "ports": [9944, 30333, 9933],
-        "secrets": "",
-        "repoauth": ""
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
-    "description": "Host your Bittensor Full Node on the Flux Cloud for a 12-month plan",
-    "price": 173.25,
-    "multiplier": 1,
-    "category": "Blockchain",
-    "version": 7,
-    "name": "BittensorFN",
-    "instances": 3,
-    "contacts": [],
-    "geolocation": [],
-    "staticip": false,
-    "nodes": [],
-    "expire": 264000,
     "compose": [
       {
         "name": "bittensorfullnode",
@@ -4222,7 +2958,7 @@
   },
   {
     "description": "Host your Streamr 1.0 Testnet on the Flux Cloud 1-month plan",
-    "price": 19.05,
+    "price": 10.99,
 	  "multiplier": 1,
     "category": "Blockchain",
     "version": 7,
@@ -4274,162 +3010,91 @@
     "enabled": true
   },
   {
-    "description": "Host your Streamr 1.0 Testnet on the Flux Cloud 3-month plan",
-    "price": 53.15,
-	  "multiplier": 1,
-    "category": "Blockchain",
+    "description": "Host your PRIVATE Java Minecraft server on the Flux Cloud",
+    "priceUSD": 6.20,
+    "multiplier": 1,
+    "category": "Games",
     "version": 7,
-    "name": "Streamr",
+    "name": "privateminecraft",
     "instances": 3,
-    "isAutoEnterprise": true,
     "contacts": [],
     "geolocation": [],
     "staticip": false,
     "nodes": [],
-    "expire": 66000,
+    "isAutoEnterprise": true,
+    "expire": 22000,
     "compose": [
       {
-        "name": "streamrnode",
-        "description": "The Streamr 1.0 Testnet container",
-        "repotag": "streamr/node:latest",
-        "containerPorts": [
-          32200
-        ],
-        "domains": [
-          ""
-        ],
-        "environmentParameters": [],
+        "name": "node",
+        "description": "Private Minecraft Server container",
+        "repotag": "itzg/minecraft-server:latest",
+        "containerPorts": [25565],
+        "domains": [""],
+        "environmentParameters": ["EULA=TRUE","TYPE=SPIGOT","MAX_MEMORY=1G","INIT_MEMORY=1G"],
         "commands": [],
-        "containerData": "/tmp",
+        "containerData": "g:/data",
         "tiered": false,
-        "cpu": 3,
-        "ram": 4000,
+        "cpu": 1,
+        "ram": 1000,
         "hdd": 10,
-        "portSpecs": ["30000-50000"],    
-        "ports": [32200],
+        "ports": [25565],
         "userSecrets": [
           {
-            "name": "STREAMR__BROKER__PLUGINS__OPERATOR__OPERATOR_CONTRACT_ADDRESS",
-            "description": "Your Operator Contract Address",
-            "placeholder": "Place your Address here"
+            "name": "OPS",
+            "description": "Enter the minecraft username that should be set as the server operator-administrator",
+            "placeholder": "Enter the admin minecraft username here"
+          },
+           {
+            "name": "WHITELIST",
+            "description": "Enter the minecraft usernames that should be whitelisted, comma separated",
+            "placeholder": "Enter minecraft usernames to whitelist here"
           },
           {
-            "name": "STREAMR__BROKER__CLIENT__AUTH__PRIVATE_KEY",
-            "description": "Your Node Wallet Private Key",
-            "placeholder": "Place your Private Key here"
+            "name": "RCON_PASSWORD",
+            "description": "The RCON Password for your server will be encrypted on chain",
+            "placeholder": "Enter your desired password (not transmitted over the internet)"
           }
         ],
         "secrets": "",
         "repoauth": ""
       }
     ],
-    "visible": true,
-    "enabled": true
+    "visible": false,
+    "enabled": false
   },
   {
-    "description": "Host your Streamr 1.0 Testnet on the Flux Cloud 6-month plan",
-    "price": 97.16,
-	  "multiplier": 1,
-    "category": "Blockchain",
-    "version": 7,
-    "name": "Streamr",
-    "instances": 3,
-    "isAutoEnterprise": true,
-    "contacts": [],
-    "geolocation": [],
-    "staticip": false,
-    "nodes": [],
-    "expire": 132000,
-    "compose": [
-      {
-        "name": "streamrnode",
-        "description": "The Streamr 1.0 Testnet container",
-        "repotag": "streamr/node:latest",
-        "containerPorts": [
-          32200
-        ],
-        "domains": [
-          ""
-        ],
-        "environmentParameters": [],
-        "commands": [],
-        "containerData": "/tmp",
-        "tiered": false,
-        "cpu": 3,
-        "ram": 4000,
-        "hdd": 10,
-        "portSpecs": ["30000-50000"],    
-        "ports": [32200],
-        "userSecrets": [
-          {
-            "name": "STREAMR__BROKER__PLUGINS__OPERATOR__OPERATOR_CONTRACT_ADDRESS",
-            "description": "Your Operator Contract Address",
-            "placeholder": "Place your Address here"
-          },
-          {
-            "name": "STREAMR__BROKER__CLIENT__AUTH__PRIVATE_KEY",
-            "description": "Your Node Wallet Private Key",
-            "placeholder": "Place your Private Key here"
-          }
-        ],
-        "secrets": "",
-        "repoauth": ""
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
-    "description": "Host your Streamr 1.0 Testnet on the Flux Cloud 12-month plan",
-    "price": 160.02,
-	  "multiplier": 1,
-    "category": "Blockchain",
-    "version": 7,
-    "name": "Streamr",
-    "instances": 3,
-    "isAutoEnterprise": true,
-    "contacts": [],
-    "geolocation": [],
-    "staticip": false,
-    "nodes": [],
-    "expire": 264000,
-    "compose": [
-      {
-        "name": "streamrnode",
-        "description": "The Streamr 1.0 Testnet container",
-        "repotag": "streamr/node:latest",
-        "containerPorts": [
-          32200
-        ],
-        "domains": [
-          ""
-        ],
-        "environmentParameters": [],
-        "commands": [],
-        "containerData": "/tmp",
-        "tiered": false,
-        "cpu": 3,
-        "ram": 4000,
-        "hdd": 10,
-        "portSpecs": ["30000-50000"],    
-        "ports": [32200],
-        "userSecrets": [
-          {
-            "name": "STREAMR__BROKER__PLUGINS__OPERATOR__OPERATOR_CONTRACT_ADDRESS",
-            "description": "Your Operator Contract Address",
-            "placeholder": "Place your Address here"
-          },
-          {
-            "name": "STREAMR__BROKER__CLIENT__AUTH__PRIVATE_KEY",
-            "description": "Your Node Wallet Private Key",
-            "placeholder": "Place your Private Key here"
-          }
-        ],
-        "secrets": "",
-        "repoauth": ""
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  }
+      "description": "Host your PUBLIC Java Minecraft server on the Flux Cloud",
+      "priceUSD": 6.10,
+      "multiplier": 1,
+      "category": "Games",
+      "version": 7,
+      "name": "Minecraft",
+      "instances": 3,
+      "contacts": [],
+      "geolocation": [],
+      "staticip": false,
+      "nodes": [],
+      "expire": 22000,
+      "compose": [
+        {
+          "name": "minecraftserver",
+          "description": "The Minecraft Server container",
+          "repotag": "itzg/minecraft-server:latest",
+          "containerPorts": [25565],
+          "domains": [""],
+          "environmentParameters": ["EULA=TRUE","TYPE=SPIGOT","MAX_MEMORY=5G","INIT_MEMORY=5G"],
+          "commands": [],
+          "containerData": "g:/data",
+          "tiered": false,
+          "cpu": 2,
+          "ram": 5000,
+          "hdd": 30,      
+          "ports": [25565],
+          "secrets": "",
+          "repoauth": ""
+        }
+      ],
+      "visible": false,
+      "enabled": false
+    }
 ]
