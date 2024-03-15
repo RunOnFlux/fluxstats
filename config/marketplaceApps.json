@@ -2829,7 +2829,7 @@
       {
         "name": "blocxmasternode",
         "description": "The BLOCX Masternode container",
-        "repotag": "blocxtech/blocxmasternode:3.1.2.beta.1",
+        "repotag": "blocxtech/blocxmasternode:latest",
         "containerPorts": [12972],
         "domains": [""],
         "environmentParameters": [],
