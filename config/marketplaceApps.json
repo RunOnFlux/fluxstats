@@ -2814,7 +2814,7 @@
   },
   {
     "description": "Host your BLOCX Masternode on the Flux Cloud",
-    "priceUSD": 4.29,
+    "priceUSD": 6.32,
     "multiplier": 1,
     "category": "Masternode",
     "version": 7,
@@ -2829,24 +2829,18 @@
       {
         "name": "blocxmasternode",
         "description": "The BLOCX Masternode container",
-        "repotag": "blocxtech/blocxnode:latest",
+        "repotag": "blocxtech/blocxmasternode:latest",
         "containerPorts": [12972],
         "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/root/.blocx",
         "tiered": false,
-        "cpu": 1,
-        "ram": 1000,
-        "hdd": 10,
-        "ports": [33106],
-        "userEnvironmentParameters": [
-          {
-            "name": "KEY",
-            "description": "The key of your masternode",
-            "placeholder": "Enter your key here"
-          }
-        ],
+        "cpu": 2,
+        "ram": 2000,
+        "hdd": 16,
+        "ports": [12972],
+        "userEnvironmentParameters": [],
         "secrets": "",
         "repoauth": ""
       }
