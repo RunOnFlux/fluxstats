@@ -982,6 +982,14 @@ async function getAllFluxInformation(req, res, i = 0) {
           _id: 0,
         },
       };
+      if (projArray.includes('geo')) {
+        projection = {
+          projection: {
+            _id: 0,
+            geolocation: {},
+          },
+        };
+      }
       projArray.forEach((pr) => {
         if (pr === 'geo') {
           projection.projection.geolocation.continent = 1;
