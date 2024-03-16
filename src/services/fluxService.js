@@ -988,6 +988,7 @@ async function getAllFluxInformation(req, res, i = 0) {
           projection.projection.geolocation.continentCode = 1;
           projection.projection.geolocation.country = 1;
           projection.projection.geolocation.countryCode = 1;
+          projection.projection.geolocation.regionName = 1;
         } else {
           projection.projection[pr] = 1;
         }
