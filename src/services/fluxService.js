@@ -983,7 +983,14 @@ async function getAllFluxInformation(req, res, i = 0) {
         },
       };
       projArray.forEach((pr) => {
-        projection.projection[pr] = 1;
+        if (pr === 'geo') {
+          projection.projection.geolocation.continent = 1;
+          projection.projection.geolocation.continentCode = 1;
+          projection.projection.geolocation.country = 1;
+          projection.projection.geolocation.countryCode = 1;
+        } else {
+          projection.projection[pr] = 1;
+        }
       });
     } else {
       projection = {
