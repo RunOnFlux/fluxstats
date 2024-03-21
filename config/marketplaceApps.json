@@ -2952,7 +2952,7 @@
   },
   {
     "description": "Host your Streamr 1.0 Testnet on the Flux Cloud 1-month plan",
-    "price": 10.99,
+    "priceUSD": 10.99,
 	  "multiplier": 1,
     "category": "Blockchain",
     "version": 7,
