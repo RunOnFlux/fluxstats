@@ -154,20 +154,19 @@ async function checkForMissingTransactions() {
               title: 'XDAO',
               message: `There is a new XDAO proposal available for voting: '${proposal.topic}'`,
             },
-            topic: "xdao_proposals",
+            topic: 'xdao_proposals',
           };
-          
+
           firebase
             .messaging()
             .send(message)
-            .then((response) => {
-            log.debug("Successfully sent message:", response);
-          })
-          .catch((error) => {
-            log.error(error);
-          });
+            .then((res) => {
+              log.debug('Successfully sent message:', res);
+            })
+            .catch((error) => {
+              log.error(error);
+            });
         }
-
       } else {
         // check if its Rejected Unapid
         const maxTime = new Date().getTime() - expirationPeriod;
