@@ -4,6 +4,11 @@ const qs = require('qs');
 
 const { MongoClient } = mongodb;
 
+const user = encodeURIComponent(config.database.username);
+const password = encodeURIComponent(config.database.password);
+const authMechanism = 'DEFAULT';
+const mongoUrl = config.database.isAuth ? `mongodb://${user}:${password}@${config.database.url}:${config.database.port}?authMechanism=${authMechanism}&authSource=admin` : `mongodb://${config.database.url}:${config.database.port}/`;
+
 function timeout(ms) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
@@ -88,7 +93,7 @@ function ensureString(parameter) {
 
 // MongoDB functions
 async function connectMongoDb(url) {
-  const connectUrl = url || `mongodb://${config.database.url}:${config.database.port}/`;
+  const connectUrl = url || mongoUrl;
   const mongoSettings = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
