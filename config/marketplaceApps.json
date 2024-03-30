@@ -2951,7 +2951,7 @@
     "enabled": true
   },
   {
-    "description": "Host your Streamr 1.0 Testnet on the Flux Cloud 1-month plan",
+    "description": "Host your Streamr 1.0 Mainnet on the Flux Cloud 1-month plan",
     "priceUSD": 10.99,
 	  "multiplier": 1,
     "category": "Blockchain",
@@ -2967,7 +2967,7 @@
     "compose": [
       {
         "name": "streamrnode",
-        "description": "The Streamr 1.0 Testnet container",
+        "description": "The Streamr 1.0 Mainnet container",
         "repotag": "streamr/node:latest",
         "containerPorts": [
           32200
