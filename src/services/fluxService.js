@@ -1347,6 +1347,18 @@ async function getAppSpecsUSDPrice(req, res) {
   }
 }
 
+async function getModulesMinVersions(req, res) {
+  try {
+    const modulesMinVersions = await axios.get('https://raw.githubusercontent.com/RunOnFlux/fluxstats/master/config/modulesMinVersions.json');
+    const resMessage = serviceHelper.createDataMessage(modulesMinVersions.data);
+    res.json(resMessage);
+  } catch (error) {
+    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+    res.json(errMessage);
+    log.error(error);
+  }
+}
+
 async function start() {
   try {
     db = await serviceHelper.connectMongoDb().catch((error) => {
@@ -1393,4 +1405,5 @@ module.exports = {
   getLastRound,
   getMultiplier,
   getAppSpecsUSDPrice,
+  getModulesMinVersions,
 };
