@@ -3105,7 +3105,7 @@
       "nodes": [],
       "compose": [
         {
-          "name": "cyberfly_mqtt",
+          "name": "cyberflymqtt",
           "description": "Cyberfly MQTT server container",
           "repotag": "cyberfly/cyberfly_mqtt:latest",
           "containerPorts": [1883, 9001],
@@ -3122,12 +3122,12 @@
           "repoauth": ""
         },
         {
-          "name": "cyberfly_node",
+          "name": "cyberflynode",
           "description": "Cyberfly node backend container",
           "repotag": "cyberfly/cyberfly_node:latest",
           "containerPorts": [31001, 31002, 31003],
           "domains": [""],
-          "environmentParameters": ["MQTT_HOST=mqtt://cyberfly_mqtt"],
+          "environmentParameters": ["MQTT_HOST=mqtt://cyberflymqtt"],
           "commands": [],
           "containerData": "g:/data",
           "tiered": false,
@@ -3146,7 +3146,7 @@
           "repoauth": ""
         },
         {
-          "name": "cyberfly_node_ui",
+          "name": "cyberflynodeui",
           "description": "Cyberfly node UI container",
           "repotag": "cyberfly/cyberfly_node_ui:latest",
           "containerPorts": [80],
