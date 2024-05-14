@@ -1,3 +1,4 @@
 {
-    "syncthing": "1.27.6"
+    "syncthing": "1.27.6",
+    "docker": "26.1.2"
 }
