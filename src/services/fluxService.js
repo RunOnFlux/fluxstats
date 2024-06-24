@@ -145,6 +145,7 @@ const dummyData = {
       dosMessage: null,
     },
     numberOfConnectionsIn: 0,
+    numberOfConnectionsOut: 0,
   },
   apps: {
     fluxusage: '0',
@@ -181,7 +182,6 @@ const dummyData = {
   collateralHash: '',
   collateralIndex: 0,
   roundTime: 0,
-  connectionsOut: 0,
   dataCollectedAt: 0,
 };
 async function getFluxNodeList(i = 0) {
@@ -512,26 +512,17 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
       fluxInfo.scannedHeight = scannedHeightInfo.generalScannedHeight;
       delete fluxInfo.flux.explorerScannedHeigth;
     }
-    let conOut = fluxInfo.flux.connectionsOut;
-    if (conOut) {
-      conOut = conOut.length;
-    } else if (fluxInfo.flux.numberOfConnectionsOut) {
-      conOut = fluxInfo.flux.numberOfConnectionsOut;
-      delete fluxInfo.flux.numberOfConnectionsOut;
-    } else {
+
+    if (typeof fluxInfo.flux.numberOfConnectionsOut !== "number") {
       const connectionsOut = await getConnectionsOut(fluxnode.ip, timeout);
-      conOut = connectionsOut.length;
+      fluxInfo.flux.numberOfConnectionsOut = connectionsOut.length;
     }
-    let conIn = fluxInfo.flux.connectionsIn;
-    if (conIn) {
-      conIn = conIn.length;
-    } else if (fluxInfo.flux.numberOfConnectionsIn) {
-      conIn = fluxInfo.flux.numberOfConnectionsOut;
-      delete fluxInfo.flux.numberOfConnectionsOut;
-    } else {
+
+    if (typeof fluxInfo.flux.numberOfConnectionsIn !== "number") {
       const connectionsIn = await getConnectionsIn(fluxnode.ip, timeout);
-      conIn = connectionsIn.length;
+      fluxInfo.flux.numberOfConnectionsIn = connectionsIn.length;
     }
+
     const auxIp = fluxnode.ip.split(':')[0];
 
     if (!myGeolocationCache.has(auxIp)) {
@@ -574,14 +565,6 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
     fluxInfo.collateralHash = getCollateralInfo(fluxnode.collateral).txhash;
     fluxInfo.collateralIndex = getCollateralInfo(fluxnode.collateral).txindex;
     fluxInfo.roundTime = currentRoundTime;
-
-    if (conOut) {
-      fluxInfo.connectionsOut = conOut;
-    }
-
-    if (conIn) {
-      fluxInfo.connectionsIn = conIn;
-    }
 
     const curTime = new Date().getTime();
     fluxInfo.dataCollectedAt = curTime;
