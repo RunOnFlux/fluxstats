@@ -261,8 +261,8 @@
         ]
       }
     ],
-    "visible": true,
-    "enabled": true
+    "visible": false,
+    "enabled": false
   },
   {
     "description": "An IronFish Full Node",
@@ -2727,8 +2727,8 @@
         ]
       }
     ],
-    "visible": true,
-    "enabled": true
+    "visible": false,
+    "enabled": false
   },
   {
     "description": "Broker Node have been replaced by StreamrNode on Flux Marketplace",
