@@ -3230,7 +3230,7 @@
         "description": "Simplex SMP Server",
         "repotag": "simplexchat/smp-server:latest",
         "containerPorts": [5223],
-        "domains": [],
+        "domains": [""],
         "environmentParameters": ["ADDR=127.0.0.1"],
         "commands": [],
         "containerData": "g:/etc/opt/simplex|0:/var/opt/simplex",
