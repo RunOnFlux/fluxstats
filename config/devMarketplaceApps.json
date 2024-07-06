@@ -3209,5 +3209,63 @@
       ],
       "visible": true,
       "enabled": true
-    }
+    },
+{
+    "description": "Host your PRIVATE Simplex server on the Flux Cloud",
+    "priceUSD": 4.45,
+    "multiplier": 1,
+    "category": "Hosting",
+    "version": 7,
+    "name": "simplexsmp",
+    "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "staticip": false,
+    "nodes": [],
+    "isAutoEnterprise": true,
+    "expire": 22000,
+    "compose": [
+      {
+        "name": "smp",
+        "description": "Simplex SMP Server",
+        "repotag": "simplexchat/smp-server:latest",
+        "containerPorts": [5223],
+        "domains": [""],
+        "environmentParameters": ["ADDR=127.0.0.1"],
+        "commands": [],
+        "containerData": "g:/etc/opt/simplex|0:/var/opt/simplex",
+        "tiered": false,
+        "cpu": 0.1,
+        "ram": 100,
+        "hdd": 1,
+        "ports": [5223],
+        "userSecrets": [
+          {
+            "name": "PASS",
+            "description": "Enter the password you want to use for your private Simplex SMP Server",
+            "placeholder": "Enter the server password you would like to use"
+          },
+      
+{
+        "name": "onion",
+        "description": "Onionpipe - Generate permanent onion address for local SMP service",
+        "repotag": "wirewrex/onionpipe:main",
+        "containerPorts": [],
+        "domains": [],
+        "environmentParameters": [],
+        "commands": ["fluxsmp_${lowerCaseName}:5223~5223@simplexsmp"],
+        "containerData": "/root|g:/data",
+        "tiered": false,
+        "cpu": 0.1,
+        "ram": 100,
+        "hdd": 1,
+        "ports": [],
+        "userSecrets": [],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  }	
 ]
