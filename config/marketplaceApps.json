@@ -1,7 +1,7 @@
 [
   {
     "description": "A simple hello world app with parameterized content",
-    "priceUSD": 0.50,
+    "priceUSD": 0.5,
     "category": "Hosting",
     "version": 4,
     "name": "HelloWorldParams",
@@ -179,7 +179,7 @@
   {
     "description": "Host your Streamr 1.0 Mainnet on the Flux Cloud 1-month plan",
     "priceUSD": 10.99,
-	  "multiplier": 1,
+    "multiplier": 1,
     "category": "Blockchain",
     "version": 7,
     "name": "Streamr",
@@ -195,12 +195,8 @@
         "name": "streamrnode",
         "description": "The Streamr 1.0 Mainnet container",
         "repotag": "streamr/node:latest",
-        "containerPorts": [
-          32200
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [32200],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/tmp",
@@ -208,7 +204,7 @@
         "cpu": 3,
         "ram": 4000,
         "hdd": 10,
-        "portSpecs": ["30000-50000"],    
+        "portSpecs": ["30000-50000"],
         "ports": [32200],
         "userSecrets": [
           {
@@ -600,7 +596,7 @@
   },
   {
     "description": "Host your Sushiswap Frontend on the Flux Cloud",
-    "priceUSD": 2.10,
+    "priceUSD": 2.1,
     "multiplier": 1,
     "category": "Front-end",
     "version": 4,
@@ -629,7 +625,7 @@
   },
   {
     "description": "Host your Yearn Finance Frontend on the Flux Cloud",
-    "priceUSD": 2.10,
+    "priceUSD": 2.1,
     "multiplier": 1,
     "category": "Front-end",
     "version": 4,
@@ -658,7 +654,7 @@
   },
   {
     "description": "Host your GMX.io Frontend on the Flux Cloud",
-    "priceUSD": 2.10,
+    "priceUSD": 2.1,
     "multiplier": 1,
     "category": "Front-end",
     "version": 4,
@@ -687,7 +683,7 @@
   },
   {
     "description": "Host your Dopex.io Frontend on the Flux Cloud",
-    "priceUSD": 2.10,
+    "priceUSD": 2.1,
     "multiplier": 1,
     "category": "Front-end",
     "version": 4,
@@ -716,7 +712,7 @@
   },
   {
     "description": "Host your Pangolin Frontend on the Flux Cloud",
-    "priceUSD": 2.10,
+    "priceUSD": 2.1,
     "multiplier": 1,
     "category": "Front-end",
     "version": 4,
@@ -745,7 +741,7 @@
   },
   {
     "description": "Host your Liquity Frontend on the Flux Cloud",
-    "priceUSD": 2.10,
+    "priceUSD": 2.1,
     "multiplier": 1,
     "category": "Front-end",
     "version": 4,
@@ -774,7 +770,7 @@
   },
   {
     "description": "Host your Balancer Finance Frontend on the Flux Cloud",
-    "priceUSD": 2.10,
+    "priceUSD": 2.1,
     "multiplier": 1,
     "category": "Front-end",
     "version": 4,
@@ -819,7 +815,7 @@
   },
   {
     "description": "Host your Osmosis Frontend on the Flux Cloud",
-    "priceUSD": 2.10,
+    "priceUSD": 2.1,
     "multiplier": 1,
     "category": "Front-end",
     "version": 4,
@@ -877,7 +873,7 @@
   },
   {
     "description": "Host your Blockbook for Ethereum Classic on the Flux Cloud",
-    "priceUSD": 8.40,
+    "priceUSD": 8.4,
     "multiplier": 1,
     "category": "Blockbook",
     "version": 4,
@@ -980,7 +976,7 @@
   },
   {
     "description": "Host your Blockbook for Firo on the Flux Cloud",
-    "priceUSD": 4.80,
+    "priceUSD": 4.8,
     "multiplier": 1,
     "category": "Blockbook",
     "version": 4,
@@ -1018,7 +1014,7 @@
   },
   {
     "description": "Host your Blockbook for Groestlcoin on the Flux Cloud",
-    "priceUSD": 6.20,
+    "priceUSD": 6.2,
     "multiplier": 1,
     "category": "Blockbook",
     "version": 4,
@@ -1051,7 +1047,7 @@
   },
   {
     "description": "PrivateBin is a minimalist, open source online pastebin where the server has zero knowledge of pasted data. Data is encrypted and decrypted in the browser using 256bit AES",
-    "priceUSD": 0.50,
+    "priceUSD": 0.5,
     "multiplier": 1,
     "category": "Productivity",
     "version": 4,
@@ -1080,7 +1076,7 @@
   },
   {
     "description": "Streaming and chat platform",
-    "priceUSD": 14.50,
+    "priceUSD": 14.5,
     "multiplier": 1,
     "category": "Productivity",
     "version": 4,
@@ -1109,7 +1105,7 @@
   },
   {
     "description": "Synchronized video viewing with chat and other features",
-    "priceUSD": 2.80,
+    "priceUSD": 2.8,
     "multiplier": 1,
     "category": "Productivity",
     "version": 4,
@@ -1175,13 +1171,14 @@
     "instances": 3,
     "contacts": [],
     "geolocation": [],
-    "geolocationOptions": [{"text": "North America", "value": "acNA"},
-            {"text": "Europe", "value": "acEU"},
-            {"text": "Asia", "value": "acAS"},
-            {"text": "South America", "value": "acSA"},
-            {"text": "Oceania", "value": "acOC"},
-            {"text": "Africa", "value": "acAF"}
-            ],
+    "geolocationOptions": [
+      { "text": "North America", "value": "acNA" },
+      { "text": "Europe", "value": "acEU" },
+      { "text": "Asia", "value": "acAS" },
+      { "text": "South America", "value": "acSA" },
+      { "text": "Oceania", "value": "acOC" },
+      { "text": "Africa", "value": "acAF" }
+    ],
     "staticip": false,
     "nodes": [],
     "expire": 22000,
@@ -1192,7 +1189,13 @@
         "repotag": "thijsvanloef/palworld-server-docker:latest",
         "containerPorts": [8211, 27015, 25575],
         "domains": ["", "", ""],
-        "environmentParameters": ["BACKUP_ENABLED=false","COMMUNITY=false","SERVER_NAME=Flux Cloud Game Server","SERVER_DESCRIPTION=Best Gaming Servers are on Flux Decentralized Network, get yours at runonflux.io","PLAYERS=4"],
+        "environmentParameters": [
+          "BACKUP_ENABLED=false",
+          "COMMUNITY=false",
+          "SERVER_NAME=Flux Cloud Game Server",
+          "SERVER_DESCRIPTION=Best Gaming Servers are on Flux Decentralized Network, get yours at runonflux.io",
+          "PLAYERS=4"
+        ],
         "commands": [],
         "containerData": "g:/palworld/Pal/Saved",
         "tiered": false,
@@ -1217,13 +1220,14 @@
     "instances": 3,
     "contacts": [],
     "geolocation": [],
-    "geolocationOptions": [{"text": "North America", "value": "acNA"},
-            {"text": "Europe", "value": "acEU"},
-            {"text": "Asia", "value": "acAS"},
-            {"text": "South America", "value": "acSA"},
-            {"text": "Oceania", "value": "acOC"},
-            {"text": "Africa", "value": "acAF"}
-            ],
+    "geolocationOptions": [
+      { "text": "North America", "value": "acNA" },
+      { "text": "Europe", "value": "acEU" },
+      { "text": "Asia", "value": "acAS" },
+      { "text": "South America", "value": "acSA" },
+      { "text": "Oceania", "value": "acOC" },
+      { "text": "Africa", "value": "acAF" }
+    ],
     "staticip": false,
     "nodes": [],
     "expire": 22000,
@@ -1234,7 +1238,13 @@
         "repotag": "thijsvanloef/palworld-server-docker:latest",
         "containerPorts": [8211, 27015, 25575],
         "domains": ["", "", ""],
-        "environmentParameters": ["BACKUP_ENABLED=false","COMMUNITY=false","SERVER_NAME=Flux Cloud Game Server","SERVER_DESCRIPTION=Best Gaming Servers are on Flux Decentralized Network, get yours at runonflux.io","PLAYERS=8"],
+        "environmentParameters": [
+          "BACKUP_ENABLED=false",
+          "COMMUNITY=false",
+          "SERVER_NAME=Flux Cloud Game Server",
+          "SERVER_DESCRIPTION=Best Gaming Servers are on Flux Decentralized Network, get yours at runonflux.io",
+          "PLAYERS=8"
+        ],
         "commands": [],
         "containerData": "g:/palworld/Pal/Saved",
         "tiered": false,
@@ -1250,134 +1260,113 @@
     "enabled": true
   },
   {
-  "description": "Host your Palworld 16 slots Game Server on Flux Cloud for a 1-month plan",
-  "priceUSD": 17.99,
-  "multiplier": 1.57,
-  "category": "Games",
-  "version": 7,
-  "name": "Palworld16Slots",
-  "instances": 3,
-  "contacts": [],
-  "geolocation": [],
-  "geolocationOptions": [{"text": "North America", "value": "acNA"},
-          {"text": "Europe", "value": "acEU"}
-          ],
-  "staticip": false,
-  "nodes": [],
-  "expire": 22000,
-  "compose": [
-    {
-      "name": "palworld",
-      "description": "Palworld Game container",
-      "repotag": "thijsvanloef/palworld-server-docker:latest",
-      "containerPorts": [8211, 27015, 25575],
-      "domains": ["", "", ""],
-      "environmentParameters": ["BACKUP_ENABLED=false","COMMUNITY=false","SERVER_NAME=Flux Cloud Game Server","SERVER_DESCRIPTION=Best Gaming Servers are on Flux Decentralized Network, get yours at runonflux.io","PLAYERS=16"],
-      "commands": [],
-      "containerData": "g:/palworld/Pal/Saved",
-      "tiered": false,
-      "cpu": 4,
-      "ram": 10000,
-      "hdd": 20,
-      "ports": [8211, 27015, 25575],
-      "secrets": "",
-      "repoauth": ""
-    }
-  ],
-  "visible": true,
-  "enabled": true
-},
-{
-"description": "Host your Palworld 32 slots Game Server on Flux Cloud for a 1-month plan",
-"priceUSD": 24.99,
-"multiplier": 1.49,
-"category": "Games",
-"version": 7,
-"name": "Palworld32Slots",
-"instances": 3,
-"contacts": [],
-"geolocation": [],
-"geolocationOptions": [{"text": "North America", "value": "acNA"},
-        {"text": "Europe", "value": "acEU"}
-        ],
-"staticip": false,
-"nodes": [],
-"expire": 22000,
-"compose": [
-  {
-    "name": "palworld",
-    "description": "Palworld Game container",
-    "repotag": "thijsvanloef/palworld-server-docker:latest",
-    "containerPorts": [8211, 27015, 25575],
-    "domains": ["", "", ""],
-    "environmentParameters": ["BACKUP_ENABLED=false","COMMUNITY=false","SERVER_NAME=Flux Cloud Game Server","SERVER_DESCRIPTION=Best Gaming Servers are on Flux Decentralized Network, get yours at runonflux.io","PLAYERS=32"],
-    "commands": [],
-    "containerData": "g:/palworld/Pal/Saved",
-    "tiered": false,
-    "cpu": 6,
-    "ram": 14000,
-    "hdd": 35,
-    "ports": [8211, 27015, 25575],
-    "secrets": "",
-    "repoauth": ""
-  }
-],
-"visible": true,
-"enabled": true
-},{
-  "description": "Host your Enshrouded 4 slots Game Server on Flux Cloud for a 1-month plan",
-  "priceUSD": 9.99,
-  "multiplier": 1.66,
-  "category": "Games",
-  "version": 7,
-  "name": "Enshrouded4Slots",
-  "instances": 3,
-  "contacts": [],
-  "geolocation": [],
-  "geolocationOptions": [{"text": "North America", "value": "acNA"},
-              {"text": "Europe", "value": "acEU"},
-              {"text": "Asia", "value": "acAS"},
-              {"text": "South America", "value": "acSA"},
-              {"text": "Oceania", "value": "acOC"},
-              {"text": "Africa", "value": "acAF"}
-              ],
-  "staticip": false,
-  "nodes": [],
-  "expire": 22000,
-  "compose": [
-    {
-      "name": "Enshrouded",
-      "description": "Enshrouded Game container",
-      "repotag": "jktuned/enshrouded-server:latest",
-      "containerPorts": [15636, 15637],
-      "domains": ["", ""],
-      "environmentParameters": ["SERVER_NAME=Flux Cloud Decentralized Game Server","SERVER_SLOT_COUNT=4","UPDATE_CRON=0 2 * * *", "UPDATE_CHECK_PLAYERS=true"],
-      "commands": [],
-      "containerData": "g:/opt/enshrouded/server/savegame",
-      "tiered": false,
-      "cpu": 2,
-      "ram": 4000,
-      "hdd": 50,
-      "ports": [15636, 15637],
-      "secrets": "",
-      "repoauth": ""
-    }
-  ],
-  "visible": true,
-  "enabled": true
-  },{
-    "description": "Host your Enshrouded 8 slots Game Server on Flux Cloud for a 1-month plan",
-    "priceUSD": 14.99,
-    "multiplier": 1.72,
+    "description": "Host your Palworld 16 slots Game Server on Flux Cloud for a 1-month plan",
+    "priceUSD": 17.99,
+    "multiplier": 1.57,
     "category": "Games",
     "version": 7,
-    "name": "Enshrouded8Slots",
+    "name": "Palworld16Slots",
     "instances": 3,
     "contacts": [],
     "geolocation": [],
-    "geolocationOptions": [{"text": "North America", "value": "acNA"},
-                {"text": "Europe", "value": "acEU"}
-                ],
+    "geolocationOptions": [
+      { "text": "North America", "value": "acNA" },
+      { "text": "Europe", "value": "acEU" }
+    ],
+    "staticip": false,
+    "nodes": [],
+    "expire": 22000,
+    "compose": [
+      {
+        "name": "palworld",
+        "description": "Palworld Game container",
+        "repotag": "thijsvanloef/palworld-server-docker:latest",
+        "containerPorts": [8211, 27015, 25575],
+        "domains": ["", "", ""],
+        "environmentParameters": [
+          "BACKUP_ENABLED=false",
+          "COMMUNITY=false",
+          "SERVER_NAME=Flux Cloud Game Server",
+          "SERVER_DESCRIPTION=Best Gaming Servers are on Flux Decentralized Network, get yours at runonflux.io",
+          "PLAYERS=16"
+        ],
+        "commands": [],
+        "containerData": "g:/palworld/Pal/Saved",
+        "tiered": false,
+        "cpu": 4,
+        "ram": 10000,
+        "hdd": 20,
+        "ports": [8211, 27015, 25575],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Palworld 32 slots Game Server on Flux Cloud for a 1-month plan",
+    "priceUSD": 24.99,
+    "multiplier": 1.49,
+    "category": "Games",
+    "version": 7,
+    "name": "Palworld32Slots",
+    "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "geolocationOptions": [
+      { "text": "North America", "value": "acNA" },
+      { "text": "Europe", "value": "acEU" }
+    ],
+    "staticip": false,
+    "nodes": [],
+    "expire": 22000,
+    "compose": [
+      {
+        "name": "palworld",
+        "description": "Palworld Game container",
+        "repotag": "thijsvanloef/palworld-server-docker:latest",
+        "containerPorts": [8211, 27015, 25575],
+        "domains": ["", "", ""],
+        "environmentParameters": [
+          "BACKUP_ENABLED=false",
+          "COMMUNITY=false",
+          "SERVER_NAME=Flux Cloud Game Server",
+          "SERVER_DESCRIPTION=Best Gaming Servers are on Flux Decentralized Network, get yours at runonflux.io",
+          "PLAYERS=32"
+        ],
+        "commands": [],
+        "containerData": "g:/palworld/Pal/Saved",
+        "tiered": false,
+        "cpu": 6,
+        "ram": 14000,
+        "hdd": 35,
+        "ports": [8211, 27015, 25575],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Enshrouded 4 slots Game Server on Flux Cloud for a 1-month plan",
+    "priceUSD": 9.99,
+    "multiplier": 1.66,
+    "category": "Games",
+    "version": 7,
+    "name": "Enshrouded4Slots",
+    "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "geolocationOptions": [
+      { "text": "North America", "value": "acNA" },
+      { "text": "Europe", "value": "acEU" },
+      { "text": "Asia", "value": "acAS" },
+      { "text": "South America", "value": "acSA" },
+      { "text": "Oceania", "value": "acOC" },
+      { "text": "Africa", "value": "acAF" }
+    ],
     "staticip": false,
     "nodes": [],
     "expire": 22000,
@@ -1388,7 +1377,56 @@
         "repotag": "jktuned/enshrouded-server:latest",
         "containerPorts": [15636, 15637],
         "domains": ["", ""],
-        "environmentParameters": ["SERVER_NAME=Flux Cloud Decentralized Game Server","SERVER_SLOT_COUNT=8","UPDATE_CRON=0 2 * * *", "UPDATE_CHECK_PLAYERS=true"],
+        "environmentParameters": [
+          "SERVER_NAME=Flux Cloud Decentralized Game Server",
+          "SERVER_SLOT_COUNT=4",
+          "UPDATE_CRON=0 2 * * *",
+          "UPDATE_CHECK_PLAYERS=true"
+        ],
+        "commands": [],
+        "containerData": "g:/opt/enshrouded/server/savegame",
+        "tiered": false,
+        "cpu": 2,
+        "ram": 4000,
+        "hdd": 50,
+        "ports": [15636, 15637],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Enshrouded 8 slots Game Server on Flux Cloud for a 1-month plan",
+    "priceUSD": 14.99,
+    "multiplier": 1.72,
+    "category": "Games",
+    "version": 7,
+    "name": "Enshrouded8Slots",
+    "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "geolocationOptions": [
+      { "text": "North America", "value": "acNA" },
+      { "text": "Europe", "value": "acEU" }
+    ],
+    "staticip": false,
+    "nodes": [],
+    "expire": 22000,
+    "compose": [
+      {
+        "name": "Enshrouded",
+        "description": "Enshrouded Game container",
+        "repotag": "jktuned/enshrouded-server:latest",
+        "containerPorts": [15636, 15637],
+        "domains": ["", ""],
+        "environmentParameters": [
+          "SERVER_NAME=Flux Cloud Decentralized Game Server",
+          "SERVER_SLOT_COUNT=8",
+          "UPDATE_CRON=0 2 * * *",
+          "UPDATE_CHECK_PLAYERS=true"
+        ],
         "commands": [],
         "containerData": "g:/opt/enshrouded/server/savegame",
         "tiered": false,
@@ -1402,44 +1440,51 @@
     ],
     "visible": true,
     "enabled": true
-    },{
-      "description": "Host your Enshrouded 16 slots Game Server on Flux Cloud for a 1-month plan",
-      "priceUSD": 19.99,
-      "multiplier": 1.76,
-      "category": "Games",
-      "version": 7,
-      "name": "Enshrouded16Slots",
-      "instances": 3,
-      "contacts": [],
-      "geolocation": [],
-      "geolocationOptions": [{"text": "North America", "value": "acNA"},
-                  {"text": "Europe", "value": "acEU"}
-                  ],
-      "staticip": false,
-      "nodes": [],
-      "expire": 22000,
-      "compose": [
-        {
-          "name": "Enshrouded",
-          "description": "Enshrouded Game container",
-          "repotag": "jktuned/enshrouded-server:latest",
-          "containerPorts": [15636, 15637],
-          "domains": ["", ""],
-          "environmentParameters": ["SERVER_NAME=Flux Cloud Decentralized Game Server","SERVER_SLOT_COUNT=16","UPDATE_CRON=0 2 * * *", "UPDATE_CHECK_PLAYERS=true"],
-          "commands": [],
-          "containerData": "g:/opt/enshrouded/server/savegame",
-          "tiered": false,
-          "cpu": 4,
-          "ram": 8000,
-          "hdd": 65,
-          "ports": [15636, 15637],
-          "secrets": "",
-          "repoauth": ""
-        }
-      ],
-      "visible": true,
-      "enabled": true
-      },
+  },
+  {
+    "description": "Host your Enshrouded 16 slots Game Server on Flux Cloud for a 1-month plan",
+    "priceUSD": 19.99,
+    "multiplier": 1.76,
+    "category": "Games",
+    "version": 7,
+    "name": "Enshrouded16Slots",
+    "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "geolocationOptions": [
+      { "text": "North America", "value": "acNA" },
+      { "text": "Europe", "value": "acEU" }
+    ],
+    "staticip": false,
+    "nodes": [],
+    "expire": 22000,
+    "compose": [
+      {
+        "name": "Enshrouded",
+        "description": "Enshrouded Game container",
+        "repotag": "jktuned/enshrouded-server:latest",
+        "containerPorts": [15636, 15637],
+        "domains": ["", ""],
+        "environmentParameters": [
+          "SERVER_NAME=Flux Cloud Decentralized Game Server",
+          "SERVER_SLOT_COUNT=16",
+          "UPDATE_CRON=0 2 * * *",
+          "UPDATE_CHECK_PLAYERS=true"
+        ],
+        "commands": [],
+        "containerData": "g:/opt/enshrouded/server/savegame",
+        "tiered": false,
+        "cpu": 4,
+        "ram": 8000,
+        "hdd": 65,
+        "ports": [15636, 15637],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
   {
     "description": "An open source voxel game engine",
     "price": 3.32,
@@ -2003,7 +2048,7 @@
   },
   {
     "description": "Host your Blockbook for Viacoin on the Flux Cloud",
-    "priceUSD": 12.50,
+    "priceUSD": 12.5,
     "multiplier": 1,
     "category": "Blockbook",
     "version": 4,
@@ -2036,7 +2081,7 @@
   },
   {
     "description": "The YaCy search engine software provides results from a network of independent peers, instead of a central server. It is a distributed network where no single entity decides what to list or order it appears in.",
-    "priceUSD": 3.30,
+    "priceUSD": 3.3,
     "multiplier": 1,
     "category": "Productivity",
     "version": 4,
@@ -2126,7 +2171,7 @@
   },
   {
     "description": "Host your Blockbook for Qtum on the Flux Cloud",
-    "priceUSD": 7.00,
+    "priceUSD": 7.0,
     "multiplier": 1,
     "category": "Blockbook",
     "version": 4,
@@ -2184,7 +2229,7 @@
   },
   {
     "description": "Host your Blockbook for Dash on the Flux Cloud",
-    "priceUSD": 6.70,
+    "priceUSD": 6.7,
     "multiplier": 1,
     "category": "Blockbook",
     "version": 4,
@@ -2213,7 +2258,7 @@
   },
   {
     "description": "Host your Blockbook for Divi on the Flux Cloud",
-    "priceUSD": 6.00,
+    "priceUSD": 6.0,
     "multiplier": 1,
     "category": "Blockbook",
     "version": 4,
@@ -2247,7 +2292,7 @@
   },
   {
     "description": "Host your Blockbook for Decred on the Flux Cloud",
-    "priceUSD": 6.00,
+    "priceUSD": 6.0,
     "multiplier": 1,
     "category": "Blockbook",
     "version": 4,
@@ -2280,7 +2325,7 @@
   },
   {
     "description": "Host your Meowcoin 2.0 Testnet Full Node on the Flux Cloud",
-    "priceUSD": 7.20,
+    "priceUSD": 7.2,
     "multiplier": 1,
     "category": "Blockchain",
     "version": 7,
@@ -2296,12 +2341,8 @@
         "name": "meowcointestnetnode",
         "description": "The Meowcoin Node Container",
         "repotag": "zachprice105/meowcointestnet:latest",
-        "containerPorts": [
-          4569
-        ],
-        "domains": [
-          ""
-        ],
+        "containerPorts": [4569],
+        "domains": [""],
         "environmentParameters": [],
         "commands": [],
         "containerData": "/root",
@@ -2318,7 +2359,7 @@
   },
   {
     "description": "Host your Wanchain RPC Node on the Flux Cloud",
-    "priceUSD": 14.00,
+    "priceUSD": 14.0,
     "multiplier": 1,
     "category": "RPC Node",
     "version": 4,
@@ -2353,7 +2394,7 @@
   },
   {
     "description": "Host your Nexa Node on the Flux Cloud",
-    "priceUSD": 3.80,
+    "priceUSD": 3.8,
     "multiplier": 1,
     "category": "Blockchain",
     "version": 4,
@@ -2382,7 +2423,7 @@
   },
   {
     "description": "Host your Radiant-ElectrumX on the Flux Cloud",
-    "priceUSD": 5.20,
+    "priceUSD": 5.2,
     "multiplier": 1,
     "category": "Blockchain",
     "version": 4,
@@ -2562,7 +2603,7 @@
   },
   {
     "description": "Host your Bitgert RPC Node on the Flux Cloud",
-    "priceUSD": 14.00,
+    "priceUSD": 14.0,
     "multiplier": 1,
     "category": "RPC Node",
     "version": 4,
@@ -2591,7 +2632,7 @@
   },
   {
     "description": "Host your Celo RPC Node on the Flux Cloud",
-    "priceUSD": 16.50,
+    "priceUSD": 16.5,
     "multiplier": 1,
     "category": "RPC Node",
     "version": 4,
@@ -2630,7 +2671,7 @@
   },
   {
     "description": "Host your Fuse RPC Node on the Flux Cloud",
-    "priceUSD": 9.00,
+    "priceUSD": 9.0,
     "multiplier": 1,
     "category": "RPC Node",
     "version": 4,
@@ -2668,7 +2709,7 @@
   },
   {
     "description": "Host your Astar RPC Node on the Flux Cloud",
-    "priceUSD": 32.00,
+    "priceUSD": 32.0,
     "multiplier": 1,
     "category": "RPC Node",
     "version": 4,
@@ -2697,7 +2738,7 @@
   },
   {
     "description": "Host your Algorand RPC Node on the Flux Cloud",
-    "priceUSD": 22.00,
+    "priceUSD": 22.0,
     "multiplier": 1,
     "category": "RPC Node",
     "version": 4,
@@ -2805,7 +2846,7 @@
   },
   {
     "description": "Host your Neurai-ElectrumX via Flux Cloud",
-    "priceUSD": 8.60,
+    "priceUSD": 8.6,
     "multiplier": 1,
     "category": "Blockchain",
     "version": 4,
@@ -2938,7 +2979,7 @@
   },
   {
     "description": "Host your Celestia Light Node on the Flux Cloud",
-    "priceUSD": 3.50,
+    "priceUSD": 3.5,
     "multiplier": 1,
     "category": "Blockchain",
     "version": 4,
@@ -2986,10 +3027,11 @@
         "containerPorts": [9944, 30333, 9933],
         "domains": ["", "", ""],
         "environmentParameters": ["CARGO_HOME=/var/www/node-subtensor/.cargo"],
-        "commands": ["/bin/bash",
+        "commands": [
+          "/bin/bash",
           "-c",
           "/usr/local/bin/node-subtensor --base-path /tmp/blockchain --chain ./raw_spec.json --rpc-external --rpc-cors all --ws-external --no-mdns --ws-max-connections 5000 --in-peers 200 --out-peers 200 --bootnodes /dns/bootnode.finney.opentensor.ai/tcp/30333/ws/p2p/12D3KooWRwbMb85RWnT8DSXSYMWQtuDwh4LJzndoRrTDotTR5gDC --no-private-ip --sync warp"
-	],
+        ],
         "containerData": "/tmp",
         "tiered": false,
         "cpu": 4.5,
@@ -3005,7 +3047,7 @@
   },
   {
     "description": "Host your PRIVATE Java Minecraft server on the Flux Cloud",
-    "priceUSD": 6.20,
+    "priceUSD": 6.2,
     "multiplier": 1,
     "category": "Games",
     "version": 7,
@@ -3024,7 +3066,12 @@
         "repotag": "itzg/minecraft-server:latest",
         "containerPorts": [25565],
         "domains": [""],
-        "environmentParameters": ["EULA=TRUE","TYPE=SPIGOT","MAX_MEMORY=1G","INIT_MEMORY=1G"],
+        "environmentParameters": [
+          "EULA=TRUE",
+          "TYPE=SPIGOT",
+          "MAX_MEMORY=1G",
+          "INIT_MEMORY=1G"
+        ],
         "commands": [],
         "containerData": "g:/data",
         "tiered": false,
@@ -3038,7 +3085,7 @@
             "description": "Enter the minecraft username that should be set as the server operator-administrator",
             "placeholder": "Enter the admin minecraft username here"
           },
-           {
+          {
             "name": "WHITELIST",
             "description": "Enter the minecraft usernames that should be whitelisted, comma separated",
             "placeholder": "Enter minecraft usernames to whitelist here"
@@ -3057,114 +3104,118 @@
     "enabled": false
   },
   {
-      "description": "Host your PUBLIC Java Minecraft server on the Flux Cloud",
-      "priceUSD": 6.10,
-      "multiplier": 1,
-      "category": "Games",
-      "version": 7,
-      "name": "Minecraft",
-      "instances": 3,
-      "contacts": [],
-      "geolocation": [],
-      "staticip": false,
-      "nodes": [],
-      "expire": 22000,
-      "compose": [
-        {
-          "name": "minecraftserver",
-          "description": "The Minecraft Server container",
-          "repotag": "itzg/minecraft-server:latest",
-          "containerPorts": [25565],
-          "domains": [""],
-          "environmentParameters": ["EULA=TRUE","TYPE=SPIGOT","MAX_MEMORY=5G","INIT_MEMORY=5G"],
-          "commands": [],
-          "containerData": "g:/data",
-          "tiered": false,
-          "cpu": 2,
-          "ram": 5000,
-          "hdd": 30,      
-          "ports": [25565],
-          "secrets": "",
-          "repoauth": ""
-        }
-      ],
-      "visible": false,
-      "enabled": false
-    },
-    {
-      "description": "Host your Cyberfly Testnet Node on the Flux Cloud",
-      "priceUSD": 7.24,
-      "multiplier": 1,
-      "category": "Blockchain",
-      "version": 7,
-      "name": "Cyberfly",
-      "instances": 3,
-      "contacts": [],
-      "geolocation": [],
-      "staticip": false,
-      "nodes": [],
-      "compose": [
-        {
-          "name": "cyberflymqtt",
-          "description": "Cyberfly MQTT server container",
-          "repotag": "cyberfly/cyberfly_mqtt:latest",
-          "containerPorts": [1883, 9001],
-          "domains": ["",""],
-          "environmentParameters": [],
-          "commands": [],
-          "containerData": "g:/data",
-          "tiered": false,
-          "cpu": 1,
-          "ram": 1000,
-          "hdd": 1,      
-          "ports": [31004, 31005],
-          "secrets": "",
-          "repoauth": ""
-        },
-        {
-          "name": "cyberflynode",
-          "description": "Cyberfly node backend container",
-          "repotag": "cyberfly/cyberfly_node:latest",
-          "containerPorts": [31001, 31002, 31003],
-          "domains": ["","",""],
-          "environmentParameters": ["MQTT_HOST=mqtt://cyberflymqtt"],
-          "commands": [],
-          "containerData": "g:/data",
-          "tiered": false,
-          "cpu": 2,
-          "ram": 2000,
-          "hdd": 10,      
-          "ports": [31001, 31002, 31003],
-          "userEnvironmentParameters": [
-            {
-              "name": "KADENA_ACCOUNT",
-              "description": "Your kadena k:address",
-              "placeholder": "Enter your k: address here"
-            }
-          ],
-          "secrets": "",
-          "repoauth": ""
-        },
-        {
-          "name": "cyberflynodeui",
-          "description": "Cyberfly node UI container",
-          "repotag": "cyberfly/cyberfly_node_ui:latest",
-          "containerPorts": [80],
-          "domains": [""],
-          "environmentParameters": [],
-          "commands": [],
-          "containerData": "g:/data",
-          "tiered": false,
-          "cpu": 0.5,
-          "ram": 500,
-          "hdd": 1,      
-          "ports": [31000],
-          "secrets": "",
-          "repoauth": ""
-        }
-      ],
-      "visible": true,
-      "enabled": true
-    }
-    
+    "description": "Host your PUBLIC Java Minecraft server on the Flux Cloud",
+    "priceUSD": 6.1,
+    "multiplier": 1,
+    "category": "Games",
+    "version": 7,
+    "name": "Minecraft",
+    "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "staticip": false,
+    "nodes": [],
+    "expire": 22000,
+    "compose": [
+      {
+        "name": "minecraftserver",
+        "description": "The Minecraft Server container",
+        "repotag": "itzg/minecraft-server:latest",
+        "containerPorts": [25565],
+        "domains": [""],
+        "environmentParameters": [
+          "EULA=TRUE",
+          "TYPE=SPIGOT",
+          "MAX_MEMORY=5G",
+          "INIT_MEMORY=5G"
+        ],
+        "commands": [],
+        "containerData": "g:/data",
+        "tiered": false,
+        "cpu": 2,
+        "ram": 5000,
+        "hdd": 30,
+        "ports": [25565],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": false,
+    "enabled": false
+  },
+  {
+    "description": "Host your Cyberfly Testnet Node on the Flux Cloud",
+    "priceUSD": 7.24,
+    "multiplier": 1,
+    "category": "Blockchain",
+    "version": 7,
+    "name": "Cyberfly",
+    "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "staticip": false,
+    "nodes": [],
+    "compose": [
+      {
+        "name": "cyberflymqtt",
+        "description": "Cyberfly MQTT server container",
+        "repotag": "cyberfly/cyberfly_mqtt:latest",
+        "containerPorts": [1883, 9001],
+        "domains": ["", ""],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "g:/data",
+        "tiered": false,
+        "cpu": 1,
+        "ram": 1000,
+        "hdd": 1,
+        "ports": [31004, 31005],
+        "secrets": "",
+        "repoauth": ""
+      },
+      {
+        "name": "cyberflynode",
+        "description": "Cyberfly node backend container",
+        "repotag": "cyberfly/cyberfly_node:latest",
+        "containerPorts": [31001, 31002, 31003],
+        "domains": ["", "", ""],
+        "environmentParameters": ["MQTT_HOST=mqtt://cyberflymqtt"],
+        "commands": [],
+        "containerData": "g:/data",
+        "tiered": false,
+        "cpu": 2,
+        "ram": 2000,
+        "hdd": 10,
+        "ports": [31001, 31002, 31003],
+        "userEnvironmentParameters": [
+          {
+            "name": "KADENA_ACCOUNT",
+            "description": "Your kadena k:address",
+            "placeholder": "Enter your k: address here"
+          }
+        ],
+        "secrets": "",
+        "repoauth": ""
+      },
+      {
+        "name": "cyberflynodeui",
+        "description": "Cyberfly node UI container",
+        "repotag": "cyberfly/cyberfly_node_ui:latest",
+        "containerPorts": [80],
+        "domains": [""],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "g:/data",
+        "tiered": false,
+        "cpu": 0.5,
+        "ram": 500,
+        "hdd": 1,
+        "ports": [31000],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  }
 ]
