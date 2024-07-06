@@ -3307,7 +3307,7 @@
         "containerPorts": [],
         "domains": [],
         "environmentParameters": [],
-        "commands": ["fluxsmp_${lowerCaseName}:5223~5223@simplexsmp"],
+        "commands": ["fluxsmp_replacethis:5223~5223@simplexsmp"],
         "containerData": "/root|g:/data",
         "tiered": false,
         "cpu": 0.1,
