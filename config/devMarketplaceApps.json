@@ -3264,7 +3264,7 @@
     "enabled": true
   },
   {
-    "description": "Host your PRIVATE Simplex server on the Flux Cloud",
+    "description": "Host your PRIVATE Simplex Server w/ Clearnet IP + Onion Address",
     "priceUSD": 4.45,
     "multiplier": 1,
     "category": "Hosting",
@@ -3273,7 +3273,7 @@
     "instances": 3,
     "contacts": [],
     "geolocation": [],
-    "staticip": false,
+    "staticip": true,
     "nodes": [],
     "isAutoEnterprise": true,
     "expire": 22000,
@@ -3303,18 +3303,25 @@
       {
         "name": "onion",
         "description": "Onionpipe - Generate permanent onion address for local SMP service",
-        "repotag": "wirewrex/onionpipe:main",
+        "repotag": "wirewrex/hiddenonion:latest",
         "containerPorts": [],
         "domains": [],
-        "environmentParameters": [],
-        "commands": ["fluxsmp_${lowerCaseName}:5223~5223@simplexsmp"],
-        "containerData": "/root|g:/data",
+        "environmentParameters": ["SERVICE_PORT=5223","ONION_PORT=5223"],
+        "commands": [],
+        "containerData": "g:/var/lib/tor",
         "tiered": false,
         "cpu": 0.1,
         "ram": 100,
         "hdd": 1,
         "ports": [],
-        "userSecrets": [],
+        "userSecrets": [
+          {
+            "name": "SERVICE_HOST",
+            "description": "1. Click View Additional Details <br> 2. Copy everything before the first period on Automatic Domain <br> 3. Come back to this SERVICE_HOST Secret section and type in fluxsmp_ into the field below. <br> 4. Paste the name you copied from the domain, right after the underscore. Do not include any space.",
+            "placeholder": "fluxsmp_{replace-with-app-name}"
+          }
+        ]
+      },
         "secrets": "",
         "repoauth": ""
       }
