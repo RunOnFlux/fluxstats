@@ -3308,7 +3308,7 @@
         "repotag": "wirewrex/hiddenonion:latest",
         "containerPorts": [],
         "domains": [],
-        "environmentParameters": ["SERVICE_PORT=5223","ONION_PORT=5223"],
+        "environmentParameters": ["SERVICE_HOST=fluxsmp_","SERVICE_PORT=5223","ONION_PORT=5223"],
         "commands": [],
         "containerData": "g:/var/lib/tor",
         "tiered": false,
@@ -3316,13 +3316,59 @@
         "ram": 100,
         "hdd": 1,
         "ports": [],
-        "userSecrets": [
-          {
-            "name": "SERVICE_HOST",
-            "description": "1. Click View Additional Details <br> 2. Copy everything before the first period on Automatic Domain <br> 3. Come back to this SERVICE_HOST Secret section and type in fluxsmp_ into the field below. <br> 4. Paste the name you copied from the domain, right after the underscore. Do not include any space.",
-            "placeholder": "fluxsmp_{replace-with-app-name}"
-          }
-        ],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your PUBLIC Simplex Server w/ Clearnet IP + Onion Address",
+    "priceUSD": 6.44,
+    "multiplier": 1,
+    "category": "Hosting",
+    "version": 7,
+    "name": "simplexsmp",
+    "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "staticip": true,
+    "nodes": [],
+    "isAutoEnterprise": true,
+    "expire": 22000,
+    "compose": [
+      {
+        "name": "smp",
+        "description": "Simplex SMP Server",
+        "repotag": "simplexchat/smp-server:latest",
+        "containerPorts": [5223],
+        "domains": [""],
+        "environmentParameters": ["ADDR=127.0.0.1"],
+        "commands": [],
+        "containerData": "g:/etc/opt/simplex|0:/var/opt/simplex",
+        "tiered": false,
+        "cpu": 0.1,
+        "ram": 100,
+        "hdd": 1,
+        "ports": [5223],
+        "secrets": "",
+        "repoauth": ""
+      },
+      {
+        "name": "onion",
+        "description": "Onionpipe - Generate permanent onion address for local SMP service",
+        "repotag": "wirewrex/hiddenonion:latest",
+        "containerPorts": [],
+        "domains": [],
+        "environmentParameters": ["SERVICE_HOST=fluxsmp_","SERVICE_PORT=5223","ONION_PORT=5223"],
+        "commands": [],
+        "containerData": "g:/var/lib/tor",
+        "tiered": false,
+        "cpu": 0.1,
+        "ram": 100,
+        "hdd": 1,
+        "ports": [],
         "secrets": "",
         "repoauth": ""
       }
