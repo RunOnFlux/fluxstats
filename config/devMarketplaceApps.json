@@ -3298,7 +3298,9 @@
             "description": "Enter the password you want to use for your private Simplex SMP Server",
             "placeholder": "Enter the server password you would like to use"
           }
-        ]
+        ],
+        "secrets": "",
+        "repoauth": ""
       },
       {
         "name": "onion",
@@ -3320,8 +3322,7 @@
             "description": "1. Click View Additional Details <br> 2. Copy everything before the first period on Automatic Domain <br> 3. Come back to this SERVICE_HOST Secret section and type in fluxsmp_ into the field below. <br> 4. Paste the name you copied from the domain, right after the underscore. Do not include any space.",
             "placeholder": "fluxsmp_{replace-with-app-name}"
           }
-        ]
-      },
+        ],
         "secrets": "",
         "repoauth": ""
       }
