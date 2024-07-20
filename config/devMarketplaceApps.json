@@ -3403,7 +3403,7 @@
         "tiered": false,
         "cpu": 0.1,
         "ram": 100,
-        "hdd": 1,
+        "hdd": 10,
         "ports": [443],
         "userSecrets": [
           {
@@ -3480,7 +3480,7 @@
         "tiered": false,
         "cpu": 0.1,
         "ram": 100,
-        "hdd": 10,
+        "hdd": 1,
         "ports": [],
         "secrets": "",
         "repoauth": ""
