@@ -3264,12 +3264,12 @@
     "enabled": true
   },
   {
-    "description": "Host your PRIVATE (password protected) Simplex Server w/ Clearnet IP + Onion Address",
+    "description": "Host your PRIVATE (password protected) Simplex SMP Server w/ Clearnet IP + Onion Address",
     "priceUSD": 6.44,
     "multiplier": 1,
     "category": "Hosting",
     "version": 7,
-    "name": "SimpleXSMP",
+    "name": "PrivateSimpleXSMP",
     "instances": 3,
     "contacts": [],
     "geolocation": [],
@@ -3280,7 +3280,7 @@
     "compose": [
       {
         "name": "smp",
-        "description": "Simplex SMP Server",
+        "description": "SimpleX SMP Server",
         "repotag": "simplexchat/smp-server:latest",
         "containerPorts": [5223],
         "domains": [""],
@@ -3295,7 +3295,7 @@
         "userSecrets": [
           {
             "name": "PASS",
-            "description": "Enter the password you want to use for your private Simplex SMP Server",
+            "description": "Enter the password you want to use for your Private SimpleX SMP Server",
             "placeholder": "Enter the server password you would like to use"
           }
         ],
@@ -3304,7 +3304,7 @@
       },
       {
         "name": "onion",
-        "description": "Onionpipe - Generate permanent onion address for local SMP service",
+        "description": "Generate permanent onion address for local SMP service",
         "repotag": "wirewrex/hiddenonion:latest",
         "containerPorts": [],
         "domains": [],
@@ -3324,7 +3324,7 @@
     "enabled": true
   },
   {
-    "description": "Host your PUBLIC Simplex Server w/ Clearnet IP + Onion Address",
+    "description": "Host your PUBLIC SimpleX SMP Server w/ Clearnet IP + Onion Address",
     "priceUSD": 6.44,
     "multiplier": 1,
     "category": "Hosting",
