@@ -3377,7 +3377,7 @@
     "enabled": true
   },
   {
-    "description": "Host your PRIVATE (password protected) Simplex Server w/ Clearnet IP + Onion Address",
+    "description": "Host your PRIVATE (password protected) SimpleX xFTP Server w/ Clearnet IP + Onion Address",
     "priceUSD": 6.62,
     "multiplier": 1,
     "category": "Hosting",
