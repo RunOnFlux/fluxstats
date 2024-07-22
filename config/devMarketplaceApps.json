@@ -3377,7 +3377,7 @@
     "enabled": true
   },
   {
-    "description": "Host your PRIVATE (password protected) Simplex Server w/ Clearnet IP + Onion Address",
+    "description": "Host your PRIVATE (password protected) SimpleX xFTP Server w/ Clearnet IP + Onion Address",
     "priceUSD": 6.62,
     "multiplier": 1,
     "category": "Hosting",
@@ -3395,7 +3395,7 @@
         "name": "xftp",
         "description": "SimpleX xFTP Server",
         "repotag": "simplexchat/xftp-server:latest",
-        "containerPorts": [34443],
+        "containerPorts": [443],
         "domains": [""],
         "environmentParameters": ["ADDR=127.0.0.1","QUOTA=10gb"],
         "commands": [],
@@ -3404,7 +3404,7 @@
         "cpu": 0.1,
         "ram": 100,
         "hdd": 10,
-        "ports": [443],
+        "ports": [34443],
         "userSecrets": [
           {
             "name": "PASS",
@@ -3455,7 +3455,7 @@
         "name": "xftp",
         "description": "SimpleX xFTP Server",
         "repotag": "simplexchat/xftp-server:latest",
-        "containerPorts": [34443],
+        "containerPorts": [443],
         "domains": [""],
         "environmentParameters": ["ADDR=127.0.0.1","QUOTA=10gb"],
         "commands": [],
@@ -3464,7 +3464,7 @@
         "cpu": 0.1,
         "ram": 100,
         "hdd": 10,
-        "ports": [443],
+        "ports": [34443],
         "secrets": "",
         "repoauth": ""
       },
