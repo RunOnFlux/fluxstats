@@ -1,7 +1,7 @@
 [
   {
     "description": "A simple hello world app with parameterized content",
-    "priceUSD": 0.5,
+    "priceUSD": 0.99,
     "category": "Hosting",
     "version": 4,
     "name": "HelloWorldParams",
@@ -1769,7 +1769,7 @@
   },
   {
     "description": "Rustpad is an efficient and minimal open-source collaborative text editor",
-    "price": 0.66,
+    "price": 0.99,
     "category": "Productivity",
     "version": 4,
     "name": "Rustpad",
