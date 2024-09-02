@@ -3112,6 +3112,14 @@
     "name": "Minecraft5GB",
     "instances": 3,
     "contacts": [],
+    "geolocationOptions": [
+      { "text": "North America", "value": "acNA" },
+      { "text": "Europe", "value": "acEU" },
+      { "text": "Asia", "value": "acAS" },
+      { "text": "South America", "value": "acSA" },
+      { "text": "Oceania", "value": "acOC" },
+      { "text": "Africa", "value": "acAF" }
+    ],
     "geolocation": [],
     "staticip": false,
     "nodes": [],
@@ -3154,6 +3162,14 @@
     "name": "Minecraft7GB",
     "instances": 3,
     "contacts": [],
+    "geolocationOptions": [
+      { "text": "North America", "value": "acNA" },
+      { "text": "Europe", "value": "acEU" },
+      { "text": "Asia", "value": "acAS" },
+      { "text": "South America", "value": "acSA" },
+      { "text": "Oceania", "value": "acOC" },
+      { "text": "Africa", "value": "acAF" }
+    ],
     "geolocation": [],
     "staticip": false,
     "nodes": [],
@@ -3196,6 +3212,11 @@
     "name": "Minecraft9GB",
     "instances": 3,
     "contacts": [],
+    "geolocationOptions": [
+      { "text": "North America", "value": "acNA" },
+      { "text": "Europe", "value": "acEU" },
+      { "text": "Asia", "value": "acAS" }
+    ],
     "geolocation": [],
     "staticip": false,
     "nodes": [],
@@ -3238,6 +3259,11 @@
     "name": "Minecraft16GB",
     "instances": 3,
     "contacts": [],
+    "geolocationOptions": [
+      { "text": "North America", "value": "acNA" },
+      { "text": "Europe", "value": "acEU" },
+      { "text": "Asia", "value": "acAS" }
+    ],
     "geolocation": [],
     "staticip": false,
     "nodes": [],
@@ -3280,6 +3306,10 @@
     "name": "Minecraft32GB",
     "instances": 3,
     "contacts": [],
+    "geolocationOptions": [
+      { "text": "North America", "value": "acNA" },
+      { "text": "Europe", "value": "acEU" }
+    ],
     "geolocation": [],
     "staticip": false,
     "nodes": [],
@@ -3323,6 +3353,10 @@
     "instances": 3,
     "contacts": [],
     "geolocation": [],
+    "geolocationOptions": [
+      { "text": "North America", "value": "acNA" },
+      { "text": "Europe", "value": "acEU" }
+    ],
     "staticip": false,
     "nodes": [],
     "expire": 22000,
