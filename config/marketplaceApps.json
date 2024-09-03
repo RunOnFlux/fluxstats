@@ -3154,59 +3154,9 @@
     "enabled": true
   },
   {
-    "description": "Host your Java Minecraft 7GB of Ram Game Server on Flux Cloud for a 1-month plan",
-    "priceUSD": 8.99,
-    "multiplier": 1.23,
-    "category": "Games",
-    "version": 7,
-    "name": "Minecraft7GB",
-    "instances": 3,
-    "contacts": [],
-    "geolocationOptions": [
-      { "text": "North America", "value": "acNA" },
-      { "text": "Europe", "value": "acEU" },
-      { "text": "Asia", "value": "acAS" },
-      { "text": "South America", "value": "acSA" },
-      { "text": "Oceania", "value": "acOC" },
-      { "text": "Africa", "value": "acAF" }
-    ],
-    "geolocation": [],
-    "staticip": false,
-    "nodes": [],
-    "expire": 22000,
-    "compose": [
-      {
-        "name": "minecraftserver",
-        "description": "The Minecraft Server container",
-        "repotag": "itzg/minecraft-server:latest",
-        "containerPorts": [25565],
-        "domains": [""],
-        "environmentParameters": [
-          "SERVER_NAME=RunOnFlux.com",
-          "ENABLE_ROLLING_LOGS=true",
-          "EULA=TRUE",
-          "MAX_MEMORY=7G",
-          "INIT_MEMORY=2G"
-        ],
-        "commands": [],
-        "containerData": "g:/data",
-        "tiered": false,
-        "cpu": 2,
-        "ram": 7000,
-        "hdd": 40,
-        "portSpecs": ["10000-65535"],
-        "ports": [25565],
-        "secrets": "",
-        "repoauth": ""
-      }
-    ],
-    "visible": true,
-    "enabled": true
-  },
-  {
     "description": "Host your Java Minecraft 9GB of Ram Game Server on Flux Cloud for a 1-month plan",
-    "priceUSD": 11.99,
-    "multiplier": 1.37,
+    "priceUSD": 14.99,
+    "multiplier": 1.71,
     "category": "Games",
     "version": 7,
     "name": "Minecraft9GB",
@@ -3252,8 +3202,8 @@
   },
   {
     "description": "Host your Java Minecraft 16GB of Ram Game Server on Flux Cloud for a 1-month plan",
-    "priceUSD": 16.99,
-    "multiplier": 1,
+    "priceUSD": 24.99,
+    "multiplier": 1.99,
     "category": "Games",
     "version": 7,
     "name": "Minecraft16GB",
@@ -3299,8 +3249,8 @@
   },
   {
     "description": "Host your Java Minecraft 32GB of Ram Game Server on Flux Cloud for a 1-month plan",
-    "priceUSD": 29.99,
-    "multiplier": 1.42,
+    "priceUSD": 44.99,
+    "multiplier": 2.14,
     "category": "Games",
     "version": 7,
     "name": "Minecraft32GB",
@@ -3345,8 +3295,8 @@
   },
   {
     "description": "Host your Java Minecraft 48GB of Ram Game Server on Flux Cloud for a 1-month plan",
-    "priceUSD": 49.99,
-    "multiplier": 1.66,
+    "priceUSD": 69.99,
+    "multiplier": 2.33,
     "category": "Games",
     "version": 7,
     "name": "Minecraft48GB",
