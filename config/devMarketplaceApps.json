@@ -3149,12 +3149,12 @@
     "enabled": false
   },
   {
-    "description": "Host your Java Minecraft 5GB of Ram Game Server on Flux Cloud for a 1-month plan",
-    "priceUSD": 6.99,
-    "multiplier": 1.14,
+    "description": "Host your Vanilla Java Minecraft 1GB of Ram Game Server on Flux Cloud for a 1-month plan",
+    "priceUSD": 2.99,
+    "multiplier": 1.03,
     "category": "Games",
     "version": 7,
-    "name": "Minecraft5GB",
+    "name": "Minecraft1GB",
     "instances": 3,
     "contacts": [],
     "geolocationOptions": [
@@ -3180,15 +3180,65 @@
           "SERVER_NAME=RunOnFlux.com",
           "ENABLE_ROLLING_LOGS=true",
           "EULA=TRUE",
-          "MAX_MEMORY=5G",
-          "INIT_MEMORY=2G"
+          "MAX_MEMORY=1G",
+          "INIT_MEMORY=512MB"
         ],
         "commands": [],
         "containerData": "g:/data",
         "tiered": false,
-        "cpu": 2,
-        "ram": 5000,
-        "hdd": 30,
+        "cpu": 1.4,
+        "ram": 1000,
+        "hdd": 15,
+        "portSpecs": ["10000-65535"],
+        "ports": [25565],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Vanilla Java Minecraft 2GB of Ram Game Server on Flux Cloud for a 1-month plan",
+    "priceUSD": 4.99,
+    "multiplier": 1.36,
+    "category": "Games",
+    "version": 7,
+    "name": "Minecraft2GB",
+    "instances": 3,
+    "contacts": [],
+    "geolocationOptions": [
+      { "text": "North America", "value": "acNA" },
+      { "text": "Europe", "value": "acEU" },
+      { "text": "Asia", "value": "acAS" },
+      { "text": "South America", "value": "acSA" },
+      { "text": "Oceania", "value": "acOC" },
+      { "text": "Africa", "value": "acAF" }
+    ],
+    "geolocation": [],
+    "staticip": false,
+    "nodes": [],
+    "expire": 22000,
+    "compose": [
+      {
+        "name": "minecraftserver",
+        "description": "The Minecraft Server container",
+        "repotag": "itzg/minecraft-server:latest",
+        "containerPorts": [25565],
+        "domains": [""],
+        "environmentParameters": [
+          "SERVER_NAME=RunOnFlux.com",
+          "ENABLE_ROLLING_LOGS=true",
+          "EULA=TRUE",
+          "MAX_MEMORY=2G",
+          "INIT_MEMORY=1G"
+        ],
+        "commands": [],
+        "containerData": "g:/data",
+        "tiered": false,
+        "cpu": 1.5,
+        "ram": 2000,
+        "hdd": 20,
         "portSpecs": ["10000-65535"],
         "ports": [25565],
         "secrets": "",
