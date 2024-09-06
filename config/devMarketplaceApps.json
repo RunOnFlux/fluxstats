@@ -3181,7 +3181,7 @@
           "ENABLE_ROLLING_LOGS=true",
           "EULA=TRUE",
           "MAX_MEMORY=1G",
-          "INIT_MEMORY=512MB"
+          "INIT_MEMORY=512M"
         ],
         "commands": [],
         "containerData": "g:/data",
