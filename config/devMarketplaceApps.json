@@ -3180,7 +3180,7 @@
           "SERVER_NAME=RunOnFlux.com",
           "ENABLE_ROLLING_LOGS=true",
           "EULA=TRUE",
-          "MAX_MEMORY=1G",
+          "MAX_MEMORY=1000M",
           "INIT_MEMORY=512M"
         ],
         "commands": [],
@@ -3230,7 +3230,7 @@
           "SERVER_NAME=RunOnFlux.com",
           "ENABLE_ROLLING_LOGS=true",
           "EULA=TRUE",
-          "MAX_MEMORY=2G",
+          "MAX_MEMORY=2000M",
           "INIT_MEMORY=1G"
         ],
         "commands": [],
@@ -3280,7 +3280,7 @@
           "SERVER_NAME=RunOnFlux.com",
           "ENABLE_ROLLING_LOGS=true",
           "EULA=TRUE",
-          "MAX_MEMORY=5G",
+          "MAX_MEMORY=5000M",
           "INIT_MEMORY=1G"
         ],
         "commands": [],
@@ -3327,7 +3327,7 @@
           "SERVER_NAME=RunOnFlux.com",
           "ENABLE_ROLLING_LOGS=true",
           "EULA=TRUE",
-          "MAX_MEMORY=9G",
+          "MAX_MEMORY=9000M",
           "INIT_MEMORY=2G"
         ],
         "commands": [],
@@ -3374,7 +3374,7 @@
           "SERVER_NAME=RunOnFlux.com",
           "ENABLE_ROLLING_LOGS=true",
           "EULA=TRUE",
-          "MAX_MEMORY=16G",
+          "MAX_MEMORY=16000M",
           "INIT_MEMORY=2G"
         ],
         "commands": [],
@@ -3420,7 +3420,7 @@
           "SERVER_NAME=RunOnFlux.com",
           "ENABLE_ROLLING_LOGS=true",
           "EULA=TRUE",
-          "MAX_MEMORY=32G",
+          "MAX_MEMORY=32000M",
           "INIT_MEMORY=2G"
         ],
         "commands": [],
@@ -3466,7 +3466,7 @@
           "SERVER_NAME=RunOnFlux.com",
           "ENABLE_ROLLING_LOGS=true",
           "EULA=TRUE",
-          "MAX_MEMORY=48G",
+          "MAX_MEMORY=48000M",
           "INIT_MEMORY=2G"
         ],
         "commands": [],
