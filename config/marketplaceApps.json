@@ -3481,6 +3481,11 @@
             "name": "KADENA_ACCOUNT",
             "description": "Your kadena k:address",
             "placeholder": "Enter your k: address here"
+          },
+          {
+            "name": "NODE_PRIV_KEY",
+            "description": "Your node secret key",
+            "placeholder": "Enter your node secret key"
           }
         ],
         "secrets": "",
