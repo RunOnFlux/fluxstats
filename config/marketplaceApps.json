@@ -3106,7 +3106,7 @@
   {
     "description": "Host your Vanilla Java Minecraft 1GB of Ram Game Server on Flux Cloud for a 1-month plan",
     "priceUSD": 2.99,
-    "multiplier": 1.02,
+    "multiplier": 1.03,
     "category": "Games",
     "version": 7,
     "name": "Minecraft1GB",
@@ -3155,7 +3155,7 @@
   {
     "description": "Host your Vanilla Java Minecraft 2GB of Ram Game Server on Flux Cloud for a 1-month plan",
     "priceUSD": 4.99,
-    "multiplier": 1.35,
+    "multiplier": 1.36,
     "category": "Games",
     "version": 7,
     "name": "Minecraft2GB",
