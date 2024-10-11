@@ -1855,7 +1855,7 @@
         "cpu": 0.5,
         "ram": 1000,
         "hdd": 1,
-        "ports": [38895, 38896, 38897],
+        "ports": [9987, 38896, 38897],
         "userEnvironmentParameters": []
       }
     ],
