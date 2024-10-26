@@ -117,6 +117,7 @@
     "version": 7,
     "name": "PresearchNodeLegacy",
     "instances": 3,
+    "selectInstances": true,
     "lockedValues": ["instances"],
     "contacts": [],
     "geolocation": [],
