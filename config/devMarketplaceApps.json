@@ -2425,7 +2425,7 @@
       {
         "name": "electrumxradiant",
         "description": "The Radiant Electrumx Container",
-        "repotag": "radiantcommunity/electrumx_radiant_node:v1",
+        "repotag": "radiantcommunity/electrumx_radiant_node:latest",
         "containerPorts": [50010, 50012, 8000],
         "domains": ["", "", ""],
         "environmentParameters": [],
