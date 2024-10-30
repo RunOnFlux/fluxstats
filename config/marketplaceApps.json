@@ -76,8 +76,8 @@
   },
   {
     "description": "Host your Presearch Node Legacy on the Flux Cloud for a 1-month plan. PresearchNodeLegacy on Flux Network works with 'GrandFather' Nodes but with auto staking limitations when Nodes disconnect",
-    "priceUSD": 2.49,
-    "multiplier": 2.51,
+    "priceUSD": 2.79,
+    "multiplier": 2.81,
     "category": "Blockchain",
     "version": 7,
     "name": "PresearchNodeLegacy",
@@ -123,8 +123,8 @@
   },
   {
     "description": "Host your Presearch Node on the Flux Cloud for a 1-month plan. PresearchNode on Flux Network uses FluxStorage to build Private Keys and works without auto staking limitations when Nodes disconnect, doesn't work with 'Grandfather' nodes.",
-    "priceUSD": 2.49,
-    "multiplier": 2.51,
+    "priceUSD": 2.79,
+    "multiplier": 2.81,
     "category": "Blockchain",
     "version": 7,
     "name": "PresearchNode",
