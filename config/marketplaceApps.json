@@ -440,7 +440,7 @@
   },
   {
     "description": "Host your Kadena Chainweb Node on the Flux Network",
-    "priceUSD": 25.99,
+    "priceUSD": 28.40,
     "category": "Blockchain",
     "version": 4,
     "name": "ChainwebNode",
@@ -466,7 +466,7 @@
         "tiered": false,
         "cpu": 4,
         "ram": 12000,
-        "hdd": 660,
+        "hdd": 820,
         "ports": [31350, 31351],
         "userEnvironmentParameters": []
       }
