@@ -152,8 +152,7 @@
             size="mini"
             :min="-1000"
             :max="1000"
-          >
-          </el-input-number>
+          />
           <el-input-number
             v-model="offsetY"
             :step="50"
@@ -161,8 +160,7 @@
             size="mini"
             :min="-1000"
             :max="1000"
-          >
-          </el-input-number>
+          />
         </div>
         <div
           id="workspace"

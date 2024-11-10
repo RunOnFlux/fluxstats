@@ -20,13 +20,13 @@ module.exports = () => {
     // it('Should start process', async () => {
     //   chai.expect(service.start());
     // });
-    
+
     it('Should return flux node list', async () => {
       const response = await service.getFluxNodeList();
       chai.expect(response).to.not.be.null;
     });
 
-    const nodes = [[{ip: '192.168.0.1'}], []];
+    const nodes = [[{ ip: '192.168.0.1' }], []];
     for (const value of nodes) {
       it('Should return flux node ips', async () => {
         const response = await service.getFluxNodeIPs(value);
@@ -34,7 +34,7 @@ module.exports = () => {
       });
     }
 
-    const ips = [{ip:'38.242.236.226', res:'38.242.236.226'},{ip:'192.168.0.1', res:false}];
+    const ips = [{ ip: '38.242.236.226', res: '38.242.236.226' }, { ip: '192.168.0.1', res: false }];
     for (const value of ips) {
       it('Should return flux node geolocation', async () => {
         const response = await service.getFluxNodeGeolocation(value.ip);
@@ -45,7 +45,7 @@ module.exports = () => {
       });
     }
 
-    const fluxInfoData = [{ip:'38.242.236.226', res:'true'},{ip:'192.168.0.1', res:false}];
+    const fluxInfoData = [{ ip: '38.242.236.226', res: 'true' }, { ip: '192.168.0.1', res: false }];
     for (const value of fluxInfoData) {
       it('Should return flux information', async () => {
         try {
@@ -55,12 +55,12 @@ module.exports = () => {
             chai.expect(response.daemon).to.not.be.null;
           }
         } catch (e) {
-          // Expected timeout when IP is not avail 
+          // Expected timeout when IP is not avail
         }
       });
     }
 
-    const appHashesData = [{ip:'38.242.236.226', res:'true'},{ip:'192.168.0.1', res:false}];
+    const appHashesData = [{ ip: '38.242.236.226', res: 'true' }, { ip: '192.168.0.1', res: false }];
     for (const value of appHashesData) {
       it('Should return app hashes', async () => {
         const response = await service.getFluxAppsHashes(value.ip, 1000000);
@@ -71,7 +71,7 @@ module.exports = () => {
       });
     }
 
-    const syncHeightData = [{ip:'38.242.236.226', res:'true'},{ip:'192.168.0.1', res:false}];
+    const syncHeightData = [{ ip: '38.242.236.226', res: 'true' }, { ip: '192.168.0.1', res: false }];
     for (const value of syncHeightData) {
       it('Should return flux sync height', async () => {
         const response = await service.getFluxSyncedHeight(value.ip, 1000000);
@@ -82,7 +82,7 @@ module.exports = () => {
       });
     }
 
-    const getConnectionsOutData = [{ip:'38.242.236.226', res:'true'},{ip:'192.168.0.1', res:false}];
+    const getConnectionsOutData = [{ ip: '38.242.236.226', res: 'true' }, { ip: '192.168.0.1', res: false }];
     for (const value of getConnectionsOutData) {
       it('Should return connection out data', async () => {
         const response = await service.getConnectionsOut(value.ip, 1000000);
@@ -93,7 +93,7 @@ module.exports = () => {
       });
     }
 
-    const getConnectionsInData = [{ip:'38.242.236.226', res:'true'},{ip:'192.168.0.1', res:false}];
+    const getConnectionsInData = [{ ip: '38.242.236.226', res: 'true' }, { ip: '192.168.0.1', res: false }];
     for (const value of getConnectionsInData) {
       it('Should return connection in data', async () => {
         const response = await service.getConnectionsIn(value.ip, 1000000);
@@ -126,7 +126,7 @@ module.exports = () => {
     // });
 
     it('Should process flux nodes', async () => {
-      chai.expect(await service.processFluxNode({ip: '38.242.236.226:16127', collateral: '12345678901, 2)'}, '1654316207606', 1000000000));
+      chai.expect(await service.processFluxNode({ ip: '38.242.236.226:16127', collateral: '12345678901, 2)' }, '1654316207606', 1000000000));
     });
 
     it('Should process geolocation batch refresh database', async () => {
@@ -161,7 +161,7 @@ module.exports = () => {
     });
 
     it('Should process get all flux information', async () => {
-      const req = { params: 'ip,addedHeight', query: {projection: 'ip,addedHeight'} };
+      const req = { params: 'ip,addedHeight', query: { projection: 'ip,addedHeight' } };
       const res = {
         json: (data) => JSON.stringify(data),
       };
@@ -185,7 +185,7 @@ module.exports = () => {
     });
 
     it('Should process get all flux ip history', async () => {
-      const req = { params: {ip: '38.242.236.226'}, query: {ip: '38.242.236.226'} };
+      const req = { params: { ip: '38.242.236.226' }, query: { ip: '38.242.236.226' } };
       const res = {
         json: (data) => JSON.stringify(data),
       };

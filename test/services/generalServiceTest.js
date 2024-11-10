@@ -1,5 +1,5 @@
 const chai = require('chai');
-const {address} = require('zelcorejs');
+const { address } = require('zelcorejs');
 
 const service = require('../../src/services/generalService');
 const serviceHelper = require('../../src/services/serviceHelper');
@@ -53,7 +53,7 @@ module.exports = () => {
     //   chai.expect(response).to.be.at.least(0);
     // });
 
-    const zelids = [{id:"13vxCnQ8pQiZ12xzFdTezqspqgfPEsARPX", response: true}, {id:"23vxCnQ8pQiZ12xzFdTezqspqgfPEsARPX", response: false}, {id:"13vxCnQ8pQiZ12xzFdTezqspqgfPEsAXPX", response: false}];
+    const zelids = [{ id: '13vxCnQ8pQiZ12xzFdTezqspqgfPEsARPX', response: true }, { id: '23vxCnQ8pQiZ12xzFdTezqspqgfPEsARPX', response: false }, { id: '13vxCnQ8pQiZ12xzFdTezqspqgfPEsAXPX', response: false }];
     for (const value of zelids) {
       it('Should process active message phrases', async () => {
         const response = await service.verifyZelID(value.id);
@@ -61,7 +61,7 @@ module.exports = () => {
       });
     }
 
-    const publicKeys = [{key:"ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb", response: true}, {key:"ca978112ca1bbdcafac231b39a23dc4da786eff8147c", response: false}];
+    const publicKeys = [{ key: 'ca978112ca1bbdcafac231b39a23dc4da786eff8147c4e72b9807785afee48bb', response: true }, { key: 'ca978112ca1bbdcafac231b39a23dc4da786eff8147c', response: false }];
     for (const value of publicKeys) {
       it('Should process verify public key', async () => {
         const response = await service.verifyPublicKey(value.key);
@@ -72,45 +72,45 @@ module.exports = () => {
     const messages = [
       // *** Valid test case that needs proper data for message and signature
       // {
-      //   message: "sampleMessagewith65UnsignedInt8Characters", 
+      //   message: "sampleMessagewith65UnsignedInt8Characters",
       //   signingAddress: address.privKeyToPubKey('e9873d79c6d87dc0fb6a5778633389f4453213303da61f20bd67fc233aa33262)', true),
       //   signature: 'sampleSignaturewith65UnsignedInt8Characters',
       //   strMessageMagic: 'Sample strMessageMagic',
       //   checkSegwitAlways: true,
       //   response: true
-      // }, 
+      // },
       {
-        message: "Sample message", 
+        message: 'Sample message',
         signingAddress: 'Sample invalid length',
         signature: 'Sample signature',
         strMessageMagic: 'Sample strMessageMagic',
         checkSegwitAlways: true,
-        response: false
-      }, 
+        response: false,
+      },
       {
-        message: null, 
+        message: null,
         signingAddress: 'Sample signingAddress',
         signature: 'Sample signature',
         strMessageMagic: 'Sample strMessageMagic',
         checkSegwitAlways: true,
-        response: false
+        response: false,
       },
       {
-        message: "Sample message", 
+        message: 'Sample message',
         signingAddress: null,
         signature: 'Sample signature',
         strMessageMagic: 'Sample strMessageMagic',
         checkSegwitAlways: true,
-        response: false
+        response: false,
       },
       {
-        message: "Sample message", 
+        message: 'Sample message',
         signingAddress: null,
         signature: null,
         strMessageMagic: 'Sample strMessageMagic',
         checkSegwitAlways: true,
-        response: false
-      }
+        response: false,
+      },
     ];
     for (const value of messages) {
       it('Should process verify public key', async () => {

@@ -513,12 +513,12 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
       delete fluxInfo.flux.explorerScannedHeigth;
     }
 
-    if (typeof fluxInfo.flux.numberOfConnectionsOut !== "number") {
+    if (typeof fluxInfo.flux.numberOfConnectionsOut !== 'number') {
       const connectionsOut = await getConnectionsOut(fluxnode.ip, timeout);
       fluxInfo.flux.numberOfConnectionsOut = connectionsOut.length;
     }
 
-    if (typeof fluxInfo.flux.numberOfConnectionsIn !== "number") {
+    if (typeof fluxInfo.flux.numberOfConnectionsIn !== 'number') {
       const connectionsIn = await getConnectionsIn(fluxnode.ip, timeout);
       fluxInfo.flux.numberOfConnectionsIn = connectionsIn.length;
     }
@@ -565,6 +565,11 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
     fluxInfo.collateralHash = getCollateralInfo(fluxnode.collateral).txhash;
     fluxInfo.collateralIndex = getCollateralInfo(fluxnode.collateral).txindex;
     fluxInfo.roundTime = currentRoundTime;
+
+    // fix for sometimes missing geolocation.org
+    if (!fluxInfo.geolocation.org) {
+      fluxInfo.geolocation.org = '';
+    }
 
     const curTime = new Date().getTime();
     fluxInfo.dataCollectedAt = curTime;
