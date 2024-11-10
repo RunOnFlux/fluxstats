@@ -248,7 +248,7 @@ async function getFluxNodeGeolocation(ip) {
         regionName: ipRes.data.regionName,
         lat: ipRes.data.lat,
         lon: ipRes.data.lon,
-        org: ipRes.data.org || ipRes.data.isp,
+        org: ipRes.data.org || ipRes.data.isp || '',
       };
       // push this to our database
       return information;
@@ -567,7 +567,7 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
     fluxInfo.roundTime = currentRoundTime;
 
     // fix for sometimes missing geolocation.org
-    if (!fluxInfo.geolocation.org) {
+    if (fluxInfo.geolocation && !fluxInfo.geolocation.org) {
       fluxInfo.geolocation.org = '';
     }
 
@@ -599,6 +599,12 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
     fluxInfo.collateralIndex = getCollateralInfo(fluxnode.collateral).txindex;
     fluxInfo.roundTime = currentRoundTime;
     fluxInfo.dataCollectedAt = curTime;
+
+    // fix for sometimes missing geolocation.org
+    if (fluxInfo.geolocation && !fluxInfo.geolocation.org) {
+      fluxInfo.geolocation.org = '';
+    }
+
     fluxInfo.error = error;
     processedFluxNodes.push(fluxInfo);
   }
@@ -663,7 +669,7 @@ async function getGeolocationInBatchAndRefreshDatabase() {
                 regionName: geo.regionName,
                 lat: geo.lat,
                 lon: geo.lon,
-                org: geo.org || geo.isp,
+                org: geo.org || geo.isp || '',
               };
               fluxNodesGeolocations.push(geoInformation);
             }
@@ -706,7 +712,7 @@ async function getGeolocationInBatchAndRefreshDatabase() {
                 regionName: geo.regionName,
                 lat: geo.lat,
                 lon: geo.lon,
-                org: geo.org || geo.isp,
+                org: geo.org || geo.isp || '',
               };
               fluxNodesGeolocations.push(geoInformation);
             }
