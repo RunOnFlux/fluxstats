@@ -248,7 +248,7 @@ async function getFluxNodeGeolocation(ip) {
         regionName: ipRes.data.regionName,
         lat: ipRes.data.lat,
         lon: ipRes.data.lon,
-        org: ipRes.data.org || ipRes.data.isp,
+        org: ipRes.data.org || ipRes.data.isp || '',
       };
       // push this to our database
       return information;
@@ -513,12 +513,12 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
       delete fluxInfo.flux.explorerScannedHeigth;
     }
 
-    if (typeof fluxInfo.flux.numberOfConnectionsOut !== "number") {
+    if (typeof fluxInfo.flux.numberOfConnectionsOut !== 'number') {
       const connectionsOut = await getConnectionsOut(fluxnode.ip, timeout);
       fluxInfo.flux.numberOfConnectionsOut = connectionsOut.length;
     }
 
-    if (typeof fluxInfo.flux.numberOfConnectionsIn !== "number") {
+    if (typeof fluxInfo.flux.numberOfConnectionsIn !== 'number') {
       const connectionsIn = await getConnectionsIn(fluxnode.ip, timeout);
       fluxInfo.flux.numberOfConnectionsIn = connectionsIn.length;
     }
@@ -566,6 +566,11 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
     fluxInfo.collateralIndex = getCollateralInfo(fluxnode.collateral).txindex;
     fluxInfo.roundTime = currentRoundTime;
 
+    // fix for sometimes missing geolocation.org
+    if (fluxInfo.geolocation && !fluxInfo.geolocation.org) {
+      fluxInfo.geolocation.org = '';
+    }
+
     const curTime = new Date().getTime();
     fluxInfo.dataCollectedAt = curTime;
     delete fluxInfo.apps.hashes;
@@ -594,6 +599,12 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
     fluxInfo.collateralIndex = getCollateralInfo(fluxnode.collateral).txindex;
     fluxInfo.roundTime = currentRoundTime;
     fluxInfo.dataCollectedAt = curTime;
+
+    // fix for sometimes missing geolocation.org
+    if (fluxInfo.geolocation && !fluxInfo.geolocation.org) {
+      fluxInfo.geolocation.org = '';
+    }
+
     fluxInfo.error = error;
     processedFluxNodes.push(fluxInfo);
   }
@@ -658,7 +669,7 @@ async function getGeolocationInBatchAndRefreshDatabase() {
                 regionName: geo.regionName,
                 lat: geo.lat,
                 lon: geo.lon,
-                org: geo.org || geo.isp,
+                org: geo.org || geo.isp || '',
               };
               fluxNodesGeolocations.push(geoInformation);
             }
@@ -701,7 +712,7 @@ async function getGeolocationInBatchAndRefreshDatabase() {
                 regionName: geo.regionName,
                 lat: geo.lat,
                 lon: geo.lon,
-                org: geo.org || geo.isp,
+                org: geo.org || geo.isp || '',
               };
               fluxNodesGeolocations.push(geoInformation);
             }
