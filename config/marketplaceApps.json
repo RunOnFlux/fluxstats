@@ -3434,7 +3434,7 @@
   },
   {
     "description": "Host your Cyberfly Testnet Node on the Flux Cloud",
-    "priceUSD": 7.24,
+    "priceUSD": 9.94,
     "multiplier": 1,
     "category": "Blockchain",
     "version": 7,
@@ -3462,13 +3462,30 @@
         "secrets": "",
         "repoauth": ""
       },
+       {
+        "name": "redisstackserver",
+        "description": "Redis stack server container",
+        "repotag": "redis/redis-stack-server:latest",
+        "containerPorts": [],
+        "domains": ["", ""],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "g:/data",
+        "tiered": false,
+        "cpu": 1,
+        "ram": 2000,
+        "hdd": 10,
+        "ports": [],
+        "secrets": "",
+        "repoauth": ""
+      },
       {
         "name": "cyberflynode",
         "description": "Cyberfly node backend container",
         "repotag": "cyberfly/cyberfly_node:latest",
         "containerPorts": [31001, 31002, 31003],
         "domains": ["", "", ""],
-        "environmentParameters": ["MQTT_HOST=mqtt://cyberflymqtt"],
+        "environmentParameters": ["MQTT_HOST=mqtt://fluxcyberflymqtt_Cyberfly", "REDIS_HOST=fluxredisstackserver_Cyberfly"],
         "commands": [],
         "containerData": "g:/data",
         "tiered": false,
@@ -3481,6 +3498,11 @@
             "name": "KADENA_ACCOUNT",
             "description": "Your kadena k:address",
             "placeholder": "Enter your k: address here"
+          },
+          {
+            "name": "NODE_PRIV_KEY",
+            "description": "Your node secret key",
+            "placeholder": "Enter your node secret key"
           }
         ],
         "secrets": "",
