@@ -3485,7 +3485,7 @@
         "repotag": "cyberfly/cyberfly_node:latest",
         "containerPorts": [31001, 31002, 31003],
         "domains": ["", "", ""],
-        "environmentParameters": ["MQTT_HOST=mqtt://cyberflymqtt", "REDIS_HOST=redisstackserver"],
+        "environmentParameters": ["MQTT_HOST=mqtt://fluxcyberflymqtt_Cyberfly", "REDIS_HOST=fluxredisstackserver_Cyberfly"],
         "commands": [],
         "containerData": "g:/data",
         "tiered": false,
