@@ -3491,6 +3491,7 @@
     "geolocation": [],
     "staticip": false,
     "nodes": [],
+    "isAutoEnterprise": true,
     "compose": [
       {
         "name": "cyberflymqtt",
