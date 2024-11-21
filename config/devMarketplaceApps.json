@@ -3491,6 +3491,7 @@
     "geolocation": [],
     "staticip": false,
     "nodes": [],
+    "isAutoEnterprise": true,
     "compose": [
       {
         "name": "cyberflymqtt",
@@ -3532,7 +3533,7 @@
         "repotag": "cyberfly/cyberfly_node:latest",
         "containerPorts": [31001, 31002, 31003],
         "domains": ["", "", ""],
-        "environmentParameters": ["MQTT_HOST=mqtt://fluxcyberflymqtt_Cyberfly", "REDIS_HOST=fluxredisstackserver_Cyberfly"],
+        "environmentParameters": ["MQTT_HOST=mqtt://cyberflymqtt", "REDIS_HOST=redisstackserver"],
         "commands": [],
         "containerData": "g:/data",
         "tiered": false,
@@ -3540,7 +3541,7 @@
         "ram": 1000,
         "hdd": 10,
         "ports": [31001, 31002, 31003],
-        "userEnvironmentParameters": [
+        "userSecrets": [
           {
             "name": "KADENA_ACCOUNT",
             "description": "Your kadena k:address",
