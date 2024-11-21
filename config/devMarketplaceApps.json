@@ -3540,7 +3540,7 @@
         "ram": 1000,
         "hdd": 10,
         "ports": [31001, 31002, 31003],
-        "userEnvironmentParameters": [
+        "userSecrets": [
           {
             "name": "KADENA_ACCOUNT",
             "description": "Your kadena k:address",
