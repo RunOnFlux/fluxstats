@@ -110,7 +110,7 @@
     "enabled": true
   },
   {
-    "description": "Host your Presearch Node Legacy on the Flux Cloud for a 1-month plan. PresearchNodeLegacy on Flux Network works with 'GrandFather' Nodes but with auto staking limitations when Nodes disconnect",
+    "description": "Host your Presearch Node Legacy on the Flux Cloud. PresearchNodeLegacy on Flux Network works with 'GrandFather' Nodes but with auto staking limitations when Nodes disconnect",
     "priceUSD": 1.69,
     "multiplier": 1.71,
     "category": "Blockchain",
@@ -158,7 +158,7 @@
     "enabled": true
   },
   {
-    "description": "Host your Presearch Node on the Flux Cloud for a 1-month plan. PresearchNode on Flux Network uses FluxStorage to build Private Keys and works without auto staking limitations when Nodes disconnect, doesn't work with 'Grandfather' nodes.",
+    "description": "Host your Presearch Node on the Flux Cloud. PresearchNode on Flux Network uses FluxStorage to build Private Keys and works without auto staking limitations when Nodes disconnect, doesn't work with 'Grandfather' nodes.",
     "priceUSD": 1.69,
     "multiplier": 1.71,
     "category": "Blockchain",
@@ -243,7 +243,7 @@
     "enabled": true
   },
   {
-    "description": "Host your(s) Firo Masternode(s) on the Flux Cloud for a 1-month plan",
+    "description": "Host your(s) Firo Masternode(s) on the Flux Cloud",
     "priceUSD": 8.99,
     "multiplier": 1.89,
     "category": "Masternode",
@@ -1115,7 +1115,7 @@
     "enabled": true
   },
   {
-    "description": "Host your Palworld 4 slots Game Server on Flux Cloud for a 1-month plan",
+    "description": "Host your Palworld 4 slots Game Server on Flux Cloud",
     "priceUSD": 7.99,
     "multiplier": 1.39,
     "category": "Games",
@@ -1164,7 +1164,7 @@
     "enabled": true
   },
   {
-    "description": "Host your Palworld 8 slots Game Server on Flux Cloud for a 1-month plan",
+    "description": "Host your Palworld 8 slots Game Server on Flux Cloud",
     "priceUSD": 12.99,
     "multiplier": 1.8,
     "category": "Games",
@@ -1213,7 +1213,7 @@
     "enabled": true
   },
   {
-    "description": "Host your Palworld 16 slots Game Server on Flux Cloud for a 1-month plan",
+    "description": "Host your Palworld 16 slots Game Server on Flux Cloud",
     "priceUSD": 17.99,
     "multiplier": 1.57,
     "category": "Games",
@@ -1258,7 +1258,7 @@
     "enabled": true
   },
   {
-    "description": "Host your Palworld 32 slots Game Server on Flux Cloud for a 1-month plan",
+    "description": "Host your Palworld 32 slots Game Server on Flux Cloud",
     "priceUSD": 24.99,
     "multiplier": 1.49,
     "category": "Games",
@@ -1303,7 +1303,7 @@
     "enabled": true
   },
   {
-    "description": "Host your Enshrouded 4 slots Game Server on Flux Cloud for a 1-month plan",
+    "description": "Host your Enshrouded 4 slots Game Server on Flux Cloud",
     "priceUSD": 9.99,
     "multiplier": 1.66,
     "category": "Games",
@@ -1351,7 +1351,7 @@
     "enabled": true
   },
   {
-    "description": "Host your Enshrouded 8 slots Game Server on Flux Cloud for a 1-month plan",
+    "description": "Host your Enshrouded 8 slots Game Server on Flux Cloud",
     "priceUSD": 14.99,
     "multiplier": 1.72,
     "category": "Games",
@@ -1395,7 +1395,7 @@
     "enabled": true
   },
   {
-    "description": "Host your Enshrouded 16 slots Game Server on Flux Cloud for a 1-month plan",
+    "description": "Host your Enshrouded 16 slots Game Server on Flux Cloud",
     "priceUSD": 19.99,
     "multiplier": 1.76,
     "category": "Games",
@@ -1439,7 +1439,7 @@
     "enabled": true
   },
   {
-    "description": "Host your DayZ Game Server on Flux Cloud for a 1-month plan",
+    "description": "Host your DayZ Game Server on Flux Cloud",
     "priceUSD": 19.99,
     "multiplier": 1.49,
     "category": "Games",
@@ -2941,7 +2941,7 @@
     "enabled": true
   },
   {
-    "description": "Host your(s) Neoxa Masternode(s) on the Flux Cloud for a 1-month plan",
+    "description": "Host your(s) Neoxa Masternode(s) on the Flux Cloud",
     "priceUSD": 6.49,
     "multiplier": 1,
     "category": "Masternode",
@@ -3005,7 +3005,7 @@
     "enabled": true
   },
   {
-    "description": "Host your Bittensor Full Node on the Flux Cloud for a 1-month plan",
+    "description": "Host your Bittensor Full Node on the Flux Cloud",
     "priceUSD": 14.99,
     "multiplier": 1.09,
     "category": "Blockchain",
@@ -3151,7 +3151,7 @@
     "enabled": false
   },
   {
-    "description": "Host your Vanilla Java Minecraft 1GB of Ram Game Server on Flux Cloud for a 1-month plan",
+    "description": "Host your Vanilla Java Minecraft 1GB of Ram Game Server on Flux Cloud",
     "priceUSD": 2.99,
     "multiplier": 1.03,
     "category": "Games",
@@ -3200,7 +3200,7 @@
     "enabled": true
   },
   {
-    "description": "Host your Vanilla Java Minecraft 2GB of Ram Game Server on Flux Cloud for a 1-month plan",
+    "description": "Host your Vanilla Java Minecraft 2GB of Ram Game Server on Flux Cloud",
     "priceUSD": 4.99,
     "multiplier": 1.36,
     "category": "Games",
@@ -3249,7 +3249,7 @@
     "enabled": true
   },
   {
-    "description": "Host your Java Minecraft 5GB of Ram Game Server on Flux Cloud for a 1-month plan",
+    "description": "Host your Java Minecraft 5GB of Ram Game Server on Flux Cloud",
     "priceUSD": 9.99,
     "multiplier": 1.63,
     "category": "Games",
@@ -3298,7 +3298,7 @@
     "enabled": true
   },
   {
-    "description": "Host your Java Minecraft 9GB of Ram Game Server on Flux Cloud for a 1-month plan",
+    "description": "Host your Java Minecraft 9GB of Ram Game Server on Flux Cloud",
     "priceUSD": 14.99,
     "multiplier": 1.71,
     "category": "Games",
@@ -3344,7 +3344,7 @@
     "enabled": true
   },
   {
-    "description": "Host your Java Minecraft 16GB of Ram Game Server on Flux Cloud for a 1-month plan",
+    "description": "Host your Java Minecraft 16GB of Ram Game Server on Flux Cloud",
     "priceUSD": 24.99,
     "multiplier": 1.99,
     "category": "Games",
@@ -3390,7 +3390,7 @@
     "enabled": true
   },
   {
-    "description": "Host your Java Minecraft 32GB of Ram Game Server on Flux Cloud for a 1-month plan",
+    "description": "Host your Java Minecraft 32GB of Ram Game Server on Flux Cloud",
     "priceUSD": 44.99,
     "multiplier": 2.14,
     "category": "Games",
@@ -3435,7 +3435,7 @@
     "enabled": true
   },
   {
-    "description": "Host your Java Minecraft 48GB of Ram Game Server on Flux Cloud for a 1-month plan",
+    "description": "Host your Java Minecraft 48GB of Ram Game Server on Flux Cloud",
     "priceUSD": 69.99,
     "multiplier": 2.33,
     "category": "Games",
