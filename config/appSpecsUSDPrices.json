@@ -7,7 +7,7 @@
     "port": 2,
     "scope": 4,
     "staticip": 2,
-    "fluxmultiplier": 0.9,
+    "fluxmultiplier": 0.95,
     "multiplier": 1,
     "minUSDPrice": 0.99
 }
