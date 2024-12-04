@@ -7,6 +7,7 @@ const generalService = require('./services/generalService');
 const marketplaceService = require('./services/marketplaceService');
 const thunderService = require('./services/thunderService');
 const permanentMessages = require('./services/permanentMessagesService');
+const fluxOsService = require('./services/fluxOsService');
 
 const cache = apicache.middleware;
 
@@ -93,7 +94,7 @@ module.exports = (app) => {
   app.get('/proposals/voteinformation/:hash?/:zelid?', cache('1 minute'), (req, res) => { // if data array is empty, user did not vote
     proposalService.voteInformation(req, res);
   });
-  app.get('/proposals/votepower/:zelid?/:hash?', cache('2 minute'), (req, res) => { // object of power as numbeer and array of nodeInfo object { tier, ip, txhash, outidx, address, power, zelid, };
+  app.get('/proposals/votepower/:zelid?/:hash?', cache('2 minutes'), (req, res) => { // object of power as numbeer and array of nodeInfo object { tier, ip, txhash, outidx, address, power, zelid, };
     proposalService.getVotePower(req, res);
   });
   app.post('/proposals/submitproposal', (req, res) => {
@@ -116,5 +117,8 @@ module.exports = (app) => {
   });
   app.get('/fractus/nodes', cache('1 minute'), (req, res) => {
     thunderService.getThunderNodes(req, res);
+  });
+  app.get('/fluxos/hashes', cache('12 hours'), (req, res) => {
+    fluxOsService.listOsImageHashes(req, res);
   });
 };
