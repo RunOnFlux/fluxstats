@@ -118,7 +118,7 @@ module.exports = (app) => {
   app.get('/fractus/nodes', cache('1 minute'), (req, res) => {
     thunderService.getThunderNodes(req, res);
   });
-  app.get('/fluxos/hashes', cache('10 minutes'), (req, res) => {
+  app.get('/fluxos/hashes', cache('5 minutes'), (req, res) => {
     fluxOsService.listOsImageHashes(req, res);
   });
 };
