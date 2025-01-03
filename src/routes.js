@@ -8,6 +8,7 @@ const marketplaceService = require('./services/marketplaceService');
 const thunderService = require('./services/thunderService');
 const permanentMessages = require('./services/permanentMessagesService');
 const fluxOsService = require('./services/fluxOsService');
+const richListService = require('./services/richListService');
 
 const cache = apicache.middleware;
 
@@ -120,5 +121,9 @@ module.exports = (app) => {
   });
   app.get('/fluxos/hashes', cache('5 minutes'), (req, res) => {
     fluxOsService.listOsImageHashes(req, res);
+  });
+
+  app.get('/richlist', cache('1 minute'), (req, res) => {
+    richListService.apiRichList(req, res);
   });
 };

@@ -9,6 +9,7 @@ const proposalService = require('./src/services/proposalService');
 const generalService = require('./src/services/generalService');
 const thunderService = require('./src/services/thunderService');
 const permanentMessages = require('./src/services/permanentMessagesService');
+const richListService = require('./src/services/richListService');
 
 const server = http.createServer(app);
 
@@ -20,4 +21,5 @@ server.listen(config.server.port, () => {
   generalService.start();
   thunderService.processThunderNodes();
   permanentMessages.start();
+  richListService.start();
 });
