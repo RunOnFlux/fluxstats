@@ -1,5 +1,6 @@
 const axios = require('axios');
 const log = require('../lib/log');
+const pact = require('pact-lang-api');
 const serviceHelper = require('./serviceHelper');
 
 let currentRichList = [];
@@ -39,6 +40,28 @@ async function fetchBoxesForTokenSend(tokenId, url = 'https://graphql.erg.zelcor
   return fetchBoxesForTokenSend(tokenId, url, maxHeight, allBoxes, skip + 50);
 }
 
+async function getRunonfluxSnapshot(chainId = '0', networkId = 'mainnet01') {
+  const node = `https://kadena.dapp.runonflux.io/chainweb/0.0/${networkId}/chain/${chainId}/pact`;
+  const pactResponse = await pact.fetch.local(
+    {
+      pactCode: '(runonflux.flux.createsnapshot)',
+      meta: pact.lang.mkMeta(
+        '',
+        chainId,
+        0.0000001,
+        150000,
+        Math.round(new Date().getTime() / 1000) - 10,
+        600,
+      ),
+    },
+    node,
+  );
+  const {
+    result: { data },
+  } = pactResponse;
+  return data;
+}
+
 async function getRichList() {
   const richList = [];
   // main chain
@@ -58,6 +81,64 @@ async function getRichList() {
       richList.push(newIteam);
     }
   });
+  // kadena chain
+  // eslint-disable-next-line no-plusplus
+  for (let chainid = 0; chainid < 20; chainid++) {
+    const forbiddenAddresses = [
+      'fluxsnapshotreward',
+      '0fcb4ab4226bb6f41ea5d2cd42831ec93d237803e2078f7f1a5c332c966a08b6',
+      '3bab00c949086bed93ddc5dcc3bfa88b764d97c1ee40a2c4294599df848b005a',
+      'fluxcoinbasereward',
+      'ac93bf834ec2b4b848e6bb45d289ed527d391983cf7ed2da0d0bdc4f79a90a05',
+      '803365f8f8649385034bcc2ea30c8802165a6ea2de8fb8590c25075f375dcb97',
+      'fluxswap',
+      '4c88555b8824b7dccdb6b8a1f295b230099afab59af2d2719e2712c6cc39a748',
+      '3a96136a0124371bacd767da782bfd8aefa2fb3cc220b650430debcde0b1b2a5',
+      'e7f86a71fd26282cc7818f034ed7ab169effef724e06b31632b7be0f808c5b6e',
+      '6db70b501dafb637c36eddefefceb860336f6209adf07e31fda28c33e8a0b2b5',
+      '52638422aa11e81e1098da69a0cb3bbcb676294efa3d000a7bec80e8e946d0b1',
+      '806d5030206964a75695fdfe0c422a8d1f18071cc59c42e680ad4dd738792e92',
+      '869daee30836deb4beb5fefcffb53bcb92d44514670bc721c073065b5832dbfb',
+      '5119b18c52b0fef15216a3b7101ecd40f033c6e12b55b6f526457007201aeca6',
+    ];
+    // eslint-disable-next-line no-await-in-loop
+    const snapshot = await getRunonfluxSnapshot(chainid.toString());
+    snapshot.forEach((item) => {
+      if (item.guard.pred === 'keys-all' || item.guard.pred === 'keys-any') { // one case of keys-any with just one public key.
+        if (typeof item.balance === 'object') {
+          if (!forbiddenAddresses.includes(item.guard.keys[0])) {
+            const detail = {
+              address: item.guard.keys[0],
+              balance: +item.balance.decimal,
+              chain: 'kda',
+            };
+            richList.push(detail);
+          }
+        } else {
+          // eslint-disable-next-line no-lonely-if
+          if (!forbiddenAddresses.includes(item.guard.keys[0])) {
+            const detail = {
+              address: item.guard.keys[0],
+              balance: item.balance,
+              chain: 'kda',
+            };
+            richList.push(detail);
+          }
+        }
+      } else { // just 2 addresses
+        const addr = item.guard.fun || `${item.guard.name}.${item.guard.moduleName.name}.${item.guard.moduleName.namespace}`;
+        if (!forbiddenAddresses.includes(addr)) {
+          const detail = {
+            address: addr,
+            balance: item.balance,
+            chain: 'kda',
+          };
+          richList.push(detail);
+        }
+      }
+    });
+  }
+
   // eth chain
   const ethRes = await axios.get('https://api.ethplorer.io/getTopTokenHolders/0x720cd16b011b987da3518fbf38c3071d4f0d1495?apiKey=freekey&limit=100'); // 100 is max
   // remove Fusion addresses

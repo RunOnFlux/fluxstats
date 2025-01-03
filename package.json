@@ -65,6 +65,7 @@
     "mongodb": "^4.5.0",
     "morgan": "^1.10.0",
     "nodemon": "^2.0.15",
+    "pact-lang-api": "https://github.com/zelcore-io/pact-lang-api",
     "perfect-scrollbar": "^1.5.5",
     "qs": "^6.10.3",
     "supertest": "^6.2.3",
