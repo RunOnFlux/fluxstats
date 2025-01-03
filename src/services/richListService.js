@@ -5,6 +5,39 @@ const serviceHelper = require('./serviceHelper');
 let currentRichList = [];
 let richListTimestamp = 0;
 let top1kBalance = 0;
+let i = 0;
+
+async function fetchBoxesForTokenSend(tokenId, url = 'https://graphql.erg.zelcore.io', maxHeight = 100000000, previousBoxes = [], skip = 0) {
+  const query = `query boxes($take: Int, $skip: Int, $tokenId: String, $spent: Boolean, $maxHeight: Int) {
+    boxes(take: $take, skip: $skip, tokenId: $tokenId, spent: $spent, maxHeight: $maxHeight) {
+      boxId
+      address
+      assets {
+        tokenId
+        amount
+      }
+    }
+  }`;
+  const variables = {
+    spent: false,
+    skip,
+    take: 50, // that is maximum
+    tokenId,
+    maxHeight,
+  };
+  const data = { query, variables };
+  const boxesResp = await axios.post(url, data);
+  const { boxes } = boxesResp.data.data;
+  const allBoxes = previousBoxes.concat(boxes);
+  if (boxes.length < 50) { // well nothing to fetch
+    i = 0;
+    return allBoxes;
+  }
+  i += 1;
+  console.log(`Fetching ERG utxos ${i}`);
+  // fetch more boxes
+  return fetchBoxesForTokenSend(tokenId, url, maxHeight, allBoxes, skip + 50);
+}
 
 async function getRichList() {
   const richList = [];
@@ -131,7 +164,42 @@ async function getRichList() {
       }
     }
   });
-
+  // polygon chain
+  const polygonRes = await axios.get('https://polygon.blockscout.com/api?module=token&action=getTokenHolders&contractaddress=0xA2bb7A68c46b53f6BbF6cC91C865Ae247A82E99B&page=0&offset=1000');
+  polygonRes.data.result.forEach((holder) => {
+    if (
+      holder.address !== '0x25adf2050244c087fc1a27b870844ab9c1936bdf' && holder.address !== '0x3306b1c0e668a81f3702a7a01a7400bf0cf71dc9'
+      && holder.address !== '0x208ef66cd865cc9dc862baf2be796a055d973d33' && holder.address !== '0x99ec8a3eb982b5fb7b030465a64887649a8c7439'
+      && holder.address !== '0x438ad183665511d41be2c779942f6c7660710be2' && holder.address !== '0x55cebc5a07bc5fd4463b8152aee2d25a5cb9097f'
+      && holder.address !== '0xc7b7076ca1d7971c2e27b7c4f6493d8140c2fdd0' && holder.address !== '0x8e868e401366003d6a8f62026cc1aed4975fdbad'
+      && holder.address !== '0xd6bd199e94a9ac4dc73ce4dd4c0c02c82d6cf6c2' && holder.address !== '0x6bdee8d21022323617a34e36c3a7aefb365259a4'
+      && holder.address !== '0xee38530d735d485558c454268ffefe7704cc25c0' && holder.address !== '0xfcdc5338836cc7b060b166b1db7cdd4679713cef'
+    ) {
+      richList.push({
+        address: holder.address,
+        balance: Number((Number(holder.value) / 1e8).toFixed(8)),
+        chain: 'pol',
+      });
+    }
+  });
+  // avax
+  const avaxRes = await axios.get('https://api.routescan.io/v2/network/mainnet/evm/43114/etherscan/api?module=token&action=tokenholderlist&contractaddress=0xc4B06F17ECcB2215a5DBf042C672101Fc20daF55&page=0&offset=1000');
+  avaxRes.data.result.forEach((holder) => {
+    if (
+      holder.TokenHolderAddress !== '0x1F3b258e0ff097FC4E25B827401D10fDeAa71fC5' && holder.TokenHolderAddress !== '0xb79b5f83ed0c8b2bbf30a446c3b2da9eec42c58f'
+      && holder.TokenHolderAddress !== '0x8967d37E297f6f6ede242d51783917eb07fDE293' && holder.TokenHolderAddress !== '0xdf972c65462d4ef9c4e8ec8bc90e34f3e7f28e27'
+      && holder.TokenHolderAddress !== '0xe0d28bc942B7B0b9A513F92a2fCef2bdF0377619' && holder.TokenHolderAddress !== '0x80adeb7df420b4ee1fd46be7b830f8468dea86d4'
+      && holder.TokenHolderAddress !== '0x2599C465F0290237954E04550dA8cf8c94644e29' && holder.TokenHolderAddress !== '0xe35f0a28392747dac23652b102a0b9bcbf8de8f6'
+      && holder.TokenHolderAddress !== '0xc926CbFCbF9313E6530e3342Ee1556ce5D2c0da9' && holder.TokenHolderAddress !== '0x363a51349e301ffb5c0698be2da5656a1e79929c'
+      && holder.TokenHolderAddress !== '0xBdB587D89929b3188325643800f8f789Bf72FF53' && holder.TokenHolderAddress !== '0xf57a8a5c33301a4be255b8a3cc23073fa02a37f1'
+    ) {
+      richList.push({
+        address: holder.TokenHolderAddress,
+        balance: Number((Number(holder.TokenHolderQuantity) / 1e8).toFixed(8)),
+        chain: 'avax',
+      });
+    }
+  });
   // algorand
   const url = 'https://mainnet-idx.algonode.cloud/v2/assets/1029804829/balances?limit=100000';
   const algoRes = await axios.get(url);
@@ -155,6 +223,61 @@ async function getRichList() {
       }
     }
   });
+  // erg
+  const tokenAddress = 'e8b20745ee9d18817305f32eb21015831a48f02d40980de6e849f886dca7f807';
+  const utxosWithAsset = await fetchBoxesForTokenSend(tokenAddress);
+  const holders = [];
+  utxosWithAsset.forEach((utxo) => {
+    const correctAsset = utxo.assets.find((asset) => asset.tokenId === tokenAddress);
+    const boxAsset = +correctAsset.amount;
+    const holderExists = holders.find((holder) => holder.address === utxo.address);
+    if (holderExists) {
+      holderExists.balance += boxAsset;
+    } else {
+      const holder = {
+        address: utxo.address,
+        balance: +correctAsset.amount,
+        chain: 'erg',
+      };
+      holders.push(holder);
+    }
+  });
+  // for every holder, devide the amount in string by 1e8 and convert to number
+  holders.forEach((holder) => {
+    // eslint-disable-next-line no-param-reassign
+    holder.balance = Number((holder.balance / 1e8).toFixed(8));
+  });
+  // push it tou our rich list if not fusion address
+  holders.forEach((holder) => {
+    if (
+      holder.address !== '9hhRnDa1Hih5TepwqK1Zbb8SGYUbFpqTwE9G78yffudKq59xTa9' && holder.address !== '9fR5ks1EJ6oNupggScdkyRSFp55NSdkrkP77jW7zCM9W98prnGw'
+      && holder.address !== '9hZ9ygGKcQ9z1oaYQEmNF53aiNQTazhBo9DFC8tQsR47a15ueGw' && holder.address !== '9g8VEjKe3b4fhemrjUdW3ziKM5dgNHMZHkJ4mS7Y59VhHgdfD8U'
+      && holder.address !== '9fCKJ7g6ZffHAQb9UQY7S6YLF6dRVejBAXw284XNazkq8XLuZbw' && holder.address !== '9fbTHsBFNVnWWfQJCoFPxW9ME3uPLT9MwtGT1MabcVQRGrmTBq4'
+      && holder.address !== '9i24aAG4uG6NrPSqdWRk9PHzyxk472289F5o19KZMfXsdcbvXQf' && holder.address !== '9ejwq6F3ToUhKE6Jj8jfhj5r537XmtGBWCEj3cGNcoWqcmUN55s'
+      && holder.address !== '9hfswHWqDMd2pLDRFCfxQWDTEjNwfsNSw6tweedZwuBe8z92ZyV' && holder.address !== '9gaU9MpvL2gp3xPsKzn5sRm1APEetFKHf4mG2CUaVHzkwCxyAf3'
+      && holder.address !== '9gtdyNTVfziFsGzH7KNjMcUj4v8MtADx4Z3prg6MWyHCCWz9NJM' && holder.address !== '9gi1vyL2ubbJQLZavybcmDmd7HQ5qDGhRJYqa12JiYTTxNo2H37'
+    ) {
+      richList.push(holder);
+    }
+  });
+  // base chain
+  const baseRes = await axios.get('https://base.blockscout.com/api?module=token&action=getTokenHolders&contractaddress=0xb008bdcf9cdff9da684a190941dc3dca8c2cdd44&page=0&offset=1000');
+  baseRes.data.result.forEach((holder) => {
+    if (
+      holder.address !== '0xdcc46899f137e7eb82437b230898dabaf3d73046' && holder.address !== '0x757405ad6a141f495162e5520686d2787d7898ba'
+      && holder.address !== '0xe91b74d3c716ce77179384916f3c1700942226cc' && holder.address !== '0x9ba2092c9975a95db01e4974b4f0c05289ebd623'
+      && holder.address !== '0x98f17e2d8c09f637a236d067191e0d11656a7df0' && holder.address !== '0x8080847caa6e5de0857c2b8aeefee11a14a8b5a8'
+      && holder.address !== '0xe05fb97b601fb036bc7b75fcb1c8027193213af5' && holder.address !== '0xf5376f70f7f1072c00680d93f8d8282c94bb5ad6'
+      && holder.address !== '0xd86292b7e8d3ca5ddc474feaf46455bfa55ae36b' && holder.address !== '0x13337dc8b591b56e8af10728494a60c294a430ce'
+      && holder.address !== '0x7f5f9cd4c4c67c3f80ed74e0e1fb9e3d7975a479' && holder.address !== '0xb72ec7d7e647eaa32947b69f06255c7854b46b0b'
+    ) {
+      richList.push({
+        address: holder.address,
+        balance: Number((Number(holder.value) / 1e8).toFixed(8)),
+        chain: 'base',
+      });
+    }
+  });
   // sort based on balance from highest to lowest
   richList.sort((a, b) => b.balance - a.balance);
   const topRichList = richList.slice(0, 1000);
@@ -168,6 +291,7 @@ async function start() {
   try {
     const richList = await getRichList();
     if (richList) {
+      console.log('Rich List refreshed');
       currentRichList = richList;
       richListTimestamp = new Date().getTime();
     }
@@ -177,7 +301,7 @@ async function start() {
   } finally {
     setTimeout(() => {
       start();
-    }, 1000 * 60 * 5); // 5 minutes
+    }, 1000 * 60 * 15); // 15 minutes
   }
 }
 
