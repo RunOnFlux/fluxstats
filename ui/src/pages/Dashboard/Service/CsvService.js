@@ -28,6 +28,12 @@ const HistoryInfoHeaders = [
   'Stratus',
 ];
 
+const RichListHeaders = [
+  'Address',
+  'Balance',
+  'Chain',
+];
+
 const NodeHeaders = [
   'IP Address',
   'Network Protocol',
@@ -182,6 +188,7 @@ const MarketplaceHeaders = [
 
 module.exports = {
   Download,
+  RichListHeaders,
   HistoryInfoHeaders,
   NodeHeaders,
   NodeAddressInfoHeaders,

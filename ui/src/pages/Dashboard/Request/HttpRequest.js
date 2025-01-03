@@ -38,6 +38,14 @@ const httpRequestMarketPlace = async (axios, MemoryStorage) => {
   }
 };
 
+const httpRequestRichList = async (axios, MemoryStorage) => {
+  const lsdata = MemoryStorage.get('richlist');
+  if (!lsdata) {
+    const response = await axios.get('https://stats.runonflux.io/api/v1/richlist');
+    MemoryStorage.put('richlist', response.data.data, 18000);
+  }
+};
+
 // ipports -> array of string port value
 async function httpRequestFluxConnections(axios, ipports) {
   try {
@@ -106,4 +114,5 @@ module.exports = {
   httpRequestFluxConnections,
   httpRequestFluxPriceHistory,
   httpRequestMarketPlace,
+  httpRequestRichList,
 };

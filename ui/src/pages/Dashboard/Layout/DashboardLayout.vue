@@ -23,6 +23,7 @@
         <sidebar-item :link="{name: 'Information', icon: 'nc-icon nc-bullet-list-67'}">
           <sidebar-item :link="{name: 'Marketplace', path: '/flux/information/marketplace'}" />
         </sidebar-item>
+        <sidebar-item :link="{name: 'Rich List', icon: 'nc-icon nc-money-coins', path: '/flux/richlist'}" />
       </template>
     </side-bar>
     <div class="main-panel">

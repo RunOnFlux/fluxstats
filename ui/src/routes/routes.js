@@ -24,6 +24,9 @@ const Marketplace = () => import('@/pages/Dashboard/Information/Marketplace.vue'
 // Maintenance pages
 const Error = () => import('@/pages/Dashboard/Maintenance/Error.vue');
 
+// RichList
+const RichList = () => import('@/pages/Dashboard/RichList/RichList.vue');
+
 const nodeInfo = {
   path: '/flux/nodeinfo',
   component: DashboardLayout,
@@ -137,6 +140,19 @@ const dashboard = {
   ],
 };
 
+const richList = {
+  path: '/flux/richlist',
+  component: DashboardLayout,
+  name: 'richlist',
+  redirect: '/flux/richlist/richlist',
+  children: [
+    {
+      path: 'richlist',
+      name: 'richlist',
+      component: RichList,
+    }],
+};
+
 const root = {
   path: '/',
   redirect: '/flux/dashboard/overview',
@@ -150,6 +166,7 @@ const routes = [
   dashboard,
   fluxnetwork,
   marketplace,
+  richList,
   root,
 ];
 
