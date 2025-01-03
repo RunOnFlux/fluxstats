@@ -123,7 +123,7 @@ module.exports = (app) => {
     fluxOsService.listOsImageHashes(req, res);
   });
 
-  app.get('/richlist', cache('1 minute'), (req, res) => {
+  app.get('/api/v1/richlist', cache('1 minute'), (req, res) => {
     richListService.apiRichList(req, res);
   });
 };
