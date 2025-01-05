@@ -3590,7 +3590,7 @@
       }
     ],
     "visible": true,
-    "enabled": true
+    "enabled": false
   },
   {
     "description": "Host your PUBLIC SimpleX SMP Server w/ Clearnet IP + Onion Address",
@@ -3643,7 +3643,7 @@
       }
     ],
     "visible": true,
-    "enabled": true
+    "enabled": false
   },
   {
     "description": "Host your PUBLIC Simplex xFTP Server w/ Clearnet IP + Onion Address",
@@ -3696,6 +3696,6 @@
       }
     ],
     "visible": true,
-    "enabled": true
+    "enabled": false
   }
 ]
