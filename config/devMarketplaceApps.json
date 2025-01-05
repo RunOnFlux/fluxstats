@@ -3708,7 +3708,7 @@
       {
         "name": "xftpsimplex",
         "description": "SimpleX xFTP Server",
-        "repotag": "simplexchat/xftp-server:latest",
+        "repotag": "runonflux/simplex-xftp-server:latest",
         "containerPorts": [34443],
         "domains": [""],
         "environmentParameters": ["QUOTA=20gb"],
@@ -3741,6 +3741,6 @@
       }
     ],
     "visible": true,
-    "enabled": false
+    "enabled": true
   }
 ]
