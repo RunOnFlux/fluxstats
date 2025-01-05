@@ -3550,10 +3550,10 @@
       {
         "name": "smpsimplex",
         "description": "SimpleX SMP Server",
-        "repotag": "simplexchat/smp-server:latest",
+        "repotag": "runonflux/simplex-smp-server:latest",
         "containerPorts": [5223],
         "domains": [""],
-        "environmentParameters": ["ADDR=127.0.0.1"],
+        "environmentParameters": [],
         "commands": [],
         "containerData": "/etc/opt/simplex",
         "tiered": false,
@@ -3590,7 +3590,7 @@
       }
     ],
     "visible": true,
-    "enabled": false
+    "enabled": true
   },
   {
     "description": "Host your PUBLIC SimpleX SMP Server w/ Clearnet IP + Onion Address",
@@ -3610,10 +3610,10 @@
       {
         "name": "smpsimplex",
         "description": "SimpleX SMP Server",
-        "repotag": "simplexchat/smp-server:latest",
+        "repotag": "runonflux/simplex-smp-server:latest",
         "containerPorts": [5223],
         "domains": [""],
-        "environmentParameters": ["ADDR=127.0.0.1"],
+        "environmentParameters": [],
         "commands": [],
         "containerData": "/etc/opt/simplex",
         "tiered": false,
@@ -3643,7 +3643,7 @@
       }
     ],
     "visible": true,
-    "enabled": false
+    "enabled": true
   },
   {
     "description": "Host your PUBLIC Simplex xFTP Server w/ Clearnet IP + Onion Address",
@@ -3664,9 +3664,9 @@
         "name": "xftpsimplex",
         "description": "SimpleX xFTP Server",
         "repotag": "simplexchat/xftp-server:latest",
-        "containerPorts": [443],
+        "containerPorts": [34443],
         "domains": [""],
-        "environmentParameters": ["ADDR=127.0.0.1","QUOTA=20gb"],
+        "environmentParameters": ["QUOTA=20gb"],
         "commands": [],
         "containerData": "/etc/opt/simplex-xftp",
         "tiered": false,
@@ -3683,7 +3683,7 @@
         "repotag": "wirewrex/hiddenonion:latest",
         "containerPorts": [],
         "domains": [],
-        "environmentParameters": ["SERVICE_HOST=xftpsimplex","SERVICE_PORT=443","ONION_PORT=34443"],
+        "environmentParameters": ["SERVICE_HOST=xftpsimplex","SERVICE_PORT=34443","ONION_PORT=34443"],
         "commands": [],
         "containerData": "/var/lib/tor",
         "tiered": false,
