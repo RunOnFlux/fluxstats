@@ -3533,7 +3533,7 @@
     "enabled": true
   },
   {
-    "description": "Host your PRIVATE (password protected) Simplex SMP Server w/ Clearnet IP + Onion Address",
+    "description": "Host your PRIVATE (password protected) Simplex SMP Server with IP + Onion Address",
     "priceUSD": 5.99,
     "multiplier": 1,
     "category": "Hosting",
@@ -3593,7 +3593,7 @@
     "enabled": true
   },
   {
-    "description": "Host your PUBLIC SimpleX SMP Server w/ Clearnet IP + Onion Address",
+    "description": "Host your PUBLIC SimpleX SMP Server with IP + Onion Address",
     "priceUSD": 5.99,
     "multiplier": 1,
     "category": "Hosting",
@@ -3646,7 +3646,7 @@
     "enabled": true
   },
   {
-    "description": "Host your PUBLIC Simplex xFTP Server w/ Clearnet IP + Onion Address",
+    "description": "Host your PUBLIC Simplex xFTP 40GB Quota Server",
     "priceUSD": 5.99,
     "multiplier": 1,
     "category": "Hosting",
@@ -3666,31 +3666,14 @@
         "repotag": "runonflux/simplex-xftp-server:latest",
         "containerPorts": [34443],
         "domains": [""],
-        "environmentParameters": ["QUOTA=20gb"],
+        "environmentParameters": ["QUOTA=40gb"],
         "commands": [],
         "containerData": "/etc/opt/simplex-xftp",
         "tiered": false,
         "cpu": 0.9,
         "ram": 2000,
-        "hdd": 20,
+        "hdd": 40,
         "ports": [34443],
-        "secrets": "",
-        "repoauth": ""
-      },
-      {
-        "name": "onion",
-        "description": "Generate permanent onion address for local xFTP service",
-        "repotag": "wirewrex/hiddenonion:latest",
-        "containerPorts": [],
-        "domains": [],
-        "environmentParameters": ["SERVICE_HOST=xftpsimplex","SERVICE_PORT=34443","ONION_PORT=34443"],
-        "commands": [],
-        "containerData": "/var/lib/tor",
-        "tiered": false,
-        "cpu": 0.1,
-        "ram": 500,
-        "hdd": 1,
-        "ports": [],
         "secrets": "",
         "repoauth": ""
       }
