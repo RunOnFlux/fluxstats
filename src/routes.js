@@ -122,6 +122,9 @@ module.exports = (app) => {
   app.get('/fluxos/hashes', cache('5 minutes'), (req, res) => {
     fluxOsService.listOsImageHashes(req, res);
   });
+  app.get('/fluxos/revenue', cache('5 minutes'), (req, res) => {
+    fluxOsService.getFluxOSRevenue(req, res);
+  });
 
   app.get('/api/v1/richlist', cache('1 minute'), (req, res) => {
     richListService.apiRichList(req, res);
