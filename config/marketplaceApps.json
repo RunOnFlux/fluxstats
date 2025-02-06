@@ -3435,7 +3435,7 @@
     "enabled": true
   },
   {
-    "description": "Host your Cyberfly Testnet Node on the Flux Cloud",
+    "description": "Host your Cyberfly mainnet Node on the Flux Cloud",
     "priceUSD": 9.80,
     "multiplier": 1,
     "category": "Blockchain",
