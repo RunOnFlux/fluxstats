@@ -3436,7 +3436,7 @@
   },
   {
     "description": "Host your Cyberfly mainnet Node on the Flux Cloud",
-    "priceUSD": 9.80,
+    "priceUSD": 4.65,
     "multiplier": 1,
     "category": "Blockchain",
     "version": 7,
@@ -3446,7 +3446,6 @@
     "geolocation": [],
     "staticip": false,
     "nodes": [],
-    "isAutoEnterprise": true,
     "compose": [
       {
         "name": "cyberflymqtt",
@@ -3458,8 +3457,8 @@
         "commands": [],
         "containerData": "g:/data",
         "tiered": false,
-        "cpu": 0.5,
-        "ram": 500,
+        "cpu": 0.1,
+        "ram": 100,
         "hdd": 1,
         "ports": [31004, 31005],
         "secrets": "",
@@ -3475,9 +3474,9 @@
         "commands": [],
         "containerData": "g:/data",
         "tiered": false,
-        "cpu": 1,
-        "ram": 1000,
-        "hdd": 10,
+        "cpu": 0.1,
+        "ram": 200,
+        "hdd": 1,
         "ports": [],
         "secrets": "",
         "repoauth": ""
@@ -3494,9 +3493,9 @@
         "tiered": false,
         "cpu": 1,
         "ram": 1000,
-        "hdd": 10,
+        "hdd": 5,
         "ports": [31001, 31002, 31003],
-        "userSecrets": [
+        "userEnvironmentParameters": [
           {
             "name": "KADENA_ACCOUNT",
             "description": "Your kadena k:address",
@@ -3521,8 +3520,8 @@
         "commands": [],
         "containerData": "g:/data",
         "tiered": false,
-        "cpu": 0.5,
-        "ram": 500,
+        "cpu": 0.1,
+        "ram": 100,
         "hdd": 1,
         "ports": [31000],
         "secrets": "",
