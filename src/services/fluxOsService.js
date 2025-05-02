@@ -7,8 +7,10 @@ async function listOsImageHashes(req, res) {
     const hashesList = await axios.get('https://raw.githubusercontent.com/RunOnFlux/fluxapi/master/config/fluxOsImageHashes.json');
     res.json({ status: 'success', data: hashesList.data });
   } catch (error) {
-    const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
-    res.json(errMessage);
+    // temp patch until next ArcaneOS release (today is 02/05/25)
+    // const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
+    // res.json(errMessage);
+    res.status(503).end();
     log.error(error);
   }
 }
