@@ -72,10 +72,6 @@ module.exports = (app) => {
     fluxService.getModulesMinVersions(req, res);
   });
 
-  app.get('/hashes', cache('1 minute'), (req, res) => {
-    res.sendFile(path.join(__dirname, './fluxHashes'));
-  });
-
   app.get('/general/messagephrase', (req, res) => { // get message phrase for vote signing
     generalService.getMessagePhrase(req, res);
   });
@@ -121,9 +117,6 @@ module.exports = (app) => {
   });
   app.get('/fluxos/hashes', cache('5 minutes'), (req, res) => {
     fluxOsService.listOsImageHashes(req, res);
-  });
-  app.get('/fluxos/revenue', cache('5 minutes'), (req, res) => {
-    fluxOsService.getFluxOSRevenue(req, res);
   });
 
   app.get('/api/v1/richlist', cache('1 minute'), (req, res) => {
