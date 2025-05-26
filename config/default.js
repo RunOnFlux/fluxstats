@@ -13,7 +13,7 @@ module.exports = {
     username: dbsecrets.dbusername,
     password: dbsecrets.dbpassword,
     local: {
-      database: 'testfluxapi2',
+      database: 'fluxstats',
       collections: {
         // Array of round of flux/info calls + geolocation.
         fluxes: 'fluxes', // WARNING replaced with 'fluxes-timestamp' for performance
