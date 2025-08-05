@@ -3630,5 +3630,82 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "Host your Timpi Collector Node on FluxCloud",
+    "priceUSD": 3.6,
+    "multiplier": 1,
+    "category": "Blockchain",
+    "version": 7,
+    "name": "TimpiCollector",
+    "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "staticip": false,
+    "nodes": [],
+    "expire": 22000,
+    "compose": [
+      {
+        "name": "timpicollector",
+        "description": "The Timpi Collector Node Container",
+        "repotag": "timpiltd/timpi-collector:latest",
+        "containerPorts": [5015],
+        "domains": [""],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/opt/timpi",
+        "tiered": false,
+        "cpu": 2.0,
+        "ram": 2000,
+        "hdd": 20,
+        "ports": [5015],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Timpi Geocore Node on FluxCloud",
+    "priceUSD": 9.09,
+    "multiplier": 1,
+    "category": "Blockchain",
+    "version": 7,
+    "name": "TimpiCollector",
+    "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "staticip": false,
+    "nodes": [],
+    "expire": 22000,
+    "compose": [
+      {
+        "name": "timpigeocore",
+        "description": "The Timpi Geocore Node Container",
+        "repotag": "timpiltd/timpi-geocore:latest",
+        "containerPorts": [4100],
+        "domains": [""],
+        "environmentParameters": ["CONPORT=4100"],
+        "commands": ["--dns=100.42.180.29","--dns=100.42.180.99","--dns=8.8.8.8"],
+        "containerData": "/var/timpi",
+        "tiered": false,
+        "cpu": 2.0,
+        "ram": 2000,
+        "hdd": 20,
+        "ports": [4100],
+        "userEnvironmentParameters": [
+          {
+            "name": "GUID",
+            "description": "Your Registered GUID",
+            "placeholder": "2f4446b8-c265-429b-8055-01519aced572"
+          }
+        ],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
