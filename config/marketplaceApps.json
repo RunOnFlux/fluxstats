@@ -3672,7 +3672,7 @@
     "multiplier": 1,
     "category": "Blockchain",
     "version": 7,
-    "name": "TimpiCollector",
+    "name": "TimpiGeocore",
     "instances": 3,
     "contacts": [],
     "geolocation": [],
