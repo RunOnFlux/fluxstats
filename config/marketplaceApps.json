@@ -3690,9 +3690,9 @@
         "commands": ["--dns=100.42.180.29","--dns=100.42.180.99","--dns=8.8.8.8"],
         "containerData": "/var/timpi",
         "tiered": false,
-        "cpu": 2.0,
-        "ram": 2000,
-        "hdd": 20,
+        "cpu": 4.0,
+        "ram": 8000,
+        "hdd": 3,
         "ports": [4100],
         "userEnvironmentParameters": [
           {
