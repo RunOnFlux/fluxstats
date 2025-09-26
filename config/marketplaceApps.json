@@ -3633,7 +3633,7 @@
   },
   {
     "description": "Host your Timpi Collector Node on FluxCloud",
-    "priceUSD": 3.6,
+    "priceUSD": 4.85,
     "multiplier": 1,
     "category": "Blockchain",
     "version": 7,
@@ -3641,7 +3641,7 @@
     "instances": 3,
     "contacts": [],
     "geolocation": [],
-    "staticip": false,
+    "staticip": true,
     "nodes": [],
     "expire": 22000,
     "compose": [
@@ -3657,7 +3657,7 @@
         "tiered": false,
         "cpu": 2.0,
         "ram": 2000,
-        "hdd": 20,
+        "hdd": 1,
         "ports": [5015],
         "secrets": "",
         "repoauth": ""
@@ -3668,7 +3668,7 @@
   },
   {
     "description": "Host your Timpi Geocore Node on FluxCloud",
-    "priceUSD": 9.09,
+    "priceUSD": 10.85,
     "multiplier": 1,
     "category": "Blockchain",
     "version": 7,
@@ -3676,7 +3676,7 @@
     "instances": 3,
     "contacts": [],
     "geolocation": [],
-    "staticip": false,
+    "staticip": true,
     "nodes": [],
     "expire": 22000,
     "compose": [
