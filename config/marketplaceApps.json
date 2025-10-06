@@ -3668,7 +3668,7 @@
   },
   {
     "description": "Host your Timpi Geocore Node on FluxCloud",
-    "priceUSD": 10.85,
+    "priceUSD": 8.70,
     "multiplier": 1,
     "category": "Blockchain",
     "version": 7,
@@ -3688,7 +3688,7 @@
         "domains": [""],
         "environmentParameters": ["CONPORT=4100"],
         "commands": ["--dns=100.42.180.29","--dns=100.42.180.99","--dns=8.8.8.8"],
-        "containerData": "/var/timpi",
+        "containerData": "g:/var/timpi",
         "tiered": false,
         "cpu": 4.0,
         "ram": 8000,
