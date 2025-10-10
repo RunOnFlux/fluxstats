@@ -3707,5 +3707,75 @@
     ],
     "visible": true,
     "enabled": true
+  },
+  {
+    "description": "Host your Kaspa Node on FluxCloud",
+    "priceUSD": 27.20,
+    "multiplier": 1,
+    "category": "Blockchain",
+    "version": 7,
+    "name": "KaspaNode",
+    "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "staticip": true,
+    "nodes": [],
+    "expire": 22000,
+    "compose": [
+      {
+        "name": "kaspad",
+        "description": "The Kaspad Container",
+        "repotag": "kaspanet/rusty-kaspad:latest",
+        "containerPorts": [16110,16111,17110,18110],
+        "domains": ["","","",""],
+        "environmentParameters": [],
+        "commands": [],
+        "containerData": "/app/data",
+        "tiered": false,
+        "cpu": 8.0,
+        "ram": 16000,
+        "hdd": 256,
+        "ports": [15110,15111,17110,18110],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
+  },
+  {
+    "description": "Host your Kaspa Testnet Node on FluxCloud",
+    "priceUSD": 27.20,
+    "multiplier": 1,
+    "category": "Blockchain",
+    "version": 7,
+    "name": "KaspaTestnet",
+    "instances": 3,
+    "contacts": [],
+    "geolocation": [],
+    "staticip": true,
+    "nodes": [],
+    "expire": 22000,
+    "compose": [
+      {
+        "name": "kaspad",
+        "description": "The Kaspad Container",
+        "repotag": "kaspanet/rusty-kaspad:latest",
+        "containerPorts": [16210,16211,17210,18210],
+        "domains": ["","","",""],
+        "environmentParameters": [],
+        "commands": ["kaspad","--yes","--nologfiles","--disable-upnp","--utxoindex","--testnet","--rpclisten=0.0.0.0:16210","--rpclisten-borsh=0.0.0.0:17210","--rpclisten-json=0.0.0.0:18210"],
+        "containerData": "/app/data",
+        "tiered": false,
+        "cpu": 8.0,
+        "ram": 16000,
+        "hdd": 256,
+        "ports": [15210,15211,17210,18210],
+        "secrets": "",
+        "repoauth": ""
+      }
+    ],
+    "visible": true,
+    "enabled": true
   }
 ]
