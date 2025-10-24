@@ -3736,6 +3736,13 @@
         "ram": 16000,
         "hdd": 256,
         "ports": [15110,15111,17110,18110],
+        "userEnvironmentParameters": [
+          {
+            "name": "ADDRESS",
+            "description": "Your Kaspa address for the Nacho Kat NFT giveaway.",
+            "placeholder": "kaspa:qzqud95ytp3dkpp76tukjfr7s0f6xewh9ujljkegwvqglyjvhkchxpsf5fmkz"
+          }
+        ],
         "secrets": "",
         "repoauth": ""
       }
@@ -3771,6 +3778,13 @@
         "ram": 24000,
         "hdd": 256,
         "ports": [15110,15111,17110,18110],
+        "userEnvironmentParameters": [
+          {
+            "name": "ADDRESS",
+            "description": "Your Kaspa address for the Nacho Kat NFT giveaway.",
+            "placeholder": "kaspa:qzqud95ytp3dkpp76tukjfr7s0f6xewh9ujljkegwvqglyjvhkchxpsf5fmkz"
+          }
+        ],
         "secrets": "",
         "repoauth": ""
       }
