@@ -5,6 +5,7 @@ const config = require('config');
 const LRU = require('lru-cache');
 const log = require('../lib/log');
 const serviceHelper = require('./serviceHelper');
+const enterpriseRedaction = require('./enterpriseRedaction');
 
 const defaultTimeout = 5000;
 
@@ -577,6 +578,10 @@ async function processFluxNode(fluxnode, currentRoundTime, timeout, retry = fals
     delete fluxInfo.flux.connectionsIn;
     delete fluxInfo.flux.connectionsOut;
     delete fluxInfo.flux.explorerScannedHeigth;
+    // Enterprise apps ship an encrypted compose; their container listing must
+    // not be stored, or every round collection republishes what the encryption
+    // hides. Scrubbed before insert so it never reaches the database at all.
+    await enterpriseRedaction.redactFluxInfo(fluxInfo);
     processedFluxNodes.push(fluxInfo);
   } catch (error) {
     log.error(error);
@@ -1039,6 +1044,9 @@ async function getAllFluxInformation(req, res, i = 0) {
       fluxInformationRunning = true;
       // return latest fluxnode round
       results = await serviceHelper.findInDatabase(database, collectionName, query, projection);
+      // Rounds collected before ingest redaction shipped still hold real image
+      // names; scrub on the way out as well so history cannot be mined.
+      results = await enterpriseRedaction.redactResults(results);
       myCacheMid.set(cacheKey, results);
       fluxInformationRunning = false;
     } else {
@@ -1245,8 +1253,12 @@ async function getFluxIPHistory(req, res) {
         ipHistoryNew.push(entry);
       }
     }
-    myCacheShort.set(`ipHistory${ip}`, ipHistoryNew);
-    const resMessage = serviceHelper.createDataMessage(ipHistoryNew);
+    // This projects `apps: 1` across every historical round, so it serves the
+    // same container listing as /fluxinfo — including rounds collected before
+    // ingest redaction shipped.
+    const redactedHistory = await enterpriseRedaction.redactResults(ipHistoryNew);
+    myCacheShort.set(`ipHistory${ip}`, redactedHistory);
+    const resMessage = serviceHelper.createDataMessage(redactedHistory);
     res.json(resMessage);
   } catch (error) {
     const errMessage = serviceHelper.createErrorMessage(error.message, error.name, error.code);
