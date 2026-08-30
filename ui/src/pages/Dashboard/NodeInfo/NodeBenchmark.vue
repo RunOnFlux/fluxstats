@@ -482,10 +482,8 @@ export default {
         const bencharchitecture = values.benchmark.bench.architecture;
         const tier = values.node.status.tier ? values.node.status.tier.toLowerCase() : 'no tier';
         const org = values.geolocation.org.length > 30 ? `${values.geolocation.org.slice(0, 30)}...` : values.geolocation.org;
-        const filtered = values.apps.runningapps.filter((item) => item.Image !== 'containrrr/watchtower');
         values.benchmark.issues = [];
-        values.apps.runningapps = filtered;
-        values.apps.count = filtered.length || filtered.length !== 0 ? filtered.length : 0;
+        values.apps.count = values.apps.runningapps.length;
         values.benchmark.upnp = values.benchmark.bench.ipaddress.includes(':') ? 'TRUE' : 'FALSE';
         values.benchmark.thunder = values.benchmark.bench.thunder ? 'TRUE' : 'FALSE';
         const upnpstatus = values.benchmark.upnp;

@@ -364,26 +364,6 @@ const sortNodeApp = (values, sortProps, originalData) => {
       }
       return val;
     });
-  } else if (sortProps.column.label === 'Flux Watch Tower Installed' && sortProps.column.order === 'ascending') {
-    values.sort((a, b) => {
-      let val = 0;
-      if (a.apps.fluxtower > b.apps.fluxtower) {
-        val = 1;
-      } else if (a.apps.fluxtower < b.apps.fluxtower) {
-        val = -1;
-      }
-      return val;
-    });
-  } else if (sortProps.column.label === 'Flux Watch Tower Installed' && sortProps.column.order === 'descending') {
-    values.sort((a, b) => {
-      let val = 0;
-      if (a.apps.fluxtower < b.apps.fluxtower) {
-        val = 1;
-      } else if (a.apps.fluxtower > b.apps.fluxtower) {
-        val = -1;
-      }
-      return val;
-    });
   } else if (sortProps.column.label === 'Flux Usage' && sortProps.column.order === 'ascending') {
     values.sort((a, b) => {
       let val = 0;

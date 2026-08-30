@@ -123,13 +123,7 @@
                     :key="index"
                   >
                     <b>Application {{ index + 1 }}:</b> <br>
-                    <b>ID:</b> {{ item.Id }} <br>
                     <b>Names:</b> {{ item.Names }} <br>
-                    <b>Image:</b> {{ item.Image }} <br>
-                    <b>Image ID:</b> {{ item.ImageID }} <br>
-                    <b>Command:</b> {{ item.Command }} <br>
-                    <b>Ports:</b> {{ item.Ports }} <br>
-                    <b>Labels:</b> {{ item.Labels }} <br>
                     <b>State:</b> {{ item.State }} <br>
                     <b>Status:</b> {{ item.Status }} <br>
                   </p>
@@ -223,11 +217,6 @@ export default {
           prop: 'apps.count',
           label: 'Total Application Running',
           minWidth: 150,
-        },
-        {
-          prop: 'apps.fluxtower',
-          label: 'Flux Watch Tower Installed',
-          minWidth: 100,
         },
         {
           prop: 'apps.fluxusage',
@@ -328,24 +317,14 @@ export default {
       this.values.map((value) => {
         let temp;
         const values = value;
-        const filtered = values.apps.runningapps.filter((item) => item.Image !== 'containrrr/watchtower');
-        values.apps.runningapps = filtered;
-        values.apps.fluxtower = filtered.length !== undefined || filtered.length !== 0 ? 'TRUE' : 'FALSE';
-        values.apps.count = filtered.length !== undefined || filtered.length !== 0 ? filtered.length : 0;
+        values.apps.count = values.apps.runningapps.length;
         const appscount = values.apps.count;
-        const appsfluxtower = values.apps.fluxtower;
         temp = this.filter.has(`application running - ${appscount}`) ? this.filter.get(`application running - ${appscount}`) : [];
         if (!this.filter.has(`application running - ${appscount}`)) {
           this.filterValue.push(`application running - ${appscount}`);
         }
         temp.push(values);
         this.filter.set(`application running - ${appscount}`, temp);
-        temp = this.filter.has(`flux watch tower installed - ${appsfluxtower}`) ? this.filter.get(`flux watch tower installed - ${appsfluxtower}`) : [];
-        if (!this.filter.has(`flux watch tower installed - ${appsfluxtower}`)) {
-          this.filterValue.push(`flux watch tower installed - ${appsfluxtower}`);
-        }
-        temp.push(values);
-        this.filter.set(`flux watch tower installed - ${appsfluxtower}`, temp);
         return values;
       });
       this.filters.others = this.filterValue.sort();
@@ -375,7 +354,6 @@ export default {
         values.push({
           ip: !item.ip ? '' : item.ip,
           appsCount: !item.apps.count ? 0 : item.apps.count,
-          fluxTowerInstalled: !item.apps.fluxtower ? '' : item.apps.fluxtower,
           fluxUsage: !item.apps.fluxusage ? '' : item.apps.fluxusage,
           cpuLocked: !item.apps.resources.appsCpusLocked ? '' : item.apps.resources.appsCpusLocked,
           ramLocked: !item.apps.resources.appsRamLocked ? '' : item.apps.resources.appsRamLocked,
