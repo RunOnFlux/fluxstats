@@ -73,7 +73,6 @@ const NodeAddressInfoHeaders = [
 const NodeAppHeaders = [
   'IP Address',
   'Total Application Running',
-  'Flux Tower Installed',
   'Flux Usage',
   'CPU Locked',
   'RAM Locked',
